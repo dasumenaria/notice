@@ -12,12 +12,8 @@ $dt=str_replace('-', '', $datet);
 $exact_trim=$dt;
 $datetime = DateTime::createFromFormat('Ymd', $exact_trim);
 $emm=$datetime->format('M');
-$emj=$datetime->format('m');
+$emj=$datetime->format('m');	
 $em=strtoupper($emm);
-
-
-
-
  ?>
 <html>
 <head>
