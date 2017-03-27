@@ -21,11 +21,8 @@
 								<i class="fa fa-gift"></i> View Query
 							</div>
 							<div class="tools">
-							<!--<a class="" href="contact_us.php" style="color: white"><i class="fa fa-plus">Add Query</i></a>-->
-							<!--	<a href="" class="collapse" data-original-title="" title="">
-								</a>-->
-								
-							</div>
+							 <a class="" href="contact_us.php" style="color: white"><i class="fa fa-plus">Add Query</i></a> 
+ 							</div>
 						</div>
 						<div class="portlet-body form">
 							<form class="form-horizontal" role="form" id="noticeform" method="post" enctype="multipart/form-data">
