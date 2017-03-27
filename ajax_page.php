@@ -32,5 +32,44 @@ $ftc_detail=mysql_fetch_array($query);
  <?php 
 }
 
+if($function_name=='edit_appointment')
+{
+$query=mysql_query("select * from `appointment` where `id` = '$update_id'");
+$ftc_detail=mysql_fetch_array($query);
+$appoint_to=$ftc_detail['appoint_to'];
+
+?>
+              <div class="row col-md-12">  
+                <div class="col-sm-6">
+                <label>Appointment To</label>
+                <div class="radio-list" style="margin-left: 31px;">
+                    <label class="radio-inline">
+                    <input type="radio" name="appoint_to" value="2" <?php if($appoint_to=='2' || $appoint_to==''){ ?> checked <?php } ?>> Director </label>
+                    <label class="radio-inline">
+                    <input type="radio" name="appoint_to" value="3" <?php if($appoint_to=='3'){ ?> checked <?php } ?>> Principle </label>
+                </div>
+            </div>
+
+                 
+                <div class="col-sm-6">
+                        <label class="control-label">Appointment Date</label>
+                    
+                        <input class="form-control form-control-inline input-medium date-picker" required  value="<?php echo date('d-m-Y',strtotime($ftc_detail['appoint_date'])); ?>" placeholder="dd-mm-yyyy" type="text" data-date-format="dd-mm-yyyy" name="appoint_date">
+                </div>
+            </div>
+            <div class="row col-md-12">   
+                <div class="col-sm-6">
+                    <label class="control-label">Appointment Time</label>
+                    <input type="text" placeholder="Provide faculty Email Address" name="appoint_time" value="<?php echo $ftc_detail['appoint_time']; ?>" class="form-control timepicker"/>
+                </div>
+                <input type="hidden" name="update_id" value="<?php echo $ftc_detail['id']; ?>">
+                <div class="col-sm-6">
+                    <label class="control-label">Reason</label>
+                    <input type="text" placeholder="Provide faculty designation" name="reason" value="<?php echo $ftc_detail['reason']; ?>" class="form-control"/> 
+                </div>
+            </div>   
+ <?php 
+}
+
 ?>
  

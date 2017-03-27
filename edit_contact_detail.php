@@ -10,13 +10,13 @@
 		$mobile_no=$_POST['mobile_no'];
 		$designation=$_POST['designation'];
  		mysql_query("update `contact_detail` set `name`='$name' , `email`='$email' , `mobile_no`='$mobile_no' , `designation`='$designation' where `id` = '$update_id' ");
-		$message='faculty Update Successfully';	
+		$message='Faculty update successfully';	
 	}
 	if(isset($_POST['delete_details'])) 
 	{
 		$update_id=$_POST['update_id'];
  		mysql_query("update `contact_detail` set `flag`='1' where `id` = '$update_id' ");
-		$message='faculty Successfully Deleted';	
+		$message='Faculty successfully deleted';	
 	}
 	
 ?> 

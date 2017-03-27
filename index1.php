@@ -55,48 +55,9 @@ $em=strtoupper($emm);
 								Click here &nbsp;<i class="fa fa-share"></i> </a>
 								
 							</div></div></div><br>
-							
-							<!--<div class="row">
-							<div class="col-md-12 col-sm-12">
-						<div class="portlet-body" style="background-color:#000; color:#FFF; margin-left:0px">
-							<div class="row" style="background-color:#000; color:#FFF">
-								<div class="col-md-2 circle-text" style="">
-									<div class="easy-pie-chart">
-											<span style="font-size:15px">
-											1000 <br><br> Total Student <i class="fa fa-male"  style="color:green"></i> </span>
-										
-									</div>
-								</div>
-								<div class="col-md-2" style="">
-									<div class="easy-pie-chart">
-											<span style="font-size:15px">
-											1000 <br><br> Total Student <i class="fa fa-male"  style="color:green"></i> </span>
-										
-									</div>
-								</div>
-								<div class="col-md-2" style="">
-									<div class="easy-pie-chart">
-											<span style="font-size:15px">
-											1000 <br><br> Total Student <i class="fa fa-male"  style="color:green"></i> </span>
-										
-									</div>
-								</div>
-								<div class="col-md-2" style="">
-									<div class="easy-pie-chart">
-											<span style="font-size:15px">
-											1000 <br><br> Total Student <i class="fa fa-male"  style="color:green"></i> </span>
-										
-									</div>
-								</div>
-							</div></div>
-								
-							</div></div>-->
-							<br>
-						  
-						  
-						  
-						  <div class="row" >
-						   <div class="col-md-6 col-sm-6" >
+ 						  
+                  <div class="row" >
+                   <div class="col-md-6 col-sm-6" >
 					<div class="portlet box">
 						<div class="portlet-title">
 							<div class="caption">
@@ -258,7 +219,7 @@ $em=strtoupper($emm);
 				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" >
 					<div class="dashboard-stat blue-madison">
 						<div class="visual">
-							<i class="fa fa-comments"></i>
+							<i class="fa fa-search"></i>
 						</div>
 						<div class="details">
 							<div class="number">
@@ -275,7 +236,7 @@ $em=strtoupper($emm);
 				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" >
 					<div class="dashboard-stat blue-madison">
 						<div class="visual">
-							<i class="fa fa-comments"></i>
+							<i class="fa fa-group"></i>
 						</div>
 						<div class="details">
 							<div class="number">
@@ -296,7 +257,7 @@ $em=strtoupper($emm);
 				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 					<div class="dashboard-stat red-intense">
 						<div class="visual">
-							<i class="fa fa-bar-chart-o"></i>
+							<i class="fa fa-calendar"></i>
 						</div>
 						<div class="details">
 							<div class="number">
@@ -344,74 +305,44 @@ $em=strtoupper($emm);
 			
                         <!--------Box--------->
                       
-                         <div class="row ">
+              <div class="row ">
 				<div class="col-md-6 col-sm-6" >
-					<div class="portlet box">
-						<div class="portlet-title">
-							<div class="caption">
-								<i class="fa fa-bell-o"></i>Event
+					<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" >
+					<div class="dashboard-stat blue">
+						<div class="visual">
+							<i class="fa fa-bullhorn"></i>
+						</div>
+						<div class="details">
+							<div class="number">
+								Appointment
+							</div>
+							<div class="desc">
 							</div>
 						</div>
-						<div class="portlet-body">
-						
-							<div class="scroller" style="height: 150px;" data-always-visible="1" data-rail-visible="0">
-								<ul class="feeds">
-            <?php
-			  $r1=mysql_query("select * from event where flag='0' order by id Desc ");		
-					while($row1=mysql_fetch_array($r1))
-					{
-					
-					$e_id=$row1['id'];
-					$title=$row1['title'];
-                    $event_date1=$row1['date_from'];
-					$event_time=$row1['time'];
-                    $event_pic=$row1['image'];
-                    $event_date=date('d-m-Y', strtotime($event_date1));
-					$event_folder='event';
-					$ev_id=$e_id;
-					$exact_folder_name=$event_folder.$ev_id;
-                    ?> 
-
-								<form class="form-horizontal" role="form" id="noticeform" method="post" enctype="multipart/form-data">
-									<li>
-										<div class="col1">
-											<div class="cont">
-												<div class="cont-col1">
-													<div class="label label-sm">
-													
-													<input type="hidden" class="" name="event_x_id" value="<?php echo $e_id;?>">
-														<image src="event/<?php echo $exact_folder_name;?>/<?php echo $event_pic;?>" height="20px" width="20px">
-													</div>
-												</div>
-												<div class="cont-col2">
-													<div class="desc">
-														 <span style="color:#44B6AE"><?php echo $title;?>&nbsp;&nbsp;/&nbsp;<?php echo $event_date;?>&nbsp;&nbsp;/&nbsp;<?php echo $event_time;?> </span>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="col2">
-											<div class="date">
-												 <button class="btn label label-sm blue-madison event_ajax_class" event_id="<?php echo $e_id;?>" name="" type="button" style="color:#fff">
-														Notify <i class="fa fa-share"></i>
-														</button>
-											</div>
-										</div>
-									</li>
-										</form>
-									
-                    <?php } ?>
-                                </ul>
-							</div>
-						
-							<div class="scroller-footer">
-								<div class="btn-arrow-link pull-right">
-									<a href="dashboard_event.php">See All Events</a>
-									<i class="icon-arrow-right"></i>
-								</div>
-							</div>
-						</div>
+						<a class="more" href="appointment.php?s=0">
+						View more <i class="m-icon-swapright m-icon-white"></i>
+						</a>
 					</div>
+				</div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" >
+					<div class="dashboard-stat green">
+						<div class="visual">
+							<i class="fa fa-bell"></i>
+						</div>
+						<div class="details">
+							<div class="number">
+								Leave Note
+							</div>
+							<div class="desc">
+							</div>
+						</div>
+						<a class="more" href="view_inquiry.php">
+						View more <i class="m-icon-swapright m-icon-white"></i>
+						</a>
+					</div>
+				</div>
+                    
+                    
 				</div>
                 <!------------------------------------NEWS---------------------------------------------->
                 <div class="col-md-6 col-sm-6">
@@ -482,6 +413,76 @@ $em=strtoupper($emm);
 						</div>
 					</div>
 				</div>
+                <div class="row ">
+				<div class="col-md-6 col-sm-6" >
+					<div class="portlet box">
+						<div class="portlet-title">
+							<div class="caption">
+								<i class="fa fa-bell-o"></i>Event
+							</div>
+						</div>
+						<div class="portlet-body">
+						
+							<div class="scroller" style="height: 150px;" data-always-visible="1" data-rail-visible="0">
+								<ul class="feeds">
+            <?php
+			  $r1=mysql_query("select * from event where flag='0' order by id Desc ");		
+					while($row1=mysql_fetch_array($r1))
+					{
+					
+					$e_id=$row1['id'];
+					$title=$row1['title'];
+                    $event_date1=$row1['date_from'];
+					$event_time=$row1['time'];
+                    $event_pic=$row1['image'];
+                    $event_date=date('d-m-Y', strtotime($event_date1));
+					$event_folder='event';
+					$ev_id=$e_id;
+					$exact_folder_name=$event_folder.$ev_id;
+                    ?> 
+
+								<form class="form-horizontal" role="form" id="noticeform" method="post" enctype="multipart/form-data">
+									<li>
+										<div class="col1">
+											<div class="cont">
+												<div class="cont-col1">
+													<div class="label label-sm">
+													
+													<input type="hidden" class="" name="event_x_id" value="<?php echo $e_id;?>">
+														<image src="event/<?php echo $exact_folder_name;?>/<?php echo $event_pic;?>" height="20px" width="20px">
+													</div>
+												</div>
+												<div class="cont-col2">
+													<div class="desc">
+														 <span style="color:#44B6AE"><?php echo $title;?>&nbsp;&nbsp;/&nbsp;<?php echo $event_date;?>&nbsp;&nbsp;/&nbsp;<?php echo $event_time;?> </span>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="col2">
+											<div class="date">
+												 <button class="btn label label-sm blue-madison event_ajax_class" event_id="<?php echo $e_id;?>" name="" type="button" style="color:#fff">
+														Notify <i class="fa fa-share"></i>
+														</button>
+											</div>
+										</div>
+									</li>
+										</form>
+									
+                    <?php } ?>
+                                </ul>
+							</div>
+						
+							<div class="scroller-footer">
+								<div class="btn-arrow-link pull-right">
+									<a href="dashboard_event.php">See All Events</a>
+									<i class="icon-arrow-right"></i>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+                </div>
 				
 				
 				
