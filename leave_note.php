@@ -51,7 +51,7 @@ span {
 			<div class="portlet box">
 						<div class="portlet-title">
 							<div class="caption">
-								<i class="fa fa-gift"></i> Appointments Details
+								<i class="fa fa-gift"></i> Leave Note
 							</div>
 							 
 						</div>
@@ -59,10 +59,9 @@ span {
 								<div class="form-body">
                               <div style="margin:10px">
                                
-                             	<a href="appointment.php?s=0" class="<?php if($status_ftc==0){ echo 'btn btn-sm red'; } else { echo 'btn btn-sm blue'; }  ?>">In-Process <i class="glyphicon glyphicon-refresh"></i></a>
-                                <a href="appointment.php?s=1" class="<?php if($status_ftc==1){echo 'btn btn-sm red'; } else { echo 'btn btn-sm blue'; }  ?>">Approved <i class="glyphicon glyphicon-ok"></i></a>
-                                <a href="appointment.php?s=2" class="<?php if($status_ftc==2){echo 'btn btn-sm red'; } else { echo 'btn btn-sm blue'; }  ?>">Rejected <i class="glyphicon glyphicon-remove"></i></a>
-                                <a href="appointment.php?s=3" class="<?php if($status_ftc==3){echo 'btn btn-sm red'; } else { echo 'btn btn-sm blue'; }  ?>">Completed <i class="glyphicon glyphicon-check"></i></a>
+                             	<a href="leave_note.php?s=0" class="<?php if($status_ftc==0){ echo 'btn btn-sm red'; } else { echo 'btn btn-sm blue'; }  ?>">In-Process <i class="glyphicon glyphicon-refresh"></i></a>
+                                <a href="leave_note.php?s=1" class="<?php if($status_ftc==1){echo 'btn btn-sm red'; } else { echo 'btn btn-sm blue'; }  ?>">Approved <i class="glyphicon glyphicon-ok"></i></a>
+                                <a href="leave_note.php?s=2" class="<?php if($status_ftc==2){echo 'btn btn-sm red'; } else { echo 'btn btn-sm blue'; }  ?>">Rejected <i class="glyphicon glyphicon-remove"></i></a>
                               </div>
                              
 								 <div class="scroller" style="height:500px;"  data-always-visible="1" data-rail-visible="0">

@@ -336,7 +336,7 @@ $em=strtoupper($emm);
 							<div class="desc">
 							</div>
 						</div>
-						<a class="more" href="view_inquiry.php">
+						<a class="more" href="leave_note.php?s=1">
 						View more <i class="m-icon-swapright m-icon-white"></i>
 						</a>
 					</div>
@@ -507,25 +507,25 @@ $(document).ready(function() {
 			});
 });
 
-$(".news_ajax_class").on('click',function(){
-				var news_val=$(this).attr('news_id');
-				$.ajax({
+	$(".news_ajax_class").on('click',function(){
+		var news_val=$(this).attr('news_id');
+		$.ajax({
 			url: "ajax_news_notification.php?news_val="+news_val,
 			}).done(function(response){
-				alert('Notification Sent Successfully.');
-				$("#ok").html(response);				
-			});
-});
+			alert('Notification Sent Successfully.');
+			$("#ok").html(response);				
+		});
+	});
 
-$(".result_ajax_class").on('click',function(){
-				var result_val=$(this).attr('result1_id');
-				$.ajax({
+	$(".result_ajax_class").on('click',function(){
+		var result_val=$(this).attr('result1_id');
+		$.ajax({
 			url: "ajax_result_notification.php?result_val="+result_val,
 			}).done(function(response){
 				alert('Notification Sent Successfully.');
 				$("#ok").html(response);				
-			});
-});
+		});
+	});
 
 
  $(".cal_ajax_class").click(function(){

@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.6.5.2
--- https://www.phpmyadmin.net/
+-- version 4.5.1
+-- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 25, 2017 at 08:28 AM
--- Server version: 10.1.21-MariaDB
--- PHP Version: 5.6.30
+-- Generation Time: Mar 28, 2017 at 06:28 AM
+-- Server version: 10.1.13-MariaDB
+-- PHP Version: 5.6.23
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -36,7 +36,7 @@ CREATE TABLE `about_us` (
 --
 
 INSERT INTO `about_us` (`id`, `about_us`) VALUES
-(1, '<p><strong><span style=\"font-size: 14.0pt; font-family: \'Times New Roman\',\'serif\'; mso-fareast-font-family: \'Times New Roman\'; mso-font-kerning: 18.0pt;\">About us</span></strong></p><p>The main objective of the institution is to build young citizens of tomorrow who are ready to face challenges and</p><p>harness opportunities. MDS Sr. Sec. School provides the fullest opportunities to its students to develop an all round</p><p>personality in addition to scholarly pursuits. The institution has adopted the phrase TOTAL KNOWLEDGE TOTAL</p><p>PERSONALITY to reflect this mission and to achieve this objective, the following infrastructure has been developed</p><p>for the overall personality development.</p>');
+(1, '<p><strong><span style="font-size: 14.0pt; font-family: ''Times New Roman'',''serif''; mso-fareast-font-family: ''Times New Roman''; mso-font-kerning: 18.0pt;">About us</span></strong></p><p>The main objective of the institution is to build young citizens of tomorrow who are ready to face challenges and</p><p>harness opportunities. MDS Sr. Sec. School provides the fullest opportunities to its students to develop an all round</p><p>personality in addition to scholarly pursuits. The institution has adopted the phrase TOTAL KNOWLEDGE TOTAL</p><p>PERSONALITY to reflect this mission and to achieve this objective, the following infrastructure has been developed</p><p>for the overall personality development.</p>');
 
 -- --------------------------------------------------------
 
@@ -80,6 +80,29 @@ CREATE TABLE `add_to_calendar` (
   `event_date` date NOT NULL,
   `curent_date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `appointment`
+--
+
+CREATE TABLE `appointment` (
+  `id` int(11) NOT NULL,
+  `appoint_to` int(11) NOT NULL,
+  `appoint_date` date NOT NULL,
+  `appoint_time` time NOT NULL,
+  `reason` text NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `status` int(11) NOT NULL COMMENT '0 = pending, 1 = approved, 2 = rejected, 3 = Completed'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `appointment`
+--
+
+INSERT INTO `appointment` (`id`, `appoint_to`, `appoint_date`, `appoint_time`, `reason`, `timestamp`, `status`) VALUES
+(1, 3, '2017-04-01', '03:25:00', 'This is test meeting yes', '2017-03-27 12:20:57', 3);
 
 -- --------------------------------------------------------
 
@@ -201,6 +224,30 @@ INSERT INTO `class_section` (`id`, `class_id`, `section_id`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `contact_detail`
+--
+
+CREATE TABLE `contact_detail` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `mobile_no` varchar(20) NOT NULL,
+  `email` varchar(50) NOT NULL,
+  `designation` varchar(50) NOT NULL,
+  `flag` int(11) NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `contact_detail`
+--
+
+INSERT INTO `contact_detail` (`id`, `name`, `mobile_no`, `email`, `designation`, `flag`, `timestamp`) VALUES
+(1, 'ashish jain', '9898989898', 'ashish@phppoets.in', 'Teacher', 0, '2017-03-27 09:10:36'),
+(2, 'Dsu Menaria', '9680747166', 'dsumenaria@gmail.com', 'Principle', 0, '2017-03-27 06:48:05');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `event`
 --
 
@@ -276,7 +323,7 @@ CREATE TABLE `faculty_login` (
 --
 
 INSERT INTO `faculty_login` (`id`, `role_id`, `user_name`, `password`, `mobile_no`, `address`, `class_id`, `section_id`, `image`, `curent_date`, `flag`) VALUES
-(1, 2, 'admin', '21232f297a57a5a743894a0e4a801fc3', '8233334988', 'Udaipur', '1,2', '1,2', '', '2017-03-02', 0),
+(1, 2, 'admin', '5d41402abc4b2a76b9719d911017c592', '8233334988', 'Udaipur', '1,2', '1,2', '', '2017-03-02', 0),
 (2, 3, 'Principal', 'e7d715a9b79d263ae527955341bbe9b1', '9696969696', 'udaipur', '', '', '36641489524804.jpeg', '2017-03-15', 0),
 (3, 4, 'teacher ', 'c1698fb755f9cba93170074c0d2086d5', '9696969696', 'udaipur', '', '', '70141489524873.jpeg', '2017-03-15', 0);
 
@@ -345,6 +392,29 @@ CREATE TABLE `inquiry_form` (
   `query` text NOT NULL,
   `curent_date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `leave_note`
+--
+
+CREATE TABLE `leave_note` (
+  `id` int(11) NOT NULL,
+  `date_from` date NOT NULL,
+  `date_to` date NOT NULL,
+  `reason` text NOT NULL,
+  `student_id` int(11) NOT NULL,
+  `status` int(11) NOT NULL COMMENT '0 = in-process, 1 = approved, 2 = rejected',
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `leave_note`
+--
+
+INSERT INTO `leave_note` (`id`, `date_from`, `date_to`, `reason`, `student_id`, `status`, `timestamp`) VALUES
+(1, '2017-04-01', '2017-04-03', 'test krne k liye', 1, 0, '2017-03-28 04:27:52');
 
 -- --------------------------------------------------------
 
@@ -1081,7 +1151,7 @@ INSERT INTO `login` (`id`, `user_id`, `role_id`, `name`, `dob`, `father_name`, `
 (691, 1, 5, 'BHOOMY DERASHRI', '2006-02-24', 'MR  OM PRAKASH DERASHRI', 'MRS  KOSHALYA JOSHI', '301, GANESH NAGAR, PAYDA, UNIVERSITY ROAD, UDAIPUR', '5210', 5, 2, 0, 'MDSPS-2278', '41e96c9e7b4c9b22cad803dd957dbed5', '', '', '', 'AAAArt9gILg:APA91bFwFhemkzYV7Sq83t7zvpLC8QY27DC__xWUFIbI1GefXTDD0_4S8hOuOJ88q0oZ3gmWjshoRSwU08xqcWTb1a1PofkKp52nUdN9tB-voht0KhDW4O4Ch39ycj0VNogAuYRj29dN', '', 'noimage.jpg', 1, '0000-00-00', 0),
 (692, 1, 5, 'AVANTIKA CHOUDHARY', '2007-02-18', 'MR  PRADEEP CHOUDHARY', 'MRS  SONU CHOUDHARY', 'H  NO  29, SHUBHAM COMPLEX OPP  SAVITRI VATIKA SEC  4', '5207', 5, 2, 0, 'MDSPS-2184', '9cd3c101dea7dad311dd64ea3b6a99f0', '', '', '', 'AAAArt9gILg:APA91bFwFhemkzYV7Sq83t7zvpLC8QY27DC__xWUFIbI1GefXTDD0_4S8hOuOJ88q0oZ3gmWjshoRSwU08xqcWTb1a1PofkKp52nUdN9tB-voht0KhDW4O4Ch39ycj0VNogAuYRj29dN', '', 'noimage.jpg', 1, '0000-00-00', 0),
 (693, 1, 5, 'KANISHKA MOTWANI', '2006-03-09', 'MR  SURESH MOTWANI', 'MRS  SANGITA MOTWANI', '35, JAWAHAR NAGAR, UDAIPUR', '5122', 5, 1, 0, 'MDSPS-1634', 'f7dd756d6a769be2eafc5412444fe943', '', '', '', 'AAAArt9gILg:APA91bFwFhemkzYV7Sq83t7zvpLC8QY27DC__xWUFIbI1GefXTDD0_4S8hOuOJ88q0oZ3gmWjshoRSwU08xqcWTb1a1PofkKp52nUdN9tB-voht0KhDW4O4Ch39ycj0VNogAuYRj29dN', '', 'noimage.jpg', 1, '0000-00-00', 0),
-(694, 1, 5, 'ADITI MALU', '2006-07-18', 'MR  KANHAIYA LAL MALU', 'MRS  SARITA MALU', '\"MALU PALACE\", H NO  1, NEW MAHAVEER NAGAR, HIRAN MAGRI, SECT  NO  4, UDAIPUR', '5201', 5, 2, 0, 'MDSPS-0959', 'a0b1420fce75bb14fcdff780a1833d72', '', '', '', 'AAAArt9gILg:APA91bFwFhemkzYV7Sq83t7zvpLC8QY27DC__xWUFIbI1GefXTDD0_4S8hOuOJ88q0oZ3gmWjshoRSwU08xqcWTb1a1PofkKp52nUdN9tB-voht0KhDW4O4Ch39ycj0VNogAuYRj29dN', '', 'noimage.jpg', 1, '0000-00-00', 0),
+(694, 1, 5, 'ADITI MALU', '2006-07-18', 'MR  KANHAIYA LAL MALU', 'MRS  SARITA MALU', '"MALU PALACE", H NO  1, NEW MAHAVEER NAGAR, HIRAN MAGRI, SECT  NO  4, UDAIPUR', '5201', 5, 2, 0, 'MDSPS-0959', 'a0b1420fce75bb14fcdff780a1833d72', '', '', '', 'AAAArt9gILg:APA91bFwFhemkzYV7Sq83t7zvpLC8QY27DC__xWUFIbI1GefXTDD0_4S8hOuOJ88q0oZ3gmWjshoRSwU08xqcWTb1a1PofkKp52nUdN9tB-voht0KhDW4O4Ch39ycj0VNogAuYRj29dN', '', 'noimage.jpg', 1, '0000-00-00', 0),
 (695, 1, 5, 'ADITYA VATS', '2006-01-09', 'MR  PARMOD KUMAR SHARMA', 'MRS  JYOTSNA SHARMA', '1463, GAYATRI NAGAR, HIRAN MAGRI, SECT  NO  5, UDAIPUR', '5202', 5, 2, 0, 'MDSPS-0832', 'ada7c9b21816aef2d2b07d2a262e1ea5', '', '', '', 'AAAArt9gILg:APA91bFwFhemkzYV7Sq83t7zvpLC8QY27DC__xWUFIbI1GefXTDD0_4S8hOuOJ88q0oZ3gmWjshoRSwU08xqcWTb1a1PofkKp52nUdN9tB-voht0KhDW4O4Ch39ycj0VNogAuYRj29dN', '', 'noimage.jpg', 1, '0000-00-00', 0),
 (696, 1, 5, 'KHUSHI BHERWANI', '2006-09-05', 'MR  JITENDRA BHERWANI', 'MRS  POOJA BHERWANI', '166, SECTOR NO  8, SANJAY GANDHI NAGAR, HIRAN MAGRI, UDAIPUR', '5126', 5, 1, 0, 'MDSPS-1960', 'b5d7f6bc071f8a055fb2644104230f39', '', '', '', 'AAAArt9gILg:APA91bFwFhemkzYV7Sq83t7zvpLC8QY27DC__xWUFIbI1GefXTDD0_4S8hOuOJ88q0oZ3gmWjshoRSwU08xqcWTb1a1PofkKp52nUdN9tB-voht0KhDW4O4Ch39ycj0VNogAuYRj29dN', '', 'noimage.jpg', 1, '0000-00-00', 0),
 (697, 1, 5, 'ESHAAN JAIN', '2006-10-09', 'MR  AVINASH JAIN', 'MRS  SUPRIYA JAIN', '35-A, ADARSH HOUSING SOCIETY, VIDHYANAGAR, HIRAN MAGRI, SECT  NO  4, UDAIPUR', '5112', 5, 1, 0, 'MDSPS-1671', '670371cefb6e9e1bf98adf20465e07c8', '', '', '', 'AAAArt9gILg:APA91bFwFhemkzYV7Sq83t7zvpLC8QY27DC__xWUFIbI1GefXTDD0_4S8hOuOJ88q0oZ3gmWjshoRSwU08xqcWTb1a1PofkKp52nUdN9tB-voht0KhDW4O4Ch39ycj0VNogAuYRj29dN', '', 'noimage.jpg', 1, '0000-00-00', 0),
@@ -1455,7 +1525,7 @@ INSERT INTO `login` (`id`, `user_id`, `role_id`, `name`, `dob`, `father_name`, `
 (1062, 1, 5, 'RAHUL PALIWAL', '2004-03-07', 'MR  BHERU LAL PALIWAL', 'MRS  GANESHI DEVI PALIWAL', '22, POSTAL COLONY, HIRAN MAGRI, SECTOR NO  5, UDAIPUR', '8246', 8, 2, 0, 'MDS-SS-3595', '3f42770fd3f3f4745b8f52bdd1267ea8', '', '', '', 'AAAArt9gILg:APA91bFwFhemkzYV7Sq83t7zvpLC8QY27DC__xWUFIbI1GefXTDD0_4S8hOuOJ88q0oZ3gmWjshoRSwU08xqcWTb1a1PofkKp52nUdN9tB-voht0KhDW4O4Ch39ycj0VNogAuYRj29dN', '', 'noimage.jpg', 1, '0000-00-00', 0),
 (1063, 1, 5, 'RADHIKA SINGH JADOUN', '2004-02-23', 'MR  GOPAL SINGH JADOUN', 'MRS  LEELA KUMARI JADOUN', '56, SUKHADIYA NAGAR, HIRAN MAGRI, SECT  NO  3, BEHIND UDAIPUR GAS GODOWN, UDAIPUR', '8135', 8, 1, 0, 'MDS-SS-3596', '181eb4830e85107edb33a97ed2fa054b', '', '', '', 'AAAArt9gILg:APA91bFwFhemkzYV7Sq83t7zvpLC8QY27DC__xWUFIbI1GefXTDD0_4S8hOuOJ88q0oZ3gmWjshoRSwU08xqcWTb1a1PofkKp52nUdN9tB-voht0KhDW4O4Ch39ycj0VNogAuYRj29dN', '', 'noimage.jpg', 1, '0000-00-00', 0),
 (1064, 1, 5, 'BHARAT SHARMA', '2002-12-05', 'MR. RAMESHWAR NAGDA', 'MRS  RADHA SHARMA', '64 EKLING COLONY SEC 3 CELEBRATION CAFÃ‰ UDAIPUR', '8108', 8, 1, 0, 'MDS-SS-3597', '535689cbf946808d9dd46dee094dfe37', '', '', '', 'AAAArt9gILg:APA91bFwFhemkzYV7Sq83t7zvpLC8QY27DC__xWUFIbI1GefXTDD0_4S8hOuOJ88q0oZ3gmWjshoRSwU08xqcWTb1a1PofkKp52nUdN9tB-voht0KhDW4O4Ch39ycj0VNogAuYRj29dN', '', 'noimage.jpg', 1, '0000-00-00', 0),
-(1065, 1, 5, 'RIYUKSHA SHUKLA', '2002-09-19', 'MR.Â RAJESH SHUKLA', 'MRS  ANITA SHUKLA', '4-A, \"DEVGYAN\" SHUKLABHAWAN, NORTH SUNDERWAS, UDAIPUR', '8137', 8, 1, 0, 'MDS-SS-3598', 'a167910517180ba505ef8c340cd9670b', '', '', '', 'AAAArt9gILg:APA91bFwFhemkzYV7Sq83t7zvpLC8QY27DC__xWUFIbI1GefXTDD0_4S8hOuOJ88q0oZ3gmWjshoRSwU08xqcWTb1a1PofkKp52nUdN9tB-voht0KhDW4O4Ch39ycj0VNogAuYRj29dN', '', 'noimage.jpg', 1, '0000-00-00', 0),
+(1065, 1, 5, 'RIYUKSHA SHUKLA', '2002-09-19', 'MR.Â RAJESH SHUKLA', 'MRS  ANITA SHUKLA', '4-A, "DEVGYAN" SHUKLABHAWAN, NORTH SUNDERWAS, UDAIPUR', '8137', 8, 1, 0, 'MDS-SS-3598', 'a167910517180ba505ef8c340cd9670b', '', '', '', 'AAAArt9gILg:APA91bFwFhemkzYV7Sq83t7zvpLC8QY27DC__xWUFIbI1GefXTDD0_4S8hOuOJ88q0oZ3gmWjshoRSwU08xqcWTb1a1PofkKp52nUdN9tB-voht0KhDW4O4Ch39ycj0VNogAuYRj29dN', '', 'noimage.jpg', 1, '0000-00-00', 0),
 (1066, 1, 5, 'PRACHI TATED', '2003-03-19', 'MR  CHANDRA SINGH TATED', 'MRS  SEEMA TATER', '57, VIVEK NAGAR, HIRAN MAGRI, SECT  NO  3, UDAIPUR', '8237', 8, 2, 0, 'MDS-SS-3599', '49776779be4e68d63a381def59257afe', '', '', '', 'AAAArt9gILg:APA91bFwFhemkzYV7Sq83t7zvpLC8QY27DC__xWUFIbI1GefXTDD0_4S8hOuOJ88q0oZ3gmWjshoRSwU08xqcWTb1a1PofkKp52nUdN9tB-voht0KhDW4O4Ch39ycj0VNogAuYRj29dN', '', 'noimage.jpg', 1, '0000-00-00', 0),
 (1067, 1, 5, 'ANURAG BAHETI', '2003-07-24', 'MR  DINESH BAHETI', 'MRS  SUNITA', 'H NO  140, SHREE JEE VIHAR, NEW VIDHYA NAGAR, HIRAN MAGRI SECT  NO  4, UDAIPUR', '8208', 8, 2, 0, 'MDS-SS-3328', '3f2da4a345fbf5a741217084f0c9323b', '', '', '', 'AAAArt9gILg:APA91bFwFhemkzYV7Sq83t7zvpLC8QY27DC__xWUFIbI1GefXTDD0_4S8hOuOJ88q0oZ3gmWjshoRSwU08xqcWTb1a1PofkKp52nUdN9tB-voht0KhDW4O4Ch39ycj0VNogAuYRj29dN', '', 'noimage.jpg', 1, '0000-00-00', 0),
 (1068, 1, 5, 'JATIN CHOUBISA', '2003-09-07', 'MR  SURESH CHANDRA CHOUBISA', 'MRS  ISHWARI CHOUBISA', '433/4, HIRAN MAGRI, UDAIPUR', '8226', 8, 2, 0, 'MDS-SS-3600', '875d6b27365d662e91e01248c1ab5b03', '', '', '', 'AAAArt9gILg:APA91bFwFhemkzYV7Sq83t7zvpLC8QY27DC__xWUFIbI1GefXTDD0_4S8hOuOJ88q0oZ3gmWjshoRSwU08xqcWTb1a1PofkKp52nUdN9tB-voht0KhDW4O4Ch39ycj0VNogAuYRj29dN', '', 'noimage.jpg', 1, '0000-00-00', 0);
@@ -1589,7 +1659,7 @@ INSERT INTO `login` (`id`, `user_id`, `role_id`, `name`, `dob`, `father_name`, `
 (1194, 1, 5, 'GAGAN PANWAR', '2000-12-03', 'MR  NAND LAL PANWAR', 'MRS  MANJU PANWAR', '423, JYOTI COLONY, STREET NO   3, NEAR GLASS FACTORY, UDAIPUR', '10111', 10, 1, 0, 'MDS-SS-2943', '535c562c746fcc9fa881d2db93797fa9', '', '', '', 'AAAArt9gILg:APA91bFwFhemkzYV7Sq83t7zvpLC8QY27DC__xWUFIbI1GefXTDD0_4S8hOuOJ88q0oZ3gmWjshoRSwU08xqcWTb1a1PofkKp52nUdN9tB-voht0KhDW4O4Ch39ycj0VNogAuYRj29dN', '', 'noimage.jpg', 1, '0000-00-00', 0),
 (1195, 1, 5, 'TANU SHREE SUTHAR', '2001-11-15', 'MR  SHANTI LAL SUTHAR', 'MRS  RADHA SUTHAR', 'F/5, GALI NO  3, SANTOSH NAGAR, GARIYAS, UDAIPUR', '10347', 10, 6, 0, 'MDS-SS-2946', '7104cd4622d68d701e13479de2392672', '', '', '', 'AAAArt9gILg:APA91bFwFhemkzYV7Sq83t7zvpLC8QY27DC__xWUFIbI1GefXTDD0_4S8hOuOJ88q0oZ3gmWjshoRSwU08xqcWTb1a1PofkKp52nUdN9tB-voht0KhDW4O4Ch39ycj0VNogAuYRj29dN', '', 'noimage.jpg', 1, '0000-00-00', 0),
 (1196, 1, 5, 'DIVYANSH JAIN', '2001-10-02', 'MR  MAHESH KUMAR JAIN', 'MRS  ANITA JAIN', '23, MAHAVEER NAGAR, HIRAN MAGRI, SECT  NO  14, UDAIPUR', '10214', 10, 2, 0, 'MDS-SS-2929', 'a93524af63fc984ff214e7ea8b22a6e3', '', '', '', 'AAAArt9gILg:APA91bFwFhemkzYV7Sq83t7zvpLC8QY27DC__xWUFIbI1GefXTDD0_4S8hOuOJ88q0oZ3gmWjshoRSwU08xqcWTb1a1PofkKp52nUdN9tB-voht0KhDW4O4Ch39ycj0VNogAuYRj29dN', '', 'noimage.jpg', 1, '0000-00-00', 0),
-(1197, 1, 5, 'ALOK BHANAWAT', '2001-04-19', 'MR  ANIL BHANAWAT', 'MRS  PRAMILA BHANAWAT', '186, \"GULZAR BHAWAN\"  HIRAN MAGRI, SECT  NO  3, UDAIPUR', '10105', 10, 1, 0, 'MDS-SS-2933', 'ede41930707dc37d4cd246a76d69c249', '', '', '', 'AAAArt9gILg:APA91bFwFhemkzYV7Sq83t7zvpLC8QY27DC__xWUFIbI1GefXTDD0_4S8hOuOJ88q0oZ3gmWjshoRSwU08xqcWTb1a1PofkKp52nUdN9tB-voht0KhDW4O4Ch39ycj0VNogAuYRj29dN', '', 'noimage.jpg', 1, '0000-00-00', 0),
+(1197, 1, 5, 'ALOK BHANAWAT', '2001-04-19', 'MR  ANIL BHANAWAT', 'MRS  PRAMILA BHANAWAT', '186, "GULZAR BHAWAN"  HIRAN MAGRI, SECT  NO  3, UDAIPUR', '10105', 10, 1, 0, 'MDS-SS-2933', 'ede41930707dc37d4cd246a76d69c249', '', '', '', 'AAAArt9gILg:APA91bFwFhemkzYV7Sq83t7zvpLC8QY27DC__xWUFIbI1GefXTDD0_4S8hOuOJ88q0oZ3gmWjshoRSwU08xqcWTb1a1PofkKp52nUdN9tB-voht0KhDW4O4Ch39ycj0VNogAuYRj29dN', '', 'noimage.jpg', 1, '0000-00-00', 0),
 (1198, 1, 5, 'SANDEEP PATEL', '2001-06-23', 'MR  NAVAL RAM PATEL', 'MRS  DALI BAI PATEL', '324, CHANAKYAPURI SECT  NO  4, NEAR GURU NANAK PUBLIC SCHOOL, UDAIPUR', '10342', 10, 6, 0, 'MDS-SS-2917', 'deba3037eb5ce5e98d98a86ee402b8ee', '', '', '', 'AAAArt9gILg:APA91bFwFhemkzYV7Sq83t7zvpLC8QY27DC__xWUFIbI1GefXTDD0_4S8hOuOJ88q0oZ3gmWjshoRSwU08xqcWTb1a1PofkKp52nUdN9tB-voht0KhDW4O4Ch39ycj0VNogAuYRj29dN', '', 'noimage.jpg', 1, '0000-00-00', 0),
 (1199, 1, 5, 'VINITA SOLANKI', '2001-07-17', 'MR  VIRENDRA SINGH', 'MRS  RAJKUMARI', '1333, ADARSH NAGAR, HIRAN MAGRI, SECT  NO  4, UDAIPUR', '10148', 10, 1, 0, 'MDS-SS-2895', '13771016e9411fa4da3b59027db3385b', '', '', '', 'AAAArt9gILg:APA91bFwFhemkzYV7Sq83t7zvpLC8QY27DC__xWUFIbI1GefXTDD0_4S8hOuOJ88q0oZ3gmWjshoRSwU08xqcWTb1a1PofkKp52nUdN9tB-voht0KhDW4O4Ch39ycj0VNogAuYRj29dN', '', 'noimage.jpg', 1, '0000-00-00', 0),
 (1200, 1, 5, 'SUCHI SHARMA', '2001-04-01', 'MR  PREM SHANKAR SHARMA', 'MRS  CHANCHAL SHARMA', '40-41, KUMBHA NAGAR, HIRAN MAGRI, SECT  NO  4, UDAIPUR', '10144', 10, 1, 0, 'MDS-SS-2919', '4d416ee045c5a8e04b167d80588f0538', '', '', '', 'AAAArt9gILg:APA91bFwFhemkzYV7Sq83t7zvpLC8QY27DC__xWUFIbI1GefXTDD0_4S8hOuOJ88q0oZ3gmWjshoRSwU08xqcWTb1a1PofkKp52nUdN9tB-voht0KhDW4O4Ch39ycj0VNogAuYRj29dN', '', 'noimage.jpg', 1, '0000-00-00', 0),
@@ -3103,7 +3173,9 @@ INSERT INTO `modules` (`id`, `name`, `main_menu`, `main_menu_icon`, `sub_menu`, 
 (49, 'Add', 'Syllabus', 'fa fa-edit', '', '', 'syllabus.php', 'fa fa-plus', '', ''),
 (50, 'View', 'Syllabus', 'fa fa-edit', '', '', 'view_syllabus.php', 'fa fa-edit', '', ''),
 (51, 'Add', 'Time Table', 'fa fa-edit', '', '', 'timetable.php', 'fa fa-plus', '', ''),
-(52, 'View', 'Time Table', 'fa fa-edit', '', '', 'view_timetable.php', 'fa fa-edit', '', '');
+(52, 'View', 'Time Table', 'fa fa-edit', '', '', 'view_timetable.php', 'fa fa-edit', '', ''),
+(53, 'Add', 'Contact Details', 'fa fa-group', '', '', 'contact_detail.php', 'fa fa-book', '', ''),
+(54, 'Edit', 'Contact Details', 'fa fa-group', '', '', 'edit_contact_detail.php', 'fa fa-edit ', '', '');
 
 -- --------------------------------------------------------
 
@@ -3163,7 +3235,7 @@ CREATE TABLE `notice` (
 --
 
 INSERT INTO `notice` (`id`, `role_id`, `category_id`, `user_id`, `notice_no`, `image`, `title`, `description`, `dateofpublish`, `time`, `class_id`, `section_id`, `medium_id`, `noticedetails`, `file_name`, `curent_date`, `shareable`, `flag`) VALUES
-(1, 2, 6, 1, '1', 'notice1.jpg', 'notice1', 'testnotice', '2017-03-15', '02:29 PM', '', '', '', '						<center><img src=\"img/logo.png\" width=\"250px\" height=\"100px\"></img></center>\r\n	asdyjvasnd					', 'notice1.pdf', '0000-00-00', 1, 0);
+(1, 2, 6, 1, '1', 'notice1.jpg', 'notice1', 'testnotice', '2017-03-15', '02:29 PM', '', '', '', '						<center><img src="img/logo.png" width="250px" height="100px"></img></center>\r\n	asdyjvasnd					', 'notice1.pdf', '0000-00-00', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -3311,7 +3383,10 @@ INSERT INTO `user_management` (`id`, `role_id`, `module_id`) VALUES
 (39, 2, '49'),
 (40, 2, '50'),
 (41, 2, '51'),
-(42, 2, '52');
+(42, 2, '52'),
+(43, 2, '9'),
+(44, 2, '53'),
+(45, 2, '54');
 
 --
 -- Indexes for dumped tables
@@ -3336,6 +3411,12 @@ ALTER TABLE `add_to_calendar`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `appointment`
+--
+ALTER TABLE `appointment`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `assignment`
 --
 ALTER TABLE `assignment`
@@ -3357,6 +3438,12 @@ ALTER TABLE `broadcast_message`
 -- Indexes for table `class_section`
 --
 ALTER TABLE `class_section`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `contact_detail`
+--
+ALTER TABLE `contact_detail`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -3393,6 +3480,12 @@ ALTER TABLE `home_gallery`
 -- Indexes for table `inquiry_form`
 --
 ALTER TABLE `inquiry_form`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `leave_note`
+--
+ALTER TABLE `leave_note`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -3505,6 +3598,11 @@ ALTER TABLE `acedmic_calendar`
 ALTER TABLE `add_to_calendar`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
+-- AUTO_INCREMENT for table `appointment`
+--
+ALTER TABLE `appointment`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
 -- AUTO_INCREMENT for table `assignment`
 --
 ALTER TABLE `assignment`
@@ -3524,6 +3622,11 @@ ALTER TABLE `broadcast_message`
 --
 ALTER TABLE `class_section`
   MODIFY `id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+--
+-- AUTO_INCREMENT for table `contact_detail`
+--
+ALTER TABLE `contact_detail`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `event`
 --
@@ -3554,6 +3657,11 @@ ALTER TABLE `home_gallery`
 --
 ALTER TABLE `inquiry_form`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `leave_note`
+--
+ALTER TABLE `leave_note`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `login`
 --
@@ -3593,7 +3701,7 @@ ALTER TABLE `master_subject`
 -- AUTO_INCREMENT for table `modules`
 --
 ALTER TABLE `modules`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
 --
 -- AUTO_INCREMENT for table `news`
 --
@@ -3628,7 +3736,7 @@ ALTER TABLE `time_table`
 -- AUTO_INCREMENT for table `user_management`
 --
 ALTER TABLE `user_management`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
