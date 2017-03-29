@@ -2249,7 +2249,100 @@ public function fetch_syllabus() {
 			$this->response($this->json($error), 200);
 		}
 		}
+//		DSU MENARIA DEVLOPED CODE
 
+//--  AppointMent API/*
+	public function appointment_data() 
+	{
+		global $link;
+		include_once("common/global.inc.php");
+		if ($this->get_request_method() != "POST") {
+            $this->response('', 406);
+        }
+		if(isset($this->_request['response_type']))
+		{
+			$response_type=$this->_request['response_type'];
+			//-- Response Type = 1 Insert  2 = update  3 Fetch
+			if($response_type==1)
+			{//Insert
+				$appoint_to=$this->_request['appoint_to'];
+				$appoint_date=$this->_request['appoint_date'];/// YMD
+				$appoint_date_cnv=date('Y-m-d', strtotime($appoint_date));
+				$appoint_time=$this->_request['appoint_time'];
+				$reason=$this->_request['reason'];
+				 
+				$sql_insert = $this->db->prepare("INSERT into appointment(appoint_to,appoint_date,appoint_time,reason)VALUES(:appoint_to,:appoint_date,:appoint_time,:reason)");
+				$sql_insert->bindParam(":appoint_to", $appoint_to, PDO::PARAM_STR);
+				$sql_insert->bindParam(":appoint_date", $appoint_date_cnv, PDO::PARAM_STR);
+				$sql_insert->bindParam(":appoint_time", $appoint_time, PDO::PARAM_STR);
+				$sql_insert->bindParam(":reason", $reason, PDO::PARAM_STR);
+				$sql_insert->execute();	
+				$userid = $this->db->lastInsertId();
+				$success = array('status'=> true, "Error" => "Thank you appointment successfully submitted");
+                $this->response($this->json($success), 200);
+						
+				
+			}
+			else if($response_type==2)
+			{//update
+				$update_id=$this->_request['update_id'];
+				$appoint_to=$this->_request['appoint_to'];
+				$appoint_date=$this->_request['appoint_date'];/// YMD
+				$appoint_date_cnv=date('Y-m-d', strtotime($appoint_date));
+				$appoint_time=$this->_request['appoint_time'];
+				$reason=$this->_request['reason'];
+				
+					$sql_update = $this->db->prepare("update `appointment` set appoint_to=:appoint_to,appoint_date=:appoint_date,appoint_time=:appoint_time,reason=:reason where id=:id");	
+					$sql_update->bindParam(":appoint_to", $appoint_to, PDO::PARAM_STR);
+					$sql_update->bindParam(":appoint_date", $appoint_date_cnv, PDO::PARAM_STR);
+					$sql_update->bindParam(":appoint_time", $appoint_time, PDO::PARAM_STR);
+					$sql_update->bindParam(":reason", $reason, PDO::PARAM_STR);
+					$sql_update->bindParam(":id", $update_id, PDO::PARAM_STR);
+ 					$sql_update->execute();
+					$success = array('status'=> true, "Error" => "Thank you appointment updated successfully");
+                    $this->response($this->json($success), 200);
+					
+				
+			}
+			else if($response_type==3)
+			{//Fetch
+				$sql_fetch = $this->db->prepare("SELECT * FROM appointment");
+ 				$sql_fetch->execute();
+				 if ($sql_fetch->rowCount() != 0) {  
+				 	$x=0;   
+					while($row_gp = $sql_fetch->fetch(PDO::FETCH_ASSOC)){
+						foreach($row_gp as $key=>$valye)	
+						{
+							$string_insert[$x][$key]=$row_gp[$key];
+						}
+						$x++;
+					}
+					 
+					$result1 = array("appointment" => $string_insert);
+					$success = array('Type' => 'OK', "Error" => '', 'Responce' => $result1);
+					$this->response($this->json($success), 200);
+				} 
+				else {
+					
+					$error = array('Type' => "Error", "Error" => "No data found", 'Responce' => '');
+					$this->response($this->json($error), 400);
+				}				
+				
+			}
+			else
+			{// INvalid
+				$error = array('status' => false , "Error" => "Invalid Response Type", 'Responce' => '');
+				$this->response($this->json($error), 400);	
+			}
+			
+			
+		}
+		else
+		{
+			$error = array('status' => false , "Error" => "Please Provide Response Type to Get Data", 'Responce' => '');
+			$this->response($this->json($error), 400);	
+		}
+	}
 ///////////////////////////////////////		
     /*
      *  Encode array into JSON
