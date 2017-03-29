@@ -55,7 +55,7 @@ include("functions.php");
 $message="";
 	if(!empty($_POST['login']) && !empty($_POST['pass'])) {
 		
-		$result=mysql_query("select * from `facultylogin` where `username`='".$_POST['login']."' and `password`='".md5($_POST['pass'])."'");
+		$result=mysql_query("select * from `faculty_login` where `username`='".$_POST['login']."' and `password`='".md5($_POST['pass'])."'");
 	if(mysql_num_rows($result)>0)
 	{
 		$row= mysql_fetch_array($result);

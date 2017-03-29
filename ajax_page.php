@@ -6,7 +6,6 @@ if($function_name=='edit_contact')
 {
 $query=mysql_query("select * from `contact_detail` where `id` = '$update_id'");
 $ftc_detail=mysql_fetch_array($query);
-
 ?>
               <div class="row col-md-12">  
                 <div class="col-sm-6">
@@ -71,5 +70,45 @@ $appoint_to=$ftc_detail['appoint_to'];
  <?php 
 }
 
+if($function_name=='edit_leave_note')
+{
+$query=mysql_query("select * from `leave_note` where `id` = '$update_id'");
+$ftc_detail=mysql_fetch_array($query);
+ 
+?>
+              <div class="row col-md-12">  
+                <div class="col-sm-6">
+                <label>Leave Date From</label>
+                <input class="form-control form-control-inline input-medium date-picker" required  value="<?php echo date('d-m-Y',strtotime($ftc_detail['date_from'])); ?>" placeholder="dd-mm-yyyy" type="text" data-date-format="dd-mm-yyyy" name="date_from">
+            </div>
+
+                <div class="col-sm-6">
+                        <label class="control-label">Leave Date to</label>
+                        <input class="form-control form-control-inline input-medium date-picker" required  value="<?php echo date('d-m-Y',strtotime($ftc_detail['date_to'])); ?>" placeholder="dd-mm-yyyy" type="text" data-date-format="dd-mm-yyyy" name="date_to">
+                </div>
+            </div>
+            <div class="row col-md-12">   
+                <input type="hidden" name="update_id" value="<?php echo $ftc_detail['id']; ?>">
+                <div class="col-sm-12">
+                    <label class="control-label">Reason</label>
+                    <input type="text" placeholder="Provide faculty designation" name="reason" value="<?php echo $ftc_detail['reason']; ?>" class="form-control"/> 
+                </div>
+            </div>   
+ <?php 
+} 
+if($function_name=='create_user_section_list')
+{
+	$query=mysql_query("select `section_id` from `class_section` where `class_id` = '$update_id'");
+		while($ftc_detail=mysql_fetch_array($query)){
+			$section_id=$ftc_detail['section_id'];
+			$queryq=mysql_query("select * from `master_section` where `id` = '$section_id'");
+			$ftc_detailq=mysql_fetch_array($queryq);
+			$section_name=$ftc_detailq['section_name'];
+			$id=$ftc_detailq['id'];
+			?>
+				<option value="<?php echo $id;?>"><?php echo $section_name;?></option>                              
+			<?php  
+		}	
+}
 ?>
  

@@ -11,29 +11,32 @@ $password=md5($password1);
 $role_id=mysql_real_escape_string($_REQUEST["role_id"]);
 $mobile_no=mysql_real_escape_string($_REQUEST["mobile_no"]);
 $address=mysql_real_escape_string($_REQUEST["address"]);
+$class_id=mysql_real_escape_string($_REQUEST["class_id"]);
+$section_id=mysql_real_escape_string($_REQUEST["section_id"]);
 @$file_name=$_FILES["image"]["name"];
 $date=date('Y-m-d');
 
-				if(!empty($file_name))
-				{
-				@$file_name=$_FILES["image"]["name"];
-				$file_tmp_name=$_FILES['image']['tmp_name'];
-			    $target ="faculty/";
-				$file_name=strtotime(date('d-m-Y h:i:s'));
-				$filedata=explode('/', $_FILES["image"]["type"]);
-				$filedata[1];
-				$random=rand(100, 10000);
-			     $target=$target.basename($random.$file_name.'.'.$filedata[1]);
-				 move_uploaded_file($file_tmp_name,$target);
-				 $item_image=$random.$file_name.'.'.$filedata[1];
-				}
-				else{
-				$item_image='no_image.png';
+if(!empty($file_name))
+{
+	@$file_name=$_FILES["image"]["name"];
+	$file_tmp_name=$_FILES['image']['tmp_name'];
+	$target ="faculty/";
+	$file_name=strtotime(date('d-m-Y h:i:s'));
+	$filedata=explode('/', $_FILES["image"]["type"]);
+	$filedata[1];
+	$random=rand(100, 10000);
+	 $target=$target.basename($random.$file_name.'.'.$filedata[1]);
+	 move_uploaded_file($file_tmp_name,$target);
+	 $item_image=$random.$file_name.'.'.$filedata[1];
+}
+else{
+	$item_image='no_image.png';
 				}
 
-$sql="insert into faculty_login(user_name,role_id,password,mobile_no,address,image,curent_date)values('$username','$role_id','$password','$mobile_no','$address','$item_image','$date')";
-$r=mysql_query($sql);
-$message="User Added Successfully";
+	$sql="insert into faculty_login(user_name,role_id,password,mobile_no,address,image,curent_date,class_id,section_id)
+	values('$username','$role_id','$password','$mobile_no','$address','$item_image','$date','$class_id','$section_id')";
+	$r=mysql_query($sql);
+	$message="User Added Successfully";
 }
 	else
 	{
@@ -61,6 +64,7 @@ $message="User Added Successfully";
 							<a class="" href="view_users.php" style="color: white"><i class="fa fa-search">&nbsp;View</i></a>
 							</div>
 						</div>
+                        
 						<div class="portlet-body form">
                         <?php if($message!="") { ?>
 <div class="message" id="success" style="color:#44B6AE; text-align:center"><label class="control-label"><?php echo $message; ?></label></div>
@@ -82,7 +86,7 @@ $message="User Added Successfully";
                                             $id=$row1['id'];
                                             $role_name=$row1['role_name'];
                                             ?>
-                              <option value="<?php echo $id;?>"><?php echo $role_name;?></option>                              
+                             				 <option value="<?php echo $id;?>"><?php echo $role_name;?></option>                              
                               <?php }?> 
                               <select/>
 										</div>
@@ -112,6 +116,36 @@ $message="User Added Successfully";
 									</div>
 									</div>
 									
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <label class="col-md-2 control-label">Select Class</label>
+                                            <div class="col-md-3">
+                                            <select name="class_id" class="form-control select select2 select2me section_select" placeholder="Select...">
+                                             	<option value=""></option>
+                                                <?php
+												$class=mysql_query("select * from master_class");		
+												$i=0;
+												while($class1=mysql_fetch_array($class))
+												{
+												$id=$class1['id'];
+												$class_name=$class1['class_name'];
+												?>
+											  <option value="<?php echo $id;?>"><?php echo $class_name;?></option>                              
+											  <?php }?> 
+                                       		</select>
+                                            </div>
+                                        
+                                            <label class="col-md-2 control-label">Section</label>
+                                            <div class="col-md-3">
+                                               <select name="section_id" class="form-control select select2 select2me " placeholder="Select..." id="replace_data">
+                                             	<option value=""></option>
+                                               </select>
+                                            </div>
+                                        </div>
+									</div>
+                                    
+                                    
+                                    
 									<div class="row">
 									 <div class="form-group">
 									 <label class="col-md-2 control-label">Address</label>
@@ -253,7 +287,18 @@ $message="User Added Successfully";
 					</table>
 					</div>-->
 					
-					
+	</div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    				
 			
 			
 </div>
@@ -266,13 +311,28 @@ $(document).ready(function(){
         $(".remove_row").die().live("click",function(){
             $(this).closest("#parant_table tr").remove();
         });
+		$(document).on('change','.section_select', function(){
+			var class_id = $(this).val();
+			 
+			$.ajax({
+				url: "ajax_page.php?function_name=create_user_section_list&id="+class_id,
+				type: "POST",
+				success: function(data)
+				{   
+ 					  $('#replace_data').html(data);
+ 				}
+			});
 		});
+		
+	});
 
 		var myVar=setInterval(function(){myTimerr()},4000);
 		function myTimerr() 
 		{
-		$("#success").hide();
+			$("#success").hide();
 		} 
+		
+		
 		</script>
 
 <script>

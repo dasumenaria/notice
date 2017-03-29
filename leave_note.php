@@ -2,37 +2,31 @@
  include("index_layout.php");
  include("database.php");
  $status_ftc=$_GET['s'];
- $message='';
+ $faculty_login_id=$_SESSION['id'];
+	$role=$_SESSION['category'];
+	$message ='';
 	if(isset($_POST['update_details'])) 
 	{
-		$update_id=$_POST['update_id'];
-		$appoint_to=$_POST['appoint_to'];
-		$appoint_time=$_POST['appoint_time'];
 		$reason=$_POST['reason'];
-		$appoint_date=date('Y-m-d', strtotime($_POST['appoint_date']));;
- 		mysql_query("update `appointment` set `appoint_to`='$appoint_to' , `appoint_date`='$appoint_date' , `appoint_time`='$appoint_time' , `reason`='$reason' where `id` = '$update_id' ");
-		$message='Faculty update successfully';	
+		$date_from=date('Y-m-d', strtotime($_POST['date_from']));;
+		$date_to=date('Y-m-d', strtotime($_POST['date_to']));
+		$update_id=$_POST['update_id'];
+ 		mysql_query("update `leave_note` set `date_from`='$date_from' , `date_to`='$date_to' , `reason`='$reason' where `id` = '$update_id' ");
+		$message='Leave update successfully';	
 	}
 	if(isset($_POST['approve_details'])) 
 	{
 		$update_id=$_POST['update_id'];
- 		mysql_query("update `appointment` set `status`='1' where `id` = '$update_id' ");
-		$message='Appointment approve successfully';	
+ 		mysql_query("update `leave_note` set `status`='1' where `id` = '$update_id' ");
+		$message='Leave approve successfully';	
 	}
 	if(isset($_POST['reject_details'])) 
 	{
 		$update_id=$_POST['update_id'];
- 		mysql_query("update `appointment` set `status`='2' where `id` = '$update_id' ");
-		$message='Appointment reject successfully';	
+ 		mysql_query("update `leave_note` set `status`='2' where `id` = '$update_id' ");
+		$message='Leave reject successfully';	
 	}
-	if(isset($_POST['complete_details'])) 
-	{
-		$update_id=$_POST['update_id'];
- 		mysql_query("update `appointment` set `status`='3' where `id` = '$update_id' ");
-		$message='Appointment complete successfully';	
-	}
-	
-?> 
+ ?> 
 <html>
 <head>
 <?php css();?>
@@ -77,31 +71,41 @@ span {
 								<thead>
 								<tr style="background-color:#FFFFFF; color:rgba(94, 94, 94, 0.82);">
 									<th>S. No.</th>
-									<th>Appointmenat To</th>
-									<th>Date</th>
-									<th>Time</th>
+									<th>Student Name</th>
+                                    <th>Enrollment No</th>
+									<th>Leave From</th>
+                                    <th>Leave To</th>
 									<th>Reason</th>
 									<th>Status</th>
-                                    <?php if($status_ftc!=3){ ?> <th>Action</th><?php } ?>
+                                    <th>Action</th>
 								</tr>
 								</thead>
                                     <tbody>
 									 <?php
 										  $i=0;
-										   $r1=mysql_query("select * from `appointment` where `status`='$status_ftc' order by appoint_date Desc ");		
+										  if($role==3){
+											  $r1=mysql_query("select * from `leave_note` where `status`='$status_ftc' && `faculty_id`='$faculty_login_id' order by timestamp Desc ");	 
+										  }else
+										  {
+										   	 $r1=mysql_query("select * from `leave_note` where `status`='$status_ftc' order by timestamp Desc ");	
+										  }
                                             while($row1=mysql_fetch_array($r1))
                                             {
 												$i++;
 												$id=$row1['id'];
-												$appoint_to=$row1['appoint_to'];
-												$appoint_date=$row1['appoint_date'];        
-												$appoint_time=$row1['appoint_time'];
+												$date_to=$row1['date_to'];
+												$dateTO=date('d-m-Y',strtotime($date_to));
+												$date_from=$row1['date_from'];        
 												$reason=$row1['reason'];
-												$date=date('d-m-Y',strtotime($appoint_date));
+												$dateFROM=date('d-m-Y',strtotime($date_from));
 												$status_dup=$row1['status'];
-												$role=mysql_query("select `role_name` from `master_role`  where `id`= '$appoint_to' ");
+												$student_id=$row1['student_id'];
+												$role=mysql_query("select `name`,`father_name`,`mother_name`,`eno` from `login`  where `id`= '$student_id' ");
 												$fetrole=mysql_fetch_array($role);
-												$rome_mname=$fetrole['role_name'];	
+												$name=$fetrole['name'];
+												$eno=$fetrole['eno'];
+												//$father_name=$fetrole['father_name'];
+												//$mother_name=$fetrole['mother_name'];	
 										if($status_dup==0){
                                             $recod='<span class="label label-sm label-warning">In-Process</span>';
 											 
@@ -115,21 +119,20 @@ span {
                                         else if($status_dup==3){
                                             $recod='<span class="label label-danger label-sm btn blue btn-sm">Completed</span>';
                                          }
-                                        
 												
                                         ?>
                                         <tr>
                                             <td><?php echo $i;?></td>
-                                            <td><?php echo $rome_mname;?></td>
-                                            <td><?php echo $date;?></td>
-                                            <td><?php echo $appoint_time;?></td>	
+                                            <td><?php echo $name;?></td>
+                                            <td><?php echo $eno;?></td>
+                                            <td><?php echo $dateFROM;?></td>
+                                            <td><?php echo $dateTO?></td>
                                             <td><?php echo $reason;?></td>
                                             <td><?php echo $recod;?></td>
-                                            <?php if($status_ftc!=3){ ?>
                                             <td>
                                             
                                             <div class="btn-group">
-														<button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">Action <i class="fa fa-angle-down"></i></button>
+														<button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown"> Action <i class="fa fa-angle-down"></i></button>
 														<ul class="dropdown-menu" role="menu">
                                                        
 															<li>
@@ -138,18 +141,13 @@ span {
                                                            
                                                             <li class="divider">
 															<li>
-																<a data-toggle="modal" href="#approve<?php echo $id; ?>"><i class="glyphicon glyphicon-ok"></i>Approve </a>
+																<a data-toggle="modal" href="#approve<?php echo $id; ?>"><i class="glyphicon glyphicon-ok"></i> Approve </a>
             												</li>
                                                             <li class="divider">
 															<li>
-																<a data-toggle="modal" href="#reject<?php echo $id; ?>"><i class="glyphicon glyphicon-remove"></i>Reject </a>
+																<a data-toggle="modal" href="#reject<?php echo $id; ?>"><i class="glyphicon glyphicon-remove"></i> Reject </a>
 															</li>
-															<li class="divider">
-															</li>
-															<li>
-                                                                <a data-toggle="modal" href="#complete<?php echo $id; ?>"><i class="glyphicon glyphicon-check"></i>Complete </a>
-															</li>
-														</ul>
+ 														</ul>
 													</div>
         <div class="modal fade" id="approve<?php echo $id; ?>" tabindex="-1" role="basic" aria-hidden="true" >
                 <div class="modal-dialog">
@@ -186,28 +184,7 @@ span {
                     </form>
                 </div>
             </div>
-                                            
-            <div class="modal fade" id="complete<?php echo $id; ?>" tabindex="-1" role="basic" aria-hidden="true" >
-                <div class="modal-dialog">
-                    <form method="post">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                            <h4 class="modal-title"><strong>Do you want move to completed </strong></h4>
-                        </div>
-                        <input type="hidden" name="update_id" value="<?php echo $id; ?>">
-                        <div class="modal-footer">
-                            <button type="button" class="btn default" data-dismiss="modal">Close</button>
-                            <button type="submit" name="complete_details" class="btn red">Delete</button>
-                        </div>
-                    </div>
-                    </form>
-                </div>
-            </div>                                
-                                            
-                                             
-                                            </td>
-                                           <?php } ?>
+                                             </td>
                                         </tr>
                          <?php } ?>
                                     </tbody>
@@ -247,7 +224,7 @@ span {
 	$('.edit_contact').click(function(){
 		var	id= $(this).attr('id');
 		$.ajax({
-			url: "ajax_page.php?function_name=edit_appointment&id="+id,
+			url: "ajax_page.php?function_name=edit_leave_note&id="+id,
 			type: "POST",
 			success: function(data)
 			{   

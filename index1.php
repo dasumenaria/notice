@@ -252,45 +252,85 @@ $em=strtoupper($emm);
 				</div>
 				
 				
-				</div><br>
-				     <div class="row">
-				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-					<div class="dashboard-stat red-intense">
-						<div class="visual">
-							<i class="fa fa-calendar"></i>
-						</div>
-						<div class="details">
-							<div class="number">
-								 Upcoming Events
-							</div>
-							<div class="desc">
-							</div>
-						</div>
-						<a class="more" href="dashboard_event.php">
-						View more <i class="m-icon-swapright m-icon-white"></i>
-						</a>
-					</div>
 				</div>
+                <br>
+				<div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="dashboard-stat red-intense">
+                            <div class="visual">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <div class="details">
+                                <div class="number">
+                                     Upcoming Events
+                                </div>
+                                <div class="desc">
+                                </div>
+                            </div>
+                            <a class="more" href="dashboard_event.php">
+                            View more <i class="m-icon-swapright m-icon-white"></i>
+                            </a>
+                        </div>
+                    </div>	
 				
-				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-					<div class="dashboard-stat green-haze">
-						<div class="visual">
-							<i class="fa fa-shopping-cart"></i>
-						</div>
-						<div class="details">
-							<div class="number">
-								News
-							</div>
-							<div class="desc">
-								
-							</div>
-						</div>
-						<a class="more" href="dashboard_news.php">
-						View more <i class="m-icon-swapright m-icon-white"></i>
-						</a>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="dashboard-stat green-haze">
+                            <div class="visual">
+                                <i class="fa fa-shopping-cart"></i>
+                            </div>
+                            <div class="details">
+                                <div class="number">
+                                    News
+                                </div>
+                                <div class="desc">
+                                    
+                                </div>
+                            </div>
+                            <a class="more" href="dashboard_news.php">
+                            View more <i class="m-icon-swapright m-icon-white"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" >
+                            <div class="dashboard-stat blue">
+                                <div class="visual">
+                                    <i class="fa fa-bullhorn"></i>
+                                </div>
+                                <div class="details">
+                                    <div class="number">
+                                        Appointment
+                                    </div>
+                                    <div class="desc">
+                                    </div>
+                                </div>
+                                <a class="more" href="appointment.php?s=0">
+                                View more <i class="m-icon-swapright m-icon-white"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" >
+                            <div class="dashboard-stat green">
+                                <div class="visual">
+                                    <i class="fa fa-bell"></i>
+                                </div>
+                                <div class="details">
+                                    <div class="number">
+                                        Leave Note
+                                    </div>
+                                    <div class="desc">
+                                    </div>
+                                </div>
+                                <a class="more" href="leave_note.php?s=0">
+                                View more <i class="m-icon-swapright m-icon-white"></i>
+                                </a>
+                            </div>
+                      </div>
 					</div>
-				</div>
-			</div>
+                </div>
 						
 							
 						</div>
@@ -306,44 +346,74 @@ $em=strtoupper($emm);
                         <!--------Box--------->
                       
               <div class="row ">
-				<div class="col-md-6 col-sm-6" >
-					<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" >
-					<div class="dashboard-stat blue">
-						<div class="visual">
-							<i class="fa fa-bullhorn"></i>
-						</div>
-						<div class="details">
-							<div class="number">
-								Appointment
-							</div>
-							<div class="desc">
+                    <div class="col-md-6 col-sm-6" >
+					<div class="portlet box">
+						<div class="portlet-title">
+							<div class="caption">
+								<i class="fa fa-bell-o"></i>Event
 							</div>
 						</div>
-						<a class="more" href="appointment.php?s=0">
-						View more <i class="m-icon-swapright m-icon-white"></i>
-						</a>
+						<div class="portlet-body">
+						
+							<div class="scroller" style="height: 150px;" data-always-visible="1" data-rail-visible="0">
+								<ul class="feeds">
+            <?php
+			  $r1=mysql_query("select * from event where flag='0' order by id Desc ");		
+					while($row1=mysql_fetch_array($r1))
+					{
+					
+					$e_id=$row1['id'];
+					$title=$row1['title'];
+                    $event_date1=$row1['date_from'];
+					$event_time=$row1['time'];
+                    $event_pic=$row1['image'];
+                    $event_date=date('d-m-Y', strtotime($event_date1));
+					$event_folder='event';
+					$ev_id=$e_id;
+					$exact_folder_name=$event_folder.$ev_id;
+                    ?> 
+
+								<form class="form-horizontal" role="form" id="noticeform" method="post" enctype="multipart/form-data">
+									<li>
+										<div class="col1">
+											<div class="cont">
+												<div class="cont-col1">
+													<div class="label label-sm">
+													
+													<input type="hidden" class="" name="event_x_id" value="<?php echo $e_id;?>">
+														<image src="event/<?php echo $exact_folder_name;?>/<?php echo $event_pic;?>" height="20px" width="20px">
+													</div>
+												</div>
+												<div class="cont-col2">
+													<div class="desc">
+														 <span style="color:#44B6AE"><?php echo $title;?>&nbsp;&nbsp;/&nbsp;<?php echo $event_date;?>&nbsp;&nbsp;/&nbsp;<?php echo $event_time;?> </span>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="col2">
+											<div class="date">
+												 <button class="btn label label-sm blue-madison event_ajax_class" event_id="<?php echo $e_id;?>" name="" type="button" style="color:#fff">
+														Notify <i class="fa fa-share"></i>
+														</button>
+											</div>
+										</div>
+									</li>
+										</form>
+									
+                    <?php } ?>
+                                </ul>
+							</div>
+						
+							<div class="scroller-footer">
+								<div class="btn-arrow-link pull-right">
+									<a href="dashboard_event.php">See All Events</a>
+									<i class="icon-arrow-right"></i>
+								</div>
+							</div>
+						</div>
 					</div>
-				</div>
-                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" >
-					<div class="dashboard-stat green">
-						<div class="visual">
-							<i class="fa fa-bell"></i>
-						</div>
-						<div class="details">
-							<div class="number">
-								Leave Note
-							</div>
-							<div class="desc">
-							</div>
-						</div>
-						<a class="more" href="leave_note.php?s=1">
-						View more <i class="m-icon-swapright m-icon-white"></i>
-						</a>
-					</div>
-				</div>
-                    
-                    
-				</div>
+				</div>    
                 <!------------------------------------NEWS---------------------------------------------->
                 <div class="col-md-6 col-sm-6">
 					<div class="portlet box">
@@ -414,74 +484,7 @@ $em=strtoupper($emm);
 					</div>
 				</div>
                 <div class="row ">
-				<div class="col-md-6 col-sm-6" >
-					<div class="portlet box">
-						<div class="portlet-title">
-							<div class="caption">
-								<i class="fa fa-bell-o"></i>Event
-							</div>
-						</div>
-						<div class="portlet-body">
-						
-							<div class="scroller" style="height: 150px;" data-always-visible="1" data-rail-visible="0">
-								<ul class="feeds">
-            <?php
-			  $r1=mysql_query("select * from event where flag='0' order by id Desc ");		
-					while($row1=mysql_fetch_array($r1))
-					{
-					
-					$e_id=$row1['id'];
-					$title=$row1['title'];
-                    $event_date1=$row1['date_from'];
-					$event_time=$row1['time'];
-                    $event_pic=$row1['image'];
-                    $event_date=date('d-m-Y', strtotime($event_date1));
-					$event_folder='event';
-					$ev_id=$e_id;
-					$exact_folder_name=$event_folder.$ev_id;
-                    ?> 
-
-								<form class="form-horizontal" role="form" id="noticeform" method="post" enctype="multipart/form-data">
-									<li>
-										<div class="col1">
-											<div class="cont">
-												<div class="cont-col1">
-													<div class="label label-sm">
-													
-													<input type="hidden" class="" name="event_x_id" value="<?php echo $e_id;?>">
-														<image src="event/<?php echo $exact_folder_name;?>/<?php echo $event_pic;?>" height="20px" width="20px">
-													</div>
-												</div>
-												<div class="cont-col2">
-													<div class="desc">
-														 <span style="color:#44B6AE"><?php echo $title;?>&nbsp;&nbsp;/&nbsp;<?php echo $event_date;?>&nbsp;&nbsp;/&nbsp;<?php echo $event_time;?> </span>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="col2">
-											<div class="date">
-												 <button class="btn label label-sm blue-madison event_ajax_class" event_id="<?php echo $e_id;?>" name="" type="button" style="color:#fff">
-														Notify <i class="fa fa-share"></i>
-														</button>
-											</div>
-										</div>
-									</li>
-										</form>
-									
-                    <?php } ?>
-                                </ul>
-							</div>
-						
-							<div class="scroller-footer">
-								<div class="btn-arrow-link pull-right">
-									<a href="dashboard_event.php">See All Events</a>
-									<i class="icon-arrow-right"></i>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
+				
                 </div>
 				
 				
@@ -534,7 +537,7 @@ $(document).ready(function() {
      $.ajax({
 			url: "ajax_acedmic_calender.php?&result_val="+result_val+"&result_val1="+result_val1,
 			}).done(function(response) {
-		   $("#view_data1").html(""+response+"");
+		   		$("#view_data1").html(""+response+"");
 			});
 
  });

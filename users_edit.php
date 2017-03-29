@@ -13,26 +13,28 @@ $username=mysql_real_escape_string($_REQUEST["user_name"]);
 $role_id=mysql_real_escape_string($_REQUEST["role_id"]);
 $mobile_no=mysql_real_escape_string($_REQUEST["mobile_no"]);
 $address=mysql_real_escape_string($_REQUEST["address"]);
+$class_id=mysql_real_escape_string($_REQUEST["class_id"]);
+$section_id=mysql_real_escape_string($_REQUEST["section_id"]);
  @$file_name=$_FILES["image"]["name"];
  @$k_image=$_REQUEST["k_image"];
 $date=date('Y-m-d');
 				if(!empty($file_name))
 				{
-				@$file_name=$_FILES["image"]["name"];
-				$file_tmp_name=$_FILES['image']['tmp_name'];
-			    $target ="faculty/";
-				$file_name=strtotime(date('d-m-Y h:i:s'));
-				$filedata=explode('/', $_FILES["image"]["type"]);
-				$filedata[1];
-				$random=rand(100, 10000);
-				$target=$target.basename($random.$file_name.'.'.$filedata[1]);
-				move_uploaded_file($file_tmp_name,$target);
-				$item_image=$random.$file_name.'.'.$filedata[1];
+					@$file_name=$_FILES["image"]["name"];
+					$file_tmp_name=$_FILES['image']['tmp_name'];
+					$target ="faculty/";
+					$file_name=strtotime(date('d-m-Y h:i:s'));
+					$filedata=explode('/', $_FILES["image"]["type"]);
+					$filedata[1];
+					$random=rand(100, 10000);
+					$target=$target.basename($random.$file_name.'.'.$filedata[1]);
+					move_uploaded_file($file_tmp_name,$target);
+					$item_image=$random.$file_name.'.'.$filedata[1];
 				}
 				else{
-				$item_image=$k_image;
+					$item_image=$k_image;
 				}
-				$r=mysql_query("update `faculty_login` SET `user_name`='$username',`role_id`='$role_id',`mobile_no`='$mobile_no',`address`='$address',`image`='$item_image' where id='".$get_id."'" );
+				$r=mysql_query("update `faculty_login` SET `user_name`='$username',`role_id`='$role_id',`mobile_no`='$mobile_no',`address`='$address',`image`='$item_image',`class_id`='$class_id',`section_id`='$section_id' where id='".$get_id."'" );
 				$message="User Added Successfully";
     }
 	else
@@ -78,6 +80,8 @@ $date=date('Y-m-d');
 									$mobile_no=$row1['mobile_no'];
 									$address=$row1['address'];
 									$image=$row1['image'];
+									$class_id=$row1['class_id'];
+									$section_id=$row1['section_id'];
 									?>
 								<div class="row">
 								<div class="form-group">
@@ -98,7 +102,7 @@ $date=date('Y-m-d');
                                                     <span class="fileinput-exists">
                                                     <i class="fa fa-plus"></i> </span>
                                                     <input type="idden" class="default" name="k_image" value="<?php echo $image;?>" id="">
-                                                    <input type="file" class="default" name="image" id="file1 " onchange="loadFile(event)">
+                                                    <input type="file" class="default" name="image" id="file1 " onChange="loadFile(event)">
                                                     </span>
                                                     <a href="#" class="btn red fileinput-exists" data-dismiss="fileinput" style=" color:#FFF">
                                                     <i class="fa fa-trash"></i> </a></div>
@@ -146,14 +150,60 @@ $date=date('Y-m-d');
 									</div>
 									</div>
 									<div class="row">
-                                    <div class="form-group">
-										<label class="col-md-3 control-label">Address</label>
-										<div class="col-md-4">
-											<textarea class="form-control input-medium" rows="1"  placeholder="Address" type="text" name="address"><?php echo $address;?></textarea>
-										</div>
-										
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label">Address</label>
+                                            <div class="col-md-4">
+                                                <textarea class="form-control input-medium" rows="1"  placeholder="Address" type="text" name="address"><?php echo $address;?></textarea>
+                                            </div>
+                                        </div>
 									</div>
-									</div></div></div></div>
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label">Class</label>
+                                            <div class="col-md-6">
+                                               <select name="class_id" class="form-control select2me section_select" required placeholder="Select...">
+                                                    <option value=""></option>
+                                                    <?php
+                                                    $class=mysql_query("select * from master_class");		
+                                                    $i=0;
+                                                    while($class1=mysql_fetch_array($class))
+                                                    {
+                                                    $id=$class1['id'];
+                                                    $class_name=$class1['class_name'];
+                                                    ?>
+                                                  <option value="<?php echo $id;?>" <?php if($class_id==$id){?> selected <?php }?> ><?php echo $class_name;?></option>                              
+                                                  <?php }?> 
+                                                </select>
+                                            </div>
+                                        </div>
+									</div>
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label">Section</label>
+                                            <div class="col-md-6">
+                                               <select name="section_id" class="form-control select2me section_select" required placeholder="Select..." id="replace_data">
+                                                    <option value=""></option>
+                                                    <?php
+                                                        $queryq=mysql_query("select * from `master_section`");
+                                                        while($ftc_detailq=mysql_fetch_array($queryq)){
+                                                        $section_name=$ftc_detailq['section_name'];
+                                                        $id=$ftc_detailq['id'];
+														if($section_id==$id){
+															?>
+																<option value="<?php echo $id;?>" selected><?php echo $section_name;?></option>                              
+															<?php
+														}
+                                                    }	 ?>
+                                                 </select>
+                                            </div>
+                                        </div>
+									</div>
+                                    
+                                    
+                                    </div>
+                                    
+                                    </div>
+                                    </div>
 								
 													
 								<div class=" right1" align="right" style="margin-right:50px">
@@ -172,7 +222,19 @@ $(document).ready(function(){
         $(".remove_row").die().live("click",function(){
             $(this).closest("#parant_table tr").remove();
         });
+		$(document).on('change','.section_select', function(){
+			var class_id = $(this).val();
+			 
+			$.ajax({
+				url: "ajax_page.php?function_name=create_user_section_list&id="+class_id,
+				type: "POST",
+				success: function(data)
+				{   
+ 					  $('#replace_data').html(data);
+ 				}
+			});
 		});
+	});
 
 		var myVar=setInterval(function(){myTimerr()},4000);
 		function myTimerr() 

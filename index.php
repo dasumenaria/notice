@@ -60,10 +60,12 @@ $message="";
 	if(mysql_num_rows($result)>0)
 	{
 		$row= mysql_fetch_array($result);
+		 
 		$_SESSION['id']=$row['id'];
 		$_SESSION['username']=$row['user_name'];
 		$_SESSION['category']=$row['role_id'];
 		$_SESSION['loggedin_time'] = time();
+		
 		ob_start();
 		echo "<meta http-equiv='refresh' content='0;url=index1.php'/>";
 		ob_flush();
