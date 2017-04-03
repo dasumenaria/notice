@@ -6,12 +6,7 @@ class API extends REST {
 
     public $data = "";
     
-    /*const DB_SERVER = "localhost";
-    const DB_USER = "phppoets_notice";
-    const DB_PASSWORD = ",Jr@qc5#,5&C";
-    const DB = "phppoets_notice";*/
-	
-	const DB_SERVER = "localhost";
+    const DB_SERVER = "localhost";
     const DB_USER = "root";
     const DB_PASSWORD = "";
     const DB = "new_notice";
@@ -68,10 +63,10 @@ global $link;
 		
 		if($login_identity=='student')
 		{
-		$sql = $this->db->prepare("SELECT * FROM login WHERE eno=:enrollment_no AND password=:password");
-		$sql->bindParam(":eno", $enrollment_no, PDO::PARAM_STR);
-			$sql->bindParam(":password", $newpassword, PDO::PARAM_STR);
+		$sql = $this->db->prepare("SELECT * FROM login WHERE eno='".$enrollment_no."' AND password='".$newpassword."'");
 			 $sql->execute();
+
+
 
 			 if($sql->rowCount()>0)
 			  {
@@ -80,7 +75,7 @@ global $link;
 				$about_sql1 = $about_sql->fetch(PDO::FETCH_ASSOC);
 				$x_about_us=$about_sql1['about_us'];
 
-				$sql = $this->db->prepare("SELECT * FROM login WHERE eno=:enrollment_no AND password=:password");
+				$sql = $this->db->prepare("SELECT * FROM login WHERE eno=:eno AND password=:password");
 				$sql->bindParam(":eno", $enrollment_no, PDO::PARAM_STR);
 				$sql->bindParam(":password", $newpassword, PDO::PARAM_STR);
 				$sql->execute();			
@@ -94,12 +89,18 @@ global $link;
 
 				$result = array('id' => $row_login['id'],
 				'enrollment_no' => $row_login['eno'],
+'designation' => '',
+'name' => $row_login['name'],
+
 				'username' => $row_login['name'],
 				'userimage' => $row_login['image'],
 				'uniq_id' => $row_login['school_id'],
 				'role_id' => $row_login['role_id'],
 				'about_us' => $x_about_us,
-				'login_user' => $login_identity
+				'login_user' => $login_identity,
+'class_id' => '',
+'section_id' => '',
+'class_name' => ''
 				);
 			//$result1 = array("login" => $result );
 			$success = array('status'=> true, "Error" => "login successful",'login' => $result  );
@@ -112,22 +113,22 @@ global $link;
 		}
 		else if($login_identity=='faculty')
 		{
-		$sql = $this->db->prepare("SELECT * FROM faculty_login WHERE user_name=:enrollment_no AND password=:password");
-		$sql->bindParam(":user_name", $enrollment_no, PDO::PARAM_STR);
-			$sql->bindParam(":password", $newpassword, PDO::PARAM_STR);
+
+		$sql = $this->db->prepare("SELECT * FROM faculty_login WHERE user_name='".$enrollment_no."' AND password='".$newpassword."'");
 			 $sql->execute();
+
 			 
 				if($sql->rowCount()>0)
 			{
+
 				$about_sql = $this->db->prepare("SELECT * FROM about_us");
 				$about_sql->execute();
 				$about_sql1 = $about_sql->fetch(PDO::FETCH_ASSOC);
 				$x_about_us=$about_sql1['about_us'];
 
-				$sql = $this->db->prepare("SELECT * FROM faculty_login WHERE user_name=:enrollment_no AND password=:password");
-				$sql->bindParam(":user_name", $enrollment_no, PDO::PARAM_STR);
-				$sql->bindParam(":password", $newpassword, PDO::PARAM_STR);
-				$sql->execute();			
+				$sql = $this->db->prepare("SELECT * FROM faculty_login WHERE user_name='".$enrollment_no."' AND password='".$newpassword."'");
+			 $sql->execute();
+						
 				$row_login = $sql->fetch(PDO::FETCH_ASSOC);
 				
 				if(!empty($row_login ['image'])){
@@ -138,12 +139,19 @@ global $link;
 
 				$result = array('id' => $row_login['id'],
 				'enrollment_no' => '',
+'designation' => '',
+'name' => '',
 				'username' => $row_login['user_name'],
 				'userimage' => $row_login['image'],
-				'uniq_id' => $row_login['school_id'],
+				'uniq_id' => '',
 				'role_id' => $row_login['role_id'],
 				'about_us' => $x_about_us,
-				'login_user' => $login_identity
+				'login_user' => $login_identity,
+'class_id' => '',
+'section_id' => '',
+'class_name' => ''
+
+
 				);
 			//$result1 = array("login" => $result );
 			$success = array('status'=> true, "Error" => "login successful",'login' => $result  );
@@ -235,7 +243,8 @@ $date_time=array('date' => $ed,
 					}else{
 						 $row_notification['image'] = "";
 					}
-					
+					if($row_notification['shareable']==1)
+                                        {$shareable=true;}else{$shareable=false;}
 					
 				
 			$result[] = array('id' => $row_notification['id'],
@@ -247,7 +256,7 @@ $date_time=array('date' => $ed,
 'pdf_file'=> $row_notification['file_name'],
 
 'image'=> $row_notification['image'],
-'shareable'=> $row_notification['shareable'],
+'shareable'=> $shareable,
 'description'=> $row_notification['description']
 	);
             }
@@ -722,6 +731,8 @@ $event_folder_name2=$event_folder_name1.$row_event['id'];
 					}else{
 						 $row_event['image'] = "";
 					}
+                            if($row_event['shareable']==1)
+                             {$shareable=true;}else{$shareable=false;}
                 
 			$result[] = array('id' => $row_event['id'],
 					'title' => $row_event['title'],
@@ -735,7 +746,7 @@ $event_folder_name2=$event_folder_name1.$row_event['id'];
 					'isgallery' => $isgallery,
 					'event_time' => $row_event['time'],
 					'location' => $row_event['location'],
-					'shareable'=> $row_event['shareable'],
+					'shareable'=> $shareable,
                     'date_time' => '',
 					'date_text' => $date_text
                     //'event_tag' =>$event_exist
@@ -1033,9 +1044,11 @@ public function fetch_event() {
 			
                 if(!empty($row_event['image'])){
 					$row_event['image']= $site_url."event/".$event_folder_name2."/".$row_event['image'];
-					}else{
-						 $row_event['image'] = "";
-					}
+				}
+				else
+				{
+					 $row_event['image'] = "";
+				}
 					
 									
 $timestamp=$row_event['date_from'];
@@ -1359,7 +1372,7 @@ public function inquiry_form(){
 		if(!empty($user_id))
 		{
 		$sql_insert = $this->db->prepare("INSERT into inquiry_form(user_id,role_id,name,email,study,address,mobile_no,query,curent_date)
-				VALUES(:user_id,:name,:email,:study,:address,:mobile_no,:query,:curent_date)");
+				VALUES(:user_id,:role_id,:name,:email,:study,:address,:mobile_no,:query,:curent_date)");
 				
 				$sql_insert->bindParam(":user_id", $user_id, PDO::PARAM_STR);
                 $sql_insert->bindParam(":role_id", $role_id, PDO::PARAM_STR);				
@@ -1439,6 +1452,7 @@ public function category() {
 		}
 
 ///////////////////////gallery//////
+
 public function gallery() {
               include_once("common/global.inc.php");
         global $link;
@@ -1478,6 +1492,11 @@ public function gallery() {
 					}else{
 						 $efc_sql['image'] = "";
 					}
+					$nnnid = $efc_sql['id'];
+					$edate = $efc_sql['date'];
+					$title = $efc_sql['title'];
+					$pic = $efc_sql['image'];
+					
 
 		        $f_sql = $this->db->prepare("SELECT * FROM sub_gallery where gallery_id='".$id."' order by id DESC");
 				$f_sql->execute();
@@ -1505,20 +1524,31 @@ public function gallery() {
 				{
 					$kkr=array();
 				}
+				
+				
 			}
 			else if($type==5){	 
 			$ef_sql = $this->db->prepare("SELECT * FROM news where id='".$event_id."'");
 				$ef_sql->execute();
 				$efc_sql = $ef_sql->fetch(PDO::FETCH_ASSOC);
 				
-				$news_folder_name1='event';
+				$news_folder_name1='news';
                 $news_folder_name2=$news_folder_name1.$event_id;
 
                                      if(!empty($efc_sql['featured_image'])){
 						 	$efc_sql['featured_image']= $site_url."news/".$news_folder_name2."/".$efc_sql['featured_image'];
 					}else{
 						 $efc_sql['featured_image'] = "";
+						 
 					}
+					
+					$nnid = $efc_sql['id'];
+					$edate = $efc_sql['date'];
+					$title = $efc_sql['title'];
+					$pic = $efc_sql['featured_image'];
+					
+					
+					
 		        $f_sql = $this->db->prepare("SELECT * FROM sub_gallery where gallery_id='".$id."' order by id DESC");
 				$f_sql->execute();
 				$fc_sql = $f_sql->fetchALL(PDO::FETCH_ASSOC);
@@ -1527,7 +1557,7 @@ public function gallery() {
 				foreach($fc_sql as $row_gallery)
 				{
                 if(!empty($row_gallery['gallery_pic'])){
-						 $row_gallery['gallery_pic']= $site_url."news/".$news_folder_name2."/".$row_gallery['image'];
+						 $row_gallery['gallery_pic']= $site_url."news/".$news_folder_name2."/".$row_gallery['gallery_pic'];
 					}else{
 						 $row_gallery['gallery_pic'] = "";
 					}
@@ -1547,45 +1577,7 @@ public function gallery() {
 			}
 
 
-				if($type==4)
-				{
-				 $ef_sql = $this->db->prepare("SELECT * FROM event where id='".$event_id."'");
-				$ef_sql->execute();
-				$efc_sql = $ef_sql->fetch(PDO::FETCH_ASSOC);
 				
-				$event_folder_name1='event';
-                $event_folder_name2=$event_folder_name1.$event_id;
-
-                                     if(!empty($efc_sql['image'])){
-						$efc_sql['image']= $site_url."event/".$event_folder_name2."/".$efc_sql['image'];
-					}else{
-						 $efc_sql['image'] = "";
-					}
-					$id = $efc_sql['id'];
-					$edate = $efc_sql['date'];
-					$title = $efc_sql['title'];
-					$pic = $efc_sql['image'];
-				}
-				else if($type==5)
-				{
-				 $ef_sql = $this->db->prepare("SELECT * FROM news where id='".$event_id."'");
-				$ef_sql->execute();
-				$efc_sql = $ef_sql->fetch(PDO::FETCH_ASSOC);
-				
-					$news_folder_name1='news';
-                $news_folder_name2=$news_folder_name1.$event_id;
-
-                                     if(!empty($efc_sql['news_pic'])){
-						$efc_sql['featured_image']= $site_url."news/".$news_folder_name2."/".$efc_sql['featured_image'];
-					}else{
-						 $efc_sql['featured_image'] = "";
-					}
-					
-					$id = $efc_sql['id'];
-					$edate = $efc_sql['date'];
-					$title = $efc_sql['title'];
-					$pic = $efc_sql['featured_image'];
-				}
 				$result1[]= array('id' => $id,
 				'event_date' =>$edate,
 				'title' =>$title,
@@ -1604,6 +1596,8 @@ public function gallery() {
 			$this->response($this->json($error), 200);
 		}
 		}
+
+
 /////
 
 public function fetch_add_to_calendar(){
@@ -1627,6 +1621,7 @@ public function fetch_add_to_calendar(){
 				
 			}
 			$my_date=array_unique($c_event_date);	
+
 //unset($c_event_date);
 foreach($my_date as $my_x_date)
 {
@@ -1909,7 +1904,7 @@ public function add_to_calendar(){
 						$actual_e_id=$s_e_sql1['event_id'];
 
 		        $sql_insert = $this->db->prepare("INSERT into add_to_calendar(event_id,user_id,curent_date,event_date,role_id,parent_event_id)
-				VALUES(:event_id,:user_id,:curent_date,:event_date,:parent_event_id)");
+				VALUES(:event_id,:user_id,:curent_date,:event_date,:role_id,:parent_event_id)");
                 $sql_insert->bindParam(":event_id", $event_id, PDO::PARAM_STR);
 				$sql_insert->bindParam(":user_id", $user_id, PDO::PARAM_STR);
 				$sql_insert->bindParam("curent_date", $date, PDO::PARAM_STR);
@@ -2077,7 +2072,7 @@ $name1=$name.$p_type;*/
 
 				$sql_insert->bindParam(":user_id", $user_id, PDO::PARAM_STR);
                 $sql_insert->bindParam(":class_id", $class_id, PDO::PARAM_STR);				
-                $sql_insert->bindParam(":section_id", $sid, PDO::PARAM_STR);
+                $sql_insert->bindParam(":section_id", $section_id, PDO::PARAM_STR);
 				$sql_insert->bindParam(":subject_id", $subject_id, PDO::PARAM_STR);
 				 $sql_insert->bindParam(":topic", $topic, PDO::PARAM_STR);
 				$sql_insert->bindParam(":student_id", $st_id, PDO::PARAM_STR);
@@ -2249,8 +2244,6 @@ public function fetch_syllabus() {
 			$this->response($this->json($error), 200);
 		}
 		}
-//		DSU MENARIA DEVLOPED CODE
-
 //--  AppointMent API/*
 	public function appointment_data() 
 	{
@@ -2270,12 +2263,16 @@ public function fetch_syllabus() {
 				$appoint_date_cnv=date('Y-m-d', strtotime($appoint_date));
 				$appoint_time=$this->_request['appoint_time'];
 				$reason=$this->_request['reason'];
+				$student_id=$this->_request['student_id'];
+				$name=$this->_request['name'];
 				 
-				$sql_insert = $this->db->prepare("INSERT into appointment(appoint_to,appoint_date,appoint_time,reason)VALUES(:appoint_to,:appoint_date,:appoint_time,:reason)");
+				$sql_insert = $this->db->prepare("INSERT into appointment(appoint_to,appoint_date,appoint_time,reason,student_id,name)VALUES(:appoint_to,:appoint_date,:appoint_time,:reason,:student_id,:name)");
 				$sql_insert->bindParam(":appoint_to", $appoint_to, PDO::PARAM_STR);
 				$sql_insert->bindParam(":appoint_date", $appoint_date_cnv, PDO::PARAM_STR);
 				$sql_insert->bindParam(":appoint_time", $appoint_time, PDO::PARAM_STR);
 				$sql_insert->bindParam(":reason", $reason, PDO::PARAM_STR);
+				$sql_insert->bindParam(":student_id", $student_id, PDO::PARAM_STR);
+				$sql_insert->bindParam(":name", $name, PDO::PARAM_STR);
 				$sql_insert->execute();	
 				$userid = $this->db->lastInsertId();
 				$success = array('status'=> true, "Error" => "Thank you appointment successfully submitted");
@@ -2290,14 +2287,19 @@ public function fetch_syllabus() {
 				$appoint_date=$this->_request['appoint_date'];/// YMD
 				$appoint_date_cnv=date('Y-m-d', strtotime($appoint_date));
 				$appoint_time=$this->_request['appoint_time'];
+				$student_id=$this->_request['student_id'];
+				$name=$this->_request['name'];
 				$reason=$this->_request['reason'];
 				
-					$sql_update = $this->db->prepare("update `appointment` set appoint_to=:appoint_to,appoint_date=:appoint_date,appoint_time=:appoint_time,reason=:reason where id=:id");	
+					$sql_update = $this->db->prepare("update `appointment` set appoint_to=:appoint_to,appoint_date=:appoint_date,appoint_time=:appoint_time,reason=:reason,student_id=:student_id,name=:name where id=:id");	
 					$sql_update->bindParam(":appoint_to", $appoint_to, PDO::PARAM_STR);
 					$sql_update->bindParam(":appoint_date", $appoint_date_cnv, PDO::PARAM_STR);
 					$sql_update->bindParam(":appoint_time", $appoint_time, PDO::PARAM_STR);
 					$sql_update->bindParam(":reason", $reason, PDO::PARAM_STR);
 					$sql_update->bindParam(":id", $update_id, PDO::PARAM_STR);
+					$sql_update->bindParam(":student_id", $student_id, PDO::PARAM_STR);
+					$sql_update->bindParam(":name", $name, PDO::PARAM_STR);
+					
  					$sql_update->execute();
 					$success = array('status'=> true, "Error" => "Thank you appointment updated successfully");
                     $this->response($this->json($success), 200);
@@ -2343,6 +2345,279 @@ public function fetch_syllabus() {
 			$this->response($this->json($error), 400);	
 		}
 	}
+//--  Leave Note API/*
+	public function leaveNote_data() 
+	{
+		global $link;
+		include_once("common/global.inc.php");
+		if ($this->get_request_method() != "POST") {
+            $this->response('', 406);
+        }
+		if(isset($this->_request['response_type']))
+		{
+			$response_type=$this->_request['response_type'];
+			//-- Response Type = 1 Insert  2 = update  3 Fetch
+			if($response_type==1)
+			{//Insert
+				$date_from=$this->_request['date_from'];
+				$date_to=$this->_request['date_to'];/// YMD
+				$date_from_cnv=date('Y-m-d', strtotime($date_from));
+				$date_to_cnv=date('Y-m-d', strtotime($date_to));
+				$student_id=$this->_request['student_id'];
+				$reason=$this->_request['reason'];
+				$class_id=$this->_request['class_id'];
+				 
+				$sql_insert = $this->db->prepare("INSERT into  leave_note(date_from,date_to,student_id,reason,class_id)VALUES(:date_from,:date_to,:student_id,:reason,:class_id)");
+				$sql_insert->bindParam(":date_from", $date_from_cnv, PDO::PARAM_STR);
+				$sql_insert->bindParam(":date_to", $date_to_cnv, PDO::PARAM_STR);
+				$sql_insert->bindParam(":student_id", $student_id, PDO::PARAM_STR);
+				$sql_insert->bindParam(":reason", $reason, PDO::PARAM_STR);
+				$sql_insert->bindParam(":class_id", $class_id, PDO::PARAM_STR);
+				$sql_insert->execute();	
+				$userid = $this->db->lastInsertId();
+				$success = array('status'=> true, "Error" => "Thank you your leave application successfully submitted");
+                $this->response($this->json($success), 200);
+						
+				
+			}
+			else if($response_type==2)
+			{//update
+				$update_id=$this->_request['update_id'];
+				$date_from=$this->_request['date_from'];
+				$date_to=$this->_request['date_to'];/// YMD
+				$date_from_cnv=date('Y-m-d', strtotime($date_from));
+				$date_to_cnv=date('Y-m-d', strtotime($date_to));
+				$student_id=$this->_request['student_id'];
+				$reason=$this->_request['reason'];
+				$class_id=$this->_request['class_id'];
+				
+					$sql_update = $this->db->prepare("update `leave_note` set date_from=:date_from,date_to=:date_to,student_id=:student_id,reason=:reason,class_id=:class_id where id=:id");	
+					$sql_update->bindParam(":date_from", $date_from_cnv, PDO::PARAM_STR);
+					$sql_update->bindParam(":date_to", $date_to_cnv, PDO::PARAM_STR);
+					$sql_update->bindParam(":student_id", $student_id, PDO::PARAM_STR);
+					$sql_update->bindParam(":reason", $reason, PDO::PARAM_STR);
+					$sql_update->bindParam(":class_id", $class_id, PDO::PARAM_STR);
+					$sql_update->bindParam(":id", $update_id, PDO::PARAM_STR);
+ 					$sql_update->execute();
+					$success = array('status'=> true, "Error" => "Thank you your leave application updated successfully");
+                    $this->response($this->json($success), 200);
+					
+				
+			}
+			else if($response_type==3)
+			{//Fetch
+				$sql_fetch = $this->db->prepare("SELECT * FROM leave_note");
+ 				$sql_fetch->execute();
+				 if ($sql_fetch->rowCount() != 0) {  
+				 	$x=0;   
+					while($row_gp = $sql_fetch->fetch(PDO::FETCH_ASSOC)){
+
+$student_id = $row_gp['student_id'];
+						$sql_std = $this->db->prepare("SELECT `name` FROM login WHERE id='".$student_id."'");
+						$sql_std->execute();
+						$std = $sql_std->fetch(PDO::FETCH_ASSOC);
+						$std_name=$std['name'];
+
+						foreach($row_gp as $key=>$valye)	
+						{
+							$string_insert[$x][$key]=$row_gp[$key];
+						}
+						$string_insert[$x]['student_name']=$std_name;
+						$x++;
+					}
+					 
+					$result1 = array("leave_note" => $string_insert);
+					$success = array('Type' => 'OK', "Error" => '', 'Responce' => $result1);
+					$this->response($this->json($success), 200);
+				} 
+				else {
+					
+					$error = array('Type' => "Error", "Error" => "No data found", 'Responce' => '');
+					$this->response($this->json($error), 400);
+				}				
+				
+			}
+			else
+			{// INvalid
+				$error = array('status' => false , "Error" => "Invalid Response Type", 'Responce' => '');
+				$this->response($this->json($error), 400);	
+			}
+			
+			
+		}
+		else
+		{
+			$error = array('status' => false , "Error" => "Please Provide Response Type to Get Data", 'Responce' => '');
+			$this->response($this->json($error), 400);	
+		}
+	
+	
+	}
+//-- Leave Action
+	public function leaveAction() 
+	{
+		global $link;
+		include_once("common/global.inc.php");
+		if ($this->get_request_method() != "POST") {
+            $this->response('', 406);
+        }
+		if(isset($this->_request['response_type']))
+		{
+			$response_type=$this->_request['response_type'];
+			if(isset($this->_request['update_id']))
+			{
+ 				//-- Response Type = 1 approve  2 = Reject 
+				if($response_type==1)
+				{//Approve
+					$update_id=$this->_request['update_id'];
+					$response_type=$this->_request['response_type'];
+					$sql_update = $this->db->prepare("update `leave_note` set status=:status where id=:id");	
+					$sql_update->bindParam(":status", $response_type, PDO::PARAM_STR);
+					$sql_update->bindParam(":id", $update_id, PDO::PARAM_STR);
+					$sql_update->execute();
+					 
+					$success = array('status'=> true, "Error" => "Thank you your leave application is approve");
+					$this->response($this->json($success), 200);
+							
+					
+				}
+				else if($response_type==2)
+				{//update
+					$update_id=$this->_request['update_id'];
+					$response_type=$this->_request['response_type'];
+					$sql_update = $this->db->prepare("update `leave_note` set status=:status where id=:id");	
+					$sql_update->bindParam(":status", $response_type, PDO::PARAM_STR);
+					$sql_update->bindParam(":id", $update_id, PDO::PARAM_STR);
+					$sql_update->execute();
+					 
+					$success = array('status'=> true, "Error" => "Thank you your leave application is reject");
+					$this->response($this->json($success), 200);
+						
+					
+				}
+				else
+				{// INvalid
+					$error = array('status' => false , "Error" => "Invalid Response Type", 'Responce' => '');
+					$this->response($this->json($error), 400);	
+				}
+			}
+			else
+			{
+				$error = array('status' => false , "Error" => "Please Provide Update ID", 'Responce' => '');
+				$this->response($this->json($error), 400);	
+			}
+ 		}
+		else
+		{
+			$error = array('status' => false , "Error" => "Please Provide Response Type to Get Data", 'Responce' => '');
+			$this->response($this->json($error), 400);	
+		}
+	}	
+//- APPOINTMENT ACTION	
+	public function appointmentAction() 
+	{
+		global $link;
+		include_once("common/global.inc.php");
+		if ($this->get_request_method() != "POST") {
+            $this->response('', 406);
+        }
+		if(isset($this->_request['response_type']))
+		{
+			$response_type=$this->_request['response_type'];
+			if(isset($this->_request['update_id']))
+			{
+ 				//-- Response Type = 1 approve  2 = Reject 
+				if($response_type==1)
+				{//Approve
+					$update_id=$this->_request['update_id'];
+					$response_type=$this->_request['response_type'];
+					$sql_update = $this->db->prepare("update `appointment` set status=:status where id=:id");	
+					$sql_update->bindParam(":status", $response_type, PDO::PARAM_STR);
+					$sql_update->bindParam(":id", $update_id, PDO::PARAM_STR);
+					$sql_update->execute();
+					 
+					$success = array('status'=> true, "Error" => "Thank you your appointment is approve");
+					$this->response($this->json($success), 200);
+							
+					
+				}
+				else if($response_type==2)
+				{//update
+					$update_id=$this->_request['update_id'];
+					$response_type=$this->_request['response_type'];
+					$sql_update = $this->db->prepare("update `appointment` set status=:status where id=:id");	
+					$sql_update->bindParam(":status", $response_type, PDO::PARAM_STR);
+					$sql_update->bindParam(":id", $update_id, PDO::PARAM_STR);
+					$sql_update->execute();
+					 
+					$success = array('status'=> true, "Error" => "Thank you your appointment is reject");
+					$this->response($this->json($success), 200);
+				}
+				else if($response_type==3)
+				{//update
+					$update_id=$this->_request['update_id'];
+					$response_type=$this->_request['response_type'];
+					$sql_update = $this->db->prepare("update `appointment` set status=:status where id=:id");	
+					$sql_update->bindParam(":status", $response_type, PDO::PARAM_STR);
+					$sql_update->bindParam(":id", $update_id, PDO::PARAM_STR);
+					$sql_update->execute();
+					 
+					$success = array('status'=> true, "Error" => "Thank you your appointment is completed");
+					$this->response($this->json($success), 200);
+				}
+				else
+				{// INvalid
+					$error = array('status' => false , "Error" => "Invalid Response Type", 'Responce' => '');
+					$this->response($this->json($error), 400);	
+				}
+			}
+			else
+			{
+				$error = array('status' => false , "Error" => "Please Provide Update ID", 'Responce' => '');
+				$this->response($this->json($error), 400);	
+			}
+ 		}
+		else
+		{
+			$error = array('status' => false , "Error" => "Please Provide Response Type to Get Data", 'Responce' => '');
+			$this->response($this->json($error), 400);	
+		}
+	}
+//- SUBJECT DATA
+	public function subjectList() 
+	{
+		global $link;
+		include_once("common/global.inc.php");
+		if ($this->get_request_method() != "POST") {
+            $this->response('', 406);
+        }
+		
+		$sql_fetch = $this->db->prepare("SELECT * FROM master_subject");
+		$sql_fetch->execute();
+		 if ($sql_fetch->rowCount() != 0) {  
+			$x=0;   
+			while($row_gp = $sql_fetch->fetch(PDO::FETCH_ASSOC)){
+				foreach($row_gp as $key=>$valye)	
+				{
+					$string_insert[$x][$key]=$row_gp[$key];
+				}
+				$x++;
+			}
+			 
+			$result1 = array("master_subject" => $string_insert);
+			$success = array('Type' => 'OK', "Error" => '', 'Responce' => $result1);
+			$this->response($this->json($success), 200);
+		} 
+		else {
+			
+			$error = array('Type' => "Error", "Error" => "No data found", 'Responce' => '');
+			$this->response($this->json($error), 400);
+		}
+ 	}
+
+
+	
+
 ///////////////////////////////////////		
     /*
      *  Encode array into JSON

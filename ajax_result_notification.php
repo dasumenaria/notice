@@ -8,15 +8,14 @@ ini_set('max_execution_time', 200000);
 $news_x_id=$_GET['result_val'];
 $e_title='Result Declared';
 
-
-					$time1=date('Y-m-d G:i:s');
-					$sql_token_qry=mysql_query("select * from login");		
-					while($sql_token=mysql_fetch_assoc($sql_token_qry))
-					{
-					$API_ACCESS_KEY=$sql_token['notification_key'];
-					$device_token=$sql_token['device_token'];
-					if(!empty($device_token))
-					{
+$time1=date('Y-m-d G:i:s');
+$sql_token_qry=mysql_query("select * from login");		
+while($sql_token=mysql_fetch_assoc($sql_token_qry))
+{
+$API_ACCESS_KEY=$sql_token['notification_key'];
+$device_token=$sql_token['device_token'];
+if(!empty($device_token))
+{
 	$msg = array
 	(
 	'message' 	=> $e_title,
@@ -29,7 +28,7 @@ $url = 'https://fcm.googleapis.com/fcm/send';
 $fields = array
 (
 	'registration_ids' 	=> array($device_token),
-	'data'			=> $msg
+	'data'	=> $msg
 );
 $headers = array
 (
