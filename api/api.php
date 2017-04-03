@@ -2085,10 +2085,11 @@ $name1=$name.$p_type;*/
                 $this->response($this->json($success), 200);
 			
 		}
-		else{
+		else
+		{
 			$error = array('status' => false, "Error" => "Try again");
 			$this->response($this->json($error), 200);
-		    }
+		}
 }
 ////
 
@@ -2129,8 +2130,9 @@ public function attendance()
 		    }
 }
 /////
-public function fetch_assignment_list() {
-              include_once("common/global.inc.php");
+public function fetch_assignment_list() 
+{
+        include_once("common/global.inc.php");
         global $link;
                      
 		if ($this->get_request_method() != "POST") {
@@ -2144,8 +2146,6 @@ public function fetch_assignment_list() {
 		$class_id = $login_sqls['class_id'];
 		$section_id = $login_sqls['section_id'];
 		
-		
-		
 		$ass_sql = $this->db->prepare("SELECT * FROM assignment where (student_id='".$st_id."') OR (class_id='".$class_id."' AND section_id='".$section_id."') order by id DESC");
 		$ass_sql->execute();
 		if($ass_sql->rowCount()>0){
@@ -2158,12 +2158,20 @@ public function fetch_assignment_list() {
 				$sub_sql->execute();
 				$sub_sqls= $sub_sql->fetch(PDO::FETCH_ASSOC);
 				$subject_name = $sub_sqls['subject_name'];
+				
+				$user_id=$ass_sqls_data['user_id'];
+				$sub_sql1 = $this->db->prepare("SELECT `user_name` FROM faculty_login where id='".$user_id."'");
+				$sub_sql1->execute();
+				$sub_sqls1= $sub_sql1->fetch(PDO::FETCH_ASSOC);
+				$user_name = $sub_sqls1['user_name'];
 
 				$result[] = array('assignment_id' => $ass_sqls_data['id'],
 				'topic' => $ass_sqls_data['topic'],
 				'description' => $ass_sqls_data['description'],
 				'subject_name' => $subject_name,
-				'file' => $ass_sqls_data['file']
+				'file' => $ass_sqls_data['file'],
+				'teacher_name'=> $user_name,
+				'submission_date'=> $ass_sqls_data['submission_date']
 				);
 		}
 		
@@ -2174,16 +2182,19 @@ public function fetch_assignment_list() {
 			$error = array('status' => false, "Error" => "No Assignment",'Responce' => '');
 			$this->response($this->json($error), 200);
 		}
-		}
+	}
 
 	//////////////////////////
-		public function fetch_assignment_data() {
-              include_once("common/global.inc.php");
-        global $link;
-                     
+	
+//-- ASSIGNMENT LIST	
+	public function fetch_assignment_data() 
+	{
+		include_once("common/global.inc.php");
+		global $link;
+					 
 		if ($this->get_request_method() != "POST") {
-            $this->response('', 406);
-        }
+			$this->response('', 406);
+		}
 		@$assignment_id = $this->_request['assignment_id'];
 		
 		$ass_sql = $this->db->prepare("SELECT * FROM assignment where id='".$assignment_id."'");
@@ -2195,21 +2206,22 @@ public function fetch_assignment_list() {
 				$sub_sql->execute();
 				$sub_sqls= $sub_sql->fetch(PDO::FETCH_ASSOC);
 				$subject_name = $sub_sqls['subject_name'];
-
+	
 				$result = array('assignment_id' => $ass_sqls_data['id'],
-				'topic' => $ass_sqls_data['topic'],
-				'description' => $ass_sqls_data['description'],
-				'subject_name' => $subject_name,
-				'file' => $ass_sqls_data['file']
+					'topic' => $ass_sqls_data['topic'],
+					'description' => $ass_sqls_data['description'],
+					'subject_name' => $subject_name,
+					'file' => $ass_sqls_data['file']
+					
 				);
 			$success = array('status'=> true, "Error" => "",'fetch_assignment_data' => $result);
 			$this->response($this->json($success), 200);
-            }
+			}
 		else{
 			$error = array('status' => false, "Error" => "No Assignment",'Responce' => '');
 			$this->response($this->json($error), 200);
 		}
-		}
+	}
 /////
 public function fetch_syllabus() {
               include_once("common/global.inc.php");
@@ -2231,10 +2243,10 @@ public function fetch_syllabus() {
 				$subject_name = $sub_sqls['subject_name'];
 
 				$result = array('assignment_id' => $ass_sqls_data['id'],
-				'topic' => $ass_sqls_data['topic'],
-				'description' => $ass_sqls_data['description'],
-				'subject_name' => $subject_name,
-				'file' => $ass_sqls_data['file']
+					'topic' => $ass_sqls_data['topic'],
+					'description' => $ass_sqls_data['description'],
+					'subject_name' => $subject_name,
+					'file' => $ass_sqls_data['file']
 				);
 			$success = array('status'=> true, "Error" => "",'fetch_assignment_data' => $result);
 			$this->response($this->json($success), 200);
@@ -2614,6 +2626,223 @@ $student_id = $row_gp['student_id'];
 			$this->response($this->json($error), 400);
 		}
  	}
+
+//- Contact Details
+	public function contactDetails() 
+	{
+		global $link;
+		include_once("common/global.inc.php");
+		if ($this->get_request_method() != "POST") {
+            $this->response('', 406);
+        }
+		
+		$sql_fetch = $this->db->prepare("SELECT * FROM contact_detail");
+		$sql_fetch->execute();
+		 if ($sql_fetch->rowCount() != 0) {  
+			$x=0;   
+			while($row_gp = $sql_fetch->fetch(PDO::FETCH_ASSOC)){
+				foreach($row_gp as $key=>$valye)	
+				{
+					$string_insert[$x][$key]=$row_gp[$key];
+				}
+				$x++;
+			}
+			 
+			$result1 = array("contact_detail" => $string_insert);
+			$success = array('Type' => 'OK', "Error" => '', 'Responce' => $result1);
+			$this->response($this->json($success), 200);
+		} 
+		else {
+			
+			$error = array('Type' => "Error", "Error" => "No data found", 'Responce' => '');
+			$this->response($this->json($error), 400);
+		}
+ 	}
+//-- TIME  LIST	
+	public function TimeTableList() 
+	{
+		include_once("common/global.inc.php");
+		global $link;
+					 
+		if ($this->get_request_method() != "POST") {
+			$this->response('', 406);
+		}
+ 		
+		if(isset($this->_request['class_id']))
+		{
+			$class_id=$this->_request['class_id'];
+ 			$ass_sql = $this->db->prepare("SELECT * FROM time_table  where class_id='".$class_id."'");
+			$ass_sql->execute();
+			if($ass_sql->rowCount()>0){
+				$ass_sqls_data= $ass_sql->fetch(PDO::FETCH_ASSOC);
+					$class_id = $ass_sqls_data['class_id'];
+						
+						$sub_sql = $this->db->prepare("SELECT `class_name` FROM master_class where id='".$class_id."'");
+						$sub_sql->execute();
+						$sub_sqls= $sub_sql->fetch(PDO::FETCH_ASSOC);
+						$class_name = $sub_sqls['class_name'];
+						
+					$section_id = $ass_sqls_data['section_id'];
+					
+						$sub_sql1 = $this->db->prepare("SELECT `section_name` FROM master_section where id='".$section_id."'");
+						$sub_sql1->execute();
+						$sub_sqls1= $sub_sql1->fetch(PDO::FETCH_ASSOC);
+						$section_name = $sub_sqls1['section_name'];
+		
+					$result = array('id' => $ass_sqls_data['id'],
+						'user_id' => $ass_sqls_data['user_id'],
+						'class_id' => $ass_sqls_data['class_id'],
+						'class_name' => $class_name,
+						'section_id' => $ass_sqls_data['section_id'],
+						'section_name'=>$section_name,
+						'date'=>$ass_sqls_data['date'],
+						'file'=>$ass_sqls_data['file'],
+					);
+				$success = array('status'=> true, "Error" => "",' time_table' => $result);
+				$this->response($this->json($success), 200);
+			}
+		else
+			{
+				$error = array('status' => false, "Error" => "No data found",'Responce' => '');
+				$this->response($this->json($error), 200);
+			}
+		}
+		else
+		{
+			$error = array('Type' => "Error", "Error" => "Please Provide Class Id", 'Responce' => '');
+			$this->response($this->json($error), 400);
+		}
+	}
+//-- SyllabusList  LIST	
+	public function SyllabusList() 
+	{
+		include_once("common/global.inc.php");
+		global $link;
+					 
+		if ($this->get_request_method() != "POST") {
+			$this->response('', 406);
+		}
+ 		
+		if(isset($this->_request['class_id']))
+		{
+			$class_id=$this->_request['class_id'];
+ 			$ass_sql = $this->db->prepare("SELECT * FROM syllabus  where class_id='".$class_id."'");
+			$ass_sql->execute();
+			if($ass_sql->rowCount()>0){
+				$ass_sqls_data= $ass_sql->fetch(PDO::FETCH_ASSOC);
+					$class_id = $ass_sqls_data['class_id'];
+						
+						$sub_sql = $this->db->prepare("SELECT `class_name` FROM master_class where id='".$class_id."'");
+						$sub_sql->execute();
+						$sub_sqls= $sub_sql->fetch(PDO::FETCH_ASSOC);
+						$class_name = $sub_sqls['class_name'];
+						
+					$section_id = $ass_sqls_data['section_id'];
+					
+						$sub_sql1 = $this->db->prepare("SELECT `section_name` FROM master_section where id='".$section_id."'");
+						$sub_sql1->execute();
+						$sub_sqls1= $sub_sql1->fetch(PDO::FETCH_ASSOC);
+						$section_name = $sub_sqls1['section_name'];
+						
+					$subject_id = $ass_sqls_data['subject_id'];
+					
+						$sub_sql12 = $this->db->prepare("SELECT `subject_name` FROM master_subject where id='".$subject_id."'");
+						$sub_sql12->execute();
+						$sub_sqls12= $sub_sql12->fetch(PDO::FETCH_ASSOC);
+						$subject_name = $sub_sqls12['subject_name'];
+		
+					$result = array('id' => $ass_sqls_data['id'],
+						'user_id' => $ass_sqls_data['user_id'],
+						'class_id' => $ass_sqls_data['class_id'],
+						'class_name' => $class_name,
+						'section_id' => $ass_sqls_data['section_id'],
+						'section_name'=>$section_name,
+						'subject_id' => $ass_sqls_data['subject_id'],
+						'subject_name'=>$subject_name,
+						'date'=>$ass_sqls_data['date'],
+						'file'=>$ass_sqls_data['file'],
+					);
+				$success = array('status'=> true, "Error" => "",' syllabus' => $result);
+				$this->response($this->json($success), 200);
+			}
+		else
+			{
+				$error = array('status' => false, "Error" => "No data found",'Responce' => '');
+				$this->response($this->json($error), 200);
+			}
+		}
+		else
+		{
+			$error = array('Type' => "Error", "Error" => "Please Provide Class Id", 'Responce' => '');
+			$this->response($this->json($error), 400);
+		}
+	}
+
+//-- SyllabusList  LIST	
+	public function AttendanceList() 
+	{
+		include_once("common/global.inc.php");
+		global $link;
+					 
+		if ($this->get_request_method() != "POST") {
+			$this->response('', 406);
+		}
+ 		
+		if(isset($this->_request['class_id']))
+		{
+			$class_id=$this->_request['class_id'];
+ 			$ass_sql = $this->db->prepare("SELECT * FROM syllabus  where class_id='".$class_id."'");
+			$ass_sql->execute();
+			if($ass_sql->rowCount()>0){
+				$ass_sqls_data= $ass_sql->fetch(PDO::FETCH_ASSOC);
+					$class_id = $ass_sqls_data['class_id'];
+						
+						$sub_sql = $this->db->prepare("SELECT `class_name` FROM master_class where id='".$class_id."'");
+						$sub_sql->execute();
+						$sub_sqls= $sub_sql->fetch(PDO::FETCH_ASSOC);
+						$class_name = $sub_sqls['class_name'];
+						
+					$section_id = $ass_sqls_data['section_id'];
+					
+						$sub_sql1 = $this->db->prepare("SELECT `section_name` FROM master_section where id='".$section_id."'");
+						$sub_sql1->execute();
+						$sub_sqls1= $sub_sql1->fetch(PDO::FETCH_ASSOC);
+						$section_name = $sub_sqls1['section_name'];
+						
+					$subject_id = $ass_sqls_data['subject_id'];
+					
+						$sub_sql12 = $this->db->prepare("SELECT `subject_name` FROM master_subject where id='".$subject_id."'");
+						$sub_sql12->execute();
+						$sub_sqls12= $sub_sql12->fetch(PDO::FETCH_ASSOC);
+						$subject_name = $sub_sqls12['subject_name'];
+		
+					$result = array('id' => $ass_sqls_data['id'],
+						'user_id' => $ass_sqls_data['user_id'],
+						'class_id' => $ass_sqls_data['class_id'],
+						'class_name' => $class_name,
+						'section_id' => $ass_sqls_data['section_id'],
+						'section_name'=>$section_name,
+						'subject_id' => $ass_sqls_data['subject_id'],
+						'subject_name'=>$subject_name,
+						'date'=>$ass_sqls_data['date'],
+						'file'=>$ass_sqls_data['file'],
+					);
+				$success = array('status'=> true, "Error" => "",' syllabus' => $result);
+				$this->response($this->json($success), 200);
+			}
+		else
+			{
+				$error = array('status' => false, "Error" => "No data found",'Responce' => '');
+				$this->response($this->json($error), 200);
+			}
+		}
+		else
+		{
+			$error = array('Type' => "Error", "Error" => "Please Provide Class Id", 'Responce' => '');
+			$this->response($this->json($error), 400);
+		}
+	}
+
 
 
 	
