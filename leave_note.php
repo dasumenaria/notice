@@ -18,12 +18,112 @@
 	{
 		$update_id=$_POST['update_id'];
  		mysql_query("update `leave_note` set `status`='1' where `id` = '$update_id' ");
+		//--
+		$sub_sqls = mysql_query("SELECT `student_id` FROM `leave_note` where id='".$update_id."'");
+		$sub_sqlsa= mysql_fetch_array($sub_sqls);
+		$student_id = $sub_sqlsa['student_id'];
+			$std_nm = mysql_query("SELECT `device_token`,`notification_key`,`role_id` FROM `login` where id='".$student_id."'");
+			$ftc_nm= mysql_fetch_array($std_nm);
+			$device_token = $ftc_nm['device_token'];
+			$notification_key = $ftc_nm['notification_key'];
+			$role_id = $ftc_nm['role_id'];
+				$message='Your Leave Application Approved';
+				$title='Leave Application';
+				$submitted_by=$faculty_login_id;
+				$user_id=$student_id;
+				$date=date("M d Y");
+				$time=date("h:i A");
+				 
+				$msg = array
+				(
+					'message' 	=> 'Your Leave Application Approved',
+					'button_text'	=> 'View',
+					'link'	=> 'leaveApprove://leave_note?id='.$update_id,
+					'notification_id'	=> $update_id,
+				);
+				$url = 'https://fcm.googleapis.com/fcm/send';
+				$fields = array
+				(
+					'registration_ids' 	=> array($device_token),
+					'data'			=> $msg
+				);
+				$headers = array
+				(
+					'Authorization: key=' .$notification_key,
+					'Content-Type: application/json'
+				);	
+					//--- NOTIFICATIO INSERT
+$NOTY_insert = mysql_query("INSERT into notification(title,message,user_id,submitted_by,date,time,role_id)VALUES('$title','$message','$user_id','$submitted_by','$date','$time','$role_id')");
+ 					//-- END
+						json_encode($fields);
+						$ch = curl_init();
+						curl_setopt($ch, CURLOPT_URL, $url);
+						curl_setopt($ch, CURLOPT_POST, true);
+						curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+						curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+						curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+						curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+						curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+						$result = curl_exec($ch);
+						curl_close($ch);
+				//--
+		
 		$message='Leave approve successfully';	
 	}
 	if(isset($_POST['reject_details'])) 
 	{
 		$update_id=$_POST['update_id'];
  		mysql_query("update `leave_note` set `status`='2' where `id` = '$update_id' ");
+		//--
+		$sub_sqls = mysql_query("SELECT `student_id` FROM `leave_note` where id='".$update_id."'");
+		$sub_sqlsa= mysql_fetch_array($sub_sqls);
+		$student_id = $sub_sqlsa['student_id'];
+			$std_nm = mysql_query("SELECT `device_token`,`notification_key`,`role_id` FROM `login` where id='".$student_id."'");
+			$ftc_nm= mysql_fetch_array($std_nm);
+			$device_token = $ftc_nm['device_token'];
+			$notification_key = $ftc_nm['notification_key'];
+			$role_id = $ftc_nm['role_id'];
+				$message='Your Leave Application Rejected';
+				$title='Leave Application';
+				$submitted_by=$faculty_login_id;
+				$user_id=$student_id;
+				$date=date("M d Y");
+				$time=date("h:i A");
+				 
+				$msg = array
+				(
+					'message' 	=> 'Your Leave Application Rejected',
+					'button_text'	=> 'View',
+					'link'	=> 'leaveApprove://leave_note?id='.$update_id,
+					'notification_id'	=> $update_id,
+				);
+				$url = 'https://fcm.googleapis.com/fcm/send';
+				$fields = array
+				(
+					'registration_ids' 	=> array($device_token),
+					'data'			=> $msg
+				);
+				$headers = array
+				(
+					'Authorization: key=' .$notification_key,
+					'Content-Type: application/json'
+				);	
+					//--- NOTIFICATIO INSERT
+$NOTY_insert = mysql_query("INSERT into notification(title,message,user_id,submitted_by,date,time,role_id)VALUES('$title','$message','$user_id','$submitted_by','$date','$time','$role_id')");
+ 					//-- END
+						json_encode($fields);
+						$ch = curl_init();
+						curl_setopt($ch, CURLOPT_URL, $url);
+						curl_setopt($ch, CURLOPT_POST, true);
+						curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+						curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+						curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+						curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+						curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+						$result = curl_exec($ch);
+						curl_close($ch);
+				//--
+				
 		$message='Leave reject successfully';	
 	}
  ?> 
@@ -31,7 +131,7 @@
 <head>
 <?php css();?>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title></title>
+<title>Leave Note</title>
 </head>
 <style>
 span {

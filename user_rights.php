@@ -37,7 +37,7 @@ $sql="insert into user_management(role_id,module_id)values('$role_id','$module')
 <head>
 <?php css();?>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title></title>
+<title>Users Rights</title>
 </head>
 <?php contant_start(); menu();  ?>
 <body>

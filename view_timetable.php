@@ -8,7 +8,7 @@
 <head>
 <?php css();?>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title></title>
+<title>View Time Table</title>
 </head>
 <?php contant_start(); menu();  ?>
 <body>

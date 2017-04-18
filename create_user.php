@@ -47,7 +47,7 @@ else{
 <head>
 <?php css();?>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title></title>
+<title>Faculty Registration</title>
 </head>
 <?php contant_start(); menu();  ?>
 <body>
@@ -167,7 +167,7 @@ else{
                                                     <span class="fileinput-exists">
                                                     <i class="fa fa-plus"></i> </span>
 
-                                                    <input type="file" class="default" name="image" id="file1 " onchange="loadFile(event)">
+                                                    <input type="file" class="default" name="image" id="file1 " onChange="loadFile(event)">
                                                     </span>
                                                     <a href="#" class="btn red fileinput-exists" data-dismiss="fileinput" style=" color:#FFF">
                                                     <i class="fa fa-trash"></i> </a></div>

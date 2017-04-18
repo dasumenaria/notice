@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set('asia/kolkata');  
 include("index_layout.php");
 include("database.php");
 $user=$_SESSION['category'];
@@ -126,7 +127,7 @@ $message = "Event Add Successfully.";
 <head>
 <?php css();?>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title></title>
+<title>Event</title>
 </head>
 <?php contant_start(); menu();  ?>
 <body>
@@ -319,7 +320,7 @@ $message = "Event Add Successfully.";
 <input class="form-control timepicker timepicker-no-seconds input-medium"  type="text" name="x_time[]">
 </td>
 <td>
-<button type="button" onclick="add_row()" class="btn default blue-stripe btn-xs"><i class="fa fa-plus"></i></button>
+<button type="button" onClick="add_row()" class="btn default blue-stripe btn-xs"><i class="fa fa-plus"></i></button>
 <button type="button"  class="btn default red-stripe btn-xs remove_row"><i class="fa fa-trash"></i></button>
 </td>
 </tr>

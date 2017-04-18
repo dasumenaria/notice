@@ -18,58 +18,56 @@ $curent_date=date("Y-m-d");
 	$fetch_st1=mysql_fetch_array($fetch_st);
 	if(empty($fetch_st1))
 	{
-@$file_name=$_FILES["file"]["name"];
-$filedata=explode('/', $_FILES["file"]["type"]);
-$filedata[1];
-if($filedata[1]=='pdf')
-{
-$sql="insert into time_table(class_id,section_id,date,user_id,curent_date)values('$class_id','$section_id','$date1','$user_id','$curent_date')";
-$r=mysql_query($sql);
-$sid=mysql_insert_id();
-$pdf="pdf";
-$pdff=".pdf";
-@$file_name=$_FILES["file"]["name"];
-if(!empty($file_name))
-				{
-				@$file_name=$_FILES["file"]["name"];
-				$file_tmp_name=$_FILES['file']['tmp_name'];
-			    $target ="timetable/";
-				$file_name=$pdf.$sid.$pdff;
-				$filedata=explode('/', $_FILES["file"]["type"]);
-				$filedata[1];
-				if($filedata[1]=='pdf')
-				{
-			     $target=$target.basename($file_name);
-				 move_uploaded_file($file_tmp_name,$target);
-				$file_name=$pdf.$sid.$pdff;
-				}
-				}
-				else{
-				$file_name='no_data.pdf';
-				}
-$xsql=mysql_query("update `time_table` SET `file`='$file_name' where id='".$sid."'" );
-$xsqlr=mysql_query($xsql);    
-$message = "Time Table Add Successfully.";
-   }
-   else{
-	    $message1 = "file type different, Please select pdf file.";
-       }
- }
-else{
-	
-	$message2 = "Time Table Already exist.";
-}
-}
+		@$file_name=$_FILES["file"]["name"];
+		$filedata=explode('/', $_FILES["file"]["type"]);
+		$filedata[1];
+		if($filedata[1]=='pdf')
+		{
+		$sql="insert into time_table(class_id,section_id,date,user_id,curent_date)values('$class_id','$section_id','$date1','$user_id','$curent_date')";
+		$r=mysql_query($sql);
+		$sid=mysql_insert_id();
+		$pdf="pdf";
+		$pdff=".pdf";
+		@$file_name=$_FILES["file"]["name"];
+			if(!empty($file_name))
+			{
+					@$file_name=$_FILES["file"]["name"];
+					$file_tmp_name=$_FILES['file']['tmp_name'];
+					$target ="timetable/";
+					$file_name=$pdf.$sid.$pdff;
+					$filedata=explode('/', $_FILES["file"]["type"]);
+					$filedata[1];
+					if($filedata[1]=='pdf')
+					{
+						 $target=$target.basename($file_name);
+						 move_uploaded_file($file_tmp_name,$target);
+						 $file_name=$pdf.$sid.$pdff;
+					}
+					}
+					else{
+					$file_name='no_data.pdf';
+					}
+				$xsql=mysql_query("update `time_table` SET `file`='$file_name' where id='".$sid."'" );
+				$xsqlr=mysql_query($xsql);    
+				$message = "Time Table Add Successfully.";
+		   }
+		   else
+		   {
+				$message1 = "file type different, Please select pdf file.";
+		   }
+	 }
 	else
 	{
-		echo mysql_error();
+		
+		$message2 = "Time Table Already exist.";
 	}
-  ?> 
+}
+   ?> 
 <html>
 <head>
 <?php css();?>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title></title>
+<title>Time Table</title>
 </head>
 <?php contant_start(); menu();  ?>
 <body>

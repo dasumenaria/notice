@@ -42,12 +42,10 @@ require_once("database.php");
 <!-- END SIDEBAR TOGGLER BUTTON -->
 <!-- BEGIN LOGO -->
 <div class="logo" style="margin-top:5px;">
-
-	<span><img src="img/mdslogo.png" width="400px" height="135px"/></span>
 </div>
 <!-- END LOGO -->
 <!-- BEGIN LOGIN -->
-<div class="content" style="margin-top:1px;">
+<div class="content" style="margin-top:50px;">
 	<!-- BEGIN LOGIN FORM -->
 	<form method="post">
 	<?php 
@@ -73,27 +71,25 @@ $message="";
 		$message = "Invalid Username or Password!";
 	}
 }
-
-/*if(isset($_SESSION["id"])) {
-	if(!isLoginSessionExpired()) {
-		header("Location:index1.php");
-	} else {
-		header("Location:logout.php?session_expired=1");
-	}
-}*/
-
+ 
 if(isset($_GET["session_expired"])) {
 	$message = "Login Session is Expired. Please Login Again";
 }
 
 ?>
 	
-	<?php if($message!="") { ?>
-<div class="message"><?php echo $message; ?></div>
-<?php } ?>
-
-		<h3 class="form-title">Sign in to your session</h3>
-					
+	
+        <div class="col-md-12" align="center">
+            <img src="img/CBALogo.png" width="152px" height="145px"/>
+        </div>
+        <br>
+        <div class="col-md-12" align="center">
+			<h4 class="form-title"> Sign into your account </h4>
+        </div>
+		<br>
+		<?php if($message!="") { ?>
+    		<div style="color:#F00; margin-bottom:10px;"><?php echo $message; ?></div>
+    	<?php } ?>	
 		<div class="form-group">
 			<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
 			<label class="control-label visible-ie8 visible-ie9">Username</label>
@@ -103,7 +99,8 @@ if(isset($_GET["session_expired"])) {
 			<label class="control-label visible-ie8 visible-ie9">Password</label>
 			<input style="background-color:#fff; color:#000;" class="form-control form-control-solid placeholder-no-fix" type="password" autocomplete="off" placeholder="Password" name="pass"/>
 		</div>
-		<div class="form-actions">
+        
+		<div class="">
 		<!--<a href="registration.php" class="btn btn-default">For Registration click here!</a>-->
 			<button type="submit" name="sub_log" class="btn pull-right" style="background-color:#3C8DBC;color:#fff; align:right" >Login</button>
 		</div>

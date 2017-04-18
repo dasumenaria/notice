@@ -13,7 +13,7 @@
 <head>
 <?php css();?>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title></title>
+<title>Registration View</title>
 </head>
 <?php contant_start(); menu();  ?>
 <body>
@@ -33,38 +33,25 @@
 							<div class="col-md-6 col-sm-12">
 							<div class="dataTables_length" id="sample_1_length"><label>
 							<select name="sample_1_length" aria-controls="sample_1" class="form-control input-small input-inline find_records">
-							<option value="300">Select</option>
-							<option value="300">300</option>
-							<option value="600">600</option>
-							<option value="900">900</option>
-							<option value="1200">1200</option>
-							<option value="1500">1500</option>
-							<option value="1800">1800</option>
-							<option value="2100">2100</option>
-							<option value="2400">2400</option>
-							<option value="2700">2700</option>
-							<option value="3000">3000</option>
-							<option value="3300">3300</option>
+                                <option value="300">Select</option>
+                                <option value="300">300</option>
+                                <option value="600">600</option>
+                                <option value="900">900</option>
+                                <option value="1200">1200</option>
+                                <option value="1500">1500</option>
+                                <option value="1800">1800</option>
+                                <option value="2100">2100</option>
+                                <option value="2400">2400</option>
+                                <option value="2700">2700</option>
+                                <option value="3000">3000</option>
+                                <option value="3300">3300</option>
 							</select> Records</label></div></div>
-							
-							
-							<!--<div class="col-md-6 col-sm-12"><div id="sample_1_filter" class="dataTables_filter"><label>My search: <input class="form-control input-small input-inline" placeholder="" aria-controls="sample_1" type="search"></label></div></div>-->
-      						</div>
+       						</div>
 							<div id="data" class="scroller" style="height:400px; padding-top:5px"  data-always-visible="1" data-rail-visible="0">
 							</div>
 							
 							
-							<!--<div class="row"><div class="col-md-5 col-sm-12"><div class="dataTables_info" id="sample_1_info" role="status" aria-live="polite"></div></div><div class="col-md-7 col-sm-12"><div class="dataTables_paginate paging_bootstrap_full_number" id="sample_1_paginate"><ul class="pagination" style="visibility: visible;">
-							<li class="prev disabled"><a href="#" title="Prev"><i class="fa fa-angle-left"></i></a></li>
-							<li class="r1" value="300"><a href="#">1</a></li>
-							<li class="r1" value="600"><a href="#">2</a></li>
-							<li class="r1" value="300"><a href="#">3</a></li>
-							<li class="r1" value="300"><a href="#">4</a></li>
-							<li class="r1" value="300"><a href="#">5</a></li>
-							<li class="r1" value="300"><a href="#">6</a></li>
-							<li class="r1" value="300"><a href="#">7</a></li>
-							<li class="next"><a href="#" title="Next"><i class="fa fa-angle-right"></i></a></li>
-							</ul></div></div></div>-->
+							 
 							
 							</div>
 						</div>

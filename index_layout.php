@@ -21,7 +21,7 @@ if(isset($_SESSION["id"])) {
 
 
 <meta charset="utf-8"/>
-<title>Notice</title>
+ 
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
 <meta content="" name="description"/>
@@ -136,7 +136,7 @@ function contant_start()
 	<div class="page-header-inner">
 		<!-- BEGIN RESPONSIVE MENU TOGGLER -->
 		<div class="page-logo">
-			<a href="index1.php"><img src="img/mdslogo.png" width="130px" height="45px"  alt=""  rel='tab' style="color:#578EBE"></a>
+			<a href="index1.php"> </a>
 		</div>
 		<!-- END RESPONSIVE MENU TOGGLER -->
 	<!-- BEGIN RESPONSIVE MENU TOGGLER -->

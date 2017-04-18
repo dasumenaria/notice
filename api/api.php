@@ -6,11 +6,15 @@ class API extends REST {
 
     public $data = "";
     
-    const DB_SERVER = "localhost";
+    /*const DB_SERVER = "localhost";
+    const DB_USER = "phppoets_notice";
+    const DB_PASSWORD = ",Jr@qc5#,5&C";
+    const DB = "phppoets_notice";
+	*/
+	const DB_SERVER = "localhost";
     const DB_USER = "root";
     const DB_PASSWORD = "";
     const DB = "new_notice";
-	
 	
    private $db = NULL;
     public function __construct() {
@@ -50,8 +54,9 @@ class API extends REST {
         //,Jr@qc5#,5&C
                                 }
 ////////////My API FUN///////////////////////////////
-public function login() {
-global $link;
+	public function login() 
+	{
+		global $link;
 		include_once("common/global.inc.php");
 		if ($this->get_request_method() != "POST") {
             $this->response('', 406);
@@ -63,11 +68,8 @@ global $link;
 		
 		if($login_identity=='student')
 		{
-		$sql = $this->db->prepare("SELECT * FROM login WHERE eno='".$enrollment_no."' AND password='".$newpassword."'");
-			 $sql->execute();
-
-
-
+			$sql = $this->db->prepare("SELECT * FROM login WHERE eno='".$enrollment_no."' AND password='".$newpassword."'");
+			$sql->execute();
 			 if($sql->rowCount()>0)
 			  {
 				$about_sql = $this->db->prepare("SELECT * FROM about_us");
@@ -75,10 +77,6 @@ global $link;
 				$about_sql1 = $about_sql->fetch(PDO::FETCH_ASSOC);
 				$x_about_us=$about_sql1['about_us'];
 
-				$sql = $this->db->prepare("SELECT * FROM login WHERE eno=:eno AND password=:password");
-				$sql->bindParam(":eno", $enrollment_no, PDO::PARAM_STR);
-				$sql->bindParam(":password", $newpassword, PDO::PARAM_STR);
-				$sql->execute();			
 				$row_login = $sql->fetch(PDO::FETCH_ASSOC);
 
 				if(!empty($row_login ['image'])){
@@ -87,49 +85,68 @@ global $link;
 				$row_login ['image'] = "";
 				}
 
+				$class_id = $row_login['class_id'];
+					$sql_stds = $this->db->prepare("SELECT `class_name` FROM master_class WHERE id='".$class_id."'");
+					$sql_stds->execute();
+					$stds = $sql_stds->fetch(PDO::FETCH_ASSOC);
+					$class_name=$stds['class_name'];
+				$section_id = $row_login['section_id'];
+					$sql_std1 = $this->db->prepare("SELECT `section_name` FROM master_section WHERE id='".$section_id."'");
+					$sql_std1->execute();
+					$std1 = $sql_std1->fetch(PDO::FETCH_ASSOC);
+					$section_name=$std1['section_name'];
+					
 				$result = array('id' => $row_login['id'],
-				'enrollment_no' => $row_login['eno'],
-'designation' => '',
-'name' => $row_login['name'],
-
-				'username' => $row_login['name'],
-				'userimage' => $row_login['image'],
-				'uniq_id' => $row_login['school_id'],
-				'role_id' => $row_login['role_id'],
-				'about_us' => $x_about_us,
-				'login_user' => $login_identity,
-'class_id' => '',
-'section_id' => '',
-'class_name' => ''
+					'enrollment_no' => $row_login['eno'],
+					'designation' => '',
+					'name' => $row_login['name'],
+ 					'username' => $row_login['name'],
+					'userimage' => $row_login['image'],
+					'uniq_id' => $row_login['school_id'],
+					'role_id' => $row_login['role_id'],
+					'about_us' => $x_about_us,
+					'login_user' => $login_identity,
+					'class_id' => $row_login['class_id'],
+					'section_id' => $row_login['section_id'],
+					'class_name' => $class_name,
+					'section_name' => $section_name,
+					'roll_no' => $row_login['roll_no'],
+					'address' => $row_login['address'],
+					'mobile_no' => $row_login['mobile_no'],
 				);
 			//$result1 = array("login" => $result );
 			$success = array('status'=> true, "Error" => "login successful",'login' => $result  );
 			$this->response($this->json($success), 200);
-		}    
-		else{
-			$error = array('status' => false, "Error" => "Try again",'Responce' => '');
-			$this->response($this->json($error), 200);
-		}
+			}    
+			else
+			{
+				$error = array('status' => false, "Error" => "Try again",'Responce' => '');
+				$this->response($this->json($error), 200);
+			}
 		}
 		else if($login_identity=='faculty')
 		{
 
-		$sql = $this->db->prepare("SELECT * FROM faculty_login WHERE user_name='".$enrollment_no."' AND password='".$newpassword."'");
+			 $sql = $this->db->prepare("SELECT * FROM faculty_login WHERE user_name='".$enrollment_no."' AND password='".$newpassword."'");
 			 $sql->execute();
-
-			 
 				if($sql->rowCount()>0)
-			{
-
-				$about_sql = $this->db->prepare("SELECT * FROM about_us");
+				{
+ 				$about_sql = $this->db->prepare("SELECT * FROM about_us");
 				$about_sql->execute();
 				$about_sql1 = $about_sql->fetch(PDO::FETCH_ASSOC);
 				$x_about_us=$about_sql1['about_us'];
-
-				$sql = $this->db->prepare("SELECT * FROM faculty_login WHERE user_name='".$enrollment_no."' AND password='".$newpassword."'");
-			 $sql->execute();
-						
-				$row_login = $sql->fetch(PDO::FETCH_ASSOC);
+				
+ 				$row_login = $sql->fetch(PDO::FETCH_ASSOC);
+					$class_id = $row_login['class_id'];
+					$sql_stds = $this->db->prepare("SELECT `class_name` FROM master_class WHERE id='".$class_id."'");
+					$sql_stds->execute();
+					$stds = $sql_stds->fetch(PDO::FETCH_ASSOC);
+					$class_name=$stds['class_name'];
+					$section_id = $row_login['section_id'];
+					$sql_std1 = $this->db->prepare("SELECT `section_name` FROM master_section WHERE id='".$section_id."'");
+					$sql_std1->execute();
+					$std1 = $sql_std1->fetch(PDO::FETCH_ASSOC);
+					$section_name=$std1['section_name'];
 				
 				if(!empty($row_login ['image'])){
 				$row_login ['image'] = $site_url."faculty/".$row_login ['image'];
@@ -138,32 +155,30 @@ global $link;
 				}
 
 				$result = array('id' => $row_login['id'],
-				'enrollment_no' => '',
-'designation' => '',
-'name' => '',
-				'username' => $row_login['user_name'],
-				'userimage' => $row_login['image'],
-				'uniq_id' => '',
-				'role_id' => $row_login['role_id'],
-				'about_us' => $x_about_us,
-				'login_user' => $login_identity,
-'class_id' => '',
-'section_id' => '',
-'class_name' => ''
-
-
-				);
-			//$result1 = array("login" => $result );
-			$success = array('status'=> true, "Error" => "login successful",'login' => $result  );
+					'enrollment_no' => '',
+					'designation' => '',
+					'name' => '',
+					'username' => $row_login['user_name'],
+					'userimage' => $row_login['image'],
+					'uniq_id' => '',
+					'role_id' => $row_login['role_id'],
+					'about_us' => $x_about_us,
+					'login_user' => $login_identity,
+					'class_id' => $row_login['class_id'],
+					'section_id' => $row_login['section_id'],
+					'class_name' => $class_name,
+					'section_name' => $section_name,
+  				);
+ 			$success = array('status'=> true, "Error" => "login successful",'login' => $result  );
 			$this->response($this->json($success), 200);
-		}    
-		else{
-			$error = array('status' => false, "Error" => "Try again",'Responce' => '');
-			$this->response($this->json($error), 200);
+			}    
+			else
+			{
+				$error = array('status' => false, "Error" => "Try again",'Responce' => '');
+				$this->response($this->json($error), 200);
+			}
 		}
-		}
-			
-		}
+ 	}
 ////////////////////////
 public function push_token_update() {
 		global $link;
@@ -627,103 +642,80 @@ $sql = $this->db->prepare("SELECT * FROM noticedetail order by noticenumber DESC
         }
 ////////event//////////
 public function event() {
-              include_once("common/global.inc.php");
+         include_once("common/global.inc.php");
         global $link;
                      
 		if ($this->get_request_method() != "POST") {
             $this->response('', 406);
         }
 		        $limit=1;
-$limit_start=$this->_request['start'];
-$user_id=$this->_request['user_id'];
+		$limit_start=$this->_request['start'];
+		$user_id=$this->_request['user_id'];
 
         $event_sql = $this->db->prepare("SELECT * FROM event where flag=0 order by id DESC LIMIT $limit_start , $limit ");
 		$event_sql->execute();
-				if($event_sql->rowCount()>0)
-			{
+		if($event_sql->rowCount()>0)
+		{
 			$event_fet = $event_sql->fetchALL(PDO::FETCH_ASSOC);
 			foreach($event_fet as $row_event)
             {
-/*$exist_sql = $this->db->prepare("SELECT * FROM add_to_calendar where user_id='".$user_id."' AND event_id='".$row_event['id']."'");
-				$exist_sql->execute();
-				$exist_sql1 = $exist_sql->fetch(PDO::FETCH_ASSOC);
-
-				if($exist_sql->rowCount()>0)
-				{
-					$event_exist=true;
-				}
-				else{
-					$event_exist=false;
-				}..............*/
-
-$event_sql_id = $this->db->prepare("SELECT * FROM gallery where event_news_id='".$row_event['id']."' AND category_id='4'");
-$event_sql_id->execute();
-$event_sql_id1 = $event_sql_id->fetch(PDO::FETCH_ASSOC);
-
-if(!empty($event_sql_id1))
-{
-$event_sql_id2=$event_sql_id1['id'];
-$isgallery=true;		
-}
-else{
-$event_sql_id2='';
-$isgallery=false;
-}
-
-
+				$event_sql_id = $this->db->prepare("SELECT * FROM gallery where event_news_id='".$row_event['id']."' AND category_id='4'");
+				$event_sql_id->execute();
+				$event_sql_id1 = $event_sql_id->fetch(PDO::FETCH_ASSOC);
 				
-$timestamp=$row_event['date_from'];
-$dt=str_replace('-', '', $timestamp);
-$event_time=$row_event['time'];
-$newDateTime = date('h:i', strtotime($event_time));
-$npm = date('A', strtotime($event_time));
-$tm=str_replace(':', '', $newDateTime);
-$exact_trim=$dt.$tm;
-$datetime = DateTime::createFromFormat('YmdHi', $exact_trim);
-$ed=$datetime->format('d');
-$edd=$datetime->format('D');
-$em=$datetime->format('M');
-$emm=$datetime->format('m');
+				if(!empty($event_sql_id1))
+				{
+					$event_sql_id2=$event_sql_id1['id'];
+					$isgallery=true;		
+				}
+				else
+				{
+					$event_sql_id2='';
+					$isgallery=false;
+				}
 
-$x_emm=$emm-1;
-
-$ey=$datetime->format('Y');
-$eh=$datetime->format('H');
-$ei=$datetime->format('i');
-
-$coma=', ';
-$space=' ';
-$tabb=' - ';
-
-$date_text_from=$ed.$space.$em.$coma.$ey;
-
-/*$date_time=array('date' => $ed,
-'day' => $edd,
-'month' => $em,
-'month_id' => $x_emm,
-'year' => $ey,
-'H' => $eh,
-'I' => $ei,
-'A' => $npm);*/
-
-$timestamp1=$row_event['date_to'];
-$dt1=str_replace('-', '', $timestamp1);
-
-$datetime1 = DateTime::createFromFormat('Ymd', $dt1);
-$ed1=$datetime1->format('d');
-$edd1=$datetime1->format('D');
-$em1=$datetime1->format('M');
-$emm1=$datetime1->format('m');
-$x_emm1=$emm1-1;
-$ey1=$datetime1->format('Y');
-
-
-$date_text_to=$ed1.$space.$em1.$coma.$ey1;
-$date_text=$date_text_from.$tabb.$date_text_to;
-
-
-$event_folder_name1='event';
-$event_folder_name2=$event_folder_name1.$row_event['id'];
+ 				$timestamp=$row_event['date_from'];
+				$dt=str_replace('-', '', $timestamp);
+				$event_time=$row_event['time'];
+				$newDateTime = date('h:i', strtotime($event_time));
+				$npm = date('A', strtotime($event_time));
+				$tm=str_replace(':', '', $newDateTime);
+				$exact_trim=$dt.$tm;
+				$datetime = DateTime::createFromFormat('YmdHi', $exact_trim);
+				$ed=$datetime->format('d');
+				$edd=$datetime->format('D');
+				$em=$datetime->format('M');
+				$emm=$datetime->format('m');
+				
+				$x_emm=$emm-1;
+				
+				$ey=$datetime->format('Y');
+				$eh=$datetime->format('H');
+				$ei=$datetime->format('i');
+				
+				$coma=', ';
+				$space=' ';
+				$tabb=' - ';
+				
+				$date_text_from=$ed.$space.$em.$coma.$ey;
+				$timestamp1=$row_event['date_to'];
+				$dt1=str_replace('-', '', $timestamp1);
+				
+				$datetime1 = DateTime::createFromFormat('Ymd', $dt1);
+				$ed1=$datetime1->format('d');
+				$edd1=$datetime1->format('D');
+				$em1=$datetime1->format('M');
+				$emm1=$datetime1->format('m');
+				$x_emm1=$emm1-1;
+				$ey1=$datetime1->format('Y');
+				
+				
+				$date_text_to=$ed1.$space.$em1.$coma.$ey1;
+				$date_text=$date_text_from.$tabb.$date_text_to;
+				
+				
+				$event_folder_name1='event';
+				$event_folder_name2=$event_folder_name1.$row_event['id'];
 
 				
                 if(!empty($row_event['image'])){
@@ -731,7 +723,8 @@ $event_folder_name2=$event_folder_name1.$row_event['id'];
 					}else{
 						 $row_event['image'] = "";
 					}
-                            if($row_event['shareable']==1)
+					 
+					if($row_event['shareable']==1)
                              {$shareable=true;}else{$shareable=false;}
                 
 			$result[] = array('id' => $row_event['id'],
@@ -1044,11 +1037,9 @@ public function fetch_event() {
 			
                 if(!empty($row_event['image'])){
 					$row_event['image']= $site_url."event/".$event_folder_name2."/".$row_event['image'];
-				}
-				else
-				{
-					 $row_event['image'] = "";
-				}
+					}else{
+						 $row_event['image'] = "";
+					}
 					
 									
 $timestamp=$row_event['date_from'];
@@ -1930,7 +1921,7 @@ public function add_to_calendar(){
 }
 /////
 public function fetch_class_section()
-{
+{	
 		if ($this->get_request_method() != "POST") {
             $this->response('', 406);
         }
@@ -1948,7 +1939,7 @@ public function fetch_class_section()
 		$devide_sqls = $devide_sql->fetchALL(PDO::FETCH_ASSOC);
 		
 		foreach($devide_sqls as $devide_sqls_data)
-	{
+		{
 		$did=$devide_sqls_data['id'];
 		$sid=$devide_sqls_data['section_id'];
 		$section_name_sql = $this->db->prepare("SELECT * FROM master_section where id='".$sid."'");
@@ -2002,8 +1993,8 @@ public function fetch_class_section()
 			$this->response($this->json($success), 200);
 }
 ////
-public function assignment()
-{
+	public function assignment()
+	{
 		if ($this->get_request_method() != "POST") {
             $this->response('', 406);
         }
@@ -2015,19 +2006,14 @@ public function assignment()
 		$subject_id= $this->_request['subject_id'];
 		$topic = $this->_request['topic'];
 		$description = $this->_request['description'];
-		@$file = $this->_request['file'];
+		@$tmpname = $_FILES['file']['tmp_name'];
+		@$filename = time() . $_FILES["file"]["name"];
+		@$ext = pathinfo($filename, PATHINFO_EXTENSION);
+		$targetPath=@$topic.'.'.$ext;
+ 		move_uploaded_file($tmpname, dirname(__FILE__)."/../assignment/".$topic.'.'.$ext);
+		
 		$submission_date = $this->_request['submission_date'];
-		$curent_date = date("Y-m-d");
-		
-/*@$file = $this->_request['file'];
-$data = str_replace('data:image/png;base64,', '', $file);
-$data1 = str_replace(' ', '+', $data);
-$decodedFile = base64_decode($data1); 
-$random=(string)mt_rand(1000,9999);
-$name=$random;
-$p_type='.JPG';
-$name1=$name.$p_type;*/
-		
+		$curent_date = date("Y-m-d");	
 		
 		if($assignment_type=='class_wise')
 		{
@@ -2045,18 +2031,11 @@ $name1=$name.$p_type;*/
 				$sql_insert->bindParam(":subject_id", $subject_id, PDO::PARAM_STR);
 				$sql_insert->bindParam(":topic", $topic, PDO::PARAM_STR);
                 $sql_insert->bindParam(":description", $description, PDO::PARAM_STR);
-				$sql_insert->bindParam("submission_date", $submission_date, PDO::PARAM_STR);
-				$sql_insert->bindParam("curent_date", $curent_date, PDO::PARAM_STR);
-				$sql_insert->bindParam("file", $name1, PDO::PARAM_STR);
+				$sql_insert->bindParam(":submission_date", $submission_date, PDO::PARAM_STR);
+				$sql_insert->bindParam(":curent_date", $curent_date, PDO::PARAM_STR);
+				$sql_insert->bindParam(":file", $targetPath, PDO::PARAM_STR);
                 $sql_insert->execute();
 		}
-		
-			/*if(file_put_contents(dirname(__FILE__)."/../webroot/catfile/".$name.".JPG", $decodedFile))
-			{
-			$success = array('status' => true, "msg" => 'Your Bulk Booking has been successfully submit.');
-			$this->response($this->json($success), 200);
-			} */
-			
                 $success = array('status'=> true, "Error" => "Thank you your assignment updated successfully");
                 $this->response($this->json($success), 200);
 		}
@@ -2065,62 +2044,24 @@ $name1=$name.$p_type;*/
 			 $student_ids=sizeof($student_id);
 		$st_id=0;
 		for($i=0; $i<$student_ids; $i++)
-		{
+		{ 
 			$st_id=$student_id[$i];
-			$sql_insert = $this->db->prepare("INSERT into assignment(user_id,class_id,section_id,subject_id,topic,student_id,description,submission_date,curent_date)
-				VALUES(:user_id,:class_id,:section_id,:subject_id,:topic,:student_id,:description,:submission_date,:curent_date)");
+			$sql_insert = $this->db->prepare("INSERT into assignment(user_id,class_id,section_id,subject_id,topic,student_id,description,submission_date,curent_date,file)
+				VALUES(:user_id,:class_id,:section_id,:subject_id,:topic,:student_id,:description,:submission_date,:curent_date,:file)");
 
 				$sql_insert->bindParam(":user_id", $user_id, PDO::PARAM_STR);
                 $sql_insert->bindParam(":class_id", $class_id, PDO::PARAM_STR);				
                 $sql_insert->bindParam(":section_id", $section_id, PDO::PARAM_STR);
 				$sql_insert->bindParam(":subject_id", $subject_id, PDO::PARAM_STR);
-				 $sql_insert->bindParam(":topic", $topic, PDO::PARAM_STR);
+				$sql_insert->bindParam(":topic", $topic, PDO::PARAM_STR);
 				$sql_insert->bindParam(":student_id", $st_id, PDO::PARAM_STR);
                 $sql_insert->bindParam(":description", $description, PDO::PARAM_STR);
-				$sql_insert->bindParam("submission_date", $submission_date, PDO::PARAM_STR);
-				$sql_insert->bindParam("curent_date", $curent_date, PDO::PARAM_STR);
+				$sql_insert->bindParam(":submission_date", $submission_date, PDO::PARAM_STR);
+				$sql_insert->bindParam(":curent_date", $curent_date, PDO::PARAM_STR);
+				$sql_insert->bindParam(":file", $targetPath, PDO::PARAM_STR);
                 $sql_insert->execute();
 		}
                 $success = array('status'=> true, "Error" => "Thank you your assignment updated successfully");
-                $this->response($this->json($success), 200);
-			
-		}
-		else
-		{
-			$error = array('status' => false, "Error" => "Try again");
-			$this->response($this->json($error), 200);
-		}
-}
-////
-
-public function attendance()
-{
-		if ($this->get_request_method() != "POST") {
-            $this->response('', 406);
-        }
-		$user_id = $this->_request['user_id'];
-		@$student_id = $this->_request['student_id'];
-		$attendance_date = $this->_request['attendance_date'];
-		$curent_date = date("Y-m-d");
-		
-		$student_ids=sizeof($student_id);
-		
-		if($student_ids>0)
-		{
-		$st_id=0;
-		for($i=0; $i<$student_ids; $i++)
-		{
-			$st_id=$student_id[$i];
-			$sql_insert = $this->db->prepare("INSERT into attendance(user_id,student_id,attendance_date,curent_date)
-				VALUES(:user_id,:student_id,:attendance_date,:curent_date)");
-
-				$sql_insert->bindParam(":user_id", $user_id, PDO::PARAM_STR);
-                $sql_insert->bindParam(":student_id", $st_id, PDO::PARAM_STR);				
-                $sql_insert->bindParam(":attendance_date", $attendance_date, PDO::PARAM_STR);
-				$sql_insert->bindParam("curent_date", $curent_date, PDO::PARAM_STR);
-                $sql_insert->execute();
-		}
-                $success = array('status'=> true, "Error" => "Thank you attendance updated successfully");
                 $this->response($this->json($success), 200);
 			
 		}
@@ -2129,63 +2070,173 @@ public function attendance()
 			$this->response($this->json($error), 200);
 		    }
 }
-/////
-public function fetch_assignment_list() 
+////
+
+
+public function attendance()
 {
-        include_once("common/global.inc.php");
+		if ($this->get_request_method() != "POST") {
+            $this->response('', 406);
+        }
+		$user_id = $this->_request['user_id'];
+		@$student_id = $this->_request['student_id'];
+		$attendance_date = date('Y-m-d');
+		$attendance_mark = $this->_request['attendance_mark'];
+		$curent_date = date("Y-m-d");
+		
+		$student_ids=sizeof($student_id);
+		
+		if($student_ids>0)
+		{
+		$st_id=0;
+		$mark_id=0;
+		for($i=0; $i<$student_ids; $i++)
+		{
+			$st_id=$student_id[$i];
+			$mark_id=$attendance_mark[$i];
+			
+			$std_nm = $this->db->prepare("SELECT `id` FROM `attendance` where student_id='".$st_id."' AND attendance_date='".$attendance_date."'");
+			$std_nm->execute();
+			if($std_nm->rowCount()>0)
+			{
+				$ftc_data= $std_nm->fetchALL(PDO::FETCH_ASSOC);
+ 				$update_id=$ftc_data[0]['id']; 
+					 
+					$sql_update = $this->db->prepare("update `attendance` set user_id=:user_id,student_id=:student_id,attendance_mark=:attendance_mark,attendance_date=:attendance_date,curent_date=:curent_date where id=:id");
+					$sql_update->bindParam(":user_id", $user_id, PDO::PARAM_STR);
+					$sql_update->bindParam(":student_id", $st_id, PDO::PARAM_STR);
+					$sql_update->bindParam(":attendance_mark", $mark_id, PDO::PARAM_STR);				
+					$sql_update->bindParam(":attendance_date", $attendance_date, PDO::PARAM_STR);
+					$sql_update->bindParam("curent_date", $curent_date, PDO::PARAM_STR);
+					$sql_update->bindParam("id", $update_id, PDO::PARAM_STR);
+					$sql_update->execute();
+ 			}
+			else
+			{
+ 				if(!empty($mark_id)){	
+					$sql_insert = $this->db->prepare("INSERT into attendance(user_id,student_id,attendance_mark,attendance_date,curent_date)
+					VALUES(:user_id,:student_id,:attendance_mark,:attendance_date,:curent_date)");
+					$sql_insert->bindParam(":user_id", $user_id, PDO::PARAM_STR);
+					$sql_insert->bindParam(":student_id", $st_id, PDO::PARAM_STR);
+					$sql_insert->bindParam(":attendance_mark", $mark_id, PDO::PARAM_STR);				
+					$sql_insert->bindParam(":attendance_date", $attendance_date, PDO::PARAM_STR);
+					$sql_insert->bindParam("curent_date", $curent_date, PDO::PARAM_STR);
+					$sql_insert->execute();
+				}
+			}
+				
+		}
+		$success = array('status'=> true, "Error" => "Thank you attendance updated successfully");
+		$this->response($this->json($success), 200);
+			
+		}
+		else{
+			$error = array('status' => false, "Error" => "Try again");
+			$this->response($this->json($error), 200);
+		    }
+}
+/////
+	public function fetch_assignment_list() 
+	{
+		include_once("common/global.inc.php");
         global $link;
                      
 		if ($this->get_request_method() != "POST") {
             $this->response('', 406);
         }
-		@$student_id = $this->_request['student_id'];
-		$login_sql = $this->db->prepare("SELECT * FROM login where id='".$student_id."'");
-		$login_sql->execute();
-		$login_sqls= $login_sql->fetch(PDO::FETCH_ASSOC);
-		$st_id = $login_sqls['id'];
-		$class_id = $login_sqls['class_id'];
-		$section_id = $login_sqls['section_id'];
-		
-		$ass_sql = $this->db->prepare("SELECT * FROM assignment where (student_id='".$st_id."') OR (class_id='".$class_id."' AND section_id='".$section_id."') order by id DESC");
-		$ass_sql->execute();
-		if($ass_sql->rowCount()>0){
-		$ass_sqls= $ass_sql->fetchALL(PDO::FETCH_ASSOC);
-		
-		foreach($ass_sqls as $ass_sqls_data)
+		$assignment_type = $this->_request['assignment_type'];
+		if($assignment_type=='faculty_wise')	
 		{
-				$subject_id = $ass_sqls_data['subject_id'];
-				$sub_sql = $this->db->prepare("SELECT * FROM master_subject where id='".$subject_id."'");
-				$sub_sql->execute();
-				$sub_sqls= $sub_sql->fetch(PDO::FETCH_ASSOC);
-				$subject_name = $sub_sqls['subject_name'];
-				
-				$user_id=$ass_sqls_data['user_id'];
-				$sub_sql1 = $this->db->prepare("SELECT `user_name` FROM faculty_login where id='".$user_id."'");
-				$sub_sql1->execute();
-				$sub_sqls1= $sub_sql1->fetch(PDO::FETCH_ASSOC);
-				$user_name = $sub_sqls1['user_name'];
-
-				$result[] = array('assignment_id' => $ass_sqls_data['id'],
-				'topic' => $ass_sqls_data['topic'],
-				'description' => $ass_sqls_data['description'],
-				'subject_name' => $subject_name,
-				'file' => $ass_sqls_data['file'],
-				'teacher_name'=> $user_name,
-				'submission_date'=> $ass_sqls_data['submission_date']
-				);
+			$user_id = $this->_request['user_id'];
+ 			$ass_sql = $this->db->prepare("SELECT * FROM assignment where user_id='".$user_id."' order by id DESC");
+			$ass_sql->execute();
+			if($ass_sql->rowCount()>0)
+			{
+				$ass_sqls= $ass_sql->fetchALL(PDO::FETCH_ASSOC);
+				foreach($ass_sqls as $ass_sqls_data)
+				{
+						$subject_id = $ass_sqls_data['subject_id'];
+						$sub_sql = $this->db->prepare("SELECT * FROM master_subject where id='".$subject_id."'");
+						$sub_sql->execute();
+						$sub_sqls= $sub_sql->fetch(PDO::FETCH_ASSOC);
+						$subject_name = $sub_sqls['subject_name'];
+						
+						$user_id=$ass_sqls_data['user_id'];
+						$sub_sql1 = $this->db->prepare("SELECT `user_name` FROM faculty_login where id='".$user_id."'");
+						$sub_sql1->execute();
+						$sub_sqls1= $sub_sql1->fetch(PDO::FETCH_ASSOC);
+						$user_name = $sub_sqls1['user_name'];
+						
+					$result[] = array('assignment_id' => $ass_sqls_data['id'],
+						'topic' => $ass_sqls_data['topic'],
+						'description' => $ass_sqls_data['description'],
+						'subject_name' => $subject_name,
+						'file' => $ass_sqls_data['file'],
+						'student_id' => $ass_sqls_data['student_id'],
+						'user_id' => $ass_sqls_data['user_id'],
+						'teacher_name'=> $user_name,
+						'submission_date'=> $ass_sqls_data['submission_date']
+					);
+				}
+				$success = array('status'=> true, "Error" => "",'fetch_assignment_list' => $result);
+				$this->response($this->json($success), 200);
+			}
+			else
+			{
+				$error = array('status' => false, "Error" => "No Assignment",'Responce' => '');
+				$this->response($this->json($error), 200);
+			}			
 		}
-		
-			$success = array('status'=> true, "Error" => "",'fetch_assignment_list' => $result);
-			$this->response($this->json($success), 200);
-            }
-		else{
-			$error = array('status' => false, "Error" => "No Assignment",'Responce' => '');
+		else if($assignment_type=='student_wise')
+		{
+			$student_id = $this->_request['student_id'];
+ 			
+			$ass_sql = $this->db->prepare("SELECT * FROM assignment where student_id='".$student_id."' order by id DESC");
+			$ass_sql->execute();
+			if($ass_sql->rowCount()>0)
+			{
+				$ass_sqls= $ass_sql->fetchALL(PDO::FETCH_ASSOC);
+				foreach($ass_sqls as $ass_sqls_data)
+				{
+						$subject_id = $ass_sqls_data['subject_id'];
+						$sub_sql = $this->db->prepare("SELECT * FROM master_subject where id='".$subject_id."'");
+						$sub_sql->execute();
+						$sub_sqls= $sub_sql->fetch(PDO::FETCH_ASSOC);
+						$subject_name = $sub_sqls['subject_name'];
+						
+						$user_id=$ass_sqls_data['user_id'];
+						$sub_sql1 = $this->db->prepare("SELECT `user_name` FROM faculty_login where id='".$user_id."'");
+						$sub_sql1->execute();
+						$sub_sqls1= $sub_sql1->fetch(PDO::FETCH_ASSOC);
+						$user_name = $sub_sqls1['user_name'];
+						
+					$result[] = array('assignment_id' => $ass_sqls_data['id'],
+						'topic' => $ass_sqls_data['topic'],
+						'description' => $ass_sqls_data['description'],
+						'subject_name' => $subject_name,
+						'file' => $ass_sqls_data['file'],
+						'student_id' => $ass_sqls_data['student_id'],
+						'user_id' => $ass_sqls_data['user_id'],
+						'teacher_name'=> $user_name,
+						'submission_date'=> $ass_sqls_data['submission_date']
+					);
+				}
+				$success = array('status'=> true, "Error" => "",'fetch_assignment_list' => $result);
+				$this->response($this->json($success), 200);
+			}
+			else
+			{
+				$error = array('status' => false, "Error" => "No Assignment",'Responce' => '');
+				$this->response($this->json($error), 200);
+			}	
+		}
+		else
+		{
+			$error = array('status' => false, "Error" => "Invalid assignment type",'Responce' => '');
 			$this->response($this->json($error), 200);
 		}
 	}
 
-	//////////////////////////
-	
 //-- ASSIGNMENT LIST	
 	public function fetch_assignment_data() 
 	{
@@ -2196,8 +2247,9 @@ public function fetch_assignment_list()
 			$this->response('', 406);
 		}
 		@$assignment_id = $this->_request['assignment_id'];
+		@$student_id = $this->_request['student_id'];
 		
-		$ass_sql = $this->db->prepare("SELECT * FROM assignment where id='".$assignment_id."'");
+		$ass_sql = $this->db->prepare("SELECT * FROM assignment where id='".$assignment_id."' AND student_id='".$student_id."'");
 		$ass_sql->execute();
 		if($ass_sql->rowCount()>0){
 		$ass_sqls_data= $ass_sql->fetch(PDO::FETCH_ASSOC);
@@ -2207,12 +2259,19 @@ public function fetch_assignment_list()
 				$sub_sqls= $sub_sql->fetch(PDO::FETCH_ASSOC);
 				$subject_name = $sub_sqls['subject_name'];
 	
+$user_id=$ass_sqls_data['user_id'];
+				$sub_sql1 = $this->db->prepare("SELECT `user_name` FROM faculty_login where id='".$user_id."'");
+				$sub_sql1->execute();
+				$sub_sqls1= $sub_sql1->fetch(PDO::FETCH_ASSOC);
+				$user_name = $sub_sqls1['user_name'];
 				$result = array('assignment_id' => $ass_sqls_data['id'],
 					'topic' => $ass_sqls_data['topic'],
 					'description' => $ass_sqls_data['description'],
 					'subject_name' => $subject_name,
-					'file' => $ass_sqls_data['file']
-					
+					'file' => $ass_sqls_data['file'],
+					'user_id'=>$ass_sqls_data['user_id'],
+'teacher_name'=>$user_name,
+					'submission_date'=>$ass_sqls_data['submission_date']
 				);
 			$success = array('status'=> true, "Error" => "",'fetch_assignment_data' => $result);
 			$this->response($this->json($success), 200);
@@ -2243,10 +2302,10 @@ public function fetch_syllabus() {
 				$subject_name = $sub_sqls['subject_name'];
 
 				$result = array('assignment_id' => $ass_sqls_data['id'],
-					'topic' => $ass_sqls_data['topic'],
-					'description' => $ass_sqls_data['description'],
-					'subject_name' => $subject_name,
-					'file' => $ass_sqls_data['file']
+				'topic' => $ass_sqls_data['topic'],
+				'description' => $ass_sqls_data['description'],
+				'subject_name' => $subject_name,
+				'file' => $ass_sqls_data['file']
 				);
 			$success = array('status'=> true, "Error" => "",'fetch_assignment_data' => $result);
 			$this->response($this->json($success), 200);
@@ -2255,8 +2314,8 @@ public function fetch_syllabus() {
 			$error = array('status' => false, "Error" => "No Assignment",'Responce' => '');
 			$this->response($this->json($error), 200);
 		}
-		}
-//--  AppointMent API/*
+	}
+//--  AppointMent API/* Push // notification
 	public function appointment_data() 
 	{
 		global $link;
@@ -2267,7 +2326,7 @@ public function fetch_syllabus() {
 		if(isset($this->_request['response_type']))
 		{
 			$response_type=$this->_request['response_type'];
-			//-- Response Type = 1 Insert  2 = update  3 Fetch
+			//-- Response Type = 1 Insert  2 = update  3 ogin()Fetch
 			if($response_type==1)
 			{//Insert
 				$appoint_to=$this->_request['appoint_to'];
@@ -2286,7 +2345,65 @@ public function fetch_syllabus() {
 				$sql_insert->bindParam(":student_id", $student_id, PDO::PARAM_STR);
 				$sql_insert->bindParam(":name", $name, PDO::PARAM_STR);
 				$sql_insert->execute();	
-				$userid = $this->db->lastInsertId();
+				$insert_id = $this->db->lastInsertId();
+				//--
+ 					$std_nm = $this->db->prepare("SELECT `device_token`,`notification_key`,`role_id` FROM `faculty_login` where id='".$appoint_to."'");
+					$std_nm->execute();
+					$ftc_nm= $std_nm->fetch(PDO::FETCH_ASSOC);
+					$device_token = $ftc_nm['device_token'];
+					$notification_key = $ftc_nm['notification_key'];
+					$role_id = $ftc_nm['role_id'];
+					
+					$message='New Appointment Request Submitted';
+					$title='New Appointment';
+					$submitted_by=$student_id;
+					$user_id=$appoint_to;
+					$date=date("M d Y");
+					$time=date("h:i A");
+					
+ 					$msg = array
+					(
+						'title' => $title,
+						'message' 	=> $message,
+						'button_text'	=> 'View',
+						'link'	=> 'appointment://appointment?id='.$insert_id,
+						'notification_id'	=> $insert_id,
+					);
+					$url = 'https://fcm.googleapis.com/fcm/send';
+					$fields = array
+					(
+						'registration_ids' 	=> array($device_token),
+						'data'			=> $msg
+					);
+					$headers = array
+					(
+						'Authorization: key=' .$notification_key,
+						'Content-Type: application/json'
+					);
+					//--- NOTIFICATIO INSERT
+						$NOTY_insert = $this->db->prepare("INSERT into notification(title,message,user_id,submitted_by,date,time,role_id)VALUES(:title,:message,:user_id,:submitted_by,:date,:time,:role_id)");
+						$NOTY_insert->bindParam(":title", $title, PDO::PARAM_STR);
+						$NOTY_insert->bindParam(":message", $message, PDO::PARAM_STR);
+						$NOTY_insert->bindParam(":user_id", $user_id, PDO::PARAM_STR);
+						$NOTY_insert->bindParam(":submitted_by", $submitted_by, PDO::PARAM_STR);
+						$NOTY_insert->bindParam(":time", $time, PDO::PARAM_STR);
+						$NOTY_insert->bindParam(":date", $date, PDO::PARAM_STR);
+						$NOTY_insert->bindParam(":role_id", $role_id, PDO::PARAM_STR);
+						$NOTY_insert->execute();	
+					//-- END
+					
+						json_encode($fields);
+						$ch = curl_init();
+						curl_setopt($ch, CURLOPT_URL, $url);
+						curl_setopt($ch, CURLOPT_POST, true);
+						curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+						curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+						curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+						curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+						curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+						$result = curl_exec($ch);
+						curl_close($ch);
+				//--
 				$success = array('status'=> true, "Error" => "Thank you appointment successfully submitted");
                 $this->response($this->json($success), 200);
 						
@@ -2357,7 +2474,7 @@ public function fetch_syllabus() {
 			$this->response($this->json($error), 400);	
 		}
 	}
-//--  Leave Note API/*
+//--  Leave Note API/* Push // NOtification
 	public function leaveNote_data() 
 	{
 		global $link;
@@ -2378,15 +2495,80 @@ public function fetch_syllabus() {
 				$student_id=$this->_request['student_id'];
 				$reason=$this->_request['reason'];
 				$class_id=$this->_request['class_id'];
+				$section_id=$this->_request['section_id'];
 				 
-				$sql_insert = $this->db->prepare("INSERT into  leave_note(date_from,date_to,student_id,reason,class_id)VALUES(:date_from,:date_to,:student_id,:reason,:class_id)");
+				$sql_insert = $this->db->prepare("INSERT into leave_note(date_from,date_to,student_id,reason,class_id,section_id)VALUES(:date_from,:date_to,:student_id,:reason,:class_id,:section_id)");
 				$sql_insert->bindParam(":date_from", $date_from_cnv, PDO::PARAM_STR);
 				$sql_insert->bindParam(":date_to", $date_to_cnv, PDO::PARAM_STR);
 				$sql_insert->bindParam(":student_id", $student_id, PDO::PARAM_STR);
 				$sql_insert->bindParam(":reason", $reason, PDO::PARAM_STR);
 				$sql_insert->bindParam(":class_id", $class_id, PDO::PARAM_STR);
+				$sql_insert->bindParam(":section_id", $section_id, PDO::PARAM_STR);
 				$sql_insert->execute();	
-				$userid = $this->db->lastInsertId();
+				$update_id = $this->db->lastInsertId();
+				//--
+					$std_nm = $this->db->prepare("SELECT `device_token`,`notification_key` FROM `faculty_login` where class_id='".$class_id."' AND section_id='".$section_id."'");
+					$std_nm->execute();
+					$ftc_nm= $std_nm->fetch(PDO::FETCH_ASSOC);
+					$device_token = $ftc_nm['device_token'];
+					$notification_key = $ftc_nm['notification_key'];
+					
+					$sql_std = $this->db->prepare("SELECT `id`,`role_id` FROM faculty_login WHERE class_id='".$class_id."' AND section_id='".$section_id."'");
+					$sql_std->execute();
+					$std = $sql_std->fetch(PDO::FETCH_ASSOC);
+					$user_id=$std['id'];
+					$role_id=$std['role_id'];
+					
+					$message='New Leave Application Submitted';
+					$title='Leave Application';
+					$submitted_by=$student_id;
+					$user_id=$user_id;
+					$date=date("M d Y");
+					$time=date("h:i A");
+					 
+					$msg = array
+					(
+						'message' 	=> 'New Leave Application Submitted',
+						'button_text'	=> 'View',
+						'link'	=> 'leave://leave_note?id='.$update_id,
+						'notification_id'	=> $update_id,
+					);
+ 					$url = 'https://fcm.googleapis.com/fcm/send';
+ 					$fields = array
+					(
+						'registration_ids' 	=> array($device_token),
+						'data'			=> $msg
+					);
+					$headers = array
+					(
+						'Authorization: key=' .$notification_key,
+						'Content-Type: application/json'
+					);
+					//--- NOTIFICATIO INSERT
+						$NOTY_insert = $this->db->prepare("INSERT into notification(title,message,user_id,submitted_by,date,time,role_id)VALUES(:title,:message,:user_id,:submitted_by,:date,:time,:role_id)");
+						$NOTY_insert->bindParam(":title", $title, PDO::PARAM_STR);
+						$NOTY_insert->bindParam(":message", $message, PDO::PARAM_STR);
+						$NOTY_insert->bindParam(":user_id", $user_id, PDO::PARAM_STR);
+						$NOTY_insert->bindParam(":submitted_by", $submitted_by, PDO::PARAM_STR);
+						$NOTY_insert->bindParam(":time", $time, PDO::PARAM_STR);
+						$NOTY_insert->bindParam(":date", $date, PDO::PARAM_STR);
+						$NOTY_insert->bindParam(":role_id", $role_id, PDO::PARAM_STR);
+						$NOTY_insert->execute();	
+					//-- END
+					
+						json_encode($fields);
+						$ch = curl_init();
+						curl_setopt($ch, CURLOPT_URL, $url);
+						curl_setopt($ch, CURLOPT_POST, true);
+						curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+						curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+						curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+						curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+						curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+						$result = curl_exec($ch);
+ 						curl_close($ch);
+ 					//-- 
+				
 				$success = array('status'=> true, "Error" => "Thank you your leave application successfully submitted");
                 $this->response($this->json($success), 200);
 						
@@ -2402,13 +2584,15 @@ public function fetch_syllabus() {
 				$student_id=$this->_request['student_id'];
 				$reason=$this->_request['reason'];
 				$class_id=$this->_request['class_id'];
+				$section_id=$this->_request['section_id'];
 				
-					$sql_update = $this->db->prepare("update `leave_note` set date_from=:date_from,date_to=:date_to,student_id=:student_id,reason=:reason,class_id=:class_id where id=:id");	
+					$sql_update = $this->db->prepare("update `leave_note` set date_from=:date_from,date_to=:date_to,student_id=:student_id,reason=:reason,class_id=:class_id,section_id=:section_id where id=:id");	
 					$sql_update->bindParam(":date_from", $date_from_cnv, PDO::PARAM_STR);
 					$sql_update->bindParam(":date_to", $date_to_cnv, PDO::PARAM_STR);
 					$sql_update->bindParam(":student_id", $student_id, PDO::PARAM_STR);
 					$sql_update->bindParam(":reason", $reason, PDO::PARAM_STR);
 					$sql_update->bindParam(":class_id", $class_id, PDO::PARAM_STR);
+					$sql_update->bindParam(":section_id", $section_id, PDO::PARAM_STR);
 					$sql_update->bindParam(":id", $update_id, PDO::PARAM_STR);
  					$sql_update->execute();
 					$success = array('status'=> true, "Error" => "Thank you your leave application updated successfully");
@@ -2418,13 +2602,15 @@ public function fetch_syllabus() {
 			}
 			else if($response_type==3)
 			{//Fetch
-				$sql_fetch = $this->db->prepare("SELECT * FROM leave_note");
+				$class_id=$this->_request['class_id'];
+				$section_id=$this->_request['section_id'];
+				$sql_fetch = $this->db->prepare("SELECT * FROM leave_note WHERE class_id='".$class_id."' AND section_id='".$section_id."'");
  				$sql_fetch->execute();
 				 if ($sql_fetch->rowCount() != 0) {  
 				 	$x=0;   
 					while($row_gp = $sql_fetch->fetch(PDO::FETCH_ASSOC)){
 
-$student_id = $row_gp['student_id'];
+						$student_id = $row_gp['student_id'];
 						$sql_std = $this->db->prepare("SELECT `name` FROM login WHERE id='".$student_id."'");
 						$sql_std->execute();
 						$std = $sql_std->fetch(PDO::FETCH_ASSOC);
@@ -2436,7 +2622,7 @@ $student_id = $row_gp['student_id'];
 						}
 						$string_insert[$x]['student_name']=$std_name;
 						$x++;
-					}
+					} 
 					 
 					$result1 = array("leave_note" => $string_insert);
 					$success = array('Type' => 'OK', "Error" => '', 'Responce' => $result1);
@@ -2463,9 +2649,8 @@ $student_id = $row_gp['student_id'];
 			$this->response($this->json($error), 400);	
 		}
 	
-	
 	}
-//-- Leave Action
+//-- Leave Action  // Push  // Notification
 	public function leaveAction() 
 	{
 		global $link;
@@ -2476,22 +2661,79 @@ $student_id = $row_gp['student_id'];
 		if(isset($this->_request['response_type']))
 		{
 			$response_type=$this->_request['response_type'];
+			$user_id=$this->_request['user_id'];
 			if(isset($this->_request['update_id']))
 			{
  				//-- Response Type = 1 approve  2 = Reject 
 				if($response_type==1)
 				{//Approve
 					$update_id=$this->_request['update_id'];
-					$response_type=$this->_request['response_type'];
+ 					$response_type=$this->_request['response_type'];
 					$sql_update = $this->db->prepare("update `leave_note` set status=:status where id=:id");	
 					$sql_update->bindParam(":status", $response_type, PDO::PARAM_STR);
 					$sql_update->bindParam(":id", $update_id, PDO::PARAM_STR);
 					$sql_update->execute();
-					 
+					//--
+						$sub_sqls = $this->db->prepare("SELECT `student_id` FROM `leave_note` where id='".$update_id."'");
+						$sub_sqls->execute();
+						$sub_sqlsa= $sub_sqls->fetch(PDO::FETCH_ASSOC);
+						$student_id = $sub_sqlsa['student_id'];
+						$std_nm = $this->db->prepare("SELECT `device_token`,`notification_key`,`role_id` FROM `login` where id='".$student_id."'");
+						$std_nm->execute();
+						$ftc_nm= $std_nm->fetch(PDO::FETCH_ASSOC);
+						$device_token = $ftc_nm['device_token'];
+						$notification_key = $ftc_nm['notification_key'];
+						$role_id = $ftc_nm['role_id'];
+						$message='Your Leave Application Approved';
+						$title='Leave Application';
+						$submitted_by=$user_id;
+						$user_id=$student_id;
+						$date=date("M d Y");
+						$time=date("h:i A");
+						 
+						$msg = array
+						(
+							'message' 	=> 'Your Leave Application Approved',
+							'button_text'	=> 'View',
+							'link'	=> 'leaveApprove://leave_note?id='.$update_id,
+							'notification_id'	=> $update_id,
+						);
+						$url = 'https://fcm.googleapis.com/fcm/send';
+						$fields = array
+						(
+							'registration_ids' 	=> array($device_token),
+							'data'			=> $msg
+						);
+						$headers = array
+						(
+							'Authorization: key=' .$notification_key,
+							'Content-Type: application/json'
+						);
+						//--- NOTIFICATIO INSERT
+							$NOTY_insert = $this->db->prepare("INSERT into notification(title,message,user_id,submitted_by,date,time,role_id)VALUES(:title,:message,:user_id,:submitted_by,:date,:time,:role_id)");
+							$NOTY_insert->bindParam(":title", $title, PDO::PARAM_STR);
+							$NOTY_insert->bindParam(":message", $message, PDO::PARAM_STR);
+							$NOTY_insert->bindParam(":user_id", $user_id, PDO::PARAM_STR);
+							$NOTY_insert->bindParam(":submitted_by", $submitted_by, PDO::PARAM_STR);
+							$NOTY_insert->bindParam(":time", $time, PDO::PARAM_STR);
+							$NOTY_insert->bindParam(":date", $date, PDO::PARAM_STR);
+							$NOTY_insert->bindParam(":role_id", $role_id, PDO::PARAM_STR);
+							$NOTY_insert->execute();	
+						//-- END
+							json_encode($fields);
+							$ch = curl_init();
+							curl_setopt($ch, CURLOPT_URL, $url);
+							curl_setopt($ch, CURLOPT_POST, true);
+							curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+							curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+							curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+							curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+							curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+							$result = curl_exec($ch);
+							curl_close($ch);
+ 					//--
 					$success = array('status'=> true, "Error" => "Thank you your leave application is approve");
 					$this->response($this->json($success), 200);
-							
-					
 				}
 				else if($response_type==2)
 				{//update
@@ -2501,7 +2743,66 @@ $student_id = $row_gp['student_id'];
 					$sql_update->bindParam(":status", $response_type, PDO::PARAM_STR);
 					$sql_update->bindParam(":id", $update_id, PDO::PARAM_STR);
 					$sql_update->execute();
-					 
+					//--
+					$sub_sqls = $this->db->prepare("SELECT `student_id` FROM `leave_note` where id='".$update_id."'");
+					$sub_sqls->execute();
+					$sub_sqlsa= $sub_sqls->fetch(PDO::FETCH_ASSOC);
+					$student_id = $sub_sqlsa['student_id'];
+					$std_nm = $this->db->prepare("SELECT `device_token`,`notification_key`,`role_id` FROM `login` where id='".$student_id."'");
+					$std_nm->execute();
+					$ftc_nm= $std_nm->fetch(PDO::FETCH_ASSOC);
+					$device_token = $ftc_nm['device_token'];
+					$notification_key = $ftc_nm['notification_key'];
+					$role_id = $ftc_nm['role_id'];
+					
+					$message='Your Leave Application Rejected';
+					$title='Leave Application';
+					$submitted_by=$user_id;
+					$user_id=$student_id;
+					$date=date("M d Y");
+					$time=date("h:i A");
+ 
+ 					$msg = array
+					(
+						'message' 	=> 'Your Leave Application Rejected',
+						'button_text'	=> 'View',
+						'link'	=> 'leaveApprove://leave_note?id='.$update_id,
+						'notification_id'	=> $update_id,
+					);
+ 					$url = 'https://fcm.googleapis.com/fcm/send';
+ 					$fields = array
+					(
+						'registration_ids' 	=> array($device_token),
+						'data'			=> $msg
+					);
+					$headers = array
+					(
+						'Authorization: key=' .$notification_key,
+						'Content-Type: application/json'
+					);
+					//--- NOTIFICATIO INSERT
+						$NOTY_insert = $this->db->prepare("INSERT into notification(title,message,user_id,submitted_by,date,time,role_id)VALUES(:title,:message,:user_id,:submitted_by,:date,:time,:role_id)");
+						$NOTY_insert->bindParam(":title", $title, PDO::PARAM_STR);
+						$NOTY_insert->bindParam(":message", $message, PDO::PARAM_STR);
+						$NOTY_insert->bindParam(":user_id", $user_id, PDO::PARAM_STR);
+						$NOTY_insert->bindParam(":submitted_by", $submitted_by, PDO::PARAM_STR);
+						$NOTY_insert->bindParam(":time", $time, PDO::PARAM_STR);
+						$NOTY_insert->bindParam(":date", $date, PDO::PARAM_STR);
+						$NOTY_insert->bindParam(":role_id", $role_id, PDO::PARAM_STR);
+						$NOTY_insert->execute();	
+					//-- END
+						json_encode($fields);
+						$ch = curl_init();
+						curl_setopt($ch, CURLOPT_URL, $url);
+						curl_setopt($ch, CURLOPT_POST, true);
+						curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+						curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+						curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+						curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+						curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+						$result = curl_exec($ch);
+ 						curl_close($ch);
+ 					//-- 
 					$success = array('status'=> true, "Error" => "Thank you your leave application is reject");
 					$this->response($this->json($success), 200);
 						
@@ -2525,7 +2826,7 @@ $student_id = $row_gp['student_id'];
 			$this->response($this->json($error), 400);	
 		}
 	}	
-//- APPOINTMENT ACTION	
+//- APPOINTMENT ACTION	Push// Noticication
 	public function appointmentAction() 
 	{
 		global $link;
@@ -2535,6 +2836,7 @@ $student_id = $row_gp['student_id'];
         }
 		if(isset($this->_request['response_type']))
 		{
+			$user_id=$this->_request['user_id'];
 			$response_type=$this->_request['response_type'];
 			if(isset($this->_request['update_id']))
 			{
@@ -2547,6 +2849,67 @@ $student_id = $row_gp['student_id'];
 					$sql_update->bindParam(":status", $response_type, PDO::PARAM_STR);
 					$sql_update->bindParam(":id", $update_id, PDO::PARAM_STR);
 					$sql_update->execute();
+					//--
+						$sub_sqls = $this->db->prepare("SELECT `student_id` FROM `appointment` where id='".$update_id."'");
+						$sub_sqls->execute();
+						$sub_sqlsa= $sub_sqls->fetch(PDO::FETCH_ASSOC);
+						$student_id = $sub_sqlsa['student_id'];
+						$std_nm = $this->db->prepare("SELECT `device_token`,`notification_key`,`role_id` FROM `login` where id='".$student_id."'");
+						$std_nm->execute();
+						$ftc_nm= $std_nm->fetch(PDO::FETCH_ASSOC);
+						$device_token = $ftc_nm['device_token'];
+						$notification_key = $ftc_nm['notification_key'];
+						$role_id = $ftc_nm['role_id'];
+						
+						$message='Your Appointment is Approve';
+						$title='Appointment';
+						$submitted_by=$user_id;
+						$user_id=$student_id;
+						$date=date("M d Y");
+						$time=date("h:i A");
+
+						
+						$msg = array
+						(
+							'message' 	=> 'Your Appointment is Approve',
+							'button_text'	=> 'View',
+							'link'	=> 'appointment://appointment?id='.$update_id,
+							'notification_id'	=> $update_id,
+						);
+						$url = 'https://fcm.googleapis.com/fcm/send';
+						$fields = array
+						(
+							'registration_ids' 	=> array($device_token),
+							'data'			=> $msg
+						);
+						$headers = array
+						(
+							'Authorization: key=' .$notification_key,
+							'Content-Type: application/json'
+						);
+						//--- NOTIFICATIO INSERT
+							$NOTY_insert = $this->db->prepare("INSERT into notification(title,message,user_id,submitted_by,date,time,role_id)VALUES(:title,:message,:user_id,:submitted_by,:date,:time,:role_id)");
+							$NOTY_insert->bindParam(":title", $title, PDO::PARAM_STR);
+							$NOTY_insert->bindParam(":message", $message, PDO::PARAM_STR);
+							$NOTY_insert->bindParam(":user_id", $user_id, PDO::PARAM_STR);
+							$NOTY_insert->bindParam(":submitted_by", $submitted_by, PDO::PARAM_STR);
+							$NOTY_insert->bindParam(":time", $time, PDO::PARAM_STR);
+							$NOTY_insert->bindParam(":date", $date, PDO::PARAM_STR);
+							$NOTY_insert->bindParam(":role_id", $role_id, PDO::PARAM_STR);
+							$NOTY_insert->execute();	
+						//-- END
+							json_encode($fields);
+							$ch = curl_init();
+							curl_setopt($ch, CURLOPT_URL, $url);
+							curl_setopt($ch, CURLOPT_POST, true);
+							curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+							curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+							curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+							curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+							curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+							$result = curl_exec($ch);
+							curl_close($ch);
+ 					//-- 
 					 
 					$success = array('status'=> true, "Error" => "Thank you your appointment is approve");
 					$this->response($this->json($success), 200);
@@ -2561,7 +2924,65 @@ $student_id = $row_gp['student_id'];
 					$sql_update->bindParam(":status", $response_type, PDO::PARAM_STR);
 					$sql_update->bindParam(":id", $update_id, PDO::PARAM_STR);
 					$sql_update->execute();
-					 
+					//--
+						$sub_sqls = $this->db->prepare("SELECT `student_id` FROM `appointment` where id='".$update_id."'");
+						$sub_sqls->execute();
+						$sub_sqlsa= $sub_sqls->fetch(PDO::FETCH_ASSOC);
+						$student_id = $sub_sqlsa['student_id'];
+						$std_nm = $this->db->prepare("SELECT `device_token`,`notification_key`,`role_id` FROM `login` where id='".$student_id."'");
+						$std_nm->execute();
+						$ftc_nm= $std_nm->fetch(PDO::FETCH_ASSOC);
+						$device_token = $ftc_nm['device_token'];
+						$notification_key = $ftc_nm['notification_key'];
+						$role_id = $ftc_nm['role_id'];
+						
+						$message='Your Appointment is Reject';
+						$title='Appointment';
+						$submitted_by=$user_id;
+						$user_id=$student_id;
+						$date=date("M d Y");
+						$time=date("h:i A");
+						$msg = array
+						(
+							'message' 	=> 'Your Appointment is Reject',
+							'button_text'	=> 'View',
+							'link'	=> 'appointment://appointment?id='.$update_id,
+							'notification_id'	=> $update_id,
+						);
+						$url = 'https://fcm.googleapis.com/fcm/send';
+						$fields = array
+						(
+							'registration_ids' 	=> array($device_token),
+							'data'			=> $msg
+						);
+						$headers = array
+						(
+							'Authorization: key=' .$notification_key,
+							'Content-Type: application/json'
+						);
+						//--- NOTIFICATIO INSERT
+							$NOTY_insert = $this->db->prepare("INSERT into notification(title,message,user_id,submitted_by,date,time,role_id)VALUES(:title,:message,:user_id,:submitted_by,:date,:time,:role_id)");
+							$NOTY_insert->bindParam(":title", $title, PDO::PARAM_STR);
+							$NOTY_insert->bindParam(":message", $message, PDO::PARAM_STR);
+							$NOTY_insert->bindParam(":user_id", $user_id, PDO::PARAM_STR);
+							$NOTY_insert->bindParam(":submitted_by", $submitted_by, PDO::PARAM_STR);
+							$NOTY_insert->bindParam(":time", $time, PDO::PARAM_STR);
+							$NOTY_insert->bindParam(":date", $date, PDO::PARAM_STR);
+							$NOTY_insert->bindParam(":role_id", $role_id, PDO::PARAM_STR);
+							$NOTY_insert->execute();	
+						//-- END
+							json_encode($fields);
+							$ch = curl_init();
+							curl_setopt($ch, CURLOPT_URL, $url);
+							curl_setopt($ch, CURLOPT_POST, true);
+							curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+							curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+							curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+							curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+							curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+							$result = curl_exec($ch);
+							curl_close($ch);
+ 					//-- 
 					$success = array('status'=> true, "Error" => "Thank you your appointment is reject");
 					$this->response($this->json($success), 200);
 				}
@@ -2573,7 +2994,66 @@ $student_id = $row_gp['student_id'];
 					$sql_update->bindParam(":status", $response_type, PDO::PARAM_STR);
 					$sql_update->bindParam(":id", $update_id, PDO::PARAM_STR);
 					$sql_update->execute();
-					 
+					//--
+						$sub_sqls = $this->db->prepare("SELECT `student_id` FROM `appointment` where id='".$update_id."'");
+						$sub_sqls->execute();
+						$sub_sqlsa= $sub_sqls->fetch(PDO::FETCH_ASSOC);
+						$student_id = $sub_sqlsa['student_id'];
+						$std_nm = $this->db->prepare("SELECT `device_token`,`notification_key`,`role_id` FROM `login` where id='".$student_id."'");
+						$std_nm->execute();
+						$ftc_nm= $std_nm->fetch(PDO::FETCH_ASSOC);
+						$device_token = $ftc_nm['device_token'];
+						$notification_key = $ftc_nm['notification_key'];
+						$role_id = $ftc_nm['role_id'];
+						
+						$message='Your Appointment is Completed';
+						$title='Appointment';
+						$submitted_by=$user_id;
+						$user_id=$student_id;
+						$date=date("M d Y");
+						$time=date("h:i A");
+						
+						$msg = array
+						(
+							'message' 	=> 'Your Appointment is Completed',
+							'button_text'	=> 'View',
+							'link'	=> 'appointment://appointment?id='.$update_id,
+							'notification_id'	=> $update_id,
+						);
+						$url = 'https://fcm.googleapis.com/fcm/send';
+						$fields = array
+						(
+							'registration_ids' 	=> array($device_token),
+							'data'			=> $msg
+						);
+						$headers = array
+						(
+							'Authorization: key=' .$notification_key,
+							'Content-Type: application/json'
+						);
+						//--- NOTIFICATIO INSERT
+							$NOTY_insert = $this->db->prepare("INSERT into notification(title,message,user_id,submitted_by,date,time,role_id)VALUES(:title,:message,:user_id,:submitted_by,:date,:time,:role_id)");
+							$NOTY_insert->bindParam(":title", $title, PDO::PARAM_STR);
+							$NOTY_insert->bindParam(":message", $message, PDO::PARAM_STR);
+							$NOTY_insert->bindParam(":user_id", $user_id, PDO::PARAM_STR);
+							$NOTY_insert->bindParam(":submitted_by", $submitted_by, PDO::PARAM_STR);
+							$NOTY_insert->bindParam(":time", $time, PDO::PARAM_STR);
+							$NOTY_insert->bindParam(":date", $date, PDO::PARAM_STR);
+							$NOTY_insert->bindParam(":role_id", $role_id, PDO::PARAM_STR);
+							$NOTY_insert->execute();	
+						//-- END
+							json_encode($fields);
+							$ch = curl_init();
+							curl_setopt($ch, CURLOPT_URL, $url);
+							curl_setopt($ch, CURLOPT_POST, true);
+							curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+							curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+							curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+							curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+							curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+							$result = curl_exec($ch);
+							curl_close($ch);
+ 					//-- 
 					$success = array('status'=> true, "Error" => "Thank you your appointment is completed");
 					$this->response($this->json($success), 200);
 				}
@@ -2626,7 +3106,6 @@ $student_id = $row_gp['student_id'];
 			$this->response($this->json($error), 400);
 		}
  	}
-
 //- Contact Details
 	public function contactDetails() 
 	{
@@ -2722,7 +3201,6 @@ $student_id = $row_gp['student_id'];
 		if ($this->get_request_method() != "POST") {
 			$this->response('', 406);
 		}
- 		
 		if(isset($this->_request['class_id']))
 		{
 			$class_id=$this->_request['class_id'];
@@ -2778,74 +3256,342 @@ $student_id = $row_gp['student_id'];
 		}
 	}
 
-//-- SyllabusList  LIST	
-	public function AttendanceList() 
+//- DirectorPrincipleMessage
+	public function DirectorPrincipleMessage() 
+	{
+		global $link;
+		include_once("common/global.inc.php");
+		if ($this->get_request_method() != "POST") {
+            $this->response('', 406);
+        }
+ 		if(isset($this->_request['role_type']))
+		{
+			$role_type=$this->_request['role_type'];
+			$sub_sqls = $this->db->prepare("SELECT `role_name`,`id` FROM master_role where role_name LIKE '%".$role_type."%'");
+				$sub_sqls->execute();
+				$sub_sqlss= $sub_sqls->fetch(PDO::FETCH_ASSOC);
+				$sender_role_name = $sub_sqlss['id'];    
+				 
+				$sql_fetch = $this->db->prepare("SELECT * FROM director_principle_message WHERE  sms_sender_role = '".$sender_role_name."' order by id DESC");
+				$sql_fetch->execute();
+				 if ($sql_fetch->rowCount() != 0) {  
+					$x=0;   
+					$row_gp = $sql_fetch->fetch(PDO::FETCH_ASSOC);
+ 						$sms_sender=$row_gp['sms_sender_role'];
+							$sub_sql12 = $this->db->prepare("SELECT `role_name` FROM master_role where id='".$sms_sender."'");
+							$sub_sql12->execute();
+							$sub_sqls12= $sub_sql12->fetch(PDO::FETCH_ASSOC);
+							$sender_role_name = $sub_sqls12['role_name'];
+							
+						$sms_to_role=$row_gp['sms_receive_role'];
+						$sub_sql1 = $this->db->prepare("SELECT `role_name` FROM master_role where id='".$sms_to_role."'");
+							$sub_sql1->execute();
+							$sub_sqls1= $sub_sql1->fetch(PDO::FETCH_ASSOC);
+							$sms_to_role_name = $sub_sqls1['role_name'];
+						
+						$login_id=$row_gp['login_id'];
+							$sub_sql123 = $this->db->prepare("SELECT `user_name` FROM faculty_login where id='".$login_id."'");
+							$sub_sql123->execute();
+							$sub_sqls123= $sub_sql123->fetch(PDO::FETCH_ASSOC);
+							$user_name = $sub_sqls123['user_name'];
+						$date=date('Y-m-d',strtotime($row_gp['timestamp']));
+						
+						foreach($row_gp as $key=>$valye)	
+						{
+							$string_insert[$x][$key]=$row_gp[$key];
+							$string_insert[$x]['sms_sender_role_name']=$sender_role_name;
+							$string_insert[$x]['sms_receive_role_name']=$sms_to_role_name;
+							$string_insert[$x]['sender_username']=$user_name;
+							$string_insert[$x]['date']=$date;
+ 						}
+ 					$result1 = array("director_principle_message" => $string_insert);
+					$success = array('Type' => 'OK', "Error" => '', 'Responce' => $result1);
+					$this->response($this->json($success), 200); 
+				 }
+				 else
+				 {
+					 $error = array('Type' => "Error", "Error" => "No data found", 'Response' => '');
+					 $this->response($this->json($error), 400);
+				 }
+  		}
+		else
+		{
+			$error = array('Type' => "Error", "Error" => "Please Provide Role Type to Get Data", 'Response' => '');
+			$this->response($this->json($error), 400);
+		}
+  	}
+	
+	public function RemarksAction() 
+	{
+		global $link;
+		include_once("common/global.inc.php");
+		if ($this->get_request_method() != "POST") {
+            $this->response('', 406);
+        }
+		if(isset($this->_request['response_type']))
+		{
+			$response_type=$this->_request['response_type'];
+			//-- Response Type = 1 Insert  2 =  Fetch
+			if($response_type==1)
+			{//Insert
+				$class_id=$this->_request['class_id'];
+				$section_id=$this->_request['section_id'];/// YMD
+ 				$gread=$this->_request['gread'];
+				$remark=$this->_request['remark'];
+				$student_id=$this->_request['student_id'];
+				$login_id=$this->_request['user_id'];
+				$student_ids=sizeof($student_id);
+ 				for($i=0; $i<$student_ids; $i++)
+				{
+					$sid=$student_id[$i];
+ 					$sql_insert = $this->db->prepare("INSERT into  remarks(class_id,section_id,student_id,gread,remark,login_id)VALUES(:class_id,:section_id,:student_id,:gread,:remark,:login_id)");
+					$sql_insert->bindParam(":class_id", $class_id, PDO::PARAM_STR);
+					$sql_insert->bindParam(":section_id", $section_id, PDO::PARAM_STR);
+					$sql_insert->bindParam(":student_id", $sid, PDO::PARAM_STR);
+					$sql_insert->bindParam(":gread", $gread, PDO::PARAM_STR);
+					$sql_insert->bindParam(":remark", $remark, PDO::PARAM_STR);
+					$sql_insert->bindParam(":login_id", $login_id, PDO::PARAM_STR);
+					$sql_insert->execute();	
+				}
+ 				$success = array('status'=> true, "Error" => "Thank you remarks successfully submitted");
+                $this->response($this->json($success), 200);
+ 			}
+ 			else if($response_type==2)
+			{//Fetch
+				$student_id=$this->_request['student_id'];
+				$sql_fetch = $this->db->prepare("SELECT * FROM remarks where student_id = '".$student_id."'");
+ 				$sql_fetch->execute();
+				 if ($sql_fetch->rowCount() != 0) {  
+				 	$x=0;   
+					while($row_gp = $sql_fetch->fetch(PDO::FETCH_ASSOC)){
+
+						$student_id = $row_gp['student_id'];
+							$sql_std = $this->db->prepare("SELECT `name` FROM login WHERE id='".$student_id."'");
+							$sql_std->execute();
+							$std = $sql_std->fetch(PDO::FETCH_ASSOC);
+							$std_name=$std['name'];
+						$class_id = $row_gp['class_id'];
+							$sql_stds = $this->db->prepare("SELECT `class_name` FROM master_class WHERE id='".$class_id."'");
+							$sql_stds->execute();
+							$stds = $sql_stds->fetch(PDO::FETCH_ASSOC);
+							$class_name=$stds['class_name'];
+						$section_id = $row_gp['section_id'];
+							$sql_std1 = $this->db->prepare("SELECT `section_name` FROM master_section WHERE id='".$section_id."'");
+							$sql_std1->execute();
+							$std1 = $sql_std1->fetch(PDO::FETCH_ASSOC);
+							$section_name=$std1['section_name'];
+						$user_id=$row_gp['user_id'];
+							$sub_sql1 = $this->db->prepare("SELECT `user_name` FROM faculty_login where id='".$user_id."'");
+							$sub_sql1->execute();
+							$sub_sqls1= $sub_sql1->fetch(PDO::FETCH_ASSOC);
+							$user_name = $sub_sqls1['user_name'];
+
+						foreach($row_gp as $key=>$valye)	
+						{
+							$string_insert[$x][$key]=$row_gp[$key];
+						}
+						$string_insert[$x]['class_name']=$class_name;
+						$string_insert[$x]['section_name']=$section_name;
+						$string_insert[$x]['student_name']=$std_name;
+						$string_insert[$x]['teacher_name']=$user_name;
+						$x++;
+					} 
+					 
+					$result1 = array("remarks" => $string_insert);
+					$success = array('Type' => 'OK', "Error" => '', 'Responce' => $result1);
+					$this->response($this->json($success), 200);
+				} 
+				else {
+					
+					$error = array('Type' => "Error", "Error" => "No data found", 'Responce' => '');
+					$this->response($this->json($error), 400);
+				}				
+ 			}
+			else
+			{// INvalid
+				$error = array('status' => false , "Error" => "Invalid Response Type", 'Responce' => '');
+				$this->response($this->json($error), 400);	
+			}
+			
+			
+		}
+		else
+		{
+			$error = array('status' => false , "Error" => "Please Provide Response Type to Get Data", 'Responce' => '');
+			$this->response($this->json($error), 400);	
+		}
+		
+	}
+	
+	public function AttendanceData() 
 	{
 		include_once("common/global.inc.php");
 		global $link;
-					 
-		if ($this->get_request_method() != "POST") {
-			$this->response('', 406);
-		}
- 		
-		if(isset($this->_request['class_id']))
+ 		if ($this->get_request_method() != "POST") {
+            $this->response('', 406);
+        }
+		 
+		if(isset($this->_request['student_id']))
 		{
-			$class_id=$this->_request['class_id'];
- 			$ass_sql = $this->db->prepare("SELECT * FROM syllabus  where class_id='".$class_id."'");
-			$ass_sql->execute();
-			if($ass_sql->rowCount()>0){
-				$ass_sqls_data= $ass_sql->fetch(PDO::FETCH_ASSOC);
-					$class_id = $ass_sqls_data['class_id'];
-						
-						$sub_sql = $this->db->prepare("SELECT `class_name` FROM master_class where id='".$class_id."'");
-						$sub_sql->execute();
-						$sub_sqls= $sub_sql->fetch(PDO::FETCH_ASSOC);
-						$class_name = $sub_sqls['class_name'];
-						
-					$section_id = $ass_sqls_data['section_id'];
-					
-						$sub_sql1 = $this->db->prepare("SELECT `section_name` FROM master_section where id='".$section_id."'");
-						$sub_sql1->execute();
-						$sub_sqls1= $sub_sql1->fetch(PDO::FETCH_ASSOC);
-						$section_name = $sub_sqls1['section_name'];
-						
-					$subject_id = $ass_sqls_data['subject_id'];
-					
-						$sub_sql12 = $this->db->prepare("SELECT `subject_name` FROM master_subject where id='".$subject_id."'");
-						$sub_sql12->execute();
-						$sub_sqls12= $sub_sql12->fetch(PDO::FETCH_ASSOC);
-						$subject_name = $sub_sqls12['subject_name'];
-		
-					$result = array('id' => $ass_sqls_data['id'],
-						'user_id' => $ass_sqls_data['user_id'],
-						'class_id' => $ass_sqls_data['class_id'],
-						'class_name' => $class_name,
-						'section_id' => $ass_sqls_data['section_id'],
-						'section_name'=>$section_name,
-						'subject_id' => $ass_sqls_data['subject_id'],
-						'subject_name'=>$subject_name,
-						'date'=>$ass_sqls_data['date'],
-						'file'=>$ass_sqls_data['file'],
-					);
-				$success = array('status'=> true, "Error" => "",' syllabus' => $result);
-				$this->response($this->json($success), 200);
-			}
-		else
+			$student_id=$this->_request['student_id'];
+			$cal_sql = $this->db->prepare("SELECT * FROM attendance where `student_id`='".$student_id."' ");
+			$cal_sql->execute();
+		    if($cal_sql->rowCount()>0)
 			{
-				$error = array('status' => false, "Error" => "No data found",'Responce' => '');
+ 			
+				$total_month=12;
+				$currnt_year=date('Y');
+				for($x=1;$x<=$total_month;$x++)
+				{
+					$total_month_leave=0;
+					$total_month_absent=0;
+					$total_month_prsent=0;
+					$total_month_working=0;
+					$total_month_holiday=0;
+					
+					$first_date='01-'.$x.'-'.$currnt_year;
+					$first_date=date('Y-m-d',strtotime($first_date));
+					$last_date=date('Y-m-t',strtotime($first_date));
+					$currentTime = strtotime($first_date);
+					$endTime = strtotime($last_date);
+					$k=0; 
+					$result = array();
+					while ($currentTime <= $endTime) 
+					{
+					  if (date('N', $currentTime) < 8) 
+					  {
+						$result[] = date('Y-m-d', $currentTime);
+					  }
+					  $currentTime = strtotime('+1 day', $currentTime);
+					}
+					$all_result=array();
+					foreach($result as $date)
+					{
+						$date;
+						$cal_sqld = $this->db->prepare("SELECT * FROM attendance where `student_id`='".$student_id."' AND `curent_date`='".$date."' ");
+						$cal_sqld->execute();
+						$cal_sql1= $cal_sqld->fetchALL(PDO::FETCH_ASSOC);
+						$results=array();
+ 						$holoday = $this->db->prepare("SELECT `id` FROM acedmic_calendar where `date`='".$date."' AND `category_id`='2' ");
+						$holoday->execute();
+						 $total_holedayofdate=$holoday->rowCount();
+						foreach($cal_sql1 as $cal_sql11)
+						{
+							$y=0;
+ 							$student_id = $cal_sql11['student_id'];
+							$sql_std = $this->db->prepare("SELECT `name` FROM login WHERE id='".$student_id."'");
+							$sql_std->execute();
+							$std = $sql_std->fetch(PDO::FETCH_ASSOC);
+							$std_name=$std['name'];
+							
+							$login_id=$cal_sql11['user_id'];
+							$sub_sql123 = $this->db->prepare("SELECT `user_name` FROM faculty_login where id='".$login_id."'");
+							$sub_sql123->execute();
+							$sub_sqls123= $sub_sql123->fetch(PDO::FETCH_ASSOC);
+							$user_name = $sub_sqls123['user_name'];
+							$attendance_mark=$cal_sql11['attendance_mark'];
+							$attendance_date=$cal_sql11['attendance_date'];
+							$dat=date('D',strtotime($attendance_date));
+							$day=date('D',strtotime($attendance_date));
+							$month=date('M',strtotime($attendance_date));
+							$Year=date('Y',strtotime($attendance_date));
+							$attendance_mark=$cal_sql11['attendance_mark'];
+							if($attendance_mark==1){$attend='Present';}
+							if($attendance_mark==2){$attend='Absent';}
+							if($attendance_mark==3){$attend='Leave';}
+							
+							$results = array(
+								'date' => $dat,
+								'day' => $day,
+								'month' => $month,
+								'year' => $Year,
+								'attendance_mark' => $attend
+ 							);
+							//-- Present absend and leave
+								if($attendance_mark==1){
+									$total_month_prsent++;
+								}
+								if($attendance_mark==2){
+									$total_month_absent++;
+								}
+								if($attendance_mark==3){
+									$total_month_leave++;
+								}
+ 							$y++;
+							$all_result[]=$results;
+						}
+						//-- Holiday of same date
+						$total_month_holiday+=$total_holedayofdate;
+					}
+					 
+					$response[]=array(
+						'month'=> $x,
+						'total_present'=> $total_month_prsent,
+						'total_absent'=> $total_month_absent,
+						'total_leave'=> $total_month_leave,
+						'total_working'=> '',
+						'total_holiday'=> $total_month_holiday,
+						'result'=>$all_result,
+ 					);
+ 				}
+				$error = array('status' => true, "Error" => "",'Response' => $response);
+				$this->response($this->json($error), 200);
+ 			}
+			else
+			{
+				$error = array('status' => false, "Error" => "Student not found",'Responce' => '');
 				$this->response($this->json($error), 200);
 			}
 		}
 		else
 		{
-			$error = array('Type' => "Error", "Error" => "Please Provide Class Id", 'Responce' => '');
-			$this->response($this->json($error), 400);
+			$error = array('status' => false, "Error" => "Provide Student Id",'Responce' => '');
+			$this->response($this->json($error), 200);
 		}
 	}
 
-
-
+//- Notification DATA
+	public function NotificationData() 
+	{
+		global $link;
+		include_once("common/global.inc.php");
+		if ($this->get_request_method() != "POST") {
+            $this->response('', 406);
+        }
+		@$user_id = $this->_request['user_id'];
+		$sql_fetch = $this->db->prepare("SELECT * FROM notification where `user_id` = '".$user_id."' ");
+		$sql_fetch->execute();
+		 if ($sql_fetch->rowCount() != 0) {  
+			$x=0;   
+			while($row_gp = $sql_fetch->fetch(PDO::FETCH_ASSOC)){
+				foreach($row_gp as $key=>$valye)	
+				{
+					$string_insert[$x][$key]=$row_gp[$key];
+				}
+				$x++;
+			}
+			 
+			$result1 = array("notification" => $string_insert);
+			$success = array('Type' => 'OK', "Error" => '', 'Response' => $result1);
+			$this->response($this->json($success), 200);
+		} 
+		else {
+			
+			$error = array('Type' => "Error", "Error" => "No data found", 'Response' => '');
+			$this->response($this->json($error), 400);
+		}
+ 	}
 	
+
+
+
+
+
+
+
+
+
+
 
 ///////////////////////////////////////		
     /*

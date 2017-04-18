@@ -41,7 +41,7 @@
 <head>
 <?php css();?>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title></title>
+<title>Contact Details</title>
 </head>
 <?php contant_start(); menu();  ?>
 <body>
@@ -50,7 +50,7 @@
 			<div class="portlet box">
 						<div class="portlet-title">
 							<div class="caption">
-								<i class="fa fa-gift"></i> View Contact Details
+								<i class="fa fa-gift"></i> Contact Details
 							</div>
 							<div class="tools">
 							 <a class="" href="edit_contact_detail.php" style="color: white"><i class="fa fa-book"> View Contact</i></a> 

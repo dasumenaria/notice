@@ -46,7 +46,7 @@ $date=date('Y-m-d');
 <head>
 <?php css();?>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title></title>
+<title>Update User Details</title>
 </head>
 <?php contant_start(); menu();  ?>
 <body>

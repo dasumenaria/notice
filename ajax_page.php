@@ -99,6 +99,7 @@ $ftc_detail=mysql_fetch_array($query);
 if($function_name=='create_user_section_list')
 {
 	$query=mysql_query("select `section_id` from `class_section` where `class_id` = '$update_id'");
+			echo "<option value=''></option>";
 		while($ftc_detail=mysql_fetch_array($query)){
 			$section_id=$ftc_detail['section_id'];
 			$queryq=mysql_query("select * from `master_section` where `id` = '$section_id'");

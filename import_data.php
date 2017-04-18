@@ -42,7 +42,7 @@ if(isset($_POST["Import"])){
 <head>
 <?php css();?>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title></title>
+<title>Import Student Data</title>
 </head>
 <?php contant_start(); menu();  ?>
 <body>
