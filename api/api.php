@@ -2282,7 +2282,8 @@ $user_id=$ass_sqls_data['user_id'];
 		}
 	}
 /////
-public function fetch_syllabus() {
+	public function fetch_syllabus() 
+	{
               include_once("common/global.inc.php");
         global $link;
                      
@@ -2687,7 +2688,7 @@ public function fetch_syllabus() {
 						$message='Your Leave Application Approved';
 						$title='Leave Application';
 						$submitted_by=$user_id;
-						$user_id=$student_id;
+						$user_id=$student_id;   //9001119974
 						$date=date("M d Y");
 						$time=date("h:i A");
 						 

@@ -96,7 +96,7 @@ $NOTY_insert = mysql_query("INSERT into notification(title,message,user_id,submi
 					'button_text'	=> 'View',
 					'link'	=> 'leaveApprove://leave_note?id='.$update_id,
 					'notification_id'	=> $update_id,
-				);
+				); 
 				$url = 'https://fcm.googleapis.com/fcm/send';
 				$fields = array
 				(

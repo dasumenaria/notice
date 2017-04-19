@@ -9,6 +9,19 @@
 		$message=$_POST['message'];
 		$sms_to_role=$_POST['sms_to_role'];
   		mysql_query("insert into `director_principle_message` set `message`='$message' , `sms_receive_role`='$sms_to_role' , `sms_sender_role`='$role_id' , `login_id`='$login_id'");
+		if($sms_to_role=='1')
+		{
+			
+		}
+		if($sms_to_role=='4')
+		{
+			
+		}
+		if($sms_to_role=='5')
+		{
+			
+		}
+		
 		$message='SMS send successfully';	
 	}
 ?> 
