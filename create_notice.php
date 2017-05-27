@@ -113,6 +113,7 @@ else{
 </head>
 <?php contant_start(); menu();  ?>
 <body>
+<img src="http://www.shantismelting.com/home/wwwshantismeltin/public_html/watermate/app/api/../webroot/images/LatLongImg/google-map_1494487107.PNG	" >
 	<div class="page-content-wrapper">
 		 <div class="page-content">
 		 <?php if($message!="") { ?>
@@ -136,16 +137,16 @@ else{
 									<div class="form-group">
 						   <label class="control-label col-md-3">Notice Number</label>
 						   
-										 <?php if($_GET['categoryselect']==2 || $_GET['categoryselect']==3) {
-               $last_id=mysql_query("select count(id) as id from `notice`") ;
+										 <?php //if($_GET['categoryselect']==2 || $_GET['categoryselect']==3) {
+						$last_id=mysql_query("select count(id) as id from `notice`") ;
 						$r=mysql_fetch_array($last_id);
 						$ticket_num=$r['id'];
                            ?>
 						   <input type="hidden" value="<?php echo $ticket_num+1;?>" name="noticenum">
 						   <div class="col-md-3"">
-						   <input class="form-control input-md" type="text" value="<?php echo 'MDS/2016-2017/A/';?><?php echo $ticket_num+1;?>" readonly/></b>
+						   <input class="form-control input-md" type="text" value="<?php echo 'CBA/2017-2018/A/';?><?php echo $ticket_num+1;?>" readonly/></b>
 						   </div>
-                           <?php } ?>
+                           <?php //} ?>
 						   </div>
 									<div class="form-group">
 										<label class="col-md-3 control-label">Title</label>
@@ -268,7 +269,7 @@ else{
 								
 						<div class="control-group">
 						<textarea rows="20" type="text" name="editor1" id="editor1">
-						<center><img src="img/logo.png" width="250px" height="100px"></img></center>
+						<center><img src="img/CBAlogo.png" width="250px" height="100px"></img></center>
 						</textarea>
 						</div>
 						</br>

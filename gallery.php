@@ -3,6 +3,7 @@
  include("database.php");
  $user=$_SESSION['category'];
 $message="";
+$insert_id=0;
 if(isset($_POST['submit']))
 {
 $type=mysql_real_escape_string($_REQUEST["category_id"]);
@@ -16,44 +17,46 @@ $message="Images Added Successfully";
 $e_id=$row1['id'];
 if(!empty($row1))
 {
-$n_name='event';
-$folderName2=$n_name.$e_id;
-    $gallery_pic=$_FILES["gallery_pic"]["tmp_name"];
-	$o=sizeof($gallery_pic);
-	$gp=0;
-	for($j=0; $j<$o; $j++){
-	$rnd=rand(100, 10000);
-	$random=$rnd.$e_id;
-           
-$gp=$gallery_pic[$j];
-$photo1="event".$random.".jpg";
- move_uploaded_file( $gp,"event/".$folderName2."/".$photo1);
-$sql1="insert into sub_gallery(gallery_id,gallery_pic)values('$e_id','$photo1')"; 
-$rl=mysql_query($sql1);
-  }	
+		$n_name='event';
+		$folderName2=$n_name.$e_id;
+			$gallery_pic=$_FILES["gallery_pic"]["tmp_name"];
+			$o=sizeof($gallery_pic);
+			$gp=0;
+			for($j=0; $j<$o; $j++)
+			{
+				$rnd=rand(100, 10000);
+				$random=$rnd.$e_id;
+					   
+				$gp=$gallery_pic[$j];
+				$photo1="event".$random.".jpg";
+				move_uploaded_file( $gp,"event/".$folderName2."/".$photo1);
+				$sql1="insert into sub_gallery(gallery_id,gallery_pic)values('$e_id','$photo1')"; 
+				$rl=mysql_query($sql1);
+				$insert_id=mysql_insert_id();
+			}	
 }
-else{
-$sql="insert into gallery(event_news_id,category_id)values('$event_id','$type')";
-$r=mysql_query($sql);
-$ids=mysql_insert_id();
-
-
-$n_name='event';
-$folderName2=$n_name.$event_id;
-
-   $gallery_pic=$_FILES["gallery_pic"]["tmp_name"];
-   $o=sizeof($gallery_pic);
-   $gp=0;
-      for($j=0; $j<$o; $j++){
-       $rnd=rand(100, 10000);
-      $random=$rnd.$ids;
-$gp=$gallery_pic[$j];
-$photo1="event".$random.".jpg";
- move_uploaded_file( $gp,"event/".$folderName2."/".$photo1);
-$sql1="insert into sub_gallery(gallery_id,gallery_pic)values('$ids','$photo1')"; 
-$rl=mysql_query($sql1);
-}
-}
+else
+{
+	$sql="insert into gallery(event_news_id,category_id)values('$event_id','$type')";
+	$r=mysql_query($sql);
+	$ids=mysql_insert_id();
+ 	$n_name='event';
+	$folderName2=$n_name.$event_id;
+	
+	   $gallery_pic=$_FILES["gallery_pic"]["tmp_name"];
+	   $o=sizeof($gallery_pic);
+	   $gp=0;
+		  for($j=0; $j<$o; $j++){
+		   $rnd=rand(100, 10000);
+		  	$random=$rnd.$ids;
+			$gp=$gallery_pic[$j];
+			$photo1="event".$random.".jpg";
+			 move_uploaded_file( $gp,"event/".$folderName2."/".$photo1);
+			$sql1="insert into sub_gallery(gallery_id,gallery_pic)values('$ids','$photo1')"; 
+			$rl=mysql_query($sql1);
+			$insert_id=mysql_insert_id();
+			}
+	}
 }
 else if($type==5)
 {
@@ -72,11 +75,12 @@ if(!empty($row1))
 		$rnd=rand(100, 10000);
 		$random=$rnd.$e_id;
 
-$gp=$gallery_pic[$j];
-$photo1="event".$random.".jpg";
- move_uploaded_file( $gp,"news/".$folderName2."/".$photo1);
-$sql1="insert into sub_gallery(gallery_id,gallery_pic)values('$e_id','$photo1')"; 
-$rl=mysql_query($sql1);
+	$gp=$gallery_pic[$j];
+	$photo1="event".$random.".jpg";
+	 move_uploaded_file( $gp,"news/".$folderName2."/".$photo1);
+	$sql1="insert into sub_gallery(gallery_id,gallery_pic)values('$e_id','$photo1')"; 
+	$rl=mysql_query($sql1);
+	$insert_id=mysql_insert_id();
   }	
 }
 else{
@@ -99,6 +103,7 @@ $photo1="event".$random.".jpg";
  move_uploaded_file( $gp,"news/".$folderName2."/".$photo1);
 $sql1="insert into sub_gallery(gallery_id,gallery_pic)values('$ids','$photo1')"; 
 $rl=mysql_query($sql1);
+$insert_id=mysql_insert_id();
 }
 }	
 $message="Images Added Successfully";
@@ -305,6 +310,17 @@ else
 </body>
 <script src="assets/global/plugins/jquery.min.js" type="text/javascript"></script>
 <script>
+
+<?php if($insert_id>0){ ?>
+	var update_id = <?php echo $insert_id; ?>;
+ 		$.ajax({
+			url: "notification_page.php?function_name=create_gallery_notifys&id="+update_id,
+			type: "POST",
+			success: function(data)
+			{    
+ 			}
+	});
+<?php } ?>
 $(document).ready(function(){    
         $(".remove_row").die().live("click",function(){
             $(this).closest("#parant_table tr").remove();
@@ -330,6 +346,7 @@ $(document).ready(function(){
 		
 	});	
 </script>
+ 
 <script>
     function add_row(){  
         var new_line=$("#sample tbody").html();

@@ -1,28 +1,20 @@
 <?php
  include("index_layout.php");
  include("database.php");
- $role_id = $_SESSION['category']; 
+  $role_id = $_SESSION['category']; 
  $login_id=$_SESSION['id']; 
+ $update_id=0;
+
+ 
   $message='';
 	if(isset($_POST['submit'])) 
 	{
 		$message=$_POST['message'];
 		$sms_to_role=$_POST['sms_to_role'];
   		mysql_query("insert into `director_principle_message` set `message`='$message' , `sms_receive_role`='$sms_to_role' , `sms_sender_role`='$role_id' , `login_id`='$login_id'");
-		if($sms_to_role=='1')
-		{
-			
-		}
-		if($sms_to_role=='4')
-		{
-			
-		}
-		if($sms_to_role=='5')
-		{
-			
-		}
+		$update_id=mysql_insert_id();
+  		$message='SMS send successfully';
 		
-		$message='SMS send successfully';	
 	}
 ?> 
 <html>
@@ -85,7 +77,7 @@ span {
 										</div>
 									</div>
 									<div class=" right1" align="center">
-                                        <button type="submit" class="btn green" name="submit" >Submit</button>
+                                        <button type="submit" class="btn green formsubmit" name="submit" >Submit</button>
                                     </div>
                                </form> 
 								</div>
@@ -95,15 +87,30 @@ span {
 				</div>
             </div>
 </body>
+ 
 <?php footer();?>
 <?php scripts();?>
 <script>
+<?php if($update_id>0){?>
+		var update_id = <?php echo $update_id; ?>;
+		$.ajax({
+			url: "notification_page.php?function_name=principle_director_message&id="+update_id,
+			type: "POST",
+			success: function(data)
+			{   alert(data);
+ 			}
+		});
 	 
+<?php }?>
+
+
+
 	var myVar=setInterval(function(){myTimerr()},4000);
 	function myTimerr() 
 	{
 		$("#success").hide();
 	}
+ 	
 	
  </script>
 </html>

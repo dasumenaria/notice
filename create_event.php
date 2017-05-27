@@ -5,6 +5,7 @@ include("database.php");
 $user=$_SESSION['category'];
 $user_id=$_SESSION['id'];
 $message="";
+$eventid=0;
 if(isset($_POST['submit']))
 {
 $category_id=4;	
@@ -180,7 +181,7 @@ $message = "Event Add Successfully.";
                                             ?>
                               <option value="<?php echo $id;?>"><?php echo $role_name;?></option>                              
                               <?php }?> 
-                              <select/>
+                              </select>
 										</div>
 								<label class="col-md-2 control-label">Title</label>
 										<div class="col-md-3">
@@ -196,11 +197,11 @@ $message = "Event Add Successfully.";
 									<div class="form-group">
 										<label class="col-md-2 control-label">Event Date From</label>
 										<div class="col-md-3">
-											<input class="form-control form-control-inline input-medium date-picker" required  value="<?php echo date("d-m-Y"); ?>" placeholder="dd/mm/yyyy" type="text" data-date-format="dd-mm-yyyy" type="text" name="date_from">
+											<input class="form-control form-control-inline input-medium date-picker" required  value="<?php echo date("d-m-Y"); ?>" placeholder="dd/mm/yyyy" type="text" data-date-format="dd-mm-yyyy" name="date_from">
 										</div>
 										<label class="col-md-2 control-label" align="center">To</label>
 										<div class="col-md-3">
-											<input class="form-control form-control-inline input-medium date-picker" required  value="<?php echo date("d-m-Y"); ?>" placeholder="dd/mm/yyyy" type="text" data-date-format="dd-mm-yyyy" type="text" name="date_to">
+											<input class="form-control form-control-inline input-medium date-picker" required  value="<?php echo date("d-m-Y"); ?>" placeholder="dd/mm/yyyy" type="text" data-date-format="dd-mm-yyyy"  name="date_to">
 										</div>
 										</div>
 										</div></div>
@@ -286,7 +287,7 @@ $message = "Event Add Successfully.";
 <input class="form-control input-medium"  placeholder="Name" type="text" name="name[]">
 </td>
 <td>
-<input class="form-control form-control-inline input-medium date-picker"   value="<?php echo date("d-m-Y"); ?>" placeholder="dd/mm/yyyy" type="text" data-date-format="dd-mm-yyyy" type="text" name="date[]">
+<input class="form-control form-control-inline input-medium date-picker"   value="<?php echo date("d-m-Y"); ?>" placeholder="dd/mm/yyyy" type="text" data-date-format="dd-mm-yyyy"  name="date[]">
 </td>
 <td>
 <input class="form-control timepicker timepicker-no-seconds input-medium"  type="text" name="x_time[]">
@@ -314,7 +315,7 @@ $message = "Event Add Successfully.";
 <input class="form-control input-medium"  placeholder="Name" type="text" name="name[]">
 </td>
 <td>
-<input class="form-control form-control-inline input-medium date-picker"   value="<?php echo date("d-m-Y"); ?>" placeholder="dd/mm/yyyy" type="text" data-date-format="dd-mm-yyyy" type="text" name="date[]">
+<input class="form-control form-control-inline input-medium date-picker"   value="<?php echo date("d-m-Y"); ?>" placeholder="dd/mm/yyyy" type="text" data-date-format="dd-mm-yyyy"   name="date[]">
 </td>
 <td>
 <input class="form-control timepicker timepicker-no-seconds input-medium"  type="text" name="x_time[]">
@@ -326,14 +327,24 @@ $message = "Event Add Successfully.";
 </tr>
 </tbody> 
 </table>
-			
+ 		
 
 </div></div>
 </body>
 
-<?php footer();?>			
+<?php  footer();?>			
 <script src="assets/global/plugins/jquery.min.js" type="text/javascript"></script>
 <script>
+<?php if($eventid>0){ ?>
+var update_id = <?php echo $eventid; ?>;
+		$.ajax({
+			url: "notification_page.php?function_name=create_event_notify&id="+update_id,
+			type: "POST",
+			success: function(data)
+			{   
+ 			}
+		});
+<?php } ?>
 $(document).ready(function(){    
         $(".remove_row").die().live("click",function(){
             $(this).closest("#parant_table tr").remove();

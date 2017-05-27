@@ -125,7 +125,7 @@ $res=mysql_query($sql) or die(mysql_error());
 <head>
 <?php css();?>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Create Notice</title>
+<title></title>
 </head>
 <?php contant_start(); menu();  ?>
 <body>

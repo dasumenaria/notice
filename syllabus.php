@@ -6,6 +6,7 @@
  $message="";
  $message1="";
  $message2="";
+ $insert_id=0;
 if(isset($_POST['submit']))
 {
 $class_id=mysql_real_escape_string($_REQUEST["class_id"]);
@@ -51,6 +52,7 @@ if(!empty($file_name))
 $xsql=mysql_query("update `syllabus` SET `file`='$file_name' where id='".$sid."'" );
 $xsqlr=mysql_query($xsql);    
 $message = "Syllabus Add Successfully.";
+$insert_id=$sid;
    }
    else{
 	    $message1 = "file type different, Please select pdf file.";
@@ -203,17 +205,28 @@ else{
 					</div>
 			</div></div>
 </body>
-<?php footer();?>
+<?php  footer(); ?>			
+<?php scripts();?>
 <script>
+<?php if($insert_id > 0){ ?>
+var update_id = <?php echo $insert_id; ?>;
+ 		$.ajax({
+			url: "notification_page.php?function_name=create_syllabus_notifys&id="+update_id,
+			type: "POST",
+			success: function(data)
+			{   
+ 			}
+		});
+<?php } ?>
 var myVar=setInterval(function(){myTimerr()},4000);
 		function myTimerr() 
 		{
-		$("#success").hide();
+			$("#success").hide();
 		} 
 </script>
 
 
-<?php scripts();?>
+
 
 </html>
 

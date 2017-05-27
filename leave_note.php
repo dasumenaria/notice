@@ -36,6 +36,7 @@
 				 
 				$msg = array
 				(
+					'title' => $title,
 					'message' 	=> 'Your Leave Application Approved',
 					'button_text'	=> 'View',
 					'link'	=> 'leaveApprove://leave_note?id='.$update_id,
@@ -156,6 +157,7 @@ span {
                              	<a href="leave_note.php?s=0" class="<?php if($status_ftc==0){ echo 'btn btn-sm red'; } else { echo 'btn btn-sm blue'; }  ?>">In-Process <i class="glyphicon glyphicon-refresh"></i></a>
                                 <a href="leave_note.php?s=1" class="<?php if($status_ftc==1){echo 'btn btn-sm red'; } else { echo 'btn btn-sm blue'; }  ?>">Approved <i class="glyphicon glyphicon-ok"></i></a>
                                 <a href="leave_note.php?s=2" class="<?php if($status_ftc==2){echo 'btn btn-sm red'; } else { echo 'btn btn-sm blue'; }  ?>">Rejected <i class="glyphicon glyphicon-remove"></i></a>
+                                
                               </div>
                              
 								 <div class="scroller" style="height:500px;"  data-always-visible="1" data-rail-visible="0">

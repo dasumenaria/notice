@@ -55,7 +55,10 @@ $em=strtoupper($emm);
 								Click here &nbsp;<i class="fa fa-share"></i> </a>
 								
 							</div></div></div><br>
- 						  
+
+
+
+	  
                   <div class="row" >
                    <div class="col-md-6 col-sm-6" >
 					<div class="portlet box">

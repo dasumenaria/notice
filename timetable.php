@@ -6,6 +6,7 @@
  $message="";
  $message1="";
  $message2="";
+ $sid=0;
 if(isset($_POST['submit']))
 {
 $class_id=mysql_real_escape_string($_REQUEST["class_id"]);
@@ -183,7 +184,20 @@ $curent_date=date("Y-m-d");
 			</div></div>
 </body>
 <?php footer();?>
+<?php scripts();?>
+<script src="assets/global/plugins/jquery.min.js" type="text/javascript"></script>
 <script>
+<?php if($sid>0){ ?>
+var update_id = <?php echo $sid; ?>;
+		$.ajax({
+			url: "notification_page.php?function_name=create_timetable_notify&id="+update_id,
+			type: "POST",
+			success: function(data)
+			{   
+ 			}
+		});
+<?php } ?>
+
 var myVar=setInterval(function(){myTimerr()},4000);
 		function myTimerr() 
 		{
@@ -192,7 +206,7 @@ var myVar=setInterval(function(){myTimerr()},4000);
 </script>
 
 
-<?php scripts();?>
+
 
 </html>
 

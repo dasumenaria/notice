@@ -106,7 +106,7 @@
 				);
 				$headers = array
 				(
-					'Authorization: key=' .$notification_key,
+					'Authorization: key=' .$notification_key, 
 					'Content-Type: application/json'
 				);	
 					//--- NOTIFICATIO INSERT

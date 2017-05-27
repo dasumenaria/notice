@@ -2,8 +2,9 @@
  include("index_layout.php");
  include("database.php");
  $user=$_SESSION['category'];
- $user_id=$_SESSION['id'];
+ $user_id=$_SESSION['id'];  
  $message="";
+ $newsid=0;
 if(isset($_POST['submit']))
 {
 $category_id=5;
@@ -99,7 +100,7 @@ $message = "News Add Successfully.";
                                             ?>
 								<option value="<?php echo $id;?>"><?php echo $role_name;?></option>                              
 								<?php }?> 
-								<select/>
+								</select>
 								</div>
 								</div>
 								
@@ -164,8 +165,20 @@ $message = "News Add Successfully.";
 					</div>
 			</div></div>
 </body>
-<?php footer();?>
+<?php footer(); ?>
+<script src="assets/global/plugins/jquery.min.js" type="text/javascript"></script>
 <script>
+
+<?php if($newsid>0){ ?>
+	var update_id = <?php echo $newsid; ?>;
+ 		$.ajax({
+			url: "notification_page.php?function_name=create_news_notifys&id="+update_id,
+			type: "POST",
+			success: function(data)
+			{   
+ 			}
+	});
+<?php } ?>
 var myVar=setInterval(function(){myTimerr()},4000);
 		function myTimerr() 
 		{
