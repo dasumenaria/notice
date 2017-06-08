@@ -1,0 +1,125 @@
+/* here you can put your own css to customize and override the theme */
+
+/***
+Rounded Portlets
+***/
+
+
+
+.portlet{
+	border-radius: 4px !important;
+	
+}
+
+.portlet .portlet-title{
+	border-radius: 4px 4px 0px 0px !important;
+	background-color:#8E44AD important!;
+}
+
+.portlet .portlet-body,
+.portlet .portlet-body .form-actions  {
+	border-radius: 0px 0px 4px 4px !important;
+}
+.portlet.box {
+  border: 1px solid #44B6AE;
+  border-top: 0;
+}
+.portlet.box > .portlet-title {
+  background-color: #44B6AE;
+}
+.portlet.box > .portlet-title > .caption {
+  color: #FFFFFF;
+}
+.portlet.box > .portlet-title > .caption > i {
+  color: #FFFFFF;
+}
+.portlet.box > .portlet-title > .actions .btn-default {
+  background: transparent !important;
+  background-color: transparent !important;
+  border: 1px solid #a8c4dd;
+  color: #bad1e4;
+}
+.portlet.box > .portlet-title > .actions .btn-default > i {
+  color: #c5d8e9;
+}
+.portlet.box > .portlet-title > .actions .btn-default:hover, .portlet.box > .portlet-title > .actions .btn-default:focus, .portlet.box > .portlet-title > .actions .btn-default:active, .portlet.box > .portlet-title > .actions .btn-default.active {
+  border: 1px solid #cdddec;
+  color: #dfeaf3;
+}
+
+.addbtn{
+  color: #fff;
+  background-color: #45B6AF !important; 
+}
+.editbtn{
+  color: #fff ;
+  background-color: #4B8DF8 !important; 
+}
+
+.addbtnfile{
+  color: #fff important!;
+  background-color: #35AA47 !important; 
+}
+.trashbtnfile{
+  color: #fff important!;
+  background-color: #D84A38 !important; 
+}
+.frontcolor{
+  text-color: #fff important!;
+  background-color: #F58634 !important; 
+}
+.tb_class_id{
+	background-color:#000 important!;
+	color:#3FD5C0 important!;
+}
+
+.editbtn-circle{
+	background-color:#03F important!;
+	color:#EEEEEE important!;
+}
+.deletebtn-circle{
+	background-color:#ED1C24 important!;
+	color:#EEEEEE important!;
+}
+.viewbtn-circle{
+	background-color:#44B6AE important!;
+	color:#EEEEEE important!;
+}
+
+
+/*
+.page-quick-sidebar-wrapper {
+  right: -370px;
+  width: 370px;
+}
+	
+.pag	e-quick-sidebar-open.page-quick-sidebar-push-content .page-sidebar-wrapper {
+  margin-left: -370px;
+}
+
+.page-quick-sidebar-open.page-quick-sidebar-push-content .page-footer {
+  margin-right: 370px;
+  margin-left: -370px;
+}
+
+.page-sidebar-reversed.page-quick-sidebar-open.page-quick-sidebar-push-content .page-sidebar-wrapper {
+  margin-right: 370px;
+}
+
+.page-quick-sidebar-open.page-quick-sidebar-push-content.page-quick-sidebar-full-height .page-header {
+  margin-left: -370px;
+}
+
+.page-quick-sidebar-wrapper .page-quick-sidebar .page-quick-sidebar-list {
+  width: 370px !important;
+}
+
+.page-quick-sidebar-wrapper .page-quick-sidebar .page-quick-sidebar-item {
+  width: 370px !important;
+  margin-left: 370px;
+}
+
+.page-quick-sidebar-wrapper .page-quick-sidebar .page-quick-sidebar-content-item-shown .page-quick-sidebar-list {
+  margin-left: -370px;
+}
+*/
