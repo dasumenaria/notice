@@ -13,7 +13,7 @@ $class_id=$_GET['pon'];
 									<select class="form-control user1" required name="section_id">
 										<option value="">---Select Section---</option>
 											<?php 
-												$query2=mysql_query("select * from `mapping_section` where `class_id`='$class_id'"); 
+												$query2=mysql_query("select * from `class_section` where `class_id`='$class_id'"); 
 					 							while($fetch2=mysql_fetch_array($query2))
 												{
 													$i++;

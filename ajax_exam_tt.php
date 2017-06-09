@@ -13,7 +13,7 @@ $class_id=$_GET['pon'];
 									<select class="form-control user1" required name="section_id">
 										<option value="">---Select Section---</option>
 											<?php 
-												$query2=mysql_query("select * from `mapping_section` where `class_id`='$class_id'"); 
+												$query2=mysql_query("select * from `class_section` where `class_id`='$class_id'"); 
 					 							while($fetch2=mysql_fetch_array($query2))
 												{
 													$i++;
@@ -59,7 +59,7 @@ if((!empty($class_id)) && (!empty($sect_id))){
 	<tr>
 	<td width="150px">
 		 
-			<select class="select2me form-control" name="subject_id[]">
+			<select class="select2me form-control input-medium" name="subject_id[]">
 				<option value="">---Select Subject---</option>
 											<?php 
 												$query2=mysql_query("select * from `master_subject`"); 
@@ -79,20 +79,20 @@ if((!empty($class_id)) && (!empty($sect_id))){
 	</td>
 	 
 	<td>
-		<input type='text'class="form-control timepicker timepicker-no-seconds input-medium" name="time_from[]">
+		<input type='text'class="form-control timepicker timepicker-no-seconds input-small" name="time_from[]">
 	</td>
 	 
  	<td>
-		<input type='text' class="form-control timepicker timepicker-no-seconds input-medium" name="time_to[]">
+		<input type='text' class="form-control timepicker timepicker-no-seconds input-small" name="time_to[]">
 	</td>
 	 
 		 
 	<td>
-  	  <input class="form-control form-control-inline input-medium date-picker" size="16" type="text" name="exam_date[]" value="<?php echo date("d-m-Y"); ?>"/>
+  	  <input class="form-control form-control-inline input-small date-picker" size="16" type="text" name="exam_date[]" value="<?php echo date("d-m-Y"); ?>"/>
    </td>
     
 	<td>
-  	  <input type='text'  class="form-control" name="room_no[]">
+  	  <input type='text'  class="form-control input-small" name="room_no[]">
    </td>
 	 
 	<td>
