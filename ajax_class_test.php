@@ -40,58 +40,33 @@ $class_id=$_GET['pon'];
  	<?php } 
 if((!empty($class_id)) && (!empty($sect_id))){ 
 ?>
- <div class="row">
-  <div class="col-sm-3">
-		<div class="form-group">
-			<label class="col-md-3 control-label">Subject</label>
-			<div class="col-md-9">
-				<select class="select2me form-control" name="subject_id">
-				<option value="">---Select Subject---</option>
+<div class="form-group">
+						<label class="control-label col-md-3">Subject</label> 
+							<div class="col-md-4">
+							   <div class="input-icon right">
+									<i class="fa"></i>
+									<select class="form-control user1" required name="section_id">
+										<option value="">---Select Subject---</option>
 											<?php 
 												$query2=mysql_query("select * from `master_subject`"); 
 					 							while($fetch2=mysql_fetch_array($query2))
 												{
 													$i++;
 													 
+													$id=$fetch2['id'];
 													$subject_name=$fetch2['subject_name'];
-													$subject_id=$fetch2['id'];
-													
-												 
+											  	
 												?>
-												<option value="<?php echo $subject_id; ?>"><?php echo $subject_name; ?></option>
+												<option value="<?php echo $id; ?>"><?php echo $subject_name; ?></option>
 											<?php } ?>
-			</select>
-			</div>
-		</div>
-  </div>
-  <div class="col-sm-3">
-		<div class="form-group">
-			<label class="col-md-3 control-label">Date</label>
-			<div class="col-md-9">
-			 <input class="form-control form-control-inline   date-picker" size="16" type="text" name="date" value="<?php echo date("d-m-Y"); ?>"/>
-				 
-			</div>
-		</div>
-  </div>
-  <div class="col-sm-3">
-		<div class="form-group">
-			<label class="col-md-3 control-label">Time</label>
-			<div class="col-md-9">
-			<input type='text'class="form-control timepicker timepicker-no-seconds  " name="time">
-				 
-			</div>
-		</div>
-  </div>
-  <div class="col-sm-3">
-		<div class="form-group">
-			<label class="col-md-3 control-label">Reason</label>
-			<div class="col-md-9">
-				<input type="text" class="form-control" placeholder="Enter Reason" name="reason">
-				 
-			</div>
-		</div>
-  </div>
-</div> 
+									</select>
+								</div>
+								<span class="help-block">
+								Please Select Section</span>
+							</div>
+					</div>
+
+
 <div class="form-actions top">
 						<div class="row">
 							<div class="col-md-offset-3 col-md-9">
@@ -102,10 +77,20 @@ if((!empty($class_id)) && (!empty($sect_id))){
 					</div>
 <?php }	?>
 
-<script> 
+
+<script>
 $('.date-picker').datepicker();
 $('.timepicker').timepicker();
-</script> 
+$('.AddNew').click(function(){
+   var row = $(this).closest('tr').clone();
+   row.find('input').val('');
+   $(this).closest('tr').after(row);
+   $('input[type="button"]', row).removeClass('AddNew').addClass('RemoveRow').val('-');
+});
 
+$('table').on('click', '.RemoveRow', function(){
+  $(this).closest('tr').remove();
+});	
+	</script>
 	
 	

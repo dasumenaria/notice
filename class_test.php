@@ -1,31 +1,52 @@
 <?php
  include("index_layout.php");
  include("database.php");
-$session_id=$_SESSION['id'];
- 
+@$session_id=$_SESSION['id'];
+ date_default_timezone_set('Asia/Calcutta');
+ini_set('max_execution_time', 100000); 
 if(isset($_POST['submit']))
 {
-  
-$student_id=$_REQUEST["student_id"];
-$achivement=$_REQUEST["achivement"];
-$rank=$_REQUEST["rank"]; 
-$curent_date=date('Y-m-d');
-$i=0;
+$class_id=$_REQUEST["class_id"];
+$section_id=$_REQUEST["section_id"];
+$subject_id=$_REQUEST["subject_id"];
+$time_from=$_REQUEST["time_from"];
+$time_to=$_REQUEST["time_to"]; 
+ $date_current=date('Y-m-d');
  
-		foreach($subject_id as $value){
-			$t_f=$time_from[$i];
-			$subject_id=$value;	
-			$t_t=$time_to[$i];
-			
-			
-echo"insert into achivements(student_id,achivement,rank,curent_date)values('$student_id','$achivement','$rank','$curent_date')";
-exit;	
- 	  
-$sql="insert into achivements(student_id,achivement,rank,curent_date)values('$student_id','$achivement','$rank','$curent_date')";
+ $i=0;
+  
+ 
+	 foreach($subject_id as $value){
+
+		 $t_f=$time_from[$i];
+	 	 $subject_id=$value;
+		 $t_t=$time_to[$i];
+ 
+ $q="SELECT `id` from `time_table` where `class_id`='$class_id' && `section_id`='$section_id' && `subject_id`='$subject_id'";
+$f=mysql_query($q);
+$r=mysql_num_rows($f);	
+
+if($r>0)
+{	
+
+$ftc=mysql_fetch_array($f);
+echo $id=$ftc['id'];  
+
+echo "update `time_table` SET `user_id`='$session_id',`class_id`='$class_id',`section_id`='$section_id',`subject_id`='$subject_id',`time_from`='$t_f',`time_to`='$t_t',`curent_date`='$date_current' where `id`='".$id."'";
+ 
+  
+$sql1="update `time_table` SET `user_id`='$session_id',`class_id`='$class_id',`section_id`='$section_id',`subject_id`='$subject_id',`time_from`='$t_f',`time_to`='$t_t',`curent_date`='$date_current' where `id`='".$id."'";
+$r1=mysql_query($sql1);		  
+}
+else{
+
+//echo "insert into time_table(user_id,class_id,section_id,time_from,time_to,subject_id,curent_date)values('$session_id','$class_id','$section_id','$t_f','$t_t','$subject_id','$date_current')";
+
+$sql="insert into time_table(user_id,class_id,section_id,time_from,time_to,subject_id,curent_date)values('$session_id','$class_id','$section_id','$t_f','$t_t','$subject_id','$date_current')";
 $r=mysql_query($sql);
 	 $i++;
 	 }
-	 
+	 }
 }
 	else
 	{
@@ -36,7 +57,7 @@ $r=mysql_query($sql);
 <head>
 <?php css();?>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Class Test</title>
+<title>Exam Terms</title>
 </head>
 <?php contant_start(); menu();  ?>
 <body>
@@ -47,33 +68,110 @@ $r=mysql_query($sql);
 			<div class="portlet box">
 						<div class="portlet-title">
 							<div class="caption">
-								<i class="fa fa-gift"></i>Class Test
+								<i class="fa fa-gift"></i>Exam Terms
 							</div>
 							<div class="tools">
-							<!--<a class="" href="view_event.php" style="color: white"><i class="fa fa-search"></i></a>-->
 							 
-								<!--<a href="" class="collapse" data-original-title="" title="">
-								</a>-->
 								
 							</div>
 						</div>
-<div class="portlet-body form">
-	<form  class="form-horizontal" id="form_sample_2"  role="form" method="post"> 
+						<div class="portlet-body form">
 						 
-						<div class="form-body">
-						
+<form  class="form-horizontal" id="form_sample_2"  role="form" method="post"> 
+					<div class="form-body">
+						<div class="form-group">
+							<label class="control-label col-md-3">Class</label>
+							<div class="col-md-4">
+							   <div class="input-icon right">
+									<i class="fa"></i>
+									<select class="form-control user" required name="class_id" >
+									<option value="">---Select Class---</option>
+								    <?php 
+									$query=mysql_query("select * from `master_class` order by `id`");
+									while($fetch=mysql_fetch_array($query))
+									{$i++;
+										$class_id=$fetch['id'];
+										$roman=$fetch['roman'];
+									?>
+									<option value="<?php echo $class_id; ?>"><?php echo $roman; ?></option>
+									<?php } ?>
+									</select>
+								</div>
+								<span class="help-block">
+								please select Class</span>
+							</div>
 						</div>
-						<div class=" right1" align="center" style="margin-top:50px">
-							<button type="submit" class="btn green" name="submit">Submit</button>
-						</div>
-						 					
-	 </form>
-</div>
-</div>
-</body>
+					<div id="dt"></div>
+					 <div id="data">
+					 
+					 
+					 </div>
+					
+					 	 
+					</div>
+					
 
-<?php  footer();?>			
-  <?php scripts();?>
+				</form>
+						</div>
+					</div>
+			</div></div>
+</body>
+<?php footer(); ?>
+<script src="assets/global/plugins/jquery.min.js" type="text/javascript"></script>
+
+<script>
+		$(document).ready(function() {
+			
+
+$(".chk_input").live("click",function(){
+				  
+	var attr_val= $(this).attr('chk_val');			   
+	var valu=$(this).is( ':checked' );
+	
+if(valu==0)
+	{
+		$(".all_chk"+attr_val ).parent('span').removeClass('checked');
+		$(".all_chk"+attr_val ).removeAttr('checked','checked');
+	}
+else
+	{
+		$(".all_chk"+attr_val ).parent('span').addClass('checked');
+		$(".all_chk"+attr_val ).attr('checked','checked');
+	}
+});
+			
+ 		 $(".user").live("change",function(){
+		 		   var t=$(this).val();
+				   
+  		  	$.ajax({
+			url: "ajax_class_test.php?pon="+t,
+			}).done(function(response) {
+
+		   $("#dt").html(""+response+"");
+		    
+			
+			});
+			  });	 
+
+   			  $(".user1").live("change",function(){
+				  var t=$(".user").val();
+	 			   var s=$(this).val();
+				   
+				    $.ajax({
+			url: "ajax_class_test.php?pon="+t+"&pon1="+s,
+			}).done(function(response) {
+				
+		   $("#data").html(""+response+"");
+	 
+		   });
+			  });	  
+ 			  
+		 });
+	</script>
+
+
+<?php scripts();?>
 
 </html>
+ 
 
