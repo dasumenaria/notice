@@ -47,7 +47,7 @@ if((empty($class_id)) && (!empty($sect_id))){
 							<div class="col-md-4">
 							   <div class="input-icon right">
 									<i class="fa"></i>
-									<select class="form-control user2" required name="section_id">
+									<select class="form-control user2" required name="subject_id">
 										<option value="">---Select Subject---</option>
 											<?php 
 												$query2=mysql_query("select * from `master_subject`"); 
@@ -75,7 +75,7 @@ if((empty($class_id)) && (empty($sect_id))  && (!empty($sub_id))){ ?>
 			<div class="col-md-4">
 			   <div class="input-icon right">
 					<i class="fa"></i>
-					<select class="form-control user3" required name="exam_id">
+					<select class="form-control user3" required name="exam_type_id">
 						<option value="">---Select Exam---</option>
 							<?php 
 								$query2=mysql_query("select * from `master_exam`"); 
@@ -97,18 +97,32 @@ if((empty($class_id)) && (empty($sect_id))  && (!empty($sub_id))){ ?>
 	</div>
 <?php } ?>	
 <?php if((!empty($class_id)) && (!empty($sect_id))  && (!empty($sub_id)) && (!empty($exm_id))) { ?>
-
-
-<a style="padding: 3px 15px; background-color:rgba(218, 73, 73, 0.74); color:#FFF;margin-left:30%" href="number_sheet.php?cls=<?php echo $class_id; ?>&sec=<?php echo $sect_id; ?>&sub=<?php echo $sub_id; ?>&trm=<?php echo $exm_id; ?>" ><strong>Download Excel Sheet</strong></a>
-
-<a style="padding: 3px 15px; background-color:rgba(218, 73, 73, 0.74); color:#FFF;margin-left:2%" href="assign_marks.php?cls=<?php echo $class_id; ?>&sec=<?php echo $sect_id; ?>&sub=<?php echo $sub_id; ?>&trm=<?php echo $exm_id; ?>" ><strong>Marks Filling</strong></a>
+<div class="form-group">
+		<label class="control-label col-md-3">Upload CSV File</label> 
+			<div class="col-md-4">
+			   <div class="input-icon right">
+					<i class="fa"></i>
+					<input type="file" name="file" class="form-control" required >
+					 
+				</div>
+ 
+			</div>
+	</div>
 
 </br>
 </br>
 </br>
  
 
-			 
+			<div class="form-actions top">
+				<div class="row">
+					<div class="col-md-offset-3 col-md-9">
+						<input type="submit" name="submit" class="btn green" value="Submit">
+						<button type="button" class="btn default">Cancel</button>
+					</div>
+				</div>
+			</div>
+
 
 <?php } ?>
 <script>

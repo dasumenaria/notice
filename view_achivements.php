@@ -17,16 +17,18 @@
 							<div class="caption">
 								<i class="fa fa-globe"></i>Achivements
 							</div>
-							 
+							<div class="tools">
+								<a class="" href="achivements.php" style="color: white"><i class="fa fa-book"> Add Achivements</i></a>
+							</div> 
 						</div>
 						<div class="portlet-body">
 							
 		
-				<table class="table table-striped table-bordered table-hover" id="sample_1">
+				<table class="table table-striped table-bordered table-hover" >
 					<thead>
 						<tr>
 						<th class="table-checkbox">
-							S/No.
+							S.No.
 						</th>
 						<th>
 							Student Name
@@ -41,7 +43,7 @@
 					</thead>
 					<tbody>
 						<?php 
-							$query2=mysql_query("select * from `achivements` order by id limit 5"); 
+							$query2=mysql_query("select * from `achivements` order by id DESC limit 5"); 
 							$i=0;
 							while($fetch2=mysql_fetch_array($query2))
 							{

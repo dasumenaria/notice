@@ -71,7 +71,7 @@ $r=mysql_query($sql);
 								<i class="fa fa-gift"></i>Time Table
 							</div>
 							<div class="tools">
-							 
+							 <a class="" href="view_timetable.php" style="color:white"><i class="fa fa-plus">&nbsp;View Time Table</i></a>
 								
 							</div>
 						</div>

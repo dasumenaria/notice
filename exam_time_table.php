@@ -74,8 +74,7 @@ $r=mysql_query($sql);
 								<i class="fa fa-gift"></i>Exam Time Table
 							</div>
 							<div class="tools">
-							 
-								
+								<a class="" href="view_extimetable.php" style="color:white"><i class="fa fa-plus">&nbsp;View Time Table</i></a>
 							</div>
 						</div>
 						<div class="portlet-body form">

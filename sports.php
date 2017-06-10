@@ -4,35 +4,45 @@
   
 if(isset($_POST['submit']))
 {
-$sports_id=mysql_real_escape_string($_REQUEST["sports_id"]);
- 
- 
-	 
-	 
- 	$n_name='sports';
-	$folderName2=$n_name.$sports_id;
+	$sports_id=mysql_real_escape_string($_REQUEST["sports_id"]);
+	$query=mysql_query("select `sports_name` from `master_sports` where id='".$sports_id."'"); 
+	$fetch=mysql_fetch_array($query);
+	$sports_name=$fetch['sports_name'];
 	
-	   $gallery_pic=$_FILES["gallery_pic"]["tmp_name"];
-	   $o=sizeof($gallery_pic);
-	   $gp=0;
-		  for($j=0; $j<$o; $j++){
-		   $rnd=rand(100, 10000);
-		  	$random=$rnd.$sports_id;
-			$gp=$gallery_pic[$j];
-			$photo1="sports".$random.".jpg";
-			 @move_uploaded_file( $gp,"sports/".$photo1);
-			 $sql1="insert into subsports_gallery(sports_id,gallery_pic)values('$sports_id','$photo1')"; 
-			$rl=mysql_query($sql1);
-			$insert_id=mysql_insert_id();
-			}
-	}
+	$target='sports/'.$sports_name;
+	$exist = is_dir($target);
+	if(!$exist)
+	{
+		mkdir($target, 777);
+ 	}
+	
+	
+	$gallery_pic=$_FILES["gallery_pic"]["tmp_name"];
+	$o=sizeof($gallery_pic);
+	$gp=0;
+	
+	for($j=0; $j<$o; $j++)
+	{
+		
+ 		$tmp_name=$gallery_pic[$j];
+		$file_name=$_FILES["gallery_pic"]["name"][$j];
+		$ext = pathinfo($file_name, PATHINFO_EXTENSION);
+		$Filename=rand();
+ 		$photo1=$Filename.".".$ext;
+		$curent_date=date('Y-m-d');	   
+		$insert_name=$target.'/'.$photo1;
+		@move_uploaded_file($tmp_name, $target.'/'.$photo1);
+		$sql1="insert into subsports_gallery(sports_id,gallery_pic,curent_date)values('$sports_id','$insert_name','$curent_date')"; 
+		$rl=mysql_query($sql1);
+		 
+ 	}
+	 
+	ob_start();
+	echo "<meta http-equiv='refresh' content='0;url=sports.php'>";
+	ob_flush();
+}
    
-else
-    {
-        echo mysql_error();
-    }
-    
-  ?> 
+ ?> 
 <html>
 <head>
 <?php css();?>
@@ -63,7 +73,7 @@ else
 								<i class="fa fa-gift"></i> sports
 							</div>
 							<div class="tools">
-							<a class="" href="view_sports.php" style="color: white"><i class="fa fa-search">View sports List</i></a>
+							<a class="" href="view_sports.php" style="color: white"><i class="fa fa-search">View sports Gallery</i></a>
 								<!--<a href="" class="collapse" data-original-title="" title="">
 								</a>-->
 								
@@ -182,61 +192,26 @@ else
 </body>
 <script src="assets/global/plugins/jquery.min.js" type="text/javascript"></script>
 <script>
-
-<?php if($insert_id>0){ ?>
-	var update_id = <?php echo $insert_id; ?>;
- 		$.ajax({
-			url: "notification_page.php?function_name=create_gallery_notifys&id="+update_id,
-			type: "POST",
-			success: function(data)
-			{    
- 			}
-	});
-<?php } ?>
+ 
 $(document).ready(function(){    
-        $(".remove_row").die().live("click",function(){
+        $(".remove_row").live("click",function(){ 
             $(this).closest("#parant_table tr").remove();
         });
-
-        $("#category_id").on("change",function(){
-			var p=$(this).val();
-			if(p==4)
-			{
-          $("#e_idtext").show();
-		  $("#n_idtext").hide();
-			}
-			else if(p==5){
-		   $("#e_idtext").hide();
-		   $("#n_idtext").show();
-			}
-        });
-	});	
+});	
 </script>
-		
-		
-		
-		
-	});	
-</script>
+<script>
+	function add_row()
+	{  
+		var new_line=$("#sample tbody").html();
+		$("#parant_table tbody").append(new_line);
+	}
  
-<script>
-    function add_row(){  
-        var new_line=$("#sample tbody").html();
-            $("#parant_table tbody").append(new_line);
-    }
-</script>
-<script>
-var myVar=setInterval(function(){myTimerr()},4000);
-		function myTimerr() 
-		{
+	var myVar=setInterval(function(){myTimerr()},4000);
+	function myTimerr() 
+	{
 		$("#success").hide();
-		} 
+	} 
 </script>
-
-
-
-
-
 
 <?php footer();?>
 <?php scripts();?>

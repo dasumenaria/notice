@@ -5,7 +5,7 @@
 if(isset($_POST['sub_del']))
 {
 	$delete_name=$_POST['delete_name'];
-	$sd=mysql_query("delete from `time_table` where id='$delete_name'" );
+	$sd=mysql_query("delete from `exam_time_table` where id='$delete_name'" );
 	$sql=mysql_query($sd);
 
 }
@@ -26,7 +26,7 @@ if(isset($_POST['sub_del']))
 								<i class="fa fa-gift"></i> View Time Table
 							</div>
 						<div class="tools">
-							<a class="" href="timetable.php" style="color:white"><i class="fa fa-plus">&nbsp;Add Time Table</i></a>
+							<a class="" href="view_extimetable.php.php" style="color:white"><i class="fa fa-plus">&nbsp;Add Time Table</i></a>
 							</div>
 						</div>
 						<div class="portlet-body form">
@@ -77,7 +77,7 @@ $(document).ready(function(){
 		var section_id='';
 		var class_id=$("#class_id").val();
   		$.ajax({
-			url: "ajax_view_timetable.php?function_for=timetable&class_id="+class_id,
+			url: "ajax_view_timetable.php?function_for=exam&class_id="+class_id,
 			}).done(function(response) {
  			$(".section_list").html(""+response+"");
 			$("#data").html("");
@@ -89,7 +89,7 @@ $(document).ready(function(){
 		var class_id=$("#class_id").val();
 		
  		$.ajax({
-			url: "ajax_view_timetable.php?function_for=timetable&class_id="+class_id+"&section_id="+section_id,
+			url: "ajax_view_timetable.php?function_for=exam&class_id="+class_id+"&section_id="+section_id,
 			}).done(function(response) {
   			$("#data").html(""+response+"");
 		});

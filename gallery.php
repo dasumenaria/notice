@@ -26,7 +26,7 @@ if(!empty($row1))
 			{
 				$rnd=rand(100, 10000);
 				$random=$rnd.$e_id;
-					   
+				  
 				$gp=$gallery_pic[$j];
 				$photo1="event".$random.".jpg";
 				move_uploaded_file( $gp,"event/".$folderName2."/".$photo1);

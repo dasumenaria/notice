@@ -45,10 +45,7 @@ $xsqlr=mysql_query($xsql);
 $message = "News Add Successfully.";
 
    }
-	else
-	{
-		echo mysql_error();
-	}
+	 
   ?> 
 <html>
 <head>
