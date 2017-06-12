@@ -3887,8 +3887,7 @@ $string_insert[$x]['time']=$time;
 				}				
   		
 	}
-
-        public function ExamTimeTable() 
+    public function ExamTimeTable() 
 	{
 		include_once("common/global.inc.php");
         global $link;
@@ -3927,7 +3926,6 @@ $string_insert[$x]['time']=$time;
 					$this->response($this->json($success), 200);   	
 		} 
 	}
-
 	public function BusRoutes() 
 	{
 		global $link;
@@ -4013,7 +4011,6 @@ $string_insert[$x]['time']=$time;
 			$this->response($this->json($success), 200); 
 		}
 	}
-	
 	public function AchiveMentData() 
 	{
 		include_once("common/global.inc.php");

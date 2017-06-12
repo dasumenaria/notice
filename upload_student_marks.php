@@ -4,7 +4,7 @@ include("database.php");
 if(isset($_POST["submit"]))
 {
 	$class_id=$_POST['class_id'];
-	$subject_id=$_POST['subject_id'];
+	$subject_id=$_POST['subject_id']; 
 	$section_id=$_POST['section_id'];
 	$exam_type_id=$_POST['exam_type_id'];
 	//First we need to make a connection with the database
@@ -25,7 +25,7 @@ if(isset($_POST["submit"]))
 
 		$count = 0; 
 		// add this line
-		print_r($emapData);
+		 
 
 		while (($emapData = fgetcsv($file, 10000, ",")) !== FALSE)
 		{ 
@@ -37,21 +37,21 @@ if(isset($_POST["submit"]))
 				$sets1=mysql_query($sql4);
 				$fets1=mysql_fetch_array($sets1);
 				$student_id=$fets1['id'];
-				//echo"select `id` from `student_marks` where `class_id`='$class_id' && `section_id`='$section_id' && `student_id`='$student_id' && `subject_id`='$subject_id' && `exam_type_id`='$exam_type_id'";
+				 
 				$sql2= "select `id` from `student_marks` where `class_id`='$class_id' && `section_id`='$section_id' && `student_id`='$student_id' && `subject_id`='$subject_id' && `exam_type_id`='$exam_type_id'";
 				$check=mysql_query($sql2);
 				$fetch=mysql_fetch_array($check);
 				$cunt=mysql_num_rows($check);
-				echo $id=$fetch['id'];
+				 $id=$fetch['id'];
 				if($cunt>0)
 				{	
-					//echo "update `student_marks` set `class_id`='$class_id',`section_id`='$section_id',`student_id`='$student_id',`subject_id`='$subject_id',`exam_type_id`='$exam_type_id',`obtained_marks`='$emapData[4]' where id='".$id."'";
-					$sql6="update `student_marks` set `class_id`='$class_id',`section_id`='$section_id',`student_id`='$student_id',`subject_id`='$subject_id',`exam_type_id`='$exam_type_id',`obtained_marks`='$emapData[4]' where id='".$id."'";
+			 
+					$sql6="update `student_marks` set `class_id`='$class_id',`section_id`='$section_id',`student_id`='$student_id',`subject_id`='$subject_id',`exam_type_id`='$exam_type_id',`obtained_marks`='$emapData[5]' ,`max_marks`='$emapData[4]' where id='".$id."'";
 					mysql_query($sql6);
 				} 
 				else
 				{
-					$sql3="insert into `student_marks` SET `class_id`='$class_id',`section_id`='$section_id',`student_id`='$student_id',`subject_id`='$subject_id',`exam_type_id`='$exam_type_id',`obtained_marks`='$emapData[4]'";
+					$sql3="insert into `student_marks` SET `class_id`='$class_id',`section_id`='$section_id',`student_id`='$student_id',`subject_id`='$subject_id',`exam_type_id`='$exam_type_id',`obtained_marks`='$emapData[5]',`max_marks`='$emapData[4]'";
 					mysql_query($sql3);
 				}
 			}
@@ -59,7 +59,7 @@ if(isset($_POST["submit"]))
 		}
 			fclose($file);
 			// echo 'CSV File has been successfully Imported';
-			header('Location: upload_marks.php');
+			header('Location: upload_student_marks.php');
 	}  	
 	else
 	{
@@ -67,7 +67,7 @@ if(isset($_POST["submit"]))
 		$msg=1;
 		?>
 		<script>
-		alert(Invalid File:Please Upload CSV File);
+		alert('Invalid File:Please Upload CSV File');
 		</script>
 		<?php
 		echo 'Invalid File:Please Upload CSV File';
@@ -181,12 +181,13 @@ $(document).ready(function() {
 	{
 		 			    
 		var s=$(this).val();
-
-		$.ajax({
-		url: "ajax_up_stdnt_marks.php?pon1="+s,
+		var c = $('.user').val();
+		var t = '';
+ 		$.ajax({
+		url: "ajax_up_stdnt_marks.php?pon1="+s+"&pon2="+t+"&pon="+c,
 		}).done(function(response) 
 		{
-			$("#data").html(""+response+"");
+ 			$("#data").html(""+response+"");
 		});
 	});
 

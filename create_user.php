@@ -319,7 +319,7 @@ $(document).ready(function(){
 				type: "POST",
 				success: function(data)
 				{   
- 					  $('#replace_data').html(data);
+ 					 $('#replace_data').html(data);
  				}
 			});
 		});

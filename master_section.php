@@ -4,10 +4,10 @@
  
  if(isset($_POST['sub'])){
 	
-$sports_name=$_POST['sports_name'];	
+$section_name=$_POST['section_name'];	
  
  
-mysql_query("insert into `master_sports` SET `sports_name`='$sports_name'");	
+mysql_query("insert into `master_section` SET `section_name`='$section_name'");	
  
 }
 ?>
@@ -15,15 +15,15 @@ mysql_query("insert into `master_sports` SET `sports_name`='$sports_name'");
  
  if(isset($_POST['sub_del']))
 {
-  $delet_Sports=$_POST['delet_Sports'];
-  mysql_query("update `master_sports` SET `flag`='1' where id='$delet_Sports'" );
+  $delet_section=$_POST['delet_section'];
+  mysql_query("update `master_section` SET `flag`='1' where id='$delet_section'" );
   
   }
 if(isset($_POST['sub_edit']))
 {
 $edit=$_REQUEST['edit_id'];  
-$sports_name=mysql_real_escape_string($_REQUEST["sports_name"]);
-$r=mysql_query("update `master_sports` SET `sports_name`='$sports_name' where id='$edit'" );
+$section_name=mysql_real_escape_string($_REQUEST["section_name"]);
+$r=mysql_query("update `master_section` SET `section_name`='$section_name' where id='$edit'" );
 $r=mysql_query($r);
 
 echo '<script text="javascript">alert(Sectiion Added Successfully")</script>';	
@@ -43,7 +43,7 @@ else
 <head>
 <?php css();?>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>master_sports</title>
+<title>Master Section</title>
 </head>
 <?php contant_start(); menu();  ?>
 <body>
@@ -54,7 +54,7 @@ else
 			<div class="portlet box">
 			<div class="portlet-title">
 				<div class="caption">
-					<i class="fa fa-gift"></i>Master Sports
+					<i class="fa fa-gift"></i>Master Section
 				</div>
 			</div>
 			<div class="portlet-body form">
@@ -63,11 +63,11 @@ else
 					<div class="form-body">
 						 
 						<div class="form-group">
-							<label class="control-label col-md-3">Sports Name</label>
+							<label class="control-label col-md-3">Section Name</label>
 							<div class="col-md-6">
 								<div class="input-icon right">
 								<i class="fa"></i>
-								<input class="form-control" placeholder="Please Enter Sports Name" required name="sports_name" autocomplete="off" type="text">
+								<input class="form-control" placeholder="Please Enter Section Name" required name="section_name" autocomplete="off" type="text">
 								</div>
 								
 							</div>
@@ -94,7 +94,7 @@ else
 			<div class="portlet box">
 			<div class="portlet-title">
 					<div class="caption">
-					<i class="fa fa-gift"></i>View Sports
+					<i class="fa fa-gift"></i>View Section
 				</div>
 			</div>
 			<div class="portlet-body form">
@@ -108,7 +108,7 @@ else
 									</th>
 									<th>
 									
-                                    Sports Name
+                                    Section Name
 									</th>
 									 
                                     <th>
@@ -117,13 +117,13 @@ else
 								</tr>
 								</thead>
 							 <?php
-			  $r1=mysql_query("select * from  master_sports where flag='0'");		
+			  $r1=mysql_query("select * from master_section where flag='0'");		
 					$i=0;
 					while($row1=mysql_fetch_array($r1))
 					{
 					$i++;
 					$id=$row1['id'];
-					$sports_name=$row1['sports_name'];
+					$section_name=$row1['section_name'];
   					?>
                     <tbody>
 								<tr>
@@ -131,7 +131,7 @@ else
 							<?php echo $i;?>
 									</td>
 									<td class="search">
-									<?php echo $sports_name;?>
+									<?php echo $section_name;?>
 									</td>
  
 									<td>
@@ -152,11 +152,11 @@ else
 								<div class="form-body">
 						 
 						<div class="form-group">
-							<label class="control-label col-md-3">Sports Name</label>
+							<label class="control-label col-md-3">Section Name</label>
 							<div class="col-md-6">
 								<div class="input-icon right">
 								<i class="fa"></i>
-								<input class="form-control" placeholder="Please Enter Sports Name" required name="sports_name" autocomplete="off" type="text" value="<?php echo $sports_name;?>">
+								<input class="form-control" placeholder="Please Enter Section Name" required name="section_name" autocomplete="off" type="text" value="<?php echo $section_name;?>">
 								</div>
 								
 							</div>
@@ -186,11 +186,11 @@ else
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                            <span class="modal-title" style="font-size:14px; text-align:left">Are you sure, you want to delete this Sports?</span>
+                            <span class="modal-title" style="font-size:14px; text-align:left">Are you sure, you want to delete this Section?</span>
                         </div>
                         <div class="modal-footer">
                         <form method="post" name="delete<?php echo $id ;?>">
-                            <input type="hidden" name="delet_Sports" value="<?php echo $id; ?>" />
+                            <input type="hidden" name="delet_section" value="<?php echo $id; ?>" />
                             
                             <button type="submit" name="sub_del" value="" class="btn btn-sm red-sunglo ">Yes</button> 
                         </form>

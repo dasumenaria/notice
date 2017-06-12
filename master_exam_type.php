@@ -6,7 +6,7 @@ $session_id=$_SESSION['id'];
 if(isset($_POST['submit']))
 {
  
-echo $exam_type=$_POST["exam_type"]; 
+  $exam_type=$_POST["exam_type"]; 
  $sql="insert into master_exam(exam_type)values('$exam_type')";
 $r=mysql_query($sql);
  
@@ -31,6 +31,8 @@ $r=mysql_query($sql);
 			<div class="portlet box">
 						<div class="portlet-title">
 							<div class="caption">
+								<i class="fa fa-gift"></i>Exam type
+							</div><div class="caption">
 								<i class="fa fa-gift"></i>Exam type
 							</div>
 							<div class="tools">

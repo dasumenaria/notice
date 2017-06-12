@@ -16,7 +16,7 @@ mysql_query("insert into `master_class` SET `class_name`='$class_name',`roman`='
  if(isset($_POST['sub_del']))
 {
   $delet_class=$_POST['delet_class'];
-  mysql_query("delete from `master_class` where `id`='$delet_class'" );
+  mysql_query("update `master_class` SET `flag`='1' where id='$delet_class'" );
      
   }
 if(isset($_POST['sub_edit']))
@@ -44,7 +44,7 @@ else
 <head>
 <?php css();?>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Master Bus</title>
+<title>Master Class</title>
 </head>
 <?php contant_start(); menu();  ?>
 <body>
@@ -54,7 +54,9 @@ else
     <div class="col-md-6">
 			<div class="portlet box">
 			<div class="portlet-title">
-		
+				<div class="caption">
+					<i class="fa fa-gift"></i>Master Class
+				</div>
 			</div>
 			<div class="portlet-body form">
 			<!-- BEGIN FORM-->
@@ -101,7 +103,9 @@ else
             <div class="col-md-6">
 			<div class="portlet box">
 			<div class="portlet-title">
-				
+				<div class="caption">
+					<i class="fa fa-gift"></i>View Class
+				</div>
 			</div>
 			<div class="portlet-body form">
 			 <div class="table-scrollable" >
@@ -125,7 +129,7 @@ else
 								</tr>
 								</thead>
 							 <?php
-			  $r1=mysql_query("select * from master_class");		
+			  $r1=mysql_query("select * from master_class where flag='0'");		
 					$i=0;
 					while($row1=mysql_fetch_array($r1))
 					{

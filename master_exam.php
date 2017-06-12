@@ -4,29 +4,30 @@
  
  if(isset($_POST['sub'])){
 	
-$sports_name=$_POST['sports_name'];	
+$exam_type=$_POST['exam_type'];	
  
  
-mysql_query("insert into `master_sports` SET `sports_name`='$sports_name'");	
- 
+mysql_query("insert into `master_exam` SET `exam_type`='$exam_type'");	
+
 }
 ?>
  <?php 
  
  if(isset($_POST['sub_del']))
 {
-  $delet_Sports=$_POST['delet_Sports'];
-  mysql_query("update `master_sports` SET `flag`='1' where id='$delet_Sports'" );
-  
+  $delet_exam=$_POST['delet_exam'];
+  mysql_query("update `master_exam` SET `flag`='1' where id='$delet_exam'" );
+     
   }
 if(isset($_POST['sub_edit']))
 {
 $edit=$_REQUEST['edit_id'];  
-$sports_name=mysql_real_escape_string($_REQUEST["sports_name"]);
-$r=mysql_query("update `master_sports` SET `sports_name`='$sports_name' where id='$edit'" );
-$r=mysql_query($r);
+$exam_type=mysql_real_escape_string($_REQUEST["exam_type"]);
+ 
 
-echo '<script text="javascript">alert(Sectiion Added Successfully")</script>';	
+$r=mysql_query("update `master_exam` SET `exam_type`='$exam_type' where id='$edit'" );
+$r=mysql_query($r);
+echo '<script text="javascript">alert(Subject Added Successfully")</script>';	
  
 }
 else
@@ -43,7 +44,7 @@ else
 <head>
 <?php css();?>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>master_sports</title>
+<title>Master Exam</title>
 </head>
 <?php contant_start(); menu();  ?>
 <body>
@@ -54,7 +55,7 @@ else
 			<div class="portlet box">
 			<div class="portlet-title">
 				<div class="caption">
-					<i class="fa fa-gift"></i>Master Sports
+				<i class="fa fa-gift"></i>Master Exam
 				</div>
 			</div>
 			<div class="portlet-body form">
@@ -63,11 +64,11 @@ else
 					<div class="form-body">
 						 
 						<div class="form-group">
-							<label class="control-label col-md-3">Sports Name</label>
+							<label class="control-label col-md-3">Exam Name</label>
 							<div class="col-md-6">
 								<div class="input-icon right">
 								<i class="fa"></i>
-								<input class="form-control" placeholder="Please Enter Sports Name" required name="sports_name" autocomplete="off" type="text">
+								<input class="form-control" placeholder="Please Enter Exam Name" required name="exam_type" autocomplete="off" type="text">
 								</div>
 								
 							</div>
@@ -93,13 +94,13 @@ else
             <div class="col-md-6">
 			<div class="portlet box">
 			<div class="portlet-title">
-					<div class="caption">
-					<i class="fa fa-gift"></i>View Sports
+				<div class="caption">
+					<i class="fa fa-gift"></i>View Exam
 				</div>
 			</div>
 			<div class="portlet-body form">
 			 <div class="table-scrollable" >
-								<table class="table   table-hover" width="100%" style="font-family:Open Sans;">
+								<table class="table table-hover" width="100%" style="font-family:Open Sans;">
 								<thead>
 									
 								<tr style="background:#F5F5F5">
@@ -108,7 +109,7 @@ else
 									</th>
 									<th>
 									
-                                    Sports Name
+                                    Exam Name
 									</th>
 									 
                                     <th>
@@ -117,24 +118,24 @@ else
 								</tr>
 								</thead>
 							 <?php
-			  $r1=mysql_query("select * from  master_sports where flag='0'");		
+			  $r1=mysql_query("select * from master_exam where flag='0'");		
 					$i=0;
 					while($row1=mysql_fetch_array($r1))
 					{
 					$i++;
 					$id=$row1['id'];
-					$sports_name=$row1['sports_name'];
-  					?>
+					$exam_type=$row1['exam_type'];
+ 
+					?>
                     <tbody>
 								<tr>
 									<td>
 							<?php echo $i;?>
 									</td>
 									<td class="search">
-									<?php echo $sports_name;?>
+									<?php echo $exam_type;?>
 									</td>
- 
-									<td>
+                                     <td>
                                         <a class="btn blue-madison blue-stripe btn-sm" rel="tooltip" title="Edit" data-toggle="modal" href="#edit<?php echo $id;?>"><i class="fa fa-edit"></i></a>
                                         &nbsp;
                                         <!--------editon-->
@@ -152,16 +153,17 @@ else
 								<div class="form-body">
 						 
 						<div class="form-group">
-							<label class="control-label col-md-3">Sports Name</label>
+							<label class="control-label col-md-3">Exam Name</label>
 							<div class="col-md-6">
 								<div class="input-icon right">
 								<i class="fa"></i>
-								<input class="form-control" placeholder="Please Enter Sports Name" required name="sports_name" autocomplete="off" type="text" value="<?php echo $sports_name;?>">
+								<input class="form-control" placeholder="Please Enter Exam Name" required name="exam_type" autocomplete="off" type="text" value="<?php echo $exam_type;?>">
 								</div>
 								
 							</div>
 						</div>
-                          <div class=" right1" align="right" style="margin-right:10px">
+                         
+						 <div class=" right1" align="right" style="margin-right:10px">
 									<button type="submit" class="btn green" name="sub_edit">Update</button>
 								</div>
 							</form>
@@ -186,11 +188,11 @@ else
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                            <span class="modal-title" style="font-size:14px; text-align:left">Are you sure, you want to delete this Sports?</span>
+                            <span class="modal-title" style="font-size:14px; text-align:left">Are you sure, you want to delete this Exam?</span>
                         </div>
                         <div class="modal-footer">
                         <form method="post" name="delete<?php echo $id ;?>">
-                            <input type="hidden" name="delet_Sports" value="<?php echo $id; ?>" />
+                            <input type="hidden" name="delet_exam" value="<?php echo $id; ?>" />
                             
                             <button type="submit" name="sub_del" value="" class="btn btn-sm red-sunglo ">Yes</button> 
                         </form>
@@ -215,11 +217,7 @@ else
 				   
 			</div>
             </div>
-            
-            
-            
-            
-            </div>
+             </div>
 	</div>
 
 	

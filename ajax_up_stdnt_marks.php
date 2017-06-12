@@ -6,7 +6,7 @@ include("database.php");
   @$sub_id=$_GET['pon2'];
   @$exm_id=$_GET['pon3'];
  
-  	if((!empty($class_id)) && (empty($sect_id))){ ?>
+if((!empty($class_id)) && (empty($sect_id))){ ?>
 
 	<div class="form-group">
 						<label class="control-label col-md-3">Section</label> 
@@ -40,8 +40,8 @@ include("database.php");
 					</div>
 					
  	<?php } 
-if((empty($class_id)) && (!empty($sect_id))){ 
-?>
+ if((!empty($class_id)) && (!empty($sect_id)) && (empty($sub_id))){ 
+ ?>
 <div class="form-group">
 						<label class="control-label col-md-3">Subject</label> 
 							<div class="col-md-4">
@@ -50,16 +50,26 @@ if((empty($class_id)) && (!empty($sect_id))){
 									<select class="form-control user2" required name="subject_id">
 										<option value="">---Select Subject---</option>
 											<?php 
-												$query2=mysql_query("select * from `master_subject`"); 
-					 							while($fetch2=mysql_fetch_array($query2))
+											
+												$queryas=mysql_query("select * from `subject_mapping` where `class_id` = '$class_id' && `section_id` = '$sect_id'"); 
+					 							$setch3=mysql_fetch_array($queryas);											
+												$subject_id= $setch3['subject_id'];
+												if(!empty($subject_id))
 												{
-													$i++;
-													$id=$fetch2['id'];
-													$subject_name=$fetch2['subject_name'];
-											  	
+													$ep_sub=explode(',',$subject_id);	
+													foreach($ep_sub as $data)
+													{
+														$query2=mysql_query("select * from `master_subject` where `id` = '$data'"); 	
+														$fetch2=mysql_fetch_array($query2);
+														$id=$fetch2['id'];
+														$subject_name=$fetch2['subject_name'];
+													 
+ 												 
 												?>
 												<option value="<?php echo $id; ?>"><?php echo $subject_name; ?></option>
-											<?php } ?>
+											<?php }
+												}
+												?>
 									</select>
 								</div>
 								<span class="help-block">
@@ -68,6 +78,7 @@ if((empty($class_id)) && (!empty($sect_id))){
 					</div>
 
 <?php }	
+
 
 if((empty($class_id)) && (empty($sect_id))  && (!empty($sub_id))){ ?>
 	<div class="form-group">

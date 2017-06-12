@@ -107,9 +107,10 @@ $(document).ready(function() {
 	{
 		 			    
 		var s=$(this).val();
-
-		$.ajax({
-		url: "ajax_class_test.php?pon1="+s,
+		var c = $('.user').val();
+		var t = '';
+ 		$.ajax({
+		url: "ajax_class_test.php?pon1="+s+"&pon2="+t+"&pon="+c,
 		}).done(function(response) 
 		{
 			$("#data").html(""+response+"");

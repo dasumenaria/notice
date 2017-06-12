@@ -46,7 +46,7 @@ span {
 			<div class="portlet box">
 						<div class="portlet-title">
 							<div class="caption">
-								<i class="fa fa-group"></i> Class teacher Mapping
+								<i class="fa fa-group"></i> Class Teacher & Section Mapping
 							</div>
 							 
 						</div>

@@ -35,7 +35,7 @@ $fter3=mysql_fetch_array($ster3);
 	header ("Content-type: application/vnd.ms-excel");
 	header ("Content-Disposition: attachment; filename=".$filename.".csv");
 	header ("Content-Description: Generated Report" );
-	$fct="S.No.,Roll No,Student Name,Subject,".$exam_type."";
+	$fct="S.No.,Roll No,Student Name,Subject,Max Marks,".$exam_type."";
 	
 	$qwq=$fct;   
 	$qwq.="\n";
@@ -51,6 +51,7 @@ while($fets=mysql_fetch_array($query))
 		$query7=mysql_query("select `subject_name` from `master_subject` where `id`='$subject_fetch'");
 		$fet7=mysql_fetch_array($query7);
 		$subject_name=$fet7['subject_name'];
+		$x='';
 		$qwq.="$f,$roll_no,$student_name,$subject_name";
 		$qwq.="\n";
 	}
