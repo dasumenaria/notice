@@ -4112,6 +4112,75 @@ $string_insert[$x]['time']=$time;
 			$this->response($this->json($success), 200); 
 		}
 	}
+	public function ClassTest() 
+	{
+		include_once("common/global.inc.php");
+        global $link;
+		if ($this->get_request_method() != "POST") 
+		{
+			$this->response('', 406);
+		}
+		$student_id = $this->_request['student_id'];
+		
+		$sql = $this->db->prepare("SELECT `class_id`,`section_id`,`name` FROM login where `id` = '$student_id' ");
+		$sql->execute();
+		$row_gps = $sql->fetchALL(PDO::FETCH_ASSOC);
+		$section_id=$row_gps[0]['section_id']; 
+		$class_id=$row_gps[0]['class_id'];
+		$name=$row_gps[0]['name'];  
+		
+		 	 
+		$note_sql = $this->db->prepare("SELECT * FROM student_marks where `student_id` = '$student_id' && `class_id` = '$class_id' && `section_id` = '$section_id' order by `subject_id` ASC");
+		$note_sql->execute();
+		if($note_sql->rowCount()>0)
+		{
+		    $resultArray=array();
+			$row_gp = $note_sql->fetchALL(PDO::FETCH_ASSOC);
+			 $x=0;
+			 foreach($row_gp as $key=>$valye)	
+			 {
+				 
+				
+				$subject_id=$valye['subject_id'];
+					$sql_stds = $this->db->prepare("SELECT `subject_name` FROM master_subject WHERE id='".$subject_id."'");
+					$sql_stds->execute();
+					$stds = $sql_stds->fetch(PDO::FETCH_ASSOC);
+					$subject_name=$stds['subject_name'];
+				$exam_type_id=$valye['exam_type_id'];
+					$sql_stdsa = $this->db->prepare("SELECT `exam_type` FROM master_exam WHERE id='".$exam_type_id."'");
+					$sql_stdsa->execute();
+					$stdsa = $sql_stdsa->fetch(PDO::FETCH_ASSOC);
+					$exam_type=$stdsa['exam_type'];
+				$teacher_id=$valye['teacher_id'];
+					$sql_stds = $this->db->prepare("SELECT `user_name` from faculty_login WHERE id='".$teacher_id."'");
+					$sql_stds->execute();
+					$stds = $sql_stds->fetch(PDO::FETCH_ASSOC);
+					$Tname=$stds['user_name'];
+				$max_marks=$valye['max_marks'];
+				$obtained_marks=$valye['obtained_marks'];
+					
+ 				 
+				$string_insert[$x]['student_name']=$name;
+				$string_insert[$x]['marks']=$obtained_marks.'/'.$max_marks;
+				$string_insert[$x]['max_marks']=$max_marks;
+				$string_insert[$x]['obtained_marks']=$obtained_marks;
+				$string_insert[$x]['subject_name']=$subject_name;
+				$string_insert[$x]['student_id']=$student_id;
+				$string_insert[$x]['exam_type']=$exam_type;
+				$string_insert[$x]['teacher_name']=$Tname;
+ 				  
+			 $x++;
+			 }
+			$result = array("sportgallery"=> $string_insert);
+			$success = array('status'=> true, "Error" => "",'responce' => $result);
+			$this->response($this->json($success), 200);   	
+		}
+		else
+		{
+			$success = array('status'=> false, "Error" => "No data found",'responce' =>'');
+			$this->response($this->json($success), 200); 
+		}
+	}
 ///////////////////////////////////////		
     /*
      *  Encode array into JSON

@@ -1,20 +1,15 @@
 <?php
 include("index_layout.php");
 include("database.php");
+include("auth.php");
 if(isset($_POST["submit"]))
 {
 	$class_id=$_POST['class_id'];
 	$subject_id=$_POST['subject_id']; 
 	$section_id=$_POST['section_id'];
 	$exam_type_id=$_POST['exam_type_id'];
-	//First we need to make a connection with the database
-	$host='localhost'; 	// Host Name.
-	$db_user= 'root'; 	// User Name
-	$db_password= '';   // Password
-	$db='new_notice';		// Database Names
-	$conn=mysql_connect($host,$db_user,$db_password) or die (mysql_error());
-	mysql_select_db($db) or die (mysql_error());
-
+ 
+ 	$teacher_id=$_SESSION['id'];
 	$filename=$_FILES["file"]["tmp_name"];
 	$fil=$_FILES['file']['name'];
 	$ext=pathinfo($fil, PATHINFO_EXTENSION);
@@ -46,12 +41,12 @@ if(isset($_POST["submit"]))
 				if($cunt>0)
 				{	
 			 
-					$sql6="update `student_marks` set `class_id`='$class_id',`section_id`='$section_id',`student_id`='$student_id',`subject_id`='$subject_id',`exam_type_id`='$exam_type_id',`obtained_marks`='$emapData[5]' ,`max_marks`='$emapData[4]' where id='".$id."'";
+					$sql6="update `student_marks` set `class_id`='$class_id',`section_id`='$section_id',`student_id`='$student_id',`subject_id`='$subject_id',`exam_type_id`='$exam_type_id',`obtained_marks`='$emapData[5]' ,`max_marks`='$emapData[4]',`teacher_id` = '$teacher_id' where id='".$id."'";
 					mysql_query($sql6);
 				} 
 				else
 				{
-					$sql3="insert into `student_marks` SET `class_id`='$class_id',`section_id`='$section_id',`student_id`='$student_id',`subject_id`='$subject_id',`exam_type_id`='$exam_type_id',`obtained_marks`='$emapData[5]',`max_marks`='$emapData[4]'";
+					$sql3="insert into `student_marks` SET `class_id`='$class_id',`section_id`='$section_id',`student_id`='$student_id',`subject_id`='$subject_id',`exam_type_id`='$exam_type_id',`obtained_marks`='$emapData[5]',`max_marks`='$emapData[4]',`teacher_id`= '$teacher_id'";
 					mysql_query($sql3);
 				}
 			}

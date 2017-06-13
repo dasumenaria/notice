@@ -1,6 +1,7 @@
 <?php
 include("index_layout.php");
 include("database.php");
+include("auth.php");
 
 $class=$_GET['cls'];
 $section=$_GET['sec'];
@@ -25,10 +26,8 @@ $exam_type=$fter3['exam_type'];
 
 
 if(isset($_POST['submit_marks'])){
-	/*echo"<pre>";
-	print_r($_POST);
-	echo"</pre>";*/
-	
+	 
+	$teacher_id=$_SESSION['id']; 
 	$class_id=$_POST['class_id'];
 	$section_id=$_POST['section_id'];
 	$subject_id=$_POST['subject_id'];
@@ -52,12 +51,12 @@ if(isset($_POST['submit_marks'])){
 		{	
 			$fetch=mysql_fetch_array($check);
 			$id=$fetch['id'];
-			$sql6="update `student_marks` set `class_id`='$class_id',`section_id`='$section_id',`student_id`='$stunt_id',`subject_id`='$subject_id',`exam_type_id`='$exam_type_id',`obtained_marks`='$obtained_marks' ,`max_marks`='$Maxx_marks' where id='".$id."'";
+			$sql6="update `student_marks` set `class_id`='$class_id',`section_id`='$section_id',`student_id`='$stunt_id',`subject_id`='$subject_id',`exam_type_id`='$exam_type_id',`obtained_marks`='$obtained_marks' ,`max_marks`='$Maxx_marks',`teacher_id` = '$teacher_id' where id='".$id."'";  
 			mysql_query($sql6);
 		} 
 		else
 		{
-			$sql3="insert into `student_marks` SET `class_id`='$class_id',`section_id`='$section_id',`student_id`='$stunt_id',`subject_id`='$subject_id',`exam_type_id`='$exam_type_id',`obtained_marks`='$obtained_marks',`max_marks`='$Maxx_marks'";
+			$sql3="insert into `student_marks` SET `class_id`='$class_id',`section_id`='$section_id',`student_id`='$stunt_id',`subject_id`='$subject_id',`exam_type_id`='$exam_type_id',`obtained_marks`='$obtained_marks',`max_marks`='$Maxx_marks',`teacher_id` = '$teacher_id'";
 			mysql_query($sql3);
 		}
 		$x++;

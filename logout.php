@@ -2,9 +2,7 @@
 session_start();
 unset($_SESSION["id"]);
 unset($_SESSION["username"]);
-$url = "index.php";
-if(isset($_GET["session_expired"])) {
-	$url .= "?session_expired=" . $_GET["session_expired"];
-}
-header("Location:$url");
+unset($_SESSION["category"]);
+unset($_SESSION["loggedin_time"]);
+header("Location:login.php");
 ?>
