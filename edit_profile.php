@@ -5,6 +5,7 @@
  $user_id=$_SESSION['id'];
  $get_id=$_GET['id'];
 
+
  
 	$message="";
 if(isset($_POST['submit']))
@@ -26,11 +27,9 @@ $k_image=$_REQUEST["k_image"];
 $dob=date('Y-m-d',strtotime($dob1));
 $curent_date=date('Y-m-d');
 $notification_key='AAAArt9gILg:APA91bFwFhemkzYV7Sq83t7zvpLC8QY27DC__xWUFIbI1GefXTDD0_4S8hOuOJ88q0oZ3gmWjshoRSwU08xqcWTb1a1PofkKp52nUdN9tB-voht0KhDW4O4Ch39ycj0VNogAuYRj29dN';
-			 
-			 
-			 
-$update_s=mysql_query("update `student` SET `name`='$name',`eno`='$eno',`mobile_no`='$mobile_no',`father_name`='$father_name',`mother_name`='$mother_name',`class_id`='$class_id',`section_id`='$section_id',`medium`='$medium_id',`dob`='$dob',`parent_mobile_no`='$parent_mobile_no',`curent_date`='$curent_date',`user_id`='$user_id',`role_id`='$role_id',`password`='$password' where id='".$get_id."'" );
-
+//echo "update `login` SET `name`='$name',`eno`='$eno',`mobile_no`='$mobile_no',`father_name`='$father_name',`mother_name`='$mother_name',`class_id`='$class_id',`section_id`='$section_id',`medium`='$medium_id',`dob`='$dob',`parent_mobile_no`='$parent_mobile_no',`curent_date`='$curent_date',`user_id`='$user_id',`role_id`='$role_id',`password`='$password' where id='".$get_id."'" ;
+//exit;			 			 
+$update_s=mysql_query("update `login` SET `name`='$name',`eno`='$eno',`mobile_no`='$mobile_no',`father_name`='$father_name',`mother_name`='$mother_name',`class_id`='$class_id',`section_id`='$section_id',`medium`='$medium_id',`dob`='$dob',`parent_mobile_no`='$parent_mobile_no',`curent_date`='$curent_date',`user_id`='$user_id',`role_id`='$role_id',`password`='$password' where id='".$get_id."'" );
 
 $message="Registration Update Successfully";
 $photo1="student".$get_id.".jpg";

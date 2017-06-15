@@ -32,7 +32,7 @@
 							<div class="row">
 							<div class="col-md-6 col-sm-12">
 							<div class="dataTables_length" id="sample_1_length"><label>
-							<select name="sample_1_length" aria-controls="sample_1" class="form-control input-small input-inline find_records">
+							<select name="sample_1_length" aria-controls="sample_1" class="form-control input-medium input-inline find_records">
                                 <option value="300">Select</option>
                                 <option value="300">300</option>
                                 <option value="600">600</option>
@@ -46,6 +46,23 @@
                                 <option value="3000">3000</option>
                                 <option value="3300">3300</option>
 							</select> Records</label></div></div>
+							
+							<div class="col-md-6 col-sm-12">
+							<div class="dataTables_length" id="sample_1_length"><label>Student Name</label>
+							<select name="sample_1_length" aria-controls="sample_1" class="form-control input-inline input-medium users select2me">
+                                <option value="300">Select</option>
+                                <?php
+			  $r1=mysql_query("select * from login where flag='0'");
+					$i=0;
+					while($row1=mysql_fetch_array($r1))
+					{
+					$i++;
+                    $id=$row1['id'];
+					$name=$row1['name'];
+                     ?> 
+					 <option value="<?php echo $id?>"><?php echo $name?></option>
+					 <?php } ?>
+							</select> </div></div>
        						</div>
 							<div id="data" class="scroller" style="height:400px; padding-top:5px"  data-always-visible="1" data-rail-visible="0">
 							</div>
@@ -72,6 +89,21 @@ $(document).ready(function(){
 	    var view_u=$(".find_records").val();
 	  	$.ajax({
 			url: "ajax_view_profiles.php?view_u="+view_u,
+			}).done(function(response) {
+		   $("#data").html(""+response+"");
+			});
+});
+});
+</script>
+
+
+<script>
+$(document).ready(function(){    
+        $(".users").die().live("change",function(){
+			
+	    var stdn_name=$(".users").val();
+	  	$.ajax({
+			url: "studentwise_reg.php?std_name="+stdn_name,
 			}).done(function(response) {
 		   $("#data").html(""+response+"");
 			});

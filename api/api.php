@@ -4128,7 +4128,6 @@ $string_insert[$x]['time']=$time;
 		$section_id=$row_gps[0]['section_id']; 
 		$class_id=$row_gps[0]['class_id'];
 		$name=$row_gps[0]['name'];  
-		
 		 	 
 		$note_sql = $this->db->prepare("SELECT * FROM student_marks where `student_id` = '$student_id' && `class_id` = '$class_id' && `section_id` = '$section_id' order by `subject_id` ASC");
 		$note_sql->execute();
@@ -4139,8 +4138,6 @@ $string_insert[$x]['time']=$time;
 			 $x=0;
 			 foreach($row_gp as $key=>$valye)	
 			 {
-				 
-				
 				$subject_id=$valye['subject_id'];
 					$sql_stds = $this->db->prepare("SELECT `subject_name` FROM master_subject WHERE id='".$subject_id."'");
 					$sql_stds->execute();
@@ -4158,7 +4155,6 @@ $string_insert[$x]['time']=$time;
 					$Tname=$stds['user_name'];
 				$max_marks=$valye['max_marks'];
 				$obtained_marks=$valye['obtained_marks'];
-					
  				 
 				$string_insert[$x]['student_name']=$name;
 				$string_insert[$x]['marks']=$obtained_marks.'/'.$max_marks;
@@ -4171,7 +4167,7 @@ $string_insert[$x]['time']=$time;
  				  
 			 $x++;
 			 }
-			$result = array("sportgallery"=> $string_insert);
+			$result = array("classtest"=> $string_insert);
 			$success = array('status'=> true, "Error" => "",'responce' => $result);
 			$this->response($this->json($success), 200);   	
 		}
