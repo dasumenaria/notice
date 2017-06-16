@@ -23,11 +23,18 @@ $su_name=$fter2['subject_name'];
 $ster3=mysql_query("select `exam_type` from `master_exam` where `id`='$exam_name'");
 $fter3=mysql_fetch_array($ster3); 
 $exam_type=$fter3['exam_type'];
-
+//-- Test Dtae
+	$marksQuery=mysql_query("select `test_date`, `teacher_id` from `student_marks` where  `class_id` = '$class' && `section_id` = '$section' && `subject_id` = '$subject_fetch' && `exam_type_id` = '$exam_name'");
+	$ftc_marks=mysql_fetch_array($marksQuery);	
+	$TestDate=$ftc_marks['test_date'];
+ 	if($TestDate=='0000-00-00'){ echo "dasdas" ;$TestDate='';}
+	else {$TestDate=date('d-m-Y',strtotime($TestDate));}
+ 
+$teacher_id_SESS=$_SESSION['id']; 
 
 if(isset($_POST['submit_marks'])){
 	 
-	$teacher_id=$_SESSION['id']; 
+	$test_date=date('Y-m-d',strtotime($_POST['test_date']));
 	$class_id=$_POST['class_id'];
 	$section_id=$_POST['section_id'];
 	$subject_id=$_POST['subject_id'];
@@ -42,7 +49,6 @@ if(isset($_POST['submit_marks'])){
 		$obtained_marks=$marks[$x];
 		$Maxx_marks=$max_marks[$x];
 		
-		
 		$sql2= "select `id` from `student_marks` where `class_id`='$class_id' && `section_id`='$section_id' && `student_id`='$stunt_id' && `subject_id`='$subject_id' && `exam_type_id`='$exam_type_id'";
 		$check=mysql_query($sql2);
 		$cunt=mysql_num_rows($check);
@@ -51,12 +57,12 @@ if(isset($_POST['submit_marks'])){
 		{	
 			$fetch=mysql_fetch_array($check);
 			$id=$fetch['id'];
-			$sql6="update `student_marks` set `class_id`='$class_id',`section_id`='$section_id',`student_id`='$stunt_id',`subject_id`='$subject_id',`exam_type_id`='$exam_type_id',`obtained_marks`='$obtained_marks' ,`max_marks`='$Maxx_marks',`teacher_id` = '$teacher_id' where id='".$id."'";  
+			$sql6="update `student_marks` set `class_id`='$class_id',`section_id`='$section_id',`student_id`='$stunt_id',`subject_id`='$subject_id',`exam_type_id`='$exam_type_id',`obtained_marks`='$obtained_marks' ,`max_marks`='$Maxx_marks',`teacher_id` = '$teacher_id_SESS' , `test_date` = '$test_date' where id='".$id."'";  
 			mysql_query($sql6);
 		} 
 		else
 		{
-			$sql3="insert into `student_marks` SET `class_id`='$class_id',`section_id`='$section_id',`student_id`='$stunt_id',`subject_id`='$subject_id',`exam_type_id`='$exam_type_id',`obtained_marks`='$obtained_marks',`max_marks`='$Maxx_marks',`teacher_id` = '$teacher_id'";
+			$sql3="insert into `student_marks` SET `class_id`='$class_id',`section_id`='$section_id',`student_id`='$stunt_id',`subject_id`='$subject_id',`exam_type_id`='$exam_type_id',`obtained_marks`='$obtained_marks',`max_marks`='$Maxx_marks',`teacher_id` = '$teacher_id_SESS' , `test_date` = '$test_date'";
 			mysql_query($sql3);
 		}
 		$x++;
@@ -70,8 +76,9 @@ if(isset($_POST['submit_marks'])){
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Marks | Filling</title>
 </head>
-<?php contant_start(); menu();  ?>
+<?php contant_start(); menu(); ?>
 <body>
+<form  class="form-horizontal" id="form_sample_2"  role="form" method="post"> 
 	<div class="page-content-wrapper">
 		 <div class="page-content">
 			<div class="portlet box blue">
@@ -85,11 +92,19 @@ if(isset($_POST['submit_marks'])){
 					<div class="col-md-3"><b>Section :- </b><?php echo $se_name ;?></div>
 					<div class="col-md-3"><b>Subject :- </b><?php echo $su_name ;?></div>
 					<div class="col-md-3"><b>Term :- </b><?php echo $exam_type ;?></div>
-					
 				</div>
+                <div align="center" class="col-md-12" style="padding-top:30px; padding-bottom:20px">
+                	<div class="col-md-6">
+                    <label class="col-md-4" style="font-weight:700">Test Date</label>
+                        <div class="col-md-8">
+                        <input class="form-control date-picker" required value="<?php echo $TestDate; ?>"  placeholder="DD-MM-YYYY" type="text" data-date-format="dd-mm-yyyy"  name="test_date">
+                        </div>
+                    </div>
+                </div>
+                </div>
 <div class="portlet-body">
 	<div class="table-scrollable">
-	<form  class="form-horizontal" id="form_sample_2"  role="form" method="post"> 
+	
 				
                 
 	<table class="table   table-hover" width="100%" bo style="font-family:Open Sans;">
@@ -97,7 +112,7 @@ if(isset($_POST['submit_marks'])){
         <tr style="background:#F5F5F5">
             <th width="5%">S.No.</th>
             <th>Roll No.</th>
-             <th >Student Name</th>
+             <th>Student Name</th>
              <th>Max Marks</th>
             <th width="15%"><?php echo $exam_type; ?></th>
         </tr>
@@ -115,16 +130,17 @@ $i=0;
 			$ftc_marks=mysql_fetch_array($marksQuery);	
 			$max_marks=$ftc_marks['max_marks'];
 			$obtained_marks=$ftc_marks['obtained_marks'];
-			
+			$teacher_id=$ftc_marks['teacher_id'];
+			$TeacherArray[]=$teacher_id
   		?>		
 			<tr class="main">
 				<td><?php echo $i ;?></td>				
 				<td><?php echo $roll_no ;?></td>				
 				<td><?php echo $student_name ;?></td>				
-				<td><input class="allLetter form-control input-small max_marks"  name="max_marks[]" value="<?php echo $max_marks; ?>"></td>	
-                <td><input class="allLetter form-control input-small Max_valid"  name="marks[]" value="<?php echo $obtained_marks; ?>"></td>
+				<td><input class="allLetter form-control input-small max_marks" <?php if($teacher_id_SESS != $teacher_id){ echo"disabled"; }?>   name="max_marks[]" value="<?php echo $max_marks; ?>"></td>	
+                <td><input class="allLetter form-control input-small Max_valid" <?php if($teacher_id_SESS != $teacher_id){ echo"disabled"; }?> name="marks[]" value="<?php echo $obtained_marks; ?>"></td>
  			</tr>
-            <input class="form-control" type="hidden" name="student_id[]" value="<?php echo $stdunt_id; ?>">
+            <input class="form-control" type="hidden" name="student_id[]" <?php if($teacher_id_SESS != $teacher_id){ echo"disabled"; }?>  value="<?php echo $stdunt_id; ?>">
 
 <?php } ?>
 <input class="form-control" type="hidden" name="class_id" value="<?php echo $class; ?>">
@@ -135,17 +151,16 @@ $i=0;
 	</table>
 	<div id="data"></div>
 	<div class="col-md-offset-5 col-md-6" style="padding-top:10px;">
-	<button type="submit" name="submit_marks" class="btn btn-primary">Submit</button>
-	<button type="reset" class="btn default">Cancel</button>
+	<button <?php if(in_array($teacher_id_SESS,$TeacherArray)){ echo 'type="submit" ';}else { echo 'type="button"';}?> name="submit_marks" class="btn btn-primary">Submit</button>
 </div>
-	</form>
-</div>
-
-</div>
-</div>
-</div>
+	
 </div>
 
+</div>
+</div>
+</div>
+</div>
+</form>
 </body>
 <script src="assets/global/plugins/jquery.min.js" type="text/javascript"></script>
 <script src="assets/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>

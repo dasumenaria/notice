@@ -116,8 +116,7 @@ $message = "News Add Successfully.";
 										<label class="col-md-3 control-label">News Date</label>
 										
 										<div class="col-md-3">
-											<input class="form-control form-control-inline input-md date-picker" required  value="<?php echo date("d-m-Y"); ?>" placeholder="dd/mm/yyyy" type="text" 
-                                            data-date-format="dd-mm-yyyy" type="text" name="news_date">
+											<input class="form-control form-control-inline input-md date-picker" required  value="<?php echo date("d-m-Y"); ?>" placeholder="dd/mm/yyyy" data-date-format="dd-mm-yyyy" type="text" name="news_date">
 											
 										</div>
 										
@@ -145,11 +144,6 @@ $message = "News Add Successfully.";
                                                 </div>
 												</div>
 									
-									
-									
-									
-									
-									
 								</div>
 								<div class=" right1" align="right" style="margin-right:10px">
 									<button type="submit" class="btn green" name="submit">Submit</button>
@@ -161,23 +155,23 @@ $message = "News Add Successfully.";
 </body>
 <?php footer(); ?>
 <script src="assets/global/plugins/jquery.min.js" type="text/javascript"></script>
-<script>
 
+<script>
 <?php if($newsid>0){ ?>
-	var update_id = <?php echo $newsid; ?>;
- 		$.ajax({
-			url: "notification_page.php?function_name=create_news_notifys&id="+update_id,
-			type: "POST",
-			success: function(data)
-			{   
- 			}
-	});
+var update_id = <?php echo $newsid; ?>;
+	$.ajax({
+		url: "notification_page.php?function_name=create_news_notifys&id="+update_id,
+		type: "POST",
+		success: function(data)
+		{   
+		}
+});
 <?php } ?>
 var myVar=setInterval(function(){myTimerr()},4000);
-		function myTimerr() 
-		{
-		$("#success").hide();
-		} 
+function myTimerr() 
+{
+	$("#success").hide();
+} 
 </script>
 
 
