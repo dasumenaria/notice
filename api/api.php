@@ -164,9 +164,9 @@ public function login()
 					$role_name=$std12['role_name'];
 				
 				if(!empty($row_login ['image'])){
-				$row_login ['image'] = $site_url."faculty/".$row_login ['image'];
+					$row_login ['image'] = $site_url."faculty/".$row_login ['image'];
 				}else{
-				$row_login ['image'] = "";
+					$row_login ['image'] = "";
 				}
 
 				$result = array('id' => $row_login['id'],
@@ -4494,8 +4494,71 @@ $string_insert[$x]['time']=$time;
 			$this->response('', 406);
 		}
 		$teacher_id = $this->_request['teacher_id'];
+		   	 
+		$note_sql = $this->db->prepare("SELECT DISTINCT(exam_type_id) FROM student_marks where `teacher_id` = '$teacher_id' order by `test_date` DESC");
+		$note_sql->execute();
+		if($note_sql->rowCount()>0)
+		{
+		    $resultArray=array();
+			$row_gp = $note_sql->fetchALL(PDO::FETCH_ASSOC);
+ 			 $x=0;
+			 foreach($row_gp as $key=>$valye)	
+			 { 
+				$exam_type_id=$valye['exam_type_id'];
+				$note_sql1 = $this->db->prepare("SELECT * FROM student_marks where `teacher_id` = '$teacher_id' && `exam_type_id` = '$exam_type_id' order by `test_date` DESC");
+				$note_sql1->execute();
+				$row_gp1 = $note_sql1->fetchALL(PDO::FETCH_ASSOC);
+				$exam_type_ids=$row_gp1[0]['exam_type_id'];
+					$sql_stdsa = $this->db->prepare("SELECT `exam_type` FROM master_exam WHERE id='".$exam_type_ids."'");
+					$sql_stdsa->execute();
+					$stdsa = $sql_stdsa->fetch(PDO::FETCH_ASSOC);
+					$exam_type=$stdsa['exam_type'];
+				$teacher_id=$row_gp1[0]['teacher_id'];
+					$sql_stds = $this->db->prepare("SELECT `user_name` from faculty_login WHERE id='".$teacher_id."'");
+					$sql_stds->execute();
+					$stds = $sql_stds->fetch(PDO::FETCH_ASSOC);
+					$Tname=$stds['user_name'];
+				$subject_id=$row_gp1[0]['subject_id'];
+					$sql_stds = $this->db->prepare("SELECT `subject_name` FROM master_subject WHERE id='".$subject_id."'");
+					$sql_stds->execute();
+					$stds = $sql_stds->fetch(PDO::FETCH_ASSOC);
+					$subject_name=$stds['subject_name'];
+			 
+				$test_date=$row_gp1[0]['test_date'];
+				if($test_date=='0000-00-00' || $test_date=='1970-01-01'){$test_date='';}
+				else {$test_date=date('d-m-Y',strtotime($test_date));}
+
+			 	$string_insert[$key]=$row_gp[$key];
+			 	$string_insert[$x]['exam_type']=$exam_type;
+			 	$string_insert[$x]['subject_name']=$subject_name;
+				$string_insert[$x]['test_date']=$test_date;
+				$string_insert[$x]['teacher_id']=$teacher_id;
+				
+ 			 $x++;
+			 }
+			$result = array("classtest"=> $string_insert);
+			$success = array('status'=> true, "Error" => "",'responce' => $result);
+			$this->response($this->json($success), 200);   	
+		}
+		else
+		{
+			$success = array('status'=> false, "Error" => "No data found",'responce' =>'');
+			$this->response($this->json($success), 200); 
+		}
+	}
+	
+	public function ClassTestTeacherFetch() 
+	{
+		include_once("common/global.inc.php");
+        global $link;
+		if ($this->get_request_method() != "POST") 
+		{
+			$this->response('', 406);
+		}
+		$teacher_id = $this->_request['teacher_id'];
+		$exam_type_id = $this->_request['exam_type_id'];
  		 	 
-		$note_sql = $this->db->prepare("SELECT * FROM student_marks where `teacher_id` = '$teacher_id' order by `subject_id` ASC");
+		$note_sql = $this->db->prepare("SELECT * FROM student_marks where `teacher_id` = '$teacher_id' && `exam_type_id` = '$exam_type_id' order by `test_date` DESC");
 		$note_sql->execute();
 		if($note_sql->rowCount()>0)
 		{
@@ -4556,7 +4619,6 @@ $string_insert[$x]['time']=$time;
 			$this->response($this->json($success), 200); 
 		}
 	}
-
 ///////////////////////////////////////		
     /*
      *  Encode array into JSON

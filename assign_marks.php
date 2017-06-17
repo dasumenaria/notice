@@ -27,7 +27,7 @@ $exam_type=$fter3['exam_type'];
 	$marksQuery=mysql_query("select `test_date`, `teacher_id` from `student_marks` where  `class_id` = '$class' && `section_id` = '$section' && `subject_id` = '$subject_fetch' && `exam_type_id` = '$exam_name'");
 	$ftc_marks=mysql_fetch_array($marksQuery);	
 	$TestDate=$ftc_marks['test_date'];
- 	if($TestDate=='0000-00-00'){ echo "dasdas" ;$TestDate='';}
+ 	if($TestDate=='0000-00-00'){   ;$TestDate='';}
 	else {$TestDate=date('d-m-Y',strtotime($TestDate));}
  
 $teacher_id_SESS=$_SESSION['id']; 
@@ -137,10 +137,10 @@ $i=0;
 				<td><?php echo $i ;?></td>				
 				<td><?php echo $roll_no ;?></td>				
 				<td><?php echo $student_name ;?></td>				
-				<td><input class="allLetter form-control input-small max_marks" <?php if($teacher_id_SESS != $teacher_id){ echo"disabled"; }?>   name="max_marks[]" value="<?php echo $max_marks; ?>"></td>	
-                <td><input class="allLetter form-control input-small Max_valid" <?php if($teacher_id_SESS != $teacher_id){ echo"disabled"; }?> name="marks[]" value="<?php echo $obtained_marks; ?>"></td>
+				<td><input class="allLetter form-control input-small max_marks" <?php if( $teacher_id_SESS != $teacher_id  && (!empty($teacher_id))){ echo"disabled"; }?>   name="max_marks[]" value="<?php echo $max_marks; ?>"></td>	
+                <td><input class="allLetter form-control input-small Max_valid" <?php if($teacher_id_SESS != $teacher_id && (!empty($teacher_id))){ echo"disabled"; }?> name="marks[]" value="<?php echo $obtained_marks; ?>"></td>
  			</tr>
-            <input class="form-control" type="hidden" name="student_id[]" <?php if($teacher_id_SESS != $teacher_id){ echo"disabled"; }?>  value="<?php echo $stdunt_id; ?>">
+            <input class="form-control" type="hidden" name="student_id[]" <?php if($teacher_id_SESS != $teacher_id && (!empty($teacher_id))){ echo"disabled"; }?>  value="<?php echo $stdunt_id; ?>">
 
 <?php } ?>
 <input class="form-control" type="hidden" name="class_id" value="<?php echo $class; ?>">
@@ -151,7 +151,7 @@ $i=0;
 	</table>
 	<div id="data"></div>
 	<div class="col-md-offset-5 col-md-6" style="padding-top:10px;">
-	<button <?php if(in_array($teacher_id_SESS,$TeacherArray)){ echo 'type="submit" ';}else { echo 'type="button"';}?> name="submit_marks" class="btn btn-primary">Submit</button>
+	<button <?php if(!empty($teacher_id) && in_array($teacher_id_SESS,$TeacherArray)){ echo 'type="submit" ';}else { echo 'type="button"';}?> name="submit_marks" class="btn btn-primary">Submit</button>
 </div>
 	
 </div>
