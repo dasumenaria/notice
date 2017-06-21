@@ -1,109 +1,83 @@
 <?php
- include("index_layout.php");
- include("database.php");
- require_once 'dompdf/autoload.inc.php';
-	use Dompdf\Dompdf;
- $user=$_SESSION['category'];
- $session_id=$_SESSION['id'];
-?>
-<?php
+include("index_layout.php");
+include("database.php");
+require_once 'dompdf/autoload.inc.php';
+use Dompdf\Dompdf; 
+$session_id=@$_SESSION['id'];
+ 
 $message="";
 $category_id=6;
 
-if(isset($_POST['submit'])){
-$noticenum=$_POST['noticenum'];
-$title=$_POST['title'];
-$description=$_POST['description'];
-$dateofpublish1=$_POST['dateofpublish'];
-$dateofpublish=date('Y-m-d',strtotime($dateofpublish1));
-$curent_time=date("h:i A");
-
-
-$s=isset($_POST['shareable']);
-if(!empty($s))
+if(isset($_POST['submit']))
 {
-	$shareable=$s;
-}
-else{
-$shareable='0';
-}
-
-
-@$class_id=$_POST['class_id'];
-@$bw=$_POST['bw'];
-    if( isset( $_POST['bw'] ) ) {
-         $bw = 'YES';
-    }
-    else {
-         $bw = 'NO';
-    }
+	$noticenum=$_POST['noticenum'];
+	$notice_no=$_POST['notice_no'];
+	$title=$_POST['title'];
+	$description=$_POST['description'];
+	$dateofpublish1=$_POST['dateofpublish'];
+	$dateofpublish=date('Y-m-d',strtotime($dateofpublish1));
+	$curent_time=date("h:i A");
+	$s=isset($_POST['shareable']);
+		if(!empty($s))
+		{
+			$shareable=$s;
+		}
+		else
+		{
+			$shareable='0';
+		}
+	@$class_id=$_POST['class_id'];
+	@$bw=$_POST['bw'];
+		if( isset( $_POST['bw'] ) ) 
+		{
+			 $bw = 'YES';
+		}
+		else 
+		{
+			 $bw = 'NO';
+		}
     $bwfoo = isset( $_POST['bw'] ) ? $_POST['bw'] : 'no';
-	if($bwfoo=='no')
-	{
-		$class='';
-	}
-	else{ 
-	$class=implode(',',$class_id);
-	}
-	
-	
-	
-@$medium_id=$_POST['medium_id'];
-@$mw=$_POST['mw'];
-    if( isset( $_POST['mw'] ) ) {
-         $mw = 'YES';
-    }
-    else {
-         $mw = 'NO';
-    }
-    $bwfoo = isset( $_POST['mw'] ) ? $_POST['mw'] : 'no';
-	if($bwfoo=='no')
-	{
-		$medium='';
-	}
-	else{ 
-	$medium=implode(',',$medium_id);
-	}
-	
-
-$noticedetail=$_POST['editor1']; 
-$na='notice';
-$noticename=$noticenum;
-$nc='.pdf';
-$x_notice_name=$na.$noticename.$nc;
-$approval=0;
-	// instantiate and use the dompdf class
+		if($bwfoo=='no')
+		{
+			$class='';
+		}
+		else
+		{ 
+			$class=implode(',',$class_id);
+		}
+	 
+     
+	$noticedetail=$_POST['editor1']; 
+	$na='notice';
+	$noticename=$noticenum;
+	$nc='.pdf';
+	$x_notice_name=$na.$noticename.$nc;
+	$approval=0;
 	$dompdf = new dompdf();
 	$dompdf->loadHtml($noticedetail);
-	// (Optional) Setup the paper size and orientation
 	$dompdf->setPaper('A4', 'potrait');
-	// Render the HTML as PDF
 	$dompdf->render();
-	// Output the generated PDF to Browser
-	//$dompdf->stream("sample");
 	$output = $dompdf->output();
     file_put_contents('notice/notice'.$noticenum.'.pdf', $output); //dynamically change the file name
 	
-$sql="INSERT INTO `notice`(`role_id`,`notice_no`, `title`, `description`, `time`, `dateofpublish`, `class_id`, `medium_id`,`user_id`,`noticedetails`,`file_name`,`shareable`,`category_id`) VALUES ('".$user."','".$noticenum."','".$title."','".$description."','".$curent_time."','".$dateofpublish."','".$class."', '".$medium."', ".$session_id.",'".$noticedetail."','".$x_notice_name."','".$shareable."','".$category_id."')";
-$res=mysql_query($sql) or die(mysql_error());
-$e_id=mysql_insert_id();
+	$sql="INSERT INTO `notice`(`role_id`,`notice_no`, `title`, `description`, `time`, `dateofpublish`, `class_id`,`user_id`,`noticedetails`,`file_name`,`shareable`,`category_id`) VALUES ('".$user."','".$notice_no."','".$title."','".$description."','".$curent_time."','".$dateofpublish."','".$class."', ".$session_id.",'".$noticedetail."','".$x_notice_name."','".$shareable."','".$category_id."')";
+	$res=mysql_query($sql);
+	$e_id=mysql_insert_id();
 
 	$file_upload='noimage.png';
 	$photo1="notice".$e_id.".jpg";
-	
 	if(move_uploaded_file($_FILES["image"]["tmp_name"],"notice/notice_image/".$photo1))
 	{
-	$r=mysql_query("update notice set image='$photo1' where id='$e_id'");
+		$r=mysql_query("update notice set image='$photo1' where id='$e_id'");
 	}
-	else{
-	$r=mysql_query("update notice set image='$file_upload' where id='$e_id'");
+	else
+	{
+		$r=mysql_query("update notice set image='$file_upload' where id='$e_id'");
 	}
 	
-	echo "<meta http-equiv='refresh' content='0;url=create_notice_re.php'/>";
+	echo "<meta http-equiv='refresh' content='0;url=create_notice.php'/>";
 }
-else{
-	echo mysql_error();
-}
+
 ?>
 <html>
 <head>
@@ -141,10 +115,12 @@ else{
 						$last_id=mysql_query("select count(id) as id from `notice`") ;
 						$r=mysql_fetch_array($last_id);
 						$ticket_num=$r['id'];
+						$naxtyear=date("Y");
+						$naxtyear=$naxtyear+1;
                            ?>
 						   <input type="hidden" value="<?php echo $ticket_num+1;?>" name="noticenum">
-						   <div class="col-md-3"">
-						   <input class="form-control input-md" type="text" value="<?php echo 'CBA/2017-2018/A/';?><?php echo $ticket_num+1;?>" readonly/></b>
+						   <div class="col-md-3">
+						   <input class="form-control input-md" type="text" name="notice_no" value="<?php echo 'CBA/'.date("Y").'-'.$naxtyear.'/A/';?><?php echo $ticket_num+1;?>" readonly/></b>
 						   </div>
                            <?php //} ?>
 						   </div>
@@ -164,7 +140,7 @@ else{
 										<label class="col-md-3 control-label">Date of Publish</label>
 										
 										<div class="col-md-3">
-											<input class="form-control form-control-inline input-md date-picker" required  value="<?php echo date("d-m-Y"); ?>" placeholder="dd/mm/yyyy" type="text" data-date-format="dd-mm-yyyy" type="text" name="dateofpublish">
+											<input class="form-control form-control-inline input-md date-picker" required  value="<?php echo date("d-m-Y"); ?>" placeholder="dd/mm/yyyy" type="text" data-date-format="dd-mm-yyyy"  name="dateofpublish">
 											
 										</div>
 									</div>
@@ -219,7 +195,7 @@ else{
 											<div class="form-group">
 											<div class="col-md-3">
 									<label class="checkbox line">
-			  <input type="checkbox" value="" id="bw" name="bw" value="NO" onChange="myfunction()"/> Class Wise
+			  <input type="checkbox" id="bw" name="bw" value="NO" onChange="myfunction()"/> Class Wise
 			  </label>
 			<div class="control-group" id="branchselect" style="display:none;">
 				<div class="controls">
@@ -240,26 +216,7 @@ else{
 				</div>
 			</div></br>
 						
-									<label class="checkbox line">
-			  <input type="checkbox" value="" id="mw" name="mw" value="NO" onChange="myfunction()"/> Medium Wise
-			  </label>
-			<div class="control-group" id="mediumselect" style="display:none;">
-				<div class="controls">
-				<?php 
-				$sql="select distinct(medium_name),id from master_medium";
-				$res=mysql_query($sql) or die(mysql_error());
-				$count=0;
-				while($result=mysql_fetch_array($res)) { $count++; 				
-				if($count==7){ $count=1;?><?php } 
-                       	?>
-				<td class="checkbox">
-				<label><input type="checkbox" value="<?php echo $result['id']; ?>" id="<?php echo $result['medium_name']; ?>" name="medium_id[]" /><?php echo $result['medium_name']; ?></label>
-				</td>
-				<?php
-				}
-				?>
-				</div>
-			</div></br>
+				 
 			
 			
 			</div></div></div>

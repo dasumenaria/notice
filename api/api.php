@@ -440,31 +440,7 @@ public function user_forgot_password()
 				} 	
 		}
 		////
-		public function change_forgot_password() 
-	{
-		if ($this->get_request_method() != "POST") {
-            $this->response('', 406);
-        }
-		$otp=$this->_request['otp'];
-		$password=$this->_request['password'];
-		$mobile_no=$this->_request['mobile_no'];
-			$check_mobile = $this->db->prepare("SELECT * FROM login WHERE mobile_no='".$mobile_no."' AND otp='".$otp."'");
-			$check_mobile->execute();
-			if ($check_mobile->rowCount() > 0) {
-			$fetch_s_logins = $check_mobile->fetch(PDO::FETCH_ASSOC);
-			  $s_id=$fetch_s_logins['id'];
-			$s_newpassword=md5($password);
-			 $sql_s=$this->db->prepare("UPDATE `login` SET password='".$s_newpassword."', otp=0 WHERE id='".$s_id."'");
-             
-			 $sql_s->execute();
-			$success = array('Type' => "Successfully", "Error" => "Password change successfully.", 'Responce' => '1');
-				$this->response($this->json($success), 200);
-			}
-			else{
-				$error = array('Type' => "Error", "Error" => "Please Check Your Otp.", 'Responce' => '1');
-				$this->response($this->json($error), 200);				
-				} 			
-		}
+		
 //////////////////////////
 public function notification_home() {
     include_once("common/global.inc.php");
@@ -706,17 +682,7 @@ $user_id=$this->_request['user_id'];
 			$event_fet = $event_sql->fetchALL(PDO::FETCH_ASSOC);
 			foreach($event_fet as $row_event)
             {
-/*$exist_sql = $this->db->prepare("SELECT * FROM add_to_calendar where user_id='".$user_id."' AND event_id='".$row_event['id']."'");
-				$exist_sql->execute();
-				$exist_sql1 = $exist_sql->fetch(PDO::FETCH_ASSOC);
-
-				if($exist_sql->rowCount()>0)
-				{
-					$event_exist=true;
-				}
-				else{
-					$event_exist=false;
-				}..............*/
+ 
 
 $event_sql_id = $this->db->prepare("SELECT * FROM gallery where event_news_id='".$row_event['id']."' AND category_id='4'");
 $event_sql_id->execute();
@@ -4315,7 +4281,7 @@ $string_insert[$x]['time']=$time;
 													$note_sql = $this->db->prepare("insert into `student_marks` set `student_id` = '$StudentID' , `class_id` = '$class_id' , `section_id` = '$section_id' , `subject_id` = '$subject_id' , `max_marks` = '$max_marks' , `obtained_marks` = '$Marks' , `teacher_id` = '$teacher_id' , `exam_type_id` = '$exam_term_id' , `test_date` = '$test_date'");
 													$note_sql->execute();			
 												}
-												
+											//	$Rarray=array('class_id' => $class_id , 'section_id' => $section_id , 'subject_id' => $subject_id , 'max_marks' => $max_marks , 'teacher_id' =>$teacher_id , 'term_name' => $term_name , 'test_date' => $test_date, 'student_id' => $student_id , 'marks' => $marks);
 												$success = array('status'=> true, "Error" => "Data Successfully Submitted",'responce' => '');
 												$this->response($this->json($success), 200);   	
 											}
@@ -4330,7 +4296,6 @@ $string_insert[$x]['time']=$time;
 											$success = array('status'=> false, "Error" => "Test date not found",'responce' =>'');
 											$this->response($this->json($success), 200); 
 										}
-			
 									}
 									else
 									{
@@ -4424,8 +4389,12 @@ $string_insert[$x]['time']=$time;
 											{ 
 												$StudentID=$student_id[$i];
 												$Marks=$marks[$i];
+												if($Marks == '-'){}
+												else
+												{
 							 					$note_sql = $this->db->prepare("update `student_marks` set  `test_date` = '$test_date' , `obtained_marks` = '$Marks'    WHERE  `student_id` = '$StudentID' && `class_id` = '$class_id' && `section_id` = '$section_id' && `subject_id` = '$subject_id' && `teacher_id` = '$teacher_id' && `exam_type_id` = '$exam_type_id'");
-												$note_sql->execute();			
+												$note_sql->execute();	
+												}
 											}
 											
 											$success = array('status'=> true, "Error" => "Data Successfully Update",'responce' => '');
@@ -4546,7 +4515,7 @@ $string_insert[$x]['time']=$time;
 			$this->response($this->json($success), 200); 
 		}
 	}
-	
+
 	public function ClassTestTeacherFetch() 
 	{
 		include_once("common/global.inc.php");
@@ -4567,6 +4536,7 @@ $string_insert[$x]['time']=$time;
 			 $x=0;
 			 foreach($row_gp as $key=>$valye)	
 			 {
+				
 				$subject_id=$valye['subject_id'];
 					$sql_stds = $this->db->prepare("SELECT `subject_name` FROM master_subject WHERE id='".$subject_id."'");
 					$sql_stds->execute();
@@ -4597,19 +4567,34 @@ $string_insert[$x]['time']=$time;
 				if($test_date=='0000-00-00' || $test_date=='1970-01-01'){$test_date='';}
 				else {$test_date=date('d-m-Y',strtotime($test_date));}
 
- 				$string_insert[$key]=$row_gp[$key]; 
+ 				//$string_insert[$key]=$row_gp[$key]; 
 				$string_insert[$x]['student_name']=$name;
 				$string_insert[$x]['marks']=$obtained_marks.'/'.$max_marks;
 				$string_insert[$x]['max_marks']=$max_marks;
 				$string_insert[$x]['obtained_marks']=$obtained_marks;
-				$string_insert[$x]['subject_name']=$subject_name;
 				$string_insert[$x]['student_id']=$student_id;
-				$string_insert[$x]['exam_type']=$exam_type;
-				$string_insert[$x]['teacher_name']=$Tname;
- 				$string_insert[$x]['test_date']=$test_date; 
+				
+				$class_id=$valye['class_id'];
+				$section_id=$valye['section_id'];
+				$FirstArray['class_id']=$class_id;
+				$FirstArray['section_id']=$section_id;
+				
+				$FirstArray['subject_id']=$subject_id;
+				$FirstArray['subject_name']=$subject_name;
+				
+				$FirstArray['exam_type_id']=$exam_type_id;
+				$FirstArray['exam_type']=$exam_type;
+				
+				$FirstArray['teacher_id']=$teacher_id;
+				$FirstArray['Tname']=$Tname;
+				
+ 				$FirstArray['test_date']=$test_date; 
+				
 			 $x++;
 			 }
-			$result = array("classtest"=> $string_insert);
+			 $FirstArray['data']=$string_insert; 
+ 			 
+			$result = array("classtest"=> $FirstArray);
 			$success = array('status'=> true, "Error" => "",'responce' => $result);
 			$this->response($this->json($success), 200);   	
 		}
@@ -4619,6 +4604,179 @@ $string_insert[$x]['time']=$time;
 			$this->response($this->json($success), 200); 
 		}
 	}
+
+	public function ClassWiseSubjectList()
+	{
+		if ($this->get_request_method() != "POST") {
+			$this->response('', 406);
+		}
+		$class_id = $this->_request['class_id'];
+		$section_id = $this->_request['section_id'];
+			
+		$class_sql = $this->db->prepare("SELECT * FROM master_class where `id` = $class_id");
+		$class_sql->execute();
+		$class_sqls = $class_sql->fetchALL(PDO::FETCH_ASSOC);
+		$class_name=$class_sqls[0]['class_name'];
+		
+		$sql_std1 = $this->db->prepare("SELECT `section_name` FROM master_section WHERE id='".$section_id."'");
+		$sql_std1->execute();
+		$std1 = $sql_std1->fetch(PDO::FETCH_ASSOC);
+		$section_name=$std1['section_name'];
+		 
+		//---- SUBJECT MAPPING
+				$subMap = $this->db->prepare("SELECT * FROM subject_mapping where class_id='".$class_id."' AND section_id='".$section_id."'");
+				$subMap->execute();
+				$DataSubMap = $subMap->fetchALL(PDO::FETCH_ASSOC);
+				$subject_map=array();
+				 foreach($DataSubMap as $data)
+				 {
+					$subject_ids=$data['subject_id'];
+					$exploadeSub=explode(',',$subject_ids);
+					$x=0;
+					foreach($exploadeSub as $onebyone)
+					{
+						$onebyone;
+						$subMap1 = $this->db->prepare("SELECT * FROM master_subject where id='".$onebyone."'");
+						$subMap1->execute();
+						$DataSubMap1 = $subMap1->fetchALL(PDO::FETCH_ASSOC);
+						$sub_name=$DataSubMap1[0]['subject_name'];
+						$subject_map[$x]['subject_id']=$onebyone;
+						$subject_map[$x]['subject_name']=$sub_name;
+						$x++;
+					}
+				 }
+				//-----END	
+				$result[] = array('class_id' => $class_id,
+					'class_name' => $class_name,
+					'section_id' => $section_id,
+					'section_name' => $section_name,
+					'assign_subject' => $subject_map);
+					unset($section);
+	 
+			$success = array('status'=> true, "Error" => "",'class_section_roles' => $result);
+			$this->response($this->json($success), 200);
+		
+	}
+	public function ForgotPassword() 
+	{
+			global $link;
+			include_once("common/global.inc.php");
+			if ($this->get_request_method() != "POST") {
+				$this->response('', 406);
+			}
+			 
+				@$mobile_no = $this->_request['mobile_no'];
+				@$login_identity = $this->_request['login_identity'];
+				if($login_identity=='student')
+				{
+					@$scholer_no = $this->_request['scholer_no'];
+					$sql = $this->db->prepare("SELECT `name` FROM login WHERE mobile_no LIKE '%".$mobile_no."%' AND eno='".$scholer_no."'");
+					$sql->execute();
+					if ($sql->rowCount()>0) 
+					{ 
+						$row_gp1 = $sql->fetch(PDO::FETCH_ASSOC);
+						$name=$row_gp1['name'];
+	
+						$random=(string)mt_rand(1000,9999);
+						$time=date('h:i:s a', time());
+						$date=date("d-m-Y");
+						$sms1=str_replace(' ', '+', 'Dear '.$name.', Your one time password is '.$random.'.');
+		
+						$working_key='A7a76ea72525fc05bbe9963267b48dd96';
+						$sms_sender='FLEXIL';
+						file_get_contents('http://alerts.sinfini.com/api/web2sms.php?workingkey='.$working_key.'&sender='.$sms_sender.'&to='.$mobile_no.'&message='.$sms1.'');
+					 
+						$result=array('OTP' => $random,'mobile_no' => $mobile_no,'scholer_no' => $scholer_no);
+						$error = array('status' => true, "Error" => "Instructions for accessing your account have been sent to ".$mobile_no."", 'Responce' => $result);
+						$this->response($this->json($error), 400);
+					
+					}
+					else
+					{
+						$error = array('status' => false, "Error" => "Sorry, the mobile no you provide is not registered.", 'Responce' => '');
+						$this->response($this->json($error), 400);
+					}
+				}
+				else if($login_identity=='faculty')
+				{
+					$sql = $this->db->prepare("SELECT `user_name` FROM faculty_login WHERE mobile_no LIKE '%".$mobile_no."%' ");
+					$sql->execute();
+					if ($sql->rowCount()>0) 
+					{ 
+						$row_gp1 = $sql->fetch(PDO::FETCH_ASSOC);
+						$name=$row_gp1['user_name'];
+	
+						$random=(string)mt_rand(1000,9999);
+						$time=date('h:i:s a', time());
+						$date=date("d-m-Y");
+						$sms1=str_replace(' ', '+', 'Dear '.$name.', Your one time password is '.$random.'.');
+		
+						$working_key='A7a76ea72525fc05bbe9963267b48dd96';
+						$sms_sender='FLEXIL';
+						file_get_contents('http://alerts.sinfini.com/api/web2sms.php?workingkey='.$working_key.'&sender='.$sms_sender.'&to='.$mobile_no.'&message='.$sms1.'');
+					 
+						$result=array('OTP' => $random,'mobile_no' => $mobile_no);
+						$error = array('status' => true, "Error" => "Instructions for accessing your account have been sent to ".$mobile_no."", 'Responce' => $result);
+						$this->response($this->json($error), 400);
+					
+					}
+					else
+					{
+						$error = array('status' => false, "Error" => "Sorry, the mobile no you provide is not registered.", 'Responce' => '');
+						$this->response($this->json($error), 400);
+					}
+				}
+		}
+	
+	public function ChangePassword() 
+	{
+		if ($this->get_request_method() != "POST") {
+            $this->response('', 406);
+        }
+		$password=$this->_request['password'];
+		$id=$this->_request['id'];
+		$check_mobile = $this->db->prepare("SELECT * FROM login WHERE id='".$id."'");
+		$check_mobile->execute();
+		if($check_mobile->rowCount() > 0) 
+		{
+			$fetch_s_logins = $check_mobile->fetch(PDO::FETCH_ASSOC);
+			$s_id=$fetch_s_logins['id'];
+			$s_newpassword=md5($password);
+			$sql_s=$this->db->prepare("UPDATE `login` SET password='".$s_newpassword."' WHERE id='".$s_id."'");
+			
+			$sql_s->execute();
+			$success = array('status' => true, "Error" => "Password change successfully.", 'Responce' => '');
+			$this->response($this->json($success), 200);
+		}
+		else
+		{
+			$error = array('Type' => "Error", "Error" => "You are not registerd.", 'Responce' => '1');
+			$this->response($this->json($error), 400);				
+		} 			
+	}
+	
+	
+	public function CurrentApiVersion() 
+	{
+		include_once("common/global.inc.php");
+		global $link;
+		@$current_version = $this->_request['current_version'];
+		$sql1 = $this->db->prepare("SELECT * FROM api_versions WHERE id=1");
+		$sql1->execute();
+		$version = $sql1->fetch(PDO::FETCH_ASSOC);
+		$curent_version1=$version['version'];   
+		if($curent_version1==$current_version) 
+		{     
+			$success = array('status' => true, "msg" => 'yes');
+			$this->response($this->json($success), 200);
+		} 
+		else 
+		{
+			$error = array('status' => false, "Error" => "Sorry, Please update new version of App.");
+			$this->response($this->json($error), 200);
+		}
+	}
+
 	
 	///////////////////////////////////////		
     /*

@@ -3,25 +3,25 @@ session_start();
 include("database.php");
   $view_u=$_GET['view_u'];
   ?>
-	<div>	<table class="table table-bordered table-hover" id="sample_1">
+	<div>	<table class="table table-bordered table-hover">
  
 								<thead>
-								<tr style="background-color:#FFFFFF; color:#1A0DB3;background:#f9f9f9;">
-									<td>
+								<tr>
+									<th>
 										 #
-									</td>
-									<td>
+									</th>
+									<th>
 										User Name
-									</td>
-									<td>
+									</th>
+									<th>
 										Mobile No
-									</td>
-										<td>
+									</th>
+										<th>
 										Role
-									</td>
-									<td>
+									</th>
+									<th>
                                         Action
-									</td>
+									</th>
 								</tr>
 								</thead>
 							 <?php
@@ -55,11 +55,11 @@ include("database.php");
 									<?php echo $role_name;?>
 									</td>
 									<td>
-                                        <a class="btn btn-circle btn-xs" style="color:#03F; background-color:#EEEEEE" href="users_edit.php?id=<?php echo $id;?>" style="color: white">
+                                        <a class="btn btn-circle btn-xs" style="color:#FFF; background-color:#FFB848" href="users_edit.php?id=<?php echo $id;?>">
 										<i class="fa fa-edit"></i></a>
                                         &nbsp;				
                                        
-									      <a class="btn btn-circle btn-xs" style="color:#ED1C24; background-color:#EEEEEE"
+<a class="btn btn-circle btn-xs" style="color:#FFF; background-color:#F03"
   rel="tooltip" title="Delete"  data-toggle="modal" href="#delete<?php echo $id ;?>"><i class="fa fa-trash"></i></a>
             <div class="modal fade" id="delete<?php echo $id ;?>" tabindex="-1" aria-hidden="true" style="padding-top:35px">
                 <div class="modal-dialog modal-md">

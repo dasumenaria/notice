@@ -5,9 +5,9 @@
 
 		if(isset($_POST['sub_del']))
 		{
-		$delet_model=$_POST['delet_model'];
-		$r=mysql_query("update `event` SET `flag`='1' where id='$delet_model'" );
-		$sql=mysql_query($r);
+			$delet_model=$_POST['delet_model'];
+			$r=mysql_query("update `event` SET `flag`='1' where id='$delet_model'" );
+			$sql=mysql_query($r);
 		}
   ?> 
 <html>
@@ -63,14 +63,14 @@
 <script src="assets/global/plugins/jquery.min.js" type="text/javascript"></script>
 <script>
 $(document).ready(function(){    
-        $("#view_u").die().live("change",function(){
-	    var view_u=$("#view_u").val();
-	  	$.ajax({
-			url: "ajax_view_events.php?view_u="+view_u,
-			}).done(function(response) {
-		   $("#data").html(""+response+"");
-			});
-});
+	$("#view_u").die().live("change",function(){
+			var view_u=$("#view_u").val();
+			$.ajax({
+				url: "ajax_view_events.php?view_u="+view_u,
+				}).done(function(response) {
+			   $("#data").html(""+response+"");
+				});
+	});
 });
 </script>
 <?php scripts();?>

@@ -6,17 +6,23 @@ $id1=$_GET['id'];
    <div class="portlet box #d6e9c6 " style="width:70%;margin-left:15%;" >
 						<div class="portlet-title" >
 							<div class="caption">
-							<!--	<i class="fa fa-gift"></i>--> Users Rights
+							<!--	<i class="fa fa-gift"></i>--> Add Rights
 							</div>
 							
 						</div>
 						<div class="portlet-body" >
 							
 								 <div class="table-scrollable">
-								 
-								  <tr><td colspan="3">
-								    <label><input type="checkbox" class="chk_boxes" label="check all"  />&nbsp; &nbsp; Check all</label>
-								</td></tr>
+								 <table class="table  table-advance table-hover" >
+								
+                                
+                                    <tr>
+                                      <th>
+                                        <label><input type="checkbox" class="chk_boxes checker" label="check all"  />&nbsp; Check all</label>
+                                      </th>
+                                      <th>Sub Menu</th>
+                                      <th>Main Menu</th>
+                                    </tr>
 								 
                                  <?php
                                 $r1=mysql_query("select * from modules order by id Asc  ");		
@@ -30,14 +36,13 @@ $id1=$_GET['id'];
                                 $main_menu=$row1['main_menu'];
                                 ?>
 
-								<table class="table  table-advance table-hover" >
 								
-                                <tbody>
                                     <tr>
 									<td width="5%;">
-                                    <div class="input-group">
-                                    <span class="input-group-addon" style=""><input type="checkbox" class="chk_boxes1" name="module_id[]" value="<?php echo $id?>"> </span>
-                                    </div>
+                                    	<div class="checkbox-list">
+											<label>
+											<input type="checkbox" class="chk_boxes1" name="module_id[]"  value="<?php echo $id?>"></label>
+										</div>
 									</td>
                                     
 									<td  width="20%;" style="background-color:;">
@@ -49,7 +54,7 @@ $id1=$_GET['id'];
 								</tr>
                                 <?php } ?>
                                 <tr >
-                                <td colspan="3" align="right">
+                                <td colspan="3" align="center">
                                 <button type="submit" class="btn green" name="submit">Submit</button>
 								</td>
                                 </tr>

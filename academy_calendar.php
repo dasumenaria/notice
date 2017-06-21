@@ -2,28 +2,24 @@
  include("index_layout.php");
  include("database.php");
  @session_start();
- $user=$_SESSION['category'];
- $user_id=$_SESSION['id'];
+ $user_id=@$_SESSION['id'];
 
-	$message=""; 
+$message=""; 
 if(isset($_POST['submit']))
 {
-$type=mysql_real_escape_string($_REQUEST["category_id"]);
-$name=mysql_real_escape_string($_REQUEST["name"]);
-$date1=mysql_real_escape_string($_REQUEST["date"]);
-$date=date('Y-m-d',strtotime($date1));
-$d = date_parse_from_format("Y-m-d", $date);
-$curent_date=date('Y-m-d');
-$x_d=$d["month"];
-$sql="insert into acedmic_calendar(category_id,description,date,tag,curent_date,user_id)values('$type','$name','$date','$x_d','$curent_date','$user_id')";
-$r=mysql_query($sql);
-$message="Calendar Add Successfully ";
+	$type=mysql_real_escape_string($_REQUEST["category_id"]);
+	$name=mysql_real_escape_string($_REQUEST["name"]);
+	$date1=mysql_real_escape_string($_REQUEST["date"]);
+	$date=date('Y-m-d',strtotime($date1));
+	$d = date_parse_from_format("Y-m-d", $date);
+	$curent_date=date('Y-m-d');
+	$x_d=$d["month"];
+	$sql="insert into acedmic_calendar(category_id,description,date,tag,curent_date,user_id)values('$type','$name','$date','$x_d','$curent_date','$user_id')";
+	$r=mysql_query($sql);
+	$message="Calendar Add Successfully ";
+	header("Location:create_news.php");  
 }
-	else
-	{
-		echo mysql_error();
-	}
-	
+ 	
 ?> 
 <html>
 <head>
@@ -84,7 +80,7 @@ $message="Calendar Add Successfully ";
 										</div>
 									</div>
 								</div>
-								<div class=" right1" align="right" style="margin-right:10px">
+								<div class=" right1" align="center" style="margin-right:10px">
 									<button type="submit" class="btn green" name="submit">Submit</button>
 								</div>
 							</form>

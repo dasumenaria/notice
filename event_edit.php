@@ -65,14 +65,10 @@ if(!empty($file_name))
 				$item_image=$k_image;
 				}
 $r=mysql_query("update `event` SET `title`='$title',`description`='$description',`date_from`='$event_date',`date_to`='$event_date_to',`time`='$event_time',`location`='$location',`curent_date`='$curent_date',`lattitude`='$lat',`longitude`='$long',`shareable`='$shareable',`role_id`='$role_id',`category_id`='$category_id',`user_id`='$user_id',`image`='$item_image' where id='".$get_id."'" );
-$message = "Event Update Successfully.";
-//header("Location:event_multiple_upload.php?event_id=".$ids."&title=".$title."");        
+	$message = "Event Update Successfully.";
+	header("Location:event_edit.php?id=".$get_id."");        
 }
-	else
-	{
-		echo mysql_error();
-	}
-  ?> 
+?> 
 <html>
 <head>
 <?php css();?>

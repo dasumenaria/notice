@@ -24,16 +24,16 @@ include("database.php");
 							<table class="table table-bordered table-hover" id="sample_1">
  
 								<thead>
-								<tr style="background-color:#FFFFFF; color:#1A0DB3;background:#f9f9f9;">
-									<td>
+								<tr>
+									<th>
 										 #
-									</td>
-									<td>
+									</th>
+									<th>
 										Image
-									</td>
-									<td>
+									</th>
+									<th>
                                         Action
-									</td>
+									</th>
 								</tr>
 								</thead>
 							 <?php
@@ -59,7 +59,7 @@ include("database.php");
 									<image src="<?php echo $exact_folderName;?>/<?php echo $gallery_pic;?>" style="width:50px;height:50px;">
 									</td>
 									<td>   
-									      <a class="btn btn-circle btn-xs" style="color:#ED1C24; background-color:#EEEEEE"
+									      <a class="btn btn-circle btn-xs" style="color:#FFF; background-color:#C30"
   rel="tooltip" title="Delete"  data-toggle="modal" href="#delete<?php echo $id ;?>"><i class="fa fa-trash"></i></a>
             <div class="modal fade" id="delete<?php echo $id ;?>" tabindex="-1" aria-hidden="true" style="padding-top:35px">
                 <div class="modal-dialog modal-md">

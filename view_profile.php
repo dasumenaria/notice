@@ -49,7 +49,7 @@
 							
 							<div class="col-md-6 col-sm-12">
 							<div class="dataTables_length" id="sample_1_length"><label>Student Name</label>
-							<select name="sample_1_length" aria-controls="sample_1" class="form-control input-inline input-medium users select2me">
+							<select name="sample_1_length" id="users" class="form-control input-inline input-medium users select2me">
                                 <option value="300">Select</option>
                                 <?php
 			  $r1=mysql_query("select * from login where flag='0'");
@@ -99,9 +99,10 @@ $(document).ready(function(){
 
 <script>
 $(document).ready(function(){    
-        $(".users").die().live("change",function(){
+        $("#users").die().live("change",function(){
 			
-	    var stdn_name=$(".users").val();
+	    var stdn_name=$("#users").val();
+		 
 	  	$.ajax({
 			url: "studentwise_reg.php?std_name="+stdn_name,
 			}).done(function(response) {

@@ -1,8 +1,8 @@
 <?php
  include("index_layout.php");
  include("database.php");
- $user=$_SESSION['category'];
- $user_id=$_SESSION['id'];
+ $user=@$_SESSION['category'];
+ $user_id=@$_SESSION['id'];
 
  if(isset($_POST['sub_del']))
 {
@@ -13,23 +13,18 @@
 $message=""; 
 if(isset($_POST['sub_edit']))
 {
-$type=mysql_real_escape_string($_REQUEST["category_id"]);
-$name=mysql_real_escape_string($_REQUEST["name"]);
-$edit=mysql_real_escape_string($_REQUEST["edit_id"]);
-$date1=mysql_real_escape_string($_REQUEST["date"]);
-$date=date('Y-m-d',strtotime($date1));
-$d = date_parse_from_format("Y-m-d", $date);
-$curent_date=date('Y-m-d');
-$x_d=$d["month"];
-$r=mysql_query("update `acedmic_calendar` SET `category_id`='$type',`description`='$name',`date`='$date',`user_id`='$user_id',`tag`='$x_d' where id='$edit'" );
-$message="Calendar Update Successfully ";
+	$type=mysql_real_escape_string($_REQUEST["category_id"]);
+	$name=mysql_real_escape_string($_REQUEST["name"]);
+	$edit=mysql_real_escape_string($_REQUEST["edit_id"]);
+	$date1=mysql_real_escape_string($_REQUEST["date"]);
+	$date=date('Y-m-d',strtotime($date1));
+	$d = date_parse_from_format("Y-m-d", $date);
+	$curent_date=date('Y-m-d');
+	$x_d=$d["month"];
+	$r=mysql_query("update `acedmic_calendar` SET `category_id`='$type',`description`='$name',`date`='$date',`user_id`='$user_id',`tag`='$x_d' where id='$edit'" );
+	$message="Calendar Update Successfully ";
 }
-else
-{
-  
-	echo mysql_error();
-}	
-  ?> 
+   ?> 
 <html>
 <head>
 <?php css();?>

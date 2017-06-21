@@ -1,51 +1,51 @@
 <?php
  include("index_layout.php");
  include("database.php");
- $session_id=$_SESSION['id']; 
+ $session_id=@$_SESSION['id']; 
+$message='';
 if(isset($_POST['submit']))
 {
-$category_id=5;
-$news_title=mysql_real_escape_string($_REQUEST["news_title"]);
-$news_details=mysql_real_escape_string($_REQUEST["news_details"]);
-$role_id=mysql_real_escape_string($_REQUEST["role_id"]);
-$news_date1=mysql_real_escape_string($_REQUEST["news_date"]);
-$news_date=date('Y-m-d',strtotime($news_date1));
-$curent_date=date("Y-m-d");
-@$file_name=$_FILES["image"]["name"];
-
-
-$sql="insert into news(user_id,title,description,date,user_id,category_id,curent_date,role_id)values('$session_id','$news_title','$news_details','$news_date','$user_id','$category_id','$curent_date','$role_id')";
-$r=mysql_query($sql);
+	$category_id=5;
+	$news_title=mysql_real_escape_string($_REQUEST["news_title"]);
+	$news_details=mysql_real_escape_string($_REQUEST["news_details"]);
+	$role_id=mysql_real_escape_string($_REQUEST["role_id"]);
+	$news_date1=mysql_real_escape_string($_REQUEST["news_date"]);
+	$news_date=date('Y-m-d',strtotime($news_date1));
+	$curent_date=date("Y-m-d");
+	@$file_name=$_FILES["image"]["name"];
+	
+	
+	$sql="insert into news(user_id,title,description,date,category_id,curent_date,role_id)values('$session_id','$news_title','$news_details','$news_date','$category_id','$curent_date','$role_id')";
+	$r=mysql_query($sql);
 	$file_upload='noimage.png';
 	$newsid=mysql_insert_id();
-
-$n_name='news';
-$folderName2=$n_name.$newsid;
-$directoryPath = "news/".$folderName2;
-mkdir($directoryPath, 0644);
-
-if(!empty($file_name))
-				{
-				@$file_name=$_FILES["image"]["name"];
-				$file_tmp_name=$_FILES['image']['tmp_name'];
-			    $target ="news/".$folderName2."/";
-				$file_name=strtotime(date('d-m-Y h:i:s'));
-				$filedata=explode('/', $_FILES["image"]["type"]);
-				$filedata[1];
-				$random=rand(100, 10000);
-			     $target=$target.basename($random.$file_name.'.'.$filedata[1]);
-				 move_uploaded_file($file_tmp_name,$target);
-				 $item_image=$random.$file_name.'.'.$filedata[1];
-				}
-				else{
-				$item_image='no_image.png';
-				}
-$xsql=mysql_query("update `news` SET `featured_image`='$item_image' where id='".$newsid."'" );
-$xsqlr=mysql_query($xsql);    
-$message = "News Add Successfully.";
-
+	$n_name='news';
+	$folderName2=$n_name.$newsid;
+	$directoryPath = "news/".$folderName2;
+	mkdir($directoryPath, 0777);
+		if(!empty($file_name))
+		{
+			@$file_name=$_FILES["image"]["name"];
+			$file_tmp_name=$_FILES['image']['tmp_name'];
+			$target ="news/".$folderName2."/";
+			$file_name=strtotime(date('d-m-Y h:i:s'));
+			$filedata=explode('/', $_FILES["image"]["type"]);
+			$filedata[1];
+			$random=rand(100, 10000);
+			$target=$target.basename($random.$file_name.'.'.$filedata[1]);
+			move_uploaded_file($file_tmp_name,$target);
+			$item_image=$random.$file_name.'.'.$filedata[1];
+		}
+		else
+		{
+			$item_image='no_image.png';
+		}
+		$xsql=mysql_query("update `news` SET `featured_image`='$item_image' where id='".$newsid."'" );
+		$xsqlr=mysql_query($xsql);    
+		$message = "News Add Successfully.";
+		
+		header("Location:create_news.php");  
    }
-	 
   ?> 
 <html>
 <head>
@@ -65,11 +65,8 @@ $message = "News Add Successfully.";
 								<i class="fa fa-gift"></i> News
 							</div>
 							<div class="tools">
-							<a class="" href="view_news.php" style="color: white"><i class="fa fa-search">News View List</i></a>
-								<!--<a href="" class="collapse" data-original-title="" title="">
-								</a>-->
-								
-							</div>
+								<a class="" href="view_news.php" style="color: white"><i class="fa fa-search"> News View List </i></a>
+ 							</div>
 						</div>
 						<div class="portlet-body form">
 						<?php if($message!="") { ?>
@@ -145,7 +142,7 @@ $message = "News Add Successfully.";
 												</div>
 									
 								</div>
-								<div class=" right1" align="right" style="margin-right:10px">
+								<div class=" right1" align="center" style="margin-right:10px">
 									<button type="submit" class="btn green" name="submit">Submit</button>
 								</div>
 							</form>

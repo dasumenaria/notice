@@ -7,22 +7,22 @@ $user_id=$_SESSION['id'];
 	<div>	<table class="table table-bordered table-hover" id="sample_1">
  
 								<thead>
-								<tr style="background-color:#FFFFFF; color:#1A0DB3;background:#f9f9f9;">
-									<td>
+								<tr>
+									<th>
 										 #
-									</td>
-								<td>
+									</th>
+								<th>
 										 Description
-									</td>
-									<td>
+									</th>
+									<th>
                                       Calendar Date
-									</td>
-                                    <td>
+									</th>
+                                    <th>
                                         Edit
-									</td>
-									 <td>
+									</th>
+									 <th>
                                         Remove
-									</td>
+									</th>
 								</tr>
 								</thead>
 							  <?php
@@ -52,7 +52,7 @@ $user_id=$_SESSION['id'];
 										 <?php echo $date;?>
 									</td>
 									<td>
-                                                <a class="btn btn-circle btn-xs" style="color:#03F; background-color:#EEEEEE" rel="tooltip" title="Edit" data-toggle="modal" href="#edit<?php echo $id;?>"><i class="fa fa-edit"></i></a>
+                                                <a class="btn btn-circle btn-xs" style="color:#FFF; background-color:#FFB848" rel="tooltip" title="Edit" data-toggle="modal" href="#edit<?php echo $id;?>"><i class="fa fa-edit"></i></a>
 							
 				<div class="modal fade" id="edit<?php echo $id ;?>" tabindex="-1" aria-hidden="true" style="padding-top:35px">
                 <div class="modal-dialog modal-md">
@@ -89,7 +89,7 @@ $user_id=$_SESSION['id'];
                                     <div class="form-group">
 										<label class="col-md-3 control-label">Calendar Date</label>
 										<div class="col-md-3">
-										<input class="form-control form-control-inline input-medium date-picker" required id="field_5" value="<?php echo $date; ?>" placeholder="dd/mm/yyyy" type="text" data-date-format="dd-mm-yyyy" type="text" name="date">
+										<input class="form-control form-control-inline input-medium date-picker" required id="field_5" value="<?php echo $date; ?>" placeholder="dd/mm/yyyy" data-date-format="dd-mm-yyyy" type="text" name="date">
 
 										</div>
 									</div>
@@ -110,7 +110,7 @@ $user_id=$_SESSION['id'];
 												
                   
                                      <td>
-									      <a class="btn btn-circle btn-xs" style="color:#ED1C24; background-color:#EEEEEE"
+									      <a class="btn btn-circle btn-xs" style="color:#FFF; background-color:#C00"
   rel="tooltip" title="Delete"  data-toggle="modal" href="#delete<?php echo $id ;?>"><i class="fa fa-trash"></i></a>
             <div class="modal fade" id="delete<?php echo $id ;?>" tabindex="-1" aria-hidden="true" style="padding-top:35px">
                 <div class="modal-dialog modal-md">

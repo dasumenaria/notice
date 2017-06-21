@@ -36,36 +36,34 @@
 							<div class="table-toolbar">
 								<div class="row">
 								 
-									<!--<div class="col-md-4">
-										<div class="btn-group">
-				<label >Search By Category</label>
-					<select  class="form-control select select2 select2me" id="category"  placeholder="Select Category">
-					<option value="" style="display:none;"></option>
-					<?php $result = mysql_query("SELECT * FROM category");
-							while($row=mysql_fetch_array($result)){ 
-							$category_id = $row['category_id'];
-							$category = $row['category'];
-							?>
-							<option value="<?php echo $category_id; ?>"><?php echo $category; ?></option>	
-							<?php } ?>	
-					</select>
-
-
-										</div>
-									</div>-->
+									 
 									<div class="col-md-12" >
                                         
+                      				<div class="form-group">
+										<label class="control-label col-md-3">Search By Date</label>
+										<div class="col-md-4">
+											<div class="input-group input-large date-picker input-daterange" data-date-format="mm/dd/yyyy">
+												<input type="text" class="form-control" placeholder="From Date" name="from" id="from">
+												<span class="input-group-addon">
+												to </span>
+												<input type="text" class="form-control"  placeholder="To Date" name="to" id="to">
+											</div>
+											 
+										</div>
+									</div>
+
+                      
+                      
+                      
                                         
 					<div class="form-group">
                     <label class="col-md-2">&nbsp;</label>
 					<label class="col-md-2">Search By Date</label>
 					<div class="col-md-2">
 					<input type="text" class="form-control form-control-inline input-medium date-picker" placeholder="From Date"data-date-format="dd-mm-yyyy" id="from">
-                    </div>
-					 <div class="col-md-1">
+                    
                     <label>To</label>
-                    </div>
-                    <div class="col-md-2">
+                     
 					<input type="text" class="form-control form-control-inline input-medium date-picker" placeholder="To Date" data-date-format="dd-mm-yyyy" id="to">
                     </div>
                     <div class="col-md-1">

@@ -6,124 +6,114 @@ $user=$_SESSION['category'];
 $user_id=$_SESSION['id'];
 $message="";
 $eventid=0;
-if(isset($_POST['submit']))
-{
-$category_id=4;	
-$title=mysql_real_escape_string($_REQUEST["title"]);
-$description=mysql_real_escape_string($_REQUEST["description"]);
-$location=mysql_real_escape_string($_REQUEST["location"]);
-$role_id=mysql_real_escape_string($_REQUEST["role_id"]);
-$address=$location;
-$formattedAddr = str_replace(' ','+',$address);
-$geocodeFromAddr = file_get_contents('http://maps.googleapis.com/maps/api/geocode/json?address='.$formattedAddr.'&sensor=false'); 
-$output = json_decode($geocodeFromAddr);
-$address_lat=$data['latitude']  = $output->results[0]->geometry->location->lat;
-$address_long=$data['longitude'] = $output->results[0]->geometry->location->lng;
-if(!empty($address_lat) && !empty($address_lat) )
-{
- $lat=$address_lat;
- $long=$address_long;
-}
-else{
-$lat='';
- $long='';
-}
-$s=isset($_POST['shareable']);
-if(!empty($s))
-{
-	$shareable=$s;
-}
-else{
-$shareable='0';
-}
-
-
-$event_date1=mysql_real_escape_string($_REQUEST["date_from"]);
-$event_date_to1=mysql_real_escape_string($_REQUEST["date_to"]);
-$event_time=mysql_real_escape_string($_REQUEST["time"]);
-$curent_date=date("Y-m-d");
-$event_date=date('Y-m-d',strtotime($event_date1));
-$event_date_to=date('Y-m-d',strtotime($event_date_to1));
-@$file_name=$_FILES["image"]["name"];
-$sql="insert into event(title,description,date_from,date_to,time,location,curent_date,lattitude,longitude,shareable,role_id,category_id,user_id)values('$title','$description','$event_date','$event_date_to','$event_time','$location','$curent_date','$lat','$long','$shareable','$role_id','$category_id','$user_id')";
-$r=mysql_query($sql);
-$eventid=mysql_insert_id();
-
-
-$n_name='event';
-$folderName2=$n_name.$eventid;
-$directoryPath = "event/".$folderName2;
-mkdir($directoryPath, 0644);
-
-if(!empty($file_name))
-				{
-				@$file_name=$_FILES["image"]["name"];
-				$file_tmp_name=$_FILES['image']['tmp_name'];
-			    $target ="event/".$folderName2."/";
-				$file_name=strtotime(date('d-m-Y h:i:s'));
-				$filedata=explode('/', $_FILES["image"]["type"]);
-				$filedata[1];
-				$random=rand(100, 10000);
-			     $target=$target.basename($random.$file_name.'.'.$filedata[1]);
-				 move_uploaded_file($file_tmp_name,$target);
-				 $item_image=$random.$file_name.'.'.$filedata[1];
-				}
-				else{
-				$item_image='no_image.png';
-				}
-$xsql=mysql_query("update `event` SET `image`='$item_image' where id='".$eventid."'" );
-$xsqlr=mysql_query($xsql);
-
-$x_time=$_REQUEST["x_time"];
-$x_date=$_REQUEST["date"];
-$x_name=$_REQUEST["name"];
-$k=sizeof($x_name);
-$ff=$x_name[0];
-
-if($k>0 && !empty($ff))
-{
-
-$x_t=0;
-$x_d=0;
-$x_n=0;
-for($j=0; $j<$k; $j++)
-{
-$x_t=$x_time[$j];
-$x_d=$x_date[$j];
-$dt=date('Y-m-d',strtotime($x_d));
-$x_n=$x_name[$j];
-$xsql="insert into event_details(time,date,name,event_id)values('$x_t','$dt','$x_n','$eventid')";
-$xr=mysql_query($xsql);
-
-$d = date_parse_from_format("Y-m-d", $dt);
-$ex_d=$d["month"];
-$asql="insert into acedmic_calendar(category_id,description,date,tag,curent_date,user_id)values('$category_id','$x_n','$dt','$ex_d','$curent_date','$user_id')";
-$ar=mysql_query($asql);
-}	
-}
-else
-{
-
-$xsql="insert into event_details(time,date,name,event_id)values('$event_time','$event_date','$title','$eventid')";
-$xr=mysql_query($xsql);
-
-
-$d = date_parse_from_format("Y-m-d", $event_date);
-$ex_d=$d["month"];
-$asql="insert into acedmic_calendar(category_id,description,date,tag,curent_date,user_id)values('$category_id','$description','$event_date','$ex_d','$curent_date','$user_id')";
-$ar=mysql_query($asql);	
-	
-}
-
-	
-$message = "Event Add Successfully.";
-//header("Location:event_multiple_upload.php?event_id=".$ids."&title=".$title."");        
-}
-	else
+	if(isset($_POST['submit']))
 	{
-		echo mysql_error();
+		$category_id=4;	
+		$title=mysql_real_escape_string($_REQUEST["title"]);
+		$description=mysql_real_escape_string($_REQUEST["description"]);
+		$location=mysql_real_escape_string($_REQUEST["location"]);
+		$role_id=mysql_real_escape_string($_REQUEST["role_id"]);
+		$address=$location;
+		$formattedAddr = str_replace(' ','+',$address);
+		$geocodeFromAddr = file_get_contents('http://maps.googleapis.com/maps/api/geocode/json?address='.$formattedAddr.'&sensor=false'); 
+		$output = json_decode($geocodeFromAddr);
+		$address_lat=$data['latitude']  = $output->results[0]->geometry->location->lat;
+		$address_long=$data['longitude'] = $output->results[0]->geometry->location->lng;
+			if(!empty($address_lat) && !empty($address_lat) )
+			{
+				 $lat=$address_lat;
+				 $long=$address_long;
+			}
+			else
+			{
+				$lat='';
+				$long='';
+			}
+			$s=isset($_POST['shareable']);
+			if(!empty($s))
+			{
+				$shareable=$s;
+			}
+			else
+			{
+				$shareable='0';
+			}
+		$event_date1=mysql_real_escape_string($_REQUEST["date_from"]);
+		$event_date_to1=mysql_real_escape_string($_REQUEST["date_to"]);
+		$event_time=mysql_real_escape_string($_REQUEST["time"]);
+		$curent_date=date("Y-m-d");
+		$event_date=date('Y-m-d',strtotime($event_date1));
+		$event_date_to=date('Y-m-d',strtotime($event_date_to1));
+		@$file_name=$_FILES["image"]["name"];
+		
+		$sql="insert into event(title,description,date_from,date_to,time,location,curent_date,lattitude,longitude,shareable,role_id,category_id,user_id)values('$title','$description','$event_date','$event_date_to','$event_time','$location','$curent_date','$lat','$long','$shareable','$role_id','$category_id','$user_id')";
+		$r=mysql_query($sql);
+		$eventid=mysql_insert_id();
+		
+		$n_name='event';
+		$folderName2=$n_name.$eventid;
+		$directoryPath = "event/".$folderName2;
+		mkdir($directoryPath, 0777);
+		if(!empty($file_name))
+		{
+			@$file_name=$_FILES["image"]["name"];
+			$file_tmp_name=$_FILES['image']['tmp_name'];
+			$target ="event/".$folderName2."/";
+			$file_name=strtotime(date('d-m-Y h:i:s'));
+			$filedata=explode('/', $_FILES["image"]["type"]);
+			$filedata[1];
+			$random=rand(100, 10000);
+			$target=$target.basename($random.$file_name.'.'.$filedata[1]);
+			move_uploaded_file($file_tmp_name,$target);
+			$item_image=$random.$file_name.'.'.$filedata[1];
+		}
+		else
+		{
+			$item_image='no_image.png';
+		}
+		
+		$xsql=mysql_query("update `event` SET `image`='$item_image' where id='".$eventid."'" );
+		$xsqlr=mysql_query($xsql);
+		$x_time=$_REQUEST["x_time"];
+		$x_date=$_REQUEST["date"];
+		$x_name=$_REQUEST["name"];
+		$k=sizeof($x_name);
+		$ff=$x_name[0];
+		
+		if($k>0 && !empty($ff))
+		{
+			$x_t=0;
+			$x_d=0;
+			$x_n=0;
+			for($j=0; $j<$k; $j++)
+			{
+				$x_t=$x_time[$j];
+				$x_d=$x_date[$j];
+				$dt=date('Y-m-d',strtotime($x_d));
+				$x_n=$x_name[$j];
+				$xsql="insert into event_details(time,date,name,event_id)values('$x_t','$dt','$x_n','$eventid')";
+				$xr=mysql_query($xsql);
+				
+				$d = date_parse_from_format("Y-m-d", $dt);
+				$ex_d=$d["month"];
+				$asql="insert into acedmic_calendar(category_id,description,date,tag,curent_date,user_id)values('$category_id','$x_n','$dt','$ex_d','$curent_date','$user_id')";
+				$ar=mysql_query($asql);
+			}	
+		}
+		else
+		{
+		
+			$xsql="insert into event_details(time,date,name,event_id)values('$event_time','$event_date','$title','$eventid')";
+			$xr=mysql_query($xsql);
+			$d = date_parse_from_format("Y-m-d", $event_date);
+			$ex_d=$d["month"];
+			$asql="insert into acedmic_calendar(category_id,description,date,tag,curent_date,user_id)values('$category_id','$description','$event_date','$ex_d','$curent_date','$user_id')";
+			$ar=mysql_query($asql);	
+		}		
+		$message = "Event Add Successfully.";
+		header("Location:create_event.php");        
 	}
-  ?> 
+?> 
 <html>
 <head>
 <?php css();?>
@@ -216,7 +206,7 @@ $message = "Event Add Successfully.";
 										<label class="col-md-2 control-label"> Time</label>
 										<div class="col-md-3">
 											<div class="input-group">
-												<input class="form-control timepicker timepicker-no-seconds input-medium"  type="text" name="time">
+												<input class="form-control timepicker input-medium"  type="text" name="time">
 												<!--<span class="input-group-btn">
 												<button class="btn default" type="button"><i class="fa fa-clock-o"></i></button>
 												</span>-->
@@ -293,7 +283,7 @@ $message = "Event Add Successfully.";
 <input class="form-control timepicker timepicker-no-seconds input-medium"  type="text" name="x_time[]">
 </td>
 <td>
-<button type="button" onclick="add_row()" class="btn default blue-stripe btn-xs"><i class="fa fa-plus"></i></button>
+<button type="button" onClick="add_row()" class="btn default blue-stripe btn-xs"><i class="fa fa-plus"></i></button>
 </td>
 </tr>
 </tbody>
@@ -365,7 +355,7 @@ $(document).ready(function(){
 		var myVar=setInterval(function(){myTimerr()},4000);
 		function myTimerr() 
 		{
-		$("#success").hide();
+			$("#success").hide();
 		} 
 		
 		
@@ -375,11 +365,9 @@ $(document).ready(function(){
     function add_row(){  
         var new_line=$("#sample tbody").html();
             $("#parant_table tbody").append(new_line);
-			$('#parant_table select').select2();
-			$('#parant_table checked').checked();
-			$('#parant_table timepicker-no-seconds').timepicker();
-			$('#parant_table date-picker').datepicker();
-    }
+			$('.timepicker').timepicker();
+			$('.date-picker').datepicker();
+     }
 </script>
 
 

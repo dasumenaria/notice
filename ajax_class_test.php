@@ -20,15 +20,14 @@ include("database.php");
 					 							while($fetch2=mysql_fetch_array($query2))
 												{
 													$i++;
-													 
 													$section_id=$fetch2['section_id'];
 													
-												$qt=mysql_query("select * from `master_section` where `id`='$section_id'");
-												$ft=mysql_fetch_array($qt);
-
-												$section_id=$ft['id'];
-												$section_name=$ft['section_name'];	
-												
+													$qt=mysql_query("select * from `master_section` where `id`='$section_id'");
+													$ft=mysql_fetch_array($qt);
+	
+													$section_id=$ft['id'];
+													$section_name=$ft['section_name'];	
+													
 												?>
 												<option value="<?php echo $section_id; ?>"><?php echo $section_name; ?></option>
 											<?php } ?>

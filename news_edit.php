@@ -1,4 +1,4 @@
-<?php
+\<?php
  include("index_layout.php");
  include("database.php");
  $user=$_SESSION['category'];
@@ -11,45 +11,42 @@
  
 if(isset($_POST['update_submit']))
 {
-$category_id=5;
-$news_title=mysql_real_escape_string($_REQUEST["news_title"]);
-$news_details=mysql_real_escape_string($_REQUEST["news_details"]);
-$role_id=mysql_real_escape_string($_REQUEST["role_id"]);
-$news_date1=mysql_real_escape_string($_REQUEST["news_date"]);
- @$k_image=$_REQUEST["k_image"];
-$news_date=date('Y-m-d',strtotime($news_date1));
-$curent_date=date("Y-m-d");
-@$file_name=$_FILES["image"]["name"];
-
-$n_name='news';
-$folderName2=$n_name.$get_id;
-if(!empty($file_name))
-				{
-				@$file_name=$_FILES["image"]["name"];
-				$file_tmp_name=$_FILES['image']['tmp_name'];
-			    $target ="news/".$folderName2."/";
-				$file_name=strtotime(date('d-m-Y h:i:s'));
-				$filedata=explode('/', $_FILES["image"]["type"]);
-				$filedata[1];
-				$random=rand(100, 10000);
-			     $target=$target.basename($random.$file_name.'.'.$filedata[1]);
-				 move_uploaded_file($file_tmp_name,$target);
-				$item_image=$random.$file_name.'.'.$filedata[1];
-				
-				}
-				else{
-				$item_image=$k_image;
-				}
-				
-				
-$r=mysql_query("update `news` SET `title`='$news_title',`description`='$news_details',`date`='$news_date',`user_id`='$user_id',`category_id`='$category_id',`role_id`='$role_id',`featured_image`='$item_image' where id='".$get_id."'" );
-
-$message = "News Update Successfully.";
+	$category_id=5;
+	$news_title=mysql_real_escape_string($_REQUEST["news_title"]);
+	$news_details=mysql_real_escape_string($_REQUEST["news_details"]);
+	$role_id=mysql_real_escape_string($_REQUEST["role_id"]);
+	$news_date1=mysql_real_escape_string($_REQUEST["news_date"]);
+	 @$k_image=$_REQUEST["k_image"];
+	$news_date=date('Y-m-d',strtotime($news_date1));
+	$curent_date=date("Y-m-d");
+	@$file_name=$_FILES["image"]["name"];
+	
+	$n_name='news';
+	$folderName2=$n_name.$get_id;
+	if(!empty($file_name))
+					{
+					@$file_name=$_FILES["image"]["name"];
+					$file_tmp_name=$_FILES['image']['tmp_name'];
+					$target ="news/".$folderName2."/";
+					$file_name=strtotime(date('d-m-Y h:i:s'));
+					$filedata=explode('/', $_FILES["image"]["type"]);
+					$filedata[1];
+					$random=rand(100, 10000);
+					 $target=$target.basename($random.$file_name.'.'.$filedata[1]);
+					 move_uploaded_file($file_tmp_name,$target);
+					$item_image=$random.$file_name.'.'.$filedata[1];
+					
+					}
+					else{
+					$item_image=$k_image;
+					}
+					
+					
+	$r=mysql_query("update `news` SET `title`='$news_title',`description`='$news_details',`date`='$news_date',`user_id`='$user_id',`category_id`='$category_id',`role_id`='$role_id',`featured_image`='$item_image' where id='".$get_id."'" );
+	
+	$message = "News Update Successfully.";
    }
-	else
-	{
-		echo mysql_error();
-	}
+	 
   ?> 
 <html>
 <head>
@@ -69,7 +66,7 @@ $message = "News Update Successfully.";
 								<i class="fa fa-gift"></i> Update News
 							</div>
 							<div class="tools">
-							<a class="" href="view_news.php" style="color: white"><i class="fa fa-search">News View List</i></a>
+							<a class="" href="view_news.php" style="color: white"><i class="fa fa-search"> News View List</i></a>
 								<!--<a href="" class="collapse" data-original-title="" title="">
 								</a>-->
 								
@@ -167,13 +164,8 @@ $message = "News Update Successfully.";
                                                 </div>
 												</div>
 									
-									
-									
-									
-									
-									
 								</div>
-								<div class=" right1" align="right" style="margin-right:10px">
+								<div class=" right1" align="center" style="margin-right:10px">
 									<button type="submit" class="btn green" name="update_submit">Submit</button>
 								</div>
 							</form>
@@ -186,7 +178,7 @@ $message = "News Update Successfully.";
 var myVar=setInterval(function(){myTimerr()},4000);
 		function myTimerr() 
 		{
-		$("#success").hide();
+			$("#success").hide();
 		} 
 </script>
 

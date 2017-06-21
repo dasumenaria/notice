@@ -1,4 +1,4 @@
-<?php
+ <?php
  include("index_layout.php");
  include("database.php");
  $user=$_SESSION['category'];
@@ -31,8 +31,9 @@ $curent_date=date("Y-m-d");
 			{
 				@$file_name=$_FILES["file"]["name"];
 				$filedata=explode('/', $_FILES["file"]["type"]);
-				$filedata[1];
-				if($filedata[1]=='pdf')
+				  $filedata[1];
+				 
+				if($filedata[1]=='pdf' || $filedata[1]=='PDF' )
 				{
 				$sql="insert into syllabus(class_id,section_id,subject_id,date,user_id,curent_date)values('$class_id','$sect_id','$subject_id','$date1','$user_id','$curent_date')";
 				$r=mysql_query($sql);
@@ -85,8 +86,9 @@ $curent_date=date("Y-m-d");
 			{
 				@$file_name=$_FILES["file"]["name"];
 				$filedata=explode('/', $_FILES["file"]["type"]);
-				$filedata[1];
-				if($filedata[1]=='pdf')
+				  $filedata[1];
+			 
+				if($filedata[1]=='pdf' || $filedata[1]=='PDF')
 				{
 				$sql="insert into syllabus(class_id,section_id,subject_id,date,user_id,curent_date)values('$class_id','$section_id','$subject_id','$date1','$user_id','$curent_date')";
 				$r=mysql_query($sql);
@@ -139,7 +141,7 @@ $curent_date=date("Y-m-d");
 <head>
 <?php css();?>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Syllabus</title>
+<title>Syallbus</title>
 </head>
 <?php contant_start(); menu();  ?>
 <body>
@@ -150,16 +152,15 @@ $curent_date=date("Y-m-d");
 			<div class="portlet box">
 						<div class="portlet-title">
 							<div class="caption">
-								<i class="fa fa-gift"></i> Syllabus
+								<i class="fa fa-gift"></i>Syallbus
 							</div>
 							<div class="tools">
-							<a class="" href="view_syllabus.php" style="color: white"><i class="fa fa-search">Syllabus View List</i></a>
-								<!--<a href="" class="collapse" data-original-title="" title="">
-								</a>-->
+							 
+								
 							</div>
 						</div>
 						<div class="portlet-body form">
-						<?php if($message!="") { ?>
+<?php if($message!="") { ?>
                        <!-- <input id="alert_message" type="text" class="form-control" value="some alert text goes here..." placeholder="enter a text ...">-->
 <div class="message" id="success" style="color:#44B6AE; text-align:center"><label class="control-label"><?php echo $message; ?></label></div>
 <?php } ?>
@@ -170,12 +171,10 @@ $curent_date=date("Y-m-d");
 <?php if($message2!="") { ?>
                        <!-- <input id="alert_message" type="text" class="form-control" value="some alert text goes here..." placeholder="enter a text ...">-->
 <div class="message" id="success" style="color:#44B6AE; text-align:center"><label class="control-label"><?php echo $message2; ?></label></div>
-<?php } ?>
-							<form class="form-horizontal" role="form" id="noticeform" method="post" enctype="multipart/form-data">
-								<div class="form-body">
-								
-									
-									<div class="form-group">
+<?php } ?>						 
+<form  class="form-horizontal" id="form_sample_2"  role="form" method="post"> 
+					<div class="form-body">
+					<div class="form-group">
 										<label class="col-md-3 control-label">Date</label>
 										
 										<div class="col-md-3">
@@ -187,7 +186,7 @@ $curent_date=date("Y-m-d");
                                                    <div class="form-group">
                                                     <label class="control-label col-md-3">Class</label>
 													<div class="col-md-3">
-                                                   <select class="form-control select select2 select2me" placeholder="Select class.." name="class_id"><option value=""></option>
+                                                   <select class="form-control select select2 select2me user" placeholder="Select class.." name="class_id"><option value=""></option>
                                                    <?php
                                             $r1=mysql_query("select * from master_class");		
                                             $i=0;
@@ -201,28 +200,18 @@ $curent_date=date("Y-m-d");
                                             </select>
 											</div>
                                                     </div>
-                                                    
-                                                   
-                                                 
-                                                    <div class="form-group">
+						 
+											<div id="dt">
+													<div class="form-group">
                                                     <label class="control-label col-md-3">Section</label>
 													<div class="col-md-3">
-                                                   <select class="form-control select select2 select2me" placeholder="Select section.." name="section_id">
+                                                   <select class="form-control select select2 select2me" placeholder="Select section.." name=" ">
                                                         <option value=""></option>
-                                                        <?php
-                                            $r1=mysql_query("select * from master_section");		
-                                            $i=0;
-                                            while($row1=mysql_fetch_array($r1))
-                                            {
-                                            $id=$row1['id'];
-                                            $section_name=$row1['section_name'];
-                                            ?>
-                                            <option value="<?php echo $id;?>"><?php echo $section_name;?></option>
-                                            <?php } ?>
+                                                         
                                                         </select>
                                                     </div></div>
-													
-													<div class="form-group">
+											</div>
+											<div class="form-group">
                                                     <label class="control-label col-md-3">Subject</label>
 													<div class="col-md-3">
                                                    <select class="form-control select select2 select2me" placeholder="Select subject.." name="subject_id">
@@ -261,39 +250,47 @@ $curent_date=date("Y-m-d");
                                                     <i class="fa fa-trash"></i> </a></div>
                                                 </div>
 									</div>
-													
-													
-								</div>
-								<div class=" right1" align="right" style="margin-right:10px">
-									<button type="submit" class="btn green" name="submit">Submit</button>
-								</div>
-							</form>
+					 
+					 
+					 </div>
+					
+					 	 
+					</div>
+					 <div class=" right1" align="right" style="margin-right:10px">
+						<button type="submit" class="btn green" name="submit">Submit</button>
+					</div>
+				</form>
 						</div>
 					</div>
 			</div></div>
 </body>
-<?php  footer(); ?>			
-<?php scripts();?>
+<?php footer(); ?>
+<script src="assets/global/plugins/jquery.min.js" type="text/javascript"></script>
+
 <script>
-<?php if($insert_id > 0){ ?>
-var update_id = <?php echo $insert_id; ?>;
- 		$.ajax({
-			url: "notification_page.php?function_name=create_syllabus_notifys&id="+update_id,
-			type: "POST",
-			success: function(data)
-			{   
- 			}
-		});
-<?php } ?>
-var myVar=setInterval(function(){myTimerr()},4000);
-		function myTimerr() 
-		{
-			$("#success").hide();
-		} 
-</script>
+ 
+	$(document).ready(function() 
+	{
+		//alert();
+		$(".user").live("change",function()
+		{			
+			
+			var s=$(this).val();
+			$.ajax({
+			url: "ajax_syllabus.php?pon="+s,
+			}).done(function(response) {
+				//alert(response);  
+			$("#dt").html(""+response+"");
+			$('.select2me').select2();
+			});
+		});	  
+
+	});
+	</script>
 
 
-
+<?php scripts();?>
 
 </html>
+ 
 

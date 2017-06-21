@@ -27,9 +27,8 @@
 								<i class="fa fa-gift"></i> View Gallery
 							</div>
 						<div class="tools">
-						<a class="" href="gallery.php" style="color: white"><i class="fa fa-plus">Add Images into gallery </i></a>
-						<!--		<a href="" class="collapse" data-original-title="" title="">
-								</a>-->
+						<a class="" href="gallery.php" style="color: white"><i class="fa fa-plus"> Add Images into gallery </i></a>
+						 
 								
 							</div>
                             

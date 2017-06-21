@@ -7,23 +7,22 @@ $view_u=$_GET['view_u'];
 	<table class="table table-bordered table-hover" id="sample_1">
  
 								<thead>
-								<tr style="background-color:#FFFFFF; color:#1A0DB3;background:#f9f9f9;">
-									<td>
-										 #
-									</td>
-									<td>
+								<tr>
+									<th> #
+									</th>
+									<th>
 										Title
-									</td>
-									<td>
+									</th>
+									<th>
 										 Description
-									</td>
+									</th>
 									
-                                    <td>
+                                    <th>
                                         Date
-									</td>
-									<td>
+									</th>
+									<th>
                                         Action
-									</td>
+									</th>
 								</tr>
 								</thead>
 							  <?php
@@ -61,12 +60,12 @@ $view_u=$_GET['view_u'];
 										 <?php echo $news_date;?>
 									</td>
 									<td>
-                                       <a class="btn btn-circle btn-xs" style="color:#03F; background-color:#EEEEEE" href="news_edit.php?id=<?php echo $id;?>" style="color: white">
+                                       <a class="btn btn-circle btn-xs" style="color:#FFF; background-color:#09F" href="news_edit.php?id=<?php echo $id;?>">
 										<i class="fa fa-edit"></i></a>
                                         &nbsp;				
                                         &nbsp;
                                        
-									     <a class="btn btn-circle btn-xs" style="color:#ED1C24; background-color:#EEEEEE"
+									     <a class="btn btn-circle btn-xs" style="color:#FFF; background-color:#F00"
   rel="tooltip" title="Delete"  data-toggle="modal" href="#delete<?php echo $id ;?>"><i class="fa fa-trash"></i></a>
             <div class="modal fade" id="delete<?php echo $id ;?>" tabindex="-1" aria-hidden="true" style="padding-top:35px">
                 <div class="modal-dialog modal-md">

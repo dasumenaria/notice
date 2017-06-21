@@ -206,7 +206,7 @@ $date=date('Y-m-d');
                                     </div>
 								
 													
-								<div class=" right1" align="right" style="margin-right:50px">
+								<div class=" right1" align="center" style="margin-right:50px">
 									<button type="submit" class="btn blue" name="update_submit">Update</button>
 								</div>
 							</form>
