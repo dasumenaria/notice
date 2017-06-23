@@ -1,7 +1,7 @@
 <?php
  include("index_layout.php");
  include("database.php");
-  $role_id = $_SESSION['category']; 
+ $role_id = $_SESSION['category']; 
  $login_id=$_SESSION['id']; 
  $update_id=0;
 
@@ -11,7 +11,8 @@
 	{
 		$message=$_POST['message'];
 		$sms_to_role=$_POST['sms_to_role'];
-  		mysql_query("insert into `director_principle_message` set `message`='$message' , `sms_receive_role`='$sms_to_role' , `sms_sender_role`='$role_id' , `login_id`='$login_id'");
+		$sms_from_role=$_POST['sms_from_role'];
+  		mysql_query("insert into `director_principle_message` set `message`='$message' , `sms_receive_role`='$sms_to_role' , `sms_sender_role`='$sms_from_role' , `login_id`='$login_id'");
 		$update_id=mysql_insert_id();
   		$message='SMS send successfully';
 		
@@ -32,7 +33,7 @@ span {
 <body>
 	<div class="page-content-wrapper">
 		 <div class="page-content">
-			<div class="portlet box">
+			<div class="portlet box blue">
 						<div class="portlet-title">
 							<div class="caption">
 								<i class="fa fa-gift"></i> Director Principle Message
@@ -50,7 +51,26 @@ span {
                                    </div>
                                     <?php } ?> 
                                <form class="form-horizontal" role="form" id="noticeform" method="post" enctype="multipart/form-data">
-                               
+                               		
+                                    <div class="form-group">
+										<label class="col-md-3 control-label">Message From</label>
+										<div class="col-md-6">
+                                            <select name="sms_from_role" class="form-control select2me " placeholder="Select..." id="role_id">
+                                                <option value=""></option>
+                                                    <?php
+                                                    $r1=mysql_query("select * from master_role where id=2 OR id=3");		
+                                                    $i=0;
+                                                    while($row1=mysql_fetch_array($r1))
+                                                    {
+                                                        $role_id=$row1['role_id'];
+                                                        $role_name=$row1['role_name'];
+                                                        ?>
+                                                        <option value="<?php echo $role_id;?>"><?php echo $role_name;?></option>                              
+                                                    <?php 
+                                                    }?> 
+                                            </select>
+										</div>
+                                    </div>
                                		<div class="form-group">
 										<label class="col-md-3 control-label">Message To</label>
 										<div class="col-md-6">
@@ -97,7 +117,7 @@ span {
 			url: "notification_page.php?function_name=principle_director_message&id="+update_id,
 			type: "POST",
 			success: function(data)
-			{   alert(data);
+			{   
  			}
 		});
 	 

@@ -115,10 +115,14 @@ $('.AddNew').click(function(){
    var row = $(this).closest('tr').clone();
    row.find('input').val('');
    $(this).closest('tr').after(row);
+   
+   $('.date-picker').datepicker();
+   $('.timepicker').timepicker();
+   
    $('input[type="button"]', row).removeClass('AddNew').addClass('RemoveRow').val('-');
 });
 
-$('table').on('click', '.RemoveRow', function(){
+$('table').on('click', '.RemoveRow', function(){ 
   $(this).closest('tr').remove();
 });	
 	</script>

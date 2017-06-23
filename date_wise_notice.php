@@ -10,26 +10,26 @@ include('database.php');
 							<table class="table table-bordered table-hover" id="sample_1">
  
 								<thead>
-								<tr style="background-color:#FFFFFF; color:#1A0DB3;background:#f9f9f9;">
-                            <td>
+								<tr>
+                            <th>
                                     #
 
-								</td>
-								<td>
+								</th>
+								<th>
                                     Notice Number
-								</td>
-								<td>
+								</th>
+								<th>
 									 Date
-									 </td>
-								<td>
+									 </th>
+								<th>
 									 Title	
-								</td>
-								<td>
+								</th>
+								<th>
 									Description
-								</td>
-								<td>
+								</th>
+								<th>
 									PDF
-								</td>
+								</th>
 							 </tr>
 							</thead>
                              <?php
@@ -52,7 +52,7 @@ include('database.php');
     
 								</td>
 								<td>
-									<?php echo 'MDS/2016-2017/A/'; echo $notice_no;?>
+									<?php echo $notice_no;?>
 								</td>
 								
 								<td>
@@ -66,7 +66,7 @@ include('database.php');
 								</td>
 								
 								<td>
-<a href="notice/<?php echo $notice_file; ?>"><i class="btn btn-circle btn-xs fa fa-cloud-download" style="background-color:#EEEEEE"></i></a>
+<a href="notice/<?php echo $notice_file; ?>"><i class="btn btn-circle btn-xs fa fa-cloud-download" style="background-color:#C30; color:#FFF"></i></a>
 								</td>
 							</tr>
 							</tbody>

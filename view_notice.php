@@ -22,13 +22,13 @@
 			<div class="row">
 				<div class="col-md-12">
 					<!-- BEGIN EXAMPLE TABLE PORTLET-->
-					<div class="portlet box default">
+					<div class="portlet box blue">
 						<div class="portlet-title">
 							<div class="caption">
 								<i class="fa fa-gift"></i>Notice View
 							</div>
 								<div class="tools">
-							<a class="" href="create_notice_re.php" style="color: white"><i class="fa fa-search">Create New Notice</i></a>
+							<a class="" href="create_notice.php" style="color: white"><i class="fa fa-search">Create New Notice</i></a>
 							
 							</div>
 						</div>
@@ -39,40 +39,29 @@
 									 
 									<div class="col-md-12" >
                                         
-                      				<div class="form-group">
-										<label class="control-label col-md-3">Search By Date</label>
-										<div class="col-md-4">
-											<div class="input-group input-large date-picker input-daterange" data-date-format="mm/dd/yyyy">
-												<input type="text" class="form-control" placeholder="From Date" name="from" id="from">
-												<span class="input-group-addon">
-												to </span>
-												<input type="text" class="form-control"  placeholder="To Date" name="to" id="to">
-											</div>
-											 
-										</div>
-									</div>
+                                        <div class="form-group col-md-8">
+                                            <label class="control-label col-md-3">Search By Date</label>
+                                            <div class="col-md-4">
+                                                <div class="input-group input-large date-picker input-daterange" data-date-format="mm/dd/yyyy">
+                                                    <input type="text" class="form-control" placeholder="From Date" name="from" id="from">
+                                                    <span class="input-group-addon">
+                                                    to </span>
+                                                    <input type="text" class="form-control"  placeholder="To Date" name="to" id="to">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div >
+                                         <button class="btn red" id="go">GO</button>
+                                        </div>
+                                    </div>
+                                    </div>
+                                    <br>
 
                       
                       
                       
                                         
-					<div class="form-group">
-                    <label class="col-md-2">&nbsp;</label>
-					<label class="col-md-2">Search By Date</label>
-					<div class="col-md-2">
-					<input type="text" class="form-control form-control-inline input-medium date-picker" placeholder="From Date"data-date-format="dd-mm-yyyy" id="from">
-                    
-                    <label>To</label>
-                     
-					<input type="text" class="form-control form-control-inline input-medium date-picker" placeholder="To Date" data-date-format="dd-mm-yyyy" id="to">
-                    </div>
-                    <div class="col-md-1">
-                    <label >&nbsp;</label>
-                    <button class="btn blue" id="go">GO</button>
-                    </div>
-                    </div>
-					</div>
-					</div><br>
+					 
                     
 								
 					
@@ -80,26 +69,26 @@
 							<table class="table table-bordered table-hover" id="sample_1">
  
 								<thead>
-								<tr style="background-color:#FFFFFF; color:#1A0DB3;background:#f9f9f9;">
-                            <td>
+								<tr>
+                            <th>
                                     #
 
-								</td>
-								<td>
+								</th>
+								<th>
                                     Notice Number
-								</td>
-								<td>
+								</th>
+								<th>
 									 Date
-									 </td>
-								<td>
+									 </th>
+								<th>
 									 Title	
-								</td>
-								<td>
+								</th>
+								<th>
 									Description
-								</td>
-								<td>
+								</th>
+								<th>
 									PDF
-								</td>
+								</th>
 							 </tr>
 							</thead>
                              <?php
@@ -122,7 +111,7 @@
     
 								</td>
 								<td>
-									<?php echo 'MDS/2016-2017/A/'; echo $notice_no;?>
+									<?php echo $notice_no;?>
 								</td>
 								
 								<td>
@@ -136,7 +125,7 @@
 								</td>
 								
 								<td>
-<a href="notice/<?php echo $notice_file; ?>"><i class="btn btn-circle btn-xs fa fa-cloud-download" style="background-color:#EEEEEE"></i></a>
+<a href="notice/<?php echo $notice_file; ?>"><i class="btn btn-circle btn-xs fa fa-cloud-download" style="background-color:#C33; color:#FFF" ></i></a>
 								</td>
 							</tr>
 							</tbody>
@@ -154,20 +143,7 @@
 </body>
 <script src="assets/global/plugins/jquery.min.js" type="text/javascript"></script>
 <script>
-$(document).ready(function(){
- $("#category").change(function(){
- var ids=$(this).val();
-    $.ajax({
-			url: "category_wise_notice.php?category_id="+ids,
-			}).done(function(response) {
-		   $("#viewdata").html(""+response+"");
-			});
-});
-
-});
-</script>
-
-<script>
+ 
 $(document).ready(function(){
  $("#go").click(function(){
 var from = $("#from").val();

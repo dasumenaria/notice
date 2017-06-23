@@ -93,7 +93,7 @@ if(isset($_POST['submit']))
 		 <?php if($message!="") { ?>
 <div class="message"><?php echo $message; ?></div>
 <?php } ?>
-						<div class="portlet box">
+						<div class="portlet box blue">
 						<div class="portlet-title">
 							<div class="caption">
 								<i class="fa fa-gift"></i> Notice

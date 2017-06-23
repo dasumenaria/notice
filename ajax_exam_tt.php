@@ -59,7 +59,7 @@ if((!empty($class_id)) && (!empty($sect_id))){
 	<tr>
 	<td width="150px">
 		 
-			<select class="select2me form-control" name="subject_id[]">
+			<select class="select2me form-control input-medium" name="subject_id[]">
 				<option value="">---Select Subject---</option>
 											<?php 
 												$query2=mysql_query("select * from `master_subject`"); 
@@ -79,20 +79,20 @@ if((!empty($class_id)) && (!empty($sect_id))){
 	</td>
 	 
 	<td>
-		<input type='text'class="form-control timepicker timepicker-no-seconds input-medium" name="time_from[]">
+		<input type='text'class="form-control timepicker timepicker-no-seconds input-small" name="time_from[]">
 	</td>
 	 
  	<td>
-		<input type='text' class="form-control timepicker timepicker-no-seconds input-medium" name="time_to[]">
+		<input type='text' class="form-control timepicker timepicker-no-seconds input-small" name="time_to[]">
 	</td>
 	 
 		 
 	<td>
-  	  <input class="form-control form-control-inline input-medium date-picker" size="16" type="text" name="exam_date[]" value="<?php echo date("d-m-Y"); ?>"/>
+  	  <input class="form-control form-control-inline input-small date-picker" size="16" type="text" name="exam_date[]" value="<?php echo date("d-m-Y"); ?>"/>
    </td>
     
 	<td>
-  	  <input type='text'  class="form-control" name="room_no[]">
+  	  <input type='text'  class="form-control input-small" name="room_no[]">
    </td>
 	 
 	<td>
@@ -122,6 +122,8 @@ $('.AddNew').click(function(){
    var row = $(this).closest('tr').clone();
    row.find('input').val('');
    $(this).closest('tr').after(row);
+   $('.date-picker').datepicker();
+	$('.timepicker').timepicker();
    $('input[type="button"]', row).removeClass('AddNew').addClass('RemoveRow').val('-');
 });
 

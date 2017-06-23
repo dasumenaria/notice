@@ -14,7 +14,7 @@
 <body>
 	<div class="page-content-wrapper">
 		 <div class="page-content">
-			<div class="portlet box">
+			<div class="portlet box blue">
 						<div class="portlet-title">
 							<div class="caption">
 								<i class="fa fa-gift"></i> View Syllabus

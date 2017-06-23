@@ -1,6 +1,7 @@
 <?php
-session_start();
+@session_start();
 require_once("database.php");
+require_once("auth.php");
 include("functions.php");
 
 if(isset($_SESSION["id"])) {
@@ -29,9 +30,7 @@ if(isset($_SESSION["id"])) {
  
 
 <!-- BEGIN GLOBAL MANDATORY STYLES -->
-<link href="assets/Lato2OFLWeb/Lato2OFLWeb/Lato/latofonts.css" rel="stylesheet" type="text/css"/>
-<script src="assets/global/plugins/pace/pace.min.js" type="text/javascript"></script>
-<link href="assets/global/plugins/pace/themes/pace-theme-flash.css" rel="stylesheet" type="text/css"/>
+<link href="assets/Lato2OFLWeb/Lato2OFLWeb/Lato/latofonts.css" rel="stylesheet" type="text/css"/> 
 <link href="assets/global/css/fonts/font.css" rel="stylesheet" type="text/css"/>
 <link href="assets/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
 <link href="assets/global/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css"/>
@@ -132,7 +131,7 @@ function contant_start()
 {
  ?>
 <!-- BEGIN HEADER -->
-<div class="page-header navbar navbar-fixed-top" style="border-bottom:1px solid; color:#CDCDCD">
+<div class="page-header navbar navbar-fixed-top">
 	<!-- BEGIN HEADER INNER -->
 	<div class="page-header-inner">
 		<!-- BEGIN RESPONSIVE MENU TOGGLER -->
@@ -188,13 +187,7 @@ function contant_start()
 							<i class="icon-user"></i> My Profile </a>
 						</li>
 						<li>
-						<?php
-if(isset($_SESSION["username"])) {
-?>
-<a href="logout.php" tite="Logout"><i class="icon-key"></i>  &nbsp;Logout.</i></a>
-<?php
-}
-?>
+                            <a href="logout.php" tite="Logout"><i class="icon-key"></i>  &nbsp;Logout</i></a>
 						</li>
 					</ul>
 				</li>

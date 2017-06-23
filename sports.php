@@ -62,7 +62,7 @@ if(isset($_POST['submit']))
 		 <div class="page-content">
 			
 			
-			<div class="portlet box">
+			<div class="portlet box blue">
 			
 			
 			

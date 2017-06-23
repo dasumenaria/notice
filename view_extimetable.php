@@ -20,13 +20,13 @@ if(isset($_POST['sub_del']))
 <body>
 	<div class="page-content-wrapper">
 		 <div class="page-content">
-			<div class="portlet box">
+			<div class="portlet box blue">
 						<div class="portlet-title">
 							<div class="caption">
 								<i class="fa fa-gift"></i> View Time Table
 							</div>
 						<div class="tools">
-							<a class="" href="view_extimetable.php.php" style="color:white"><i class="fa fa-plus">&nbsp;Add Time Table</i></a>
+							<a class="" href="exam_time_table.php" style="color:white"><i class="fa fa-plus">&nbsp; Add Time Table</i></a>
 							</div>
 						</div>
 						<div class="portlet-body form">

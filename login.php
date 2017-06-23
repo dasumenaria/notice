@@ -55,12 +55,12 @@ include("functions.php");
 $message="";
 	if(!empty($_POST['login']) && !empty($_POST['pass'])) {
 		
-		$result=mysql_query("select * from `faculty_login` where `username`='".$_POST['login']."' and `password`='".md5($_POST['pass'])."'");
+		$result=mysql_query("select * from `faculty_login` where `user_name`='".$_POST['login']."' and `password`='".md5($_POST['pass'])."'");
 	if(mysql_num_rows($result)>0)
 	{
 		$row= mysql_fetch_array($result);
 		$_SESSION['id']=$row['id'];
-		$_SESSION['username']=$row['username'];
+		$_SESSION['user_name']=$row['user_name'];
 		$_SESSION['category']=$row['category'];
 		$_SESSION['loggedin_time'] = time();
 		ob_start();

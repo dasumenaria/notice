@@ -33,24 +33,24 @@ if($function_for=='exam')
 	?>
 		<table class="table-condensed table-bordered" width="100%">
 		<thead>
-			<tr style="background-color:#FFFFFF; color:#1A0DB3">
-				<td>
+			<tr>
+				<th>
 					#
-				</td>
-				<td>
+				</th>
+				<th>
 					Subject
-				</td>
-                <td>Exam Date</td>
-				<td>
+				</th>
+                <th>Exam Date</th>
+				<th>
 					Time From
-				</td>
-				<td>
+				</th>
+				<th>
 					Time To 
-				</td>
-                <td>Room No.</td>
-				<td>
+				</th>
+                <th>Room No.</th>
+				<th>
 					Action
-				</td>
+				</th>
 			</tr>
 		</thead>
 		<?php

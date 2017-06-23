@@ -149,7 +149,7 @@ $curent_date=date("Y-m-d");
 		 <div class="page-content">
 			
 			
-			<div class="portlet box">
+			<div class="portlet box blue"> 
 						<div class="portlet-title">
 							<div class="caption">
 								<i class="fa fa-gift"></i>Syallbus
@@ -256,7 +256,7 @@ $curent_date=date("Y-m-d");
 					
 					 	 
 					</div>
-					 <div class=" right1" align="right" style="margin-right:10px">
+					 <div class=" right1" align="center" style="margin-right:10px">
 						<button type="submit" class="btn green" name="submit">Submit</button>
 					</div>
 				</form>
@@ -276,6 +276,7 @@ $curent_date=date("Y-m-d");
 		{			
 			
 			var s=$(this).val();
+			
 			$.ajax({
 			url: "ajax_syllabus.php?pon="+s,
 			}).done(function(response) {

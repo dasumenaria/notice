@@ -4767,7 +4767,7 @@ $string_insert[$x]['time']=$time;
 		$curent_version1=$version['version'];   
 		if($curent_version1==$current_version) 
 		{     
-			$success = array('status' => true, "msg" => 'yes');
+			$success = array('status' => true, "Error" => 'yes');
 			$this->response($this->json($success), 200);
 		} 
 		else 

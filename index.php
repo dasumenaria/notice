@@ -47,14 +47,14 @@ require_once("database.php");
 <!-- BEGIN LOGIN -->
 <div class="content" style="margin-top:50px;">
 	<!-- BEGIN LOGIN FORM -->
-	<form method="post">
+	<form method="post" class="login-form">
 	<?php 
 
 include("functions.php");
 $message="";
-	if(!empty($_POST['login']) && !empty($_POST['pass'])) {
+	if(!empty($_POST['username']) && !empty($_POST['password'])) {
 		
-		$result=mysql_query("select * from `faculty_login` where `user_name`='".$_POST['login']."' and `password`='".md5($_POST['pass'])."'");
+		$result=mysql_query("select * from `faculty_login` where `user_name`='".$_POST['username']."' and `password`='".md5($_POST['password'])."'");
 	if(mysql_num_rows($result)>0)
 	{
 		$row= mysql_fetch_array($result);
@@ -79,30 +79,38 @@ if(isset($_GET["session_expired"])) {
 ?>
 	
 	
-        <div class="col-md-12" align="center">
+        <div class=" " align="center">
             <img src="img/CBALogo.png" width="152px" height="145px"/>
         </div>
         <br>
-        <div class="col-md-12" align="center">
+        <div class=" " align="center">
 			<h4 class="form-title"> Sign into your account </h4>
         </div>
 		<br>
 		<?php if($message!="") { ?>
     		<div style="color:#F00; margin-bottom:10px;"><?php echo $message; ?></div>
     	<?php } ?>	
-		<div class="form-group">
-			<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-			<label class="control-label visible-ie8 visible-ie9">Username</label>
-			<input style="background-color:#fff; color:#000;" class="form-control form-control-solid placeholder-no-fix" type="text" autocomplete="off" placeholder="Username" name="login"/>
-		</div>
+        <div class=" ">
+            <div class="form-group">
+                <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+                <label class="control-label visible-ie8 visible-ie9">Username</label>
+                <div class="input-icon">
+                    <i class="fa fa-user"></i>
+                <input style="background-color:#fff; color:#000;" class="form-control form-control-solid placeholder-no-fix" type="text" autocomplete="off" placeholder="Username" name="username"/>
+                </div>
+            </div>
+        </div>
+         <div class="">
 		<div class="form-group">
 			<label class="control-label visible-ie8 visible-ie9">Password</label>
-			<input style="background-color:#fff; color:#000;" class="form-control form-control-solid placeholder-no-fix" type="password" autocomplete="off" placeholder="Password" name="pass"/>
+            <div class="input-icon">
+				<i class="fa fa-lock"></i>
+			<input style="background-color:#fff; color:#000;" class="form-control form-control-solid placeholder-no-fix" type="password" autocomplete="off" placeholder="Password" name="password"/>
+            </div>
 		</div>
-        
+        </div>
 		<div class="">
-		<!--<a href="registration.php" class="btn btn-default">For Registration click here!</a>-->
-			<button type="submit" name="sub_log" class="btn pull-right" style="background-color:#3C8DBC;color:#fff; align:right" >Login</button>
+			<button type="submit" name="sub_log" class="btn pull-right" style="background-color:#3C8DBC;color:#fff; align:right" >Login <i class="fa fa-sign-in"></i></button>
 		</div>
 		
 	
@@ -115,13 +123,6 @@ if(isset($_GET["session_expired"])) {
 	<!-- END REGISTRATION FORM -->
 </div>
 
-<!-- END LOGIN -->
-<!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
-<!-- BEGIN CORE PLUGINS -->
-<!--[if lt IE 9]>
-<script src="../../assets/global/plugins/respond.min.js"></script>
-<script src="../../assets/global/plugins/excanvas.min.js"></script> 
-<![endif]-->
 <script src="assets/global/plugins/jquery.min.js" type="text/javascript"></script>
 <script src="assets/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
 <script src="assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>

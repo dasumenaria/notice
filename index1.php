@@ -51,7 +51,7 @@ $em=strtoupper($emm);
 						    <div class="row" style="padding-top:10px; padding-left:5px">
 						  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 						  <div class="actions">
-								<span style="color:#000">Notify to Student that Result Declared</span>
+								<span style="color:#000"> Notify to Student that Result Declared</span>
 								<a href="javascript:;" class="btn btn-sm btn-default easy-pie-chart-reload result_ajax_class" result_id1="1">
 								Click here &nbsp;<i class="fa fa-share"></i> </a>
 								
