@@ -1,5 +1,7 @@
 <?php 
 date_default_timezone_set('asia/kolkata');
+error_reporting(0);
+date_default_timezone_set('asia/kolkata');
 ini_set('max_execution_time', 200000);
 $dbHost = 'localhost';
 $dbUser = 'root';
