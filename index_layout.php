@@ -283,7 +283,7 @@ function menu() {
                                     
                                          ?>
                                                 <li class="<?php if($page_name_from_url==$data_value['page_name_url']){ echo 'active'; } ?>">
-                                                    <a href="<?php echo $data_value['page_name_url']; ?>"> <i class="<?php echo $data_value['icon_class_name']; ?>"></i><?php echo $data_value['name']; ?></a>
+                                                    <a href="<?php echo $data_value['page_name_url']; ?>"> <?php echo $data_value['name']; ?></a>
                                                 </li>
                                                 <?php
 										}
