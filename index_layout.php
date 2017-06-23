@@ -279,13 +279,11 @@ function menu() {
 									while($data_value=mysql_fetch_array($selecto4))
 									{
 										if(in_array($data_value['id'],$mng_mdul_id))
-										{			
-                                    
-                                         ?>
-                                                <li class="<?php if($page_name_from_url==$data_value['page_name_url']){ echo 'active'; } ?>">
-                                                    <a href="<?php echo $data_value['page_name_url']; ?>"> <?php echo $data_value['name']; ?></a>
-                                                </li>
-                                                <?php
+										{?>
+                                            <li class="<?php if($page_name_from_url==$data_value['page_name_url']){ echo 'active'; } ?>">
+                                                <a href="<?php echo $data_value['page_name_url']; ?>"> <?php echo $data_value['name']; ?></a>
+                                            </li>
+                                            <?php
 										}
                                     }
                                     ?>
