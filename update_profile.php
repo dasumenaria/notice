@@ -10,14 +10,11 @@ if(isset($_POST['submit']))
 $username=mysql_real_escape_string($_REQUEST["username"]);
 $pwwd=mysql_real_escape_string($_REQUEST["password"]);
 $password=md5($pwwd);
-$r=mysql_query("update `facultylogin` SET `username`='$username',`password`='$password' where id='$session_id'" );
+$r=mysql_query("update `faculty_login` SET `username`='$username',`password`='$password' where id='$session_id'" );
 $sql=mysql_query($r);
 $message = "Password Update Successfully.!";
 }
-else
-{
-	echo mysql_error();
-}
+
 ?> 
 <html>
 <head>

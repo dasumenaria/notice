@@ -25,13 +25,14 @@ Page Header
   color: #ffffff;
 }
 .page-header.navbar .top-menu .navbar-nav > li.dropdown .dropdown-toggle:hover {
-  background-color: #FBFBFB;
+  background-color: #242527;
+  color:FFF;
 }
 .page-header.navbar .top-menu .navbar-nav > li.dropdown .dropdown-toggle:hover > i {
   color: #bfbfbf;
 }
 .page-header.navbar .top-menu .navbar-nav > li.dropdown.open .dropdown-toggle {
-  background-color: #f6f6f6;
+  background-color: #242527;
 }
 .page-header.navbar .top-menu .navbar-nav > li.dropdown.open .dropdown-toggle > i {
   color: #bfbfbf;
