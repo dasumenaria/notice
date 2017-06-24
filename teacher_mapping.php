@@ -82,7 +82,7 @@ if(isset($_POST['sub_del']))
                                         $section_name=$ftc_detailq['section_name'];
                                         $id=$ftc_detailq['id'];
                                         ?>
-                                            <option value="<?php echo $id;?>"><?php echo $section_name;?></option>                              
+                                           <option value="<?php echo $id;?>"><?php echo $section_name;?></option>                              
                                         <?php  
                                     }	
                                 ?>
@@ -211,20 +211,11 @@ while($row1=mysql_fetch_array($r1))
 <?php } ?>
 </table>
 </div>
-
-</div>
-
-
 </div>
 </div>
-
-
-
-
 </div>
 </div>
-
-
+</div>
 </div>
 </body>
 <?php footer(); ?>
