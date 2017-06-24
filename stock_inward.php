@@ -41,7 +41,7 @@
 	<head>
 		<?php css();?>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<title>Stock Inword</title>
+		<title>Stock Inward</title>
 	</head>
 	<?php contant_start(); menu();  ?>
 	<body>
@@ -52,7 +52,7 @@
 						<div class="portlet box">
 							<div class="portlet-title">
 								<div class="caption">
-									<i class="fa fa-gift"></i>Stock Inword
+									<i class="fa fa-gift"></i>Stock Inward
 								</div>
 							</div>
 							<div class="portlet-body form">
