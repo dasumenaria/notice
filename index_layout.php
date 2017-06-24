@@ -388,11 +388,11 @@ function scripts()
 jQuery(document).ready(function() {
 	 
 		 
-	  Metronic.init();
-	  ComponentsPickers.init();
-	 Layout.init();
-	  ComponentsFormTools.init();	  
-	ComponentsDropdowns.init();
+Metronic.init();
+ComponentsPickers.init();
+Layout.init();
+ComponentsFormTools.init();	  
+ComponentsDropdowns.init();
  
 });
 </script>
