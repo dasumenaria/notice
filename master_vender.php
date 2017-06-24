@@ -1,40 +1,32 @@
-<?php
+n<?php
 	include("index_layout.php");
 	include("database.php");
  
 	if(isset($_POST['sub']))
 	{
-	$vender_name=$_POST['vender_name'];	
-	mysql_query("insert into `master_vender` SET `vender_name`='$vender_name'");	
-
+		$vender_name=$_POST['vender_name'];	
+		mysql_query("insert into `master_vendor` SET `vendor_name`='$vender_name'");	
 	}
-?>
-<?php 
 	if(isset($_POST['sub_del']))
 	{
 		$delet_vender=$_POST['delet_vender'];
-		mysql_query("update `master_vender` SET `flag`='1' where id='$delet_vender'" );
+		mysql_query("update `master_vendor` SET `flag`='1' where id='$delet_vender'" );
 	}
 	if(isset($_POST['sub_edit']))
 	{
 		$edit=$_REQUEST['edit_id'];  
 		$vender_name=mysql_real_escape_string($_REQUEST["vender_name"]);
-		$r=mysql_query("update `master_vender` SET `vender_name`='$vender_name' where id='$edit'" );
+		$r=mysql_query("update `master_vendor` SET `vendor_name`='$vender_name' where id='$edit'" );
 		$r=mysql_query($r);	
-		echo '<script text="javascript">alert(Vender Added Successfully")</script>';	
 	}
-	else
-	{
-		echo mysql_error();
-	}  
 ?> 
 <html>
 	<head>
 		<?php css();?>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<title>Master Vender</title>
+		<title>Master Vendor</title>
 	</head>
-		<?php contant_start(); menu();  ?>
+		<?php contant_start(); menu(); ?>
 	<body>
 		<div class="page-content-wrapper">
 			<div class="page-content">
@@ -43,7 +35,7 @@
 						<div class="portlet box">
 							<div class="portlet-title">
 								<div class="caption">
-									<i class="fa fa-gift"></i>Master Vender
+									<i class="fa fa-gift"></i>Master Vendor
 								</div>
 							</div>
 							<div class="portlet-body form">
@@ -51,11 +43,11 @@
 								<form  class="form-horizontal" id="form_sample_2"  role="form" method="post"> 
 									<div class="form-body">
 										<div class="form-group">
-											<label class="control-label col-md-3">Vender Name</label>
+											<label class="control-label col-md-3">Vendor Name</label>
 											<div class="col-md-6">
 												<div class="input-icon right">
 													<i class="fa"></i>
-													<input class="form-control" placeholder="Please Enter Vender Name" required name="vender_name" autocomplete="off" type="text">
+													<input class="form-control" placeholder="Please Enter Vendor Name" required name="vender_name" autocomplete="off" type="text">
 												</div>
 											</div>
 										</div>
@@ -75,7 +67,7 @@
 						<div class="portlet box">
 							<div class="portlet-title">
 								<div class="caption">
-									<i class="fa fa-gift"></i>View Vender
+									<i class="fa fa-gift"></i>View Vendor
 								</div>
 							</div>
 							<div class="portlet-body form">
@@ -84,17 +76,17 @@
 										<thead>
 											<tr style="background:#F5F5F5">
 												<th> #</th>
-												<th>Vender Name</th>
+												<th>Vendor Name</th>
 												<th>Action</th>
 											</tr>
 										</thead>
-										<?php $r1=mysql_query("select * from master_vender where flag='0'");		
+										<?php $r1=mysql_query("select * from master_vendor where flag='0'");		
 										$i=0;
 										while($row1=mysql_fetch_array($r1))
 										{
 											$i++;
 											$id=$row1['id'];
-											$vender_name=$row1['vender_name'];
+											$vender_name=$row1['vendor_name'];
 										?>
 										<tbody>
 											<tr>
@@ -113,7 +105,7 @@
 																		<input type="hidden" name='edit_id' class="form-control" value="<?php echo $id;?>" >	
 																		<div class="form-body">
 																			<div class="form-group">
-																				<label class="control-label col-md-3">Vender Name</label>
+																				<label class="control-label col-md-3">Vendor Name</label>
 																				<div class="col-md-6">
 																					<div class="input-icon right">
 																						<i class="fa"></i>
