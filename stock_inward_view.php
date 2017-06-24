@@ -1,7 +1,7 @@
 <?php
  include("index_layout.php");
  include("database.php");
- ?>
+?>
 <html>
 <head>
 <?php css();?>
@@ -21,7 +21,6 @@
 				</div>
 				<div class="portlet-body form">
 					<div class="form-body">
-						<div class="scroller" style="height:500px;"  data-always-visible="1" data-rail-visible="0">
 						<?php if($message){ ?>
 							<div id="success">
 								<div class="alert alert-success">
@@ -71,7 +70,7 @@
                                         <div class="btn-group">
 											<button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown"> Action <i class="fa fa-angle-down"></i></button>
 											<ul class="dropdown-menu" role="menu">
-												<li><a class="edit_contact" data-toggle="modal" id="<?php echo $id; ?>" href="#basic"><i class="glyphicon glyphicon-edit"></i>Edit </a>
+												<li><a href="stock_inward_edit.php"><i class="glyphicon glyphicon-edit"></i>Edit </a>
 												</li>
 												<li class="divider">
 												<li>
@@ -93,44 +92,12 @@
 												</form>
 											</div>
 										</div>
-										<div class="modal fade" id="reject<?php echo $id; ?>" tabindex="-1" role="basic" aria-hidden="true" >
-											<div class="modal-dialog">
-												<form method="post">
-												<div class="modal-content">
-													<div class="modal-header">
-														<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-														<h4 class="modal-title"><strong>Do you want to reject</strong></h4>
-													</div>
-													<input type="hidden" name="update_id" value="<?php echo $id; ?>">
-													<div class="modal-footer">
-														<button type="button" class="btn default" data-dismiss="modal">Close</button>
-														<button type="submit" name="reject_details" class="btn red">Delete</button>
-													</div>
-												</div>
-												</form>
-											</div>
-										</div>
+										
                                     </td>
                                 </tr>
 								<?php } ?>
                             </tbody>
 							</table>
-							<div class="modal fade" id="basic" tabindex="-1" role="basic" aria-hidden="true" >
-								<div class="modal-dialog">
-									<form class="form-horizontal" role="form" id="noticeform" method="post" enctype="multipart/form-data">
-										<div class="modal-content">
-											
-											<div class="modal-body replace_data" style="min-height: 180px;">
-											</div>
-											<div class="modal-footer">
-												<button type="button" class="btn default" data-dismiss="modal">Close</button>
-												<button type="submit" name="update_details" class="btn blue">Update</button>
-											</div>
-										</div>
-									</form>
-								</div>
-							</div>
-						</div>
 					</div>
 				</div>
 			</div>
@@ -139,7 +106,28 @@
 </body>
 <?php footer();?>
 <?php scripts();?>
+<script>
+	$('.edit_contact').click(function(){
+		var	id= $(this).attr('id');
+		$.ajax({
+			url: "ajax_page.php?function_name=edit_leave_note&id="+id,
+			type: "POST",
+			success: function(data)
+			{   
+				  $('.replace_data').html(data);
+				  $('.date-picker').datepicker();
+				  $('.timepicker').timepicker();
+			}
+		});
+	});
 	
+	var myVar=setInterval(function(){myTimerr()},4000);
+	function myTimerr() 
+	{
+		$("#success").hide();
+	}
+	
+ </script>	
 
 
 </html>
