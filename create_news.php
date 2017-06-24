@@ -120,26 +120,25 @@ if(isset($_POST['submit']))
 										
 									</div>
 									<div class="form-group">
-                              <label class="control-label col-md-3">Cover Image</label>
-                            
-                                            <div class=" col-md-3 fileinput fileinput-new" style="padding-left: 15px;" data-provides="fileinput">
-                                                <div class="col-md-10 fileinput-new thumbnail" style="width: 200px;  height: 150px;">
-                                                    <img src="img/noimage.png" style="width:100%;" alt=""/>
-                                                </div>
-                                                <div class="col-md-3 fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;">
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <span class="btn default btn-file addbtnfile" style="background-color:#00CCFF; color:#FFF">
-                                                    <span class="fileinput-new">
-                                                    <i class="fa fa-plus"></i> </span>
-                                                    <span class="fileinput-exists">
-                                                    <i class="fa fa-plus"></i> </span>
-                                                    <input type="file" class="default" name="image" id="file1">
-                                                    </span>
-                                                    <a href="#" class="btn red fileinput-exists" data-dismiss="fileinput" style=" color:#FFF">
-                                                    <i class="fa fa-trash"></i> </a></div>
-                                                </div>
-												</div>
+                                      <label class="control-label col-md-3">Cover Image</label>
+                                        <div class=" col-md-3 fileinput fileinput-new" style="padding-left: 15px;" data-provides="fileinput">
+                                            <div class="col-md-10 fileinput-new thumbnail" style="width: 200px;  height: 150px;">
+                                                <img src="img/noimage.png" style="width:100%;" alt=""/>
+                                            </div>
+                                            <div class="col-md-3 fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;">
+                                            </div>
+                                            <div class="col-md-2">
+                                                <span class="btn default btn-file addbtnfile" style="background-color:#00CCFF; color:#FFF">
+                                                <span class="fileinput-new">
+                                                <i class="fa fa-plus"></i> </span>
+                                                <span class="fileinput-exists">
+                                                <i class="fa fa-plus"></i> </span>
+                                                <input type="file" class="default" name="image" id="file1">
+                                                </span>
+                                                <a href="#" class="btn red fileinput-exists" data-dismiss="fileinput" style=" color:#FFF">
+                                                <i class="fa fa-trash"></i> </a></div>
+                                            </div>
+                                        </div>
 									
 								</div>
 								<div class=" right1" align="center" style="margin-right:10px">
