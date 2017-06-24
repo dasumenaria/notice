@@ -65,7 +65,7 @@
 											<div class="col-md-6">
 												<div class="input-icon right">
 												<i class="fa"></i>
-												<input class="form-control" placeholder="Please Enter price" required name="price" autocomplete="off" type="text">
+												<input class="form-control allLetter" placeholder="Please Enter price" required name="price" autocomplete="off" type="text">
 												</div>
 											</div>
 										</div>
@@ -139,7 +139,7 @@
 																					<div class="col-md-6">
 																						<div class="input-icon right">
 																							<i class="fa"></i>
-																							<input class="form-control" placeholder="Please Enter price" required name="price" autocomplete="off" type="text" value="<?php echo $price;?>">
+																							<input class="form-control allLetter" placeholder="Please Enter price" required name="price" autocomplete="off" type="text" value="<?php echo $price;?>">
 																						</div>
 																					</div>
 																				</div>
@@ -192,6 +192,27 @@
 <?php footer(); ?>
 
 <?php scripts();?>
+<script src="assets/global/plugins/jquery.min.js" type="text/javascript"></script>
+<script src="assets/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
+<script>
+jQuery(document).ready(function() {	
+// NUMBUER VALIDATION
+	$('.allLetter').keyup(function(){
+		var inputtxt=  $(this).val();
+		var numbers =  /^[0-9]*\.?[0-9]*$/;
+		
+		if(inputtxt.match(numbers))  
+		{  
+		} 
+		else  
+		{  
+			$(this).val('');
+			return false;  
+		}
+	});
+});
+</script>
+
 
 </html>
  
