@@ -883,5 +883,15 @@ if($function_name=='create_timetable_notify')
 								curl_close($ch);
 						//--	
 					}
- 	}	
+ 	}
+	if($function_name=='CheckStockAvaiableOrNot')
+	{
+		$item_id=$_GET['id'];
+		$quantity=$_GET['quantity'];
+ 		$cheskquery=mysql_query("select * from `stock_quantity` where item_id='$item_id'");		
+		$ftc_nmg=mysql_fetch_array($cheskquery);
+		$ftcQuantity=$ftc_nmg['quantity'];	
+		if($ftcQuantity<$quantity){ echo 1;}
+		else {}	
+	}
 ?>
