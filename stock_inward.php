@@ -5,6 +5,7 @@
 	if(isset($_POST['sub']))	
 	{
 		
+		$vender_id=$_POST['vender_id'];
 		$item_id=$_POST['item_id'];
 		$quantity=$_POST['quantity'];	
 		$date=$_POST['date'];	
@@ -12,7 +13,7 @@
 		$item_rate=$_POST['item_rate'];	
 		$remarks=$_POST['remarks'];
 		
-		mysql_query("insert into `stock_inword` (`item_id`,`quantity`,`item_rate`,`date`,`total`,`remarks`) values('$item_id','$quantity','$item_rate','$date','$total','$remarks')");
+		mysql_query("insert into `stock_inward` (`vender_id`,`item_id`,`quantity`,`item_rate`,`date`,`total`,`remarks`) values('$vender_id','$item_id','$quantity','$item_rate','$date','$total','$remarks')");
 		
 		$fetchstock=mysql_query("select * FROM `stock_quantity` where `item_id`='$item_id'");
 		$count=mysql_num_rows($fetchstock);
@@ -22,6 +23,7 @@
 			$row1=mysql_fetch_array($fetchstock);
 			$FTCid=$row1['id'];
 			$FTCquantity=$row1['quantity'];
+			
 			$FTCitem_id=$row1['item_id'];
 			$totalquantity=$FTCquantity+$quantity;
 			mysql_query("update `stock_quantity` set `quantity`='$totalquantity' where `id`='$FTCid'");
@@ -59,6 +61,25 @@
 							<!-- BEGIN FORM-->
 								<form  class="form-horizontal" id="form_sample_2"  role="form" method="post"> 
 									<div class="form-body">
+										<div class="form-group">
+											<label class="control-label col-md-3">Vender Name</label>
+											<div class="col-md-6">
+												<i class="fa"></i>
+												<select name="vender_id" class="form-control class_id select2me" required="required" placeholder="Select..." id="sname">
+													<option value=""></option>
+															<?php
+																$r1=mysql_query("select `id`,`vender_name` from master_vender ");
+																$i=0;
+																while($row1=mysql_fetch_array($r1))
+																{
+																$id=$row1['id'];
+																$vender_name=$row1['vender_name'];
+															?>
+													<option value="<?php echo $id; ?>" ><?php echo $vender_name;?></option>
+														<?php } ?> 
+												</select>
+											</div>
+										</div>
 										<div class="form-group">
 											<label class="control-label col-md-3">Item Name</label>
 											<div class="col-md-6">
