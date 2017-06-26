@@ -57,11 +57,11 @@
 												<i class="fa"></i>
 												<select name="class_id" class="form-control class_id select2me" required="required" placeholder="Select..." id="sname">
 													<option value=""></option>
-															<?php
-																$r1=mysql_query("select `item_name`,`id`,`price` from master_item where   flag = 0  order by id ASC");		
-																$i=0;
-																while($row1=mysql_fetch_array($r1))
-																{
+														<?php
+															$r1=mysql_query("select `item_name`,`id`,`price` from master_item where   flag = 0  order by id ASC");		
+															$i=0;
+															while($row1=mysql_fetch_array($r1))
+															{
 																$price = $row1['price'];	
 																$id=$row1['id'];
 																$item_name=$row1['item_name'];
