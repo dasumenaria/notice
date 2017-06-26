@@ -15,38 +15,15 @@ if(isset($_POST['update_details']))
 		$update_id=$_POST['update_id'];
  		mysql_query("update `stock_inward` set `vender_id`='$vender_id' ,`item_id`='$item_id' ,`quantity`='$quantity' ,`item_rate`='$item_rate' , `total`='$total' ,`date`='$date' , `remarks`='$remarks' where `id` = '$id' ");
 		$message='Stock Inward update successfully';	
-	}
+
 $set=mysql_query("select SUM(quantity) FROM `stock_inward` where `item_id`='$item_id'");
 $fet=mysql_fetch_array($set);
 $total_quantity=$fet[0];
-$fetchstock=mysql_query("select quantity FROM `stock_quantity` where `item_id`='$item_id'");
-		$count=mysql_num_rows($fetchstock);
-		if($count >$quantity)
-		{
-			//update
-			$row1=mysql_fetch_array($fetchstock);
-			$FTCid=$row1['id'];
-			$FTCquantity=$row1['quantity'];
-			
-			$FTCitem_id=$row1['item_id'];
-			$totalquantity=$FTCquantity+$quantity;
-			mysql_query("update `stock_quantity` set `quantity`='$totalquantity' where `id`='$FTCid'");
 
-		}
-		else
-		{
-			//insert
-			$row1=mysql_fetch_array($fetchstock);
-			$FTCid=$row1['id'];
-			$FTCquantity=$row1['quantity'];
-			
-			$FTCitem_id=$row1['item_id'];
-			$totalquantity=$FTCquantity-$quantity;
-			//mysql_query("update `stock_quantity` set `quantity`='$totalquantity' where `id`='$FTCid'");
-			mysql_query("insert into `stock_quantity` (`item_id`,`quantity`) values('$item_id','$quantity')");
+			mysql_query("update `stock_quantity` set `quantity`='$total_quantity' where `item_id`='$item_id'");
+	}
 
-		}
-	
+
  ?> 
 <html>
 	<head>
