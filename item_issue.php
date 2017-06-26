@@ -7,7 +7,13 @@
 		extract($_POST);
 		$timestamp=date('Y-m-d h:i:s');
 		$issue_date=date('Y-m-d', strtotime($_POST['issue_date'])); 
-		
+		//-- Update Stock
+		$cheskquery=mysql_query("select * from `stock_quantity` where item_id='$item_id'");		
+		$ftc_nmg=mysql_fetch_array($cheskquery);
+		$ftcQuantity=$ftc_nmg['quantity'];
+		$totalRemainingQuantity=$ftcQuantity-$quantity; 
+		mysql_query("update `stock_quantity` set `quantity`='$totalRemainingQuantity' where `item_id`='$item_id'"); 
+		//-- Insert Issue
 		mysql_query("insert into `issue_item` SET `name`='$name',`mobile_no`='$mobile_no',`item_price`='$item_price',`item_id`='$item_id',`total_price`='$total_price',`quantity`='$quantity',`remarks`='$remarks',`issue_date` = '$issue_date' , `timestamp`='$timestamp'");	
 		@header("location:item_issue.php");
 	}
@@ -17,7 +23,7 @@
 	<head>
 		<?php css();?>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<title>Master Item</title>
+		<title>Item Issue</title>
 	</head>
 	<?php contant_start(); menu();  ?>
 	<body>
@@ -57,20 +63,20 @@
                                         </div>
                                         <div class="col-md-12">
                                             <div class="form-group col-md-6">
-                                                <label class="control-label col-md-4">Item</label>
+                                                <label class="control-label col-md-4"> Item </label>
                                                 <div class="col-md-8">
-                                                  	<select class="form-control getRate" required="required" placeholder="Select..." name="item_id">
+                                                  	<select class="form-control getRate select2me" required="required" placeholder="Select..." name="item_id">
                                                         <option value=""> Select...</option>
                                                             <?php
-                                                            $r1=mysql_query("select `item_name`,`id`,`price` from master_item where   flag = 0  order by id ASC");		
+                                                            $r1=mysql_query("select `item_name`,`id`,`price` from master_item where flag = 0 order by id ASC");		
                                                             $i=0;
                                                             while($row1=mysql_fetch_array($r1))
                                                             {
                                                                 $id=$row1['id'];
                                                                 $item_name=$row1['item_name'];
 																$price=$row1['price'];
-                                                                ?>
-                                                                <option value="<?php echo $id;?>" price='<?php echo $price;?>'><?php echo $item_name;?></option>                              
+                                                               ?>
+                                                                <option value="<?php echo $id;?>" price='<?php echo $price;?>'><?php echo $item_name;?></option>
                                                             <?php 
                                                             }?> 
                                                       </select>   
@@ -141,7 +147,7 @@
  				</div>
 			</div>
 		</div>
-	</body>
+ 	</body>
 <?php footer(); ?>
 <script src="assets/global/plugins/jquery.min.js" type="text/javascript"></script>
 <script>
@@ -179,6 +185,18 @@ jQuery(document).ready(function() {
 		}else { $('.total_price').val('');
 		}
  	});
+	$('.quantity').keyup(function(){
+		var quantity = $(this).val();
+		var item_id = $('.getRate option:selected').val();
+  		$.ajax({
+			url: "notification_page.php?function_name=CheckStockAvaiableOrNot&id="+item_id+"&quantity="+quantity,
+			}).done(function(response) {
+			if(response == 1)
+			{alert('Out of stock');$('.total_price').val('');$('.quantity').val('');
+			}else{}
+  		});
+		
+	});
 });
 </script>
 <?php scripts();?>

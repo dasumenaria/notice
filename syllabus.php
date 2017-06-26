@@ -281,8 +281,8 @@ $curent_date=date("Y-m-d");
 			url: "ajax_syllabus.php?pon="+s,
 			}).done(function(response) {
 				//alert(response);  
-			$("#dt").html(""+response+"");
-			$('.select2me').select2();
+				$("#dt").html(""+response+"");
+				$('.select2me').select2();
 			});
 		});	  
 
