@@ -8,27 +8,44 @@ if(isset($_POST['update_details']))
 		$vender_id=$_POST['vender_id'];
 		$item_id=$_POST['item_id'];
 		$quantity=$_POST['quantity'];
-		$rate=$_POST['rate'];
+		$item_rate=$_POST['item_rate']; 
 		$total=$_POST['total'];
-		$date=date('Y-m-d', strtotime($_POST['date']));;
+		$date=date('Y-m-d', strtotime($_POST['date']));
+		 $remarks=$_POST['remarks'];
 		$update_id=$_POST['update_id'];
-		
- 		mysql_query("update `stock_inward` set `vender_id`='$vender_id' ,`item_id`='$item_id' ,`quantity`='$quantity' ,`rate`='$rate' , `total`='$total' ,`date`='$date' , `remarks`='$remarks' where `id` = '$id' ");
+ 		mysql_query("update `stock_inward` set `vender_id`='$vender_id' ,`item_id`='$item_id' ,`quantity`='$quantity' ,`item_rate`='$item_rate' , `total`='$total' ,`date`='$date' , `remarks`='$remarks' where `id` = '$id' ");
 		$message='Stock Inward update successfully';	
 	}
-	if(isset($_POST['sub_edit']))
-	{
-		$edit=$_REQUEST['edit_id'];  
-		$vender_id=mysql_real_escape_string($_REQUEST["vender_id"]);
-		$item_id=mysql_real_escape_string($_REQUEST["item_id"]);
-		$quantity=mysql_real_escape_string($_REQUEST["quantity"]);
-		$rate=mysql_real_escape_string($_REQUEST["rate"]);
-		$total=mysql_real_escape_string($_REQUEST["total"]);
-		$date=mysql_real_escape_string($_REQUEST["date"]);
-		$r=mysql_query("update `stock_inward` set `vender_id`='$vender_id' ,`item_id`='$item_id' ,`quantity`='$quantity' ,`rate`='$rate' , `total`='$total' ,`date`='$date' , `remarks`='$remarks' where `id` = '$edit'" );
-		$r=mysql_query($r);
-		echo '<script text="javascript">alert(Item Added Successfully")</script>';	
-	}
+$set=mysql_query("select SUM(quantity) FROM `stock_inward` where `item_id`='$item_id'");
+$fet=mysql_fetch_array($set);
+$total_quantity=$fet[0];
+$fetchstock=mysql_query("select quantity FROM `stock_quantity` where `item_id`='$item_id'");
+		$count=mysql_num_rows($fetchstock);
+		if($count >$quantity)
+		{
+			//update
+			$row1=mysql_fetch_array($fetchstock);
+			$FTCid=$row1['id'];
+			$FTCquantity=$row1['quantity'];
+			
+			$FTCitem_id=$row1['item_id'];
+			$totalquantity=$FTCquantity+$quantity;
+			mysql_query("update `stock_quantity` set `quantity`='$totalquantity' where `id`='$FTCid'");
+
+		}
+		else
+		{
+			//insert
+			$row1=mysql_fetch_array($fetchstock);
+			$FTCid=$row1['id'];
+			$FTCquantity=$row1['quantity'];
+			
+			$FTCitem_id=$row1['item_id'];
+			$totalquantity=$FTCquantity-$quantity;
+			//mysql_query("update `stock_quantity` set `quantity`='$totalquantity' where `id`='$FTCid'");
+			mysql_query("insert into `stock_quantity` (`item_id`,`quantity`) values('$item_id','$quantity')");
+
+		}
 	
  ?> 
 <html>
@@ -60,7 +77,7 @@ if(isset($_POST['update_details']))
                         <?php } ?> 
                         <table class="table-condensed table-bordered" style="width:100%;">
 							<tbody>
-								<form  class="form-horizontal" id="form_sample_2"  role="form" method="post" action="stock_inward_view.php"> 
+								<form  class="form-horizontal" id="form_sample_2"  role="form" method="post"  > 
 								<div class="form-body">
 								<?php
 									
@@ -85,7 +102,7 @@ if(isset($_POST['update_details']))
 											<select name="vender_id" class="form-control class_id select2me" required="required" placeholder="Select..." id="sname">
 												<option value="item_name"></option>
 														<?php
-															$r1=mysql_query("select * from master_vender where `flag` = 0 ");		
+															$r1=mysql_query("select * from master_vender where `flag` = '0' ");		
 															$i=0;
 															while($row1=mysql_fetch_array($r1))
 															{
@@ -142,12 +159,13 @@ if(isset($_POST['update_details']))
 												<input  class="form-control" required="required" placeholder="Total" id='total' value="<?php echo $total; ?>" name="total" readonly>	
 											</div>
 										</div>
+										<input  type="hidden" name="update_id" value="<?php echo $id ; ?>" >	
 									</div></br></br>
 									<div class="form-group">
 										<label class="control-label col-md-3">Date</label>
 										<div class="col-md-6">
 											<div class="input-icon right">
-												<input  type="date" class="form-control" required="required" placeholder="select date"  name="date" value="<?php echo $date; ?>" >	
+												<input  type="date" class="form-control" required="required" placeholder="select date"  name="date" value="<?php echo $date ; ?>" >	
 											</div>
 										</div>
 									</div></br></br>
@@ -156,7 +174,7 @@ if(isset($_POST['update_details']))
 										<div class="col-md-6">
 											<div class="input-icon right">
 												<i class="fa"></i>
-												<input class="form-control" placeholder="Please Enter Remarks" required name="remarks" autocomplete="off" value="<?php echo $remarks; ?>" type="text">
+												<input class="form-control" placeholder="Please Enter Remarks" required name="remarks" autocomplete="off" value="<?php echo $remarks ; ?>" type="text">
 											</div>
 										</div>
 									</div>
