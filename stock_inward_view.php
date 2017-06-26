@@ -2,10 +2,11 @@
  include("index_layout.php");
  include("database.php");
 $id=$_GET['id'];
-	if(isset($_POST['sub_del']))
+
+if(isset($_POST['sub_del']))
 	{
-		$stock_inward=$_POST['stock_inward'];
-		mysql_query("update `stock_inward` SET `flag`='1' where id='$id'" );
+		$delet_item=$_POST['delet_item'];
+		mysql_query("update `stock_inward` SET `flag`='1' where id='$delet_item'" );
 	}
 	
 ?> 
@@ -52,13 +53,13 @@ $id=$_GET['id'];
                             <tbody>
 								<?php
 								
-								$r1=mysql_query("select * from `stock_inward` where flg='0'");
+								$r1=mysql_query("select * from `stock_inward` where flag='0'");
 								while($row1=mysql_fetch_array($r1))
 								{
 									$i++;
 									$id=$row1['id'];
 									$vender_id=$row1['vender_id'];
-										$qry_vender_name=mysql_query("select `vender_name` from `master_vender` where id='$vender_id'|| flag='0'");
+										$qry_vender_name=mysql_query("select `vender_name` from `master_vender` where id='$vender_id'");
 										$fetch_name=mysql_fetch_array($qry_vender_name);
 											$vender_name=$fetch_name['vender_name'];
 									$item_id=$row1['item_id'];
@@ -81,7 +82,11 @@ $id=$_GET['id'];
 									<td><?php echo $date;?></td>
 									<td><?php echo $remarks;?></td>
 									<td>
-                                       <a class="btn blue-madison red-stripe btn-sm"  rel="tooltip" title="Delete"  data-toggle="modal" href="#delete<?php echo $id ;?>"><i class="fa fa-trash"></i></a>
+										<div class="btn-group">
+											<a href="stock_inward_edit.php?id=<?php echo $id; ?>"><i class="glyphicon glyphicon-edit"></i>Edit </a>
+											
+										</div>
+													<a class="btn blue-madison red-stripe btn-sm"  rel="tooltip" title="Delete"  data-toggle="modal" href="#delete<?php echo $id ;?>"><i class="fa fa-trash"></i></a>
 													<div class="modal fade" id="delete<?php echo $id ;?>" tabindex="-1" aria-hidden="true" style="padding-top:35px">
 														<div class="modal-dialog modal-md">
 															<div class="modal-content">
@@ -101,6 +106,7 @@ $id=$_GET['id'];
 														</div>
 													<!-- /.modal-dialog -->
 													</div>
+
 									</td>
                                 </tr>
 								<?php } ?>

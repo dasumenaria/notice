@@ -2,6 +2,7 @@
  include("index_layout.php");
  include("database.php");
  $id=$_GET['id'];
+  
 if(isset($_POST['update_details'])) 
 	{
 		$vender_id=$_POST['vender_id'];
@@ -11,11 +12,23 @@ if(isset($_POST['update_details']))
 		$total=$_POST['total'];
 		$date=date('Y-m-d', strtotime($_POST['date']));;
 		$update_id=$_POST['update_id'];
-		echo "update `stock_inward` set `vender_id`='$vender_id' ,`item_id`='$item_id' ,`quantity`='$quantity' ,`rate`='$rate' , `total`='$total' ,`date`='$date' , `remarks`='$remarks' where `id` = '$id' "; exit;
+		
  		mysql_query("update `stock_inward` set `vender_id`='$vender_id' ,`item_id`='$item_id' ,`quantity`='$quantity' ,`rate`='$rate' , `total`='$total' ,`date`='$date' , `remarks`='$remarks' where `id` = '$id' ");
 		$message='Stock Inward update successfully';	
 	}
-	
+	if(isset($_POST['sub_edit']))
+	{
+		$edit=$_REQUEST['edit_id'];  
+		$vender_id=mysql_real_escape_string($_REQUEST["vender_id"]);
+		$item_id=mysql_real_escape_string($_REQUEST["item_id"]);
+		$quantity=mysql_real_escape_string($_REQUEST["quantity"]);
+		$rate=mysql_real_escape_string($_REQUEST["rate"]);
+		$total=mysql_real_escape_string($_REQUEST["total"]);
+		$date=mysql_real_escape_string($_REQUEST["date"]);
+		$r=mysql_query("update `stock_inward` set `vender_id`='$vender_id' ,`item_id`='$item_id' ,`quantity`='$quantity' ,`rate`='$rate' , `total`='$total' ,`date`='$date' , `remarks`='$remarks' where `id` = '$edit'" );
+		$r=mysql_query($r);
+		echo '<script text="javascript">alert(Item Added Successfully")</script>';	
+	}
 	
  ?> 
 <html>
@@ -149,6 +162,7 @@ if(isset($_POST['update_details']))
 									</div>
 									</br>
 									</br>
+
 									<div class="form-group">
 										<div class="modal-footer">
 											<button type="button" class="btn default" data-dismiss="modal">Close</button>
