@@ -16,11 +16,17 @@ if(isset($_POST['update_details']))
  		mysql_query("update `stock_inward` set `vender_id`='$vender_id' ,`item_id`='$item_id' ,`quantity`='$quantity' ,`item_rate`='$item_rate' , `total`='$total' ,`date`='$date' , `remarks`='$remarks' where `id` = '$id' ");
 		$message='Stock Inward update successfully';	
 
-$set=mysql_query("select SUM(quantity) FROM `stock_inward` where `item_id`='$item_id'");
-$fet=mysql_fetch_array($set);
-$total_quantity=$fet[0];
+		$set=mysql_query("select SUM(quantity) FROM `stock_inward` where `item_id`='$item_id'");
+		$fet=mysql_fetch_array($set);
+		$total_quantity=$fet[0];
 
+$set1=mysql_query("select * from `stock_quantity` where `item_id`='$item_id'");
+$count=mysql_num_rows($set1);
+if(!empty($count)){
 			mysql_query("update `stock_quantity` set `quantity`='$total_quantity' where `item_id`='$item_id'");
+}else{
+mysql_query("insert into `stock_quantity` (`item_id`,`quantity`) values('$item_id','$quantity')");
+}
 	}
 
 
