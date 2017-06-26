@@ -30,12 +30,7 @@ $r=mysql_query($r);
 echo '<script text="javascript">alert(Class Added Successfully")</script>';	
  
 }
-else
-{
-  
-	echo mysql_error();
-}  
-  
+
 
 
 
