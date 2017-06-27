@@ -1,14 +1,6 @@
 <?php
  include("index_layout.php");
  include("database.php");
-$id=$_GET['id'];
-
-if(isset($_POST['sub_del']))
-	{
-		$delet_item=$_POST['delet_item'];
-		mysql_query("update `stock_inward` SET `flag`='1' where id='$delet_item'" );
-	}
-	
 ?> 
 <html>
 <head>
@@ -21,7 +13,7 @@ if(isset($_POST['sub_del']))
 <body>
 	<div class="page-content-wrapper">
 		 <div class="page-content">
-			<div class="portlet box">
+			<div class="portlet box blue">
 				<div class="portlet-title">
 					<div class="caption">
 						<i class="fa fa-gift"></i> Stock Inward View
@@ -38,9 +30,9 @@ if(isset($_POST['sub_del']))
                             <?php } ?> 
                             <table class="table-condensed table-bordered" style="width:100%;">
 							<thead>
-								<tr style="background-color:#FFFFFF; color:rgba(94, 94, 94, 0.82);">
+								<tr>
 									<th>S. No.</th>
-									<th>Vender Name</th>
+									<th>Vendor Name</th>
 									<th>Item Name</th>
                                     <th>Quantity</th>
 									<th>Rate</th>
@@ -52,16 +44,15 @@ if(isset($_POST['sub_del']))
 							</thead>
                             <tbody>
 								<?php
-								
 								$r1=mysql_query("select * from `stock_inward` where flag='0'");
 								while($row1=mysql_fetch_array($r1))
 								{
 									$i++;
 									$id=$row1['id'];
-									$vender_id=$row1['vender_id'];
-										$qry_vender_name=mysql_query("select `vender_name` from `master_vender` where id='$vender_id'");
+									$vender_id=$row1['vendor_id'];
+										$qry_vender_name=mysql_query("select `vendor_name` from `master_vendor` where id='$vender_id'");
 										$fetch_name=mysql_fetch_array($qry_vender_name);
-											$vender_name=$fetch_name['vender_name'];
+											$vender_name=$fetch_name['vendor_name'];
 									$item_id=$row1['item_id'];
 										$qry_item_name=mysql_query("select `item_name` from `master_item` where id='$item_id'");
 										$fetch_name=mysql_fetch_array($qry_item_name);
@@ -83,30 +74,8 @@ if(isset($_POST['sub_del']))
 									<td><?php echo $remarks;?></td>
 									<td>
 										<div class="btn-group">
-											<a href="stock_inward_edit.php?id=<?php echo $id; ?>"><i class="glyphicon glyphicon-edit"></i>Edit </a>
-											
+											<a class="btn btn-sm yellow" href="stock_inward_edit.php?id=<?php echo $id; ?>"><i class="glyphicon glyphicon-edit"></i> Edit </a>
 										</div>
-													<a class="btn blue-madison red-stripe btn-sm"  rel="tooltip" title="Delete"  data-toggle="modal" href="#delete<?php echo $id ;?>"><i class="fa fa-trash"></i></a>
-													<div class="modal fade" id="delete<?php echo $id ;?>" tabindex="-1" aria-hidden="true" style="padding-top:35px">
-														<div class="modal-dialog modal-md">
-															<div class="modal-content">
-																<div class="modal-header">
-																	<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-																	<span class="modal-title" style="font-size:14px; text-align:left">Are you sure, you want to delete this  Item?</span>
-																</div>
-																<div class="modal-footer">
-																	<form method="post" name="delete<?php echo $id ;?>">
-																		<input type="hidden" name="delet_item" value="<?php echo $id; ?>" />
-																	
-																		<button type="submit" name="sub_del" value="" class="btn btn-sm red-sunglo ">Yes</button> 
-																	</form>
-																</div>
-															</div>
-														<!-- /.modal-content -->
-														</div>
-													<!-- /.modal-dialog -->
-													</div>
-
 									</td>
                                 </tr>
 								<?php } ?>

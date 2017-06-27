@@ -13,13 +13,18 @@ if(isset($_POST['update_details']))
 		$date=date('Y-m-d', strtotime($_POST['date']));
 		 $remarks=$_POST['remarks'];
 		$update_id=$_POST['update_id'];
+<<<<<<< HEAD
  		mysql_query("update `stock_inward` set `vender_id`='$vender_id' ,`item_id`='$item_id' ,`quantity`='$quantity' ,`item_rate`='$item_rate' , `total`='$total' ,`date`='$date' , `remarks`='$remarks' where `id` = '$id' ");
+=======
+ 		mysql_query("update `stock_inward` set `vendor_id`='$vender_id' ,`item_id`='$item_id' ,`quantity`='$quantity' ,`item_rate`='$item_rate' , `total`='$total' ,`date`='$date' , `remarks`='$remarks' where `id` = '$id' ");
+>>>>>>> b3f0f6a594a9187af523b48d2ff60399dfb6813f
 		$message='Stock Inward update successfully';	
 
 		$set=mysql_query("select SUM(quantity) FROM `stock_inward` where `item_id`='$item_id'");
 		$fet=mysql_fetch_array($set);
 		$total_quantity=$fet[0];
 
+<<<<<<< HEAD
 $set1=mysql_query("select * from `stock_quantity` where `item_id`='$item_id'");
 $count=mysql_num_rows($set1);
 if(!empty($count)){
@@ -28,6 +33,20 @@ if(!empty($count)){
 mysql_query("insert into `stock_quantity` (`item_id`,`quantity`) values('$item_id','$quantity')");
 }
 	}
+=======
+	$set1=mysql_query("select * from `stock_quantity` where `item_id`='$item_id'");
+	$count=mysql_num_rows($set1);
+	if(!empty($count))
+	{
+		mysql_query("update `stock_quantity` set `quantity`='$total_quantity' where `item_id`='$item_id'");
+	}
+	else
+	{
+		mysql_query("insert into `stock_quantity` (`item_id`,`quantity`) values('$item_id','$quantity')");
+	}
+	@header("location:stock_inward_view.php");
+}
+>>>>>>> b3f0f6a594a9187af523b48d2ff60399dfb6813f
 
 
  ?> 
@@ -58,9 +77,14 @@ mysql_query("insert into `stock_quantity` (`item_id`,`quantity`) values('$item_i
                                 </div>
                             </div>
                         <?php } ?> 
+                        <form  class="form-horizontal" id="form_sample_2"  role="form" method="post"  > 
                         <table class="table-condensed table-bordered" style="width:100%;">
 							<tbody>
+<<<<<<< HEAD
 								<form  class="form-horizontal" id="form_sample_2"  role="form" method="post"  > 
+=======
+								
+>>>>>>> b3f0f6a594a9187af523b48d2ff60399dfb6813f
 								<div class="form-body">
 								<?php
 									
@@ -69,7 +93,7 @@ mysql_query("insert into `stock_quantity` (`item_id`,`quantity`) values('$item_i
 									$row1=mysql_fetch_array($r1);
 									
 										$i++;
-										$vender_id=$row1['vender_id'];
+										$vender_id=$row1['vendor_id'];
 										$item_id=$row1['item_id'];
 										$quantity=$row1['quantity'];
 										$item_rate=$row1['item_rate'];
@@ -79,10 +103,11 @@ mysql_query("insert into `stock_quantity` (`item_id`,`quantity`) values('$item_i
 								?>
 								
 									<div class="form-group">
-										<label class="control-label col-md-3">Vender Name</label>
+										<label class="control-label col-md-3">Vendor Name</label>
 										<div class="col-md-6">
 											<i class="fa"></i>
 											<select name="vender_id" class="form-control class_id select2me" required="required" placeholder="Select..." id="sname">
+<<<<<<< HEAD
 												<option value="item_name"></option>
 														<?php
 															$r1=mysql_query("select * from master_vender where `flag` = '0' ");		
@@ -90,14 +115,21 @@ mysql_query("insert into `stock_quantity` (`item_id`,`quantity`) values('$item_i
 															while($row1=mysql_fetch_array($r1))
 															{
 																
+=======
+												<option value=""> Select...</option>
+													<?php
+														$r1=mysql_query("select * from master_vendor where `flag` = '0' ");		
+ 														while($row1=mysql_fetch_array($r1))
+														{
+>>>>>>> b3f0f6a594a9187af523b48d2ff60399dfb6813f
 															$ids=$row1['id'];
-															$vender_name=$row1['vender_name'];
+															$vendor_name=$row1['vendor_name'];
 														?>
-												<option <?php if($ids ==$vender_id){echo "selected";}?> value="<?php echo $ids; ?>"  ><?php echo $vender_name;?></option>
+												<option <?php if($ids ==$vender_id){echo "selected";}?> value="<?php echo $ids; ?>"  ><?php echo $vendor_name;?></option>
 													<?php } ?> 
 											</select>
 										</div>
-									</div></br></br>
+									</div>
 									<div class="form-group">
 										<label class="control-label col-md-3">Item Name</label>
 										<div class="col-md-6">
@@ -117,7 +149,7 @@ mysql_query("insert into `stock_quantity` (`item_id`,`quantity`) values('$item_i
 													<?php } ?> 
 											</select>
 										</div>
-									</div></br></br>
+									</div>
 									<div class="form-group">
 										<label class="control-label col-md-3">Quantity</label>
 										<div class="col-md-6">
@@ -126,7 +158,7 @@ mysql_query("insert into `stock_quantity` (`item_id`,`quantity`) values('$item_i
 											<input class="form-control" placeholder="Please Enter quantity" required name="quantity" autocomplete="off" id='quantity'  onkeyup="myFunction()" value="<?php echo $quantity; ?>" type="text">
 											</div>
 										</div>
-									</div></br></br>
+									</div>
 									<div class="form-group">
 										<label class="control-label col-md-3">Item Rate</label>
 										<div class="col-md-6">
@@ -134,7 +166,7 @@ mysql_query("insert into `stock_quantity` (`item_id`,`quantity`) values('$item_i
 												<input  class="form-control" required="required" placeholder="price" id='item_rate' name="item_rate" value="<?php echo $item_rate; ?>" readonly>	
 											</div>
 										</div>
-									</div></br></br>
+									</div>
 									<div class="form-group">
 										<label class="control-label col-md-3">Total</label>
 										<div class="col-md-6">
@@ -143,7 +175,11 @@ mysql_query("insert into `stock_quantity` (`item_id`,`quantity`) values('$item_i
 											</div>
 										</div>
 										<input  type="hidden" name="update_id" value="<?php echo $id ; ?>" >	
+<<<<<<< HEAD
 									</div></br></br>
+=======
+									</div>
+>>>>>>> b3f0f6a594a9187af523b48d2ff60399dfb6813f
 									<div class="form-group">
 										<label class="control-label col-md-3">Date</label>
 										<div class="col-md-6">
@@ -151,7 +187,7 @@ mysql_query("insert into `stock_quantity` (`item_id`,`quantity`) values('$item_i
 												<input  type="date" class="form-control" required="required" placeholder="select date"  name="date" value="<?php echo $date ; ?>" >	
 											</div>
 										</div>
-									</div></br></br>
+									</div>
 									<div class="form-group">
 										<label class="control-label col-md-3">Remarks</label>
 										<div class="col-md-6">
@@ -161,9 +197,6 @@ mysql_query("insert into `stock_quantity` (`item_id`,`quantity`) values('$item_i
 											</div>
 										</div>
 									</div>
-									</br>
-									</br>
-
 									<div class="form-group">
 										<div class="modal-footer">
 											<button type="button" class="btn default" data-dismiss="modal">Close</button>
@@ -171,9 +204,10 @@ mysql_query("insert into `stock_quantity` (`item_id`,`quantity`) values('$item_i
 										</div>
 									</div>
 								</div>
-								</div>
+								 
 							</tbody>
                         </table>
+                        </form>
 						</div>
 					</div>
 				</div>
@@ -182,7 +216,7 @@ mysql_query("insert into `stock_quantity` (`item_id`,`quantity`) values('$item_i
 	</div>
 </body>
 <?php footer();?>
-<?php scripts();?>
+
 <script src="assets/global/plugins/jquery.min.js" type="text/javascript"></script>
 <script>
 
@@ -199,14 +233,15 @@ $(document).ready(function() {
 function myFunction() 
 	{
 		
-	var x = document.getElementById("quantity");
-    var y = document.getElementById("item_rate");
-    var z = document.getElementById("total");
-	z.value = parseInt(x.value * y.value);
+		var x = document.getElementById("quantity");
+		var y = document.getElementById("item_rate");
+		var z = document.getElementById("total");
+		z.value = parseInt(x.value * y.value);
 
 	}
 	
 
 
 </script>
+<?php scripts();?>
 </html>

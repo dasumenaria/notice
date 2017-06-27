@@ -894,4 +894,91 @@ if($function_name=='create_timetable_notify')
 		if($ftcQuantity<$quantity){ echo 1;}
 		else {}	
 	}
+	if($function_name=='ItemReturnAjaxView')
+	{
+		$item_id=$_GET['id'];
+		$from=$_GET['from'];
+		$report_type=$_GET['report_type'];
+		if(!empty($from)){$from=date('Y-m-d', strtotime($from));}
+		$to=$_GET['to'];
+		if(!empty($to)){$to=date('Y-m-d', strtotime($to));}
+		
+		$where='';
+		if(!empty($item_id) && empty($to)){$where="`item_id` = '$item_id'";}
+		if(!empty($to) && empty($item_id)){$where="`issue_date` between '$from' AND '$to'";}
+		if(!empty($to) && !empty($item_id)){$where="`item_id` = '$item_id' && `issue_date` between '$from' AND '$to'";}
+		$fet_data=mysql_query("select * from `".$report_type."` where ".$where." order by `id` DESC");
+		 
+		if($report_type=='issue_item'){$report_view='Issue Report';}
+		if($report_type=='return_item'){$report_view='Return Report';}
+		?>
+        <div align="center"> <h3> <?php echo $report_view; ?></h3></div>
+        <table class="table-condensed table-bordered" style="width:100%;">
+            <thead>
+            <tr>
+                <th>S. No.</th>
+                <th>Name</th>
+                <th>Mobile No</th>
+                <th>Item</th>
+                <th>Item Price</th>
+                <th>Quantity</th>
+                <th>Total Price</th>
+                <?php
+                	if($report_type=='issue_item'){echo '<th>Issue Date</th>';}
+					if($report_type=='return_item'){echo'<th>Return Date</th>';}
+				?>
+                
+                <th>Remarks</th>
+             </tr>
+            </thead>
+            <tbody>
+        <?php
+		$x=0;
+		while($fet_data=mysql_fetch_array($fet_data))
+		{	$x++;
+			$name=$fet_data['name'];
+			$mobile_no=$fet_data['mobile_no'];
+			$item_id=$fet_data['item_id'];
+			$r1=mysql_query("select `item_name` from master_item where `id` = $item_id");		
+			$row1=mysql_fetch_array($r1);
+			$item_name=$row1['item_name'];
+			$item_price=$fet_data['item_price'];
+			$total_price=$fet_data['total_price'];
+			$quantity=$fet_data['quantity'];
+ 			$remarks=$fet_data['remarks'];
+			?>
+            <tr>
+            	<td><?php echo $x?></td>
+            	<td><?php echo $name?></td>
+                <td><?php echo $mobile_no?></td>
+                <td><?php echo $item_name?></td>
+                 <td><?php echo $item_price?></td>
+                <td><?php echo $quantity?></td>
+                 <td><?php echo $total_price?></td>
+                <?php
+					if($report_type=='issue_item'){echo'<td>'.date('d-m-Y', strtotime($fet_data['issue_date'])).'</td>';}
+					if($report_type=='return_item'){echo'<td>'.date('d-m-Y', strtotime($fet_data['return_date'])).'</td>';}
+				?>
+                <td><?php echo $remarks?></td>
+             </tr>
+            <?php
+			
+		}
+		?>
+        	</tbody>
+        </table>
+        <?php
+	}
+	if($function_name=='CheckStockReturnMoreThenIssueOrNot')
+	{
+		$issue_id=$_GET['issue_id'];
+		$quantity=$_GET['quantity'];
+		$item_id=$_GET['item_id'];
+		$cheskquery=mysql_query("select * from `issue_item` where id='$issue_id' && `item_id` = '$item_id'");		
+		$ftc_nmg=mysql_fetch_array($cheskquery);
+		$ftcQuantity=$ftc_nmg['quantity'];	
+		if($ftcQuantity<$quantity){ echo 1;}
+		else {}	
+		
+	}
 ?>
