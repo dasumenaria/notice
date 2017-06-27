@@ -11,27 +11,17 @@
 		$name=mysql_real_escape_string($_REQUEST["name"]);
 		$mobile_no=mysql_real_escape_string($_REQUEST["mobile_no"]);
 		$email=mysql_real_escape_string($_REQUEST["email"]);
-<<<<<<< HEAD
-		$master_role_id=mysql_real_escape_string($_REQUEST["master_role_id"]);
-		$notification_key='AAAArt9gILg:APA91bFwFhemkzYV7Sq83t7zvpLC8QY27DC__xWUFIbI1GefXTDD0_4S8hOuOJ88q0oZ3gmWjshoRSwU08xqcWTb1a1PofkKp52nUdN9tB-voht0KhDW4O4Ch39ycj0VNogAuYRj29dN';
-		
-		$fetch_st=mysql_query("select `id` from `contact_detail` where `mobile_no`='$mobile_no'");		
-=======
+
 		$designation=mysql_real_escape_string($_REQUEST["designation"]);
  		
 		$fetch_st=mysql_query("select `id` from contact_detail where mobile_no='$mobile_no'");		
->>>>>>> a6e7479d0dfa04634ca5a95fef5925cadfecae38
 		$fetch_st1=mysql_fetch_array($fetch_st);
 		if(empty($fetch_st1))
 		{
 								
-<<<<<<< HEAD
-			
-			$r=mysql_query("insert into `contact_detail`(`name`,`mobile_no`,`email`,`master_role_id`)values('$name','$mobile_no','$email','$master_role_id')");
-=======
+
 			$sql="insert into contact_detail(name,mobile_no,email,designation)values('$name','$mobile_no','$email','$designation')";
 			$r=mysql_query($sql); 
->>>>>>> a6e7479d0dfa04634ca5a95fef5925cadfecae38
 			$mmessage="Thank You, registration has been successfully.";
 			$message =true;	
 		}
