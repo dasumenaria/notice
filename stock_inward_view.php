@@ -60,7 +60,7 @@
 									$quantity=$row1['quantity'];
 									$item_rate=$row1['item_rate'];
 									$total=$row1['total'];
-									$date=$row1['date'];
+									$date=date('d-m-Y', strtotime($row1['date']));
 									$remarks=$row1['remarks'];
 								?>
 								<tr>
