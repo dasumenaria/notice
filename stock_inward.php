@@ -5,15 +5,15 @@
 	if(isset($_POST['sub']))	
 	{
 		
-		$vender_id=$_POST['vender_id'];
+		$vendor_id=$_POST['vender_id'];
 		$item_id=$_POST['item_id'];
 		$quantity=$_POST['quantity'];	
 		$date=$_POST['date'];	
 		$total=$_POST['total'];	
 		$item_rate=$_POST['item_rate'];	
 		$remarks=$_POST['remarks'];
-		
-		mysql_query("insert into `stock_inward` (`vender_id`,`item_id`,`quantity`,`item_rate`,`date`,`total`,`remarks`) values('$vender_id','$item_id','$quantity','$item_rate','$date','$total','$remarks')");
+	 
+		mysql_query("insert into `stock_inward` (`vendor_id`,`item_id`,`quantity`,`item_rate`,`date`,`total`,`remarks`) values('$vendor_id','$item_id','$quantity','$item_rate','$date','$total','$remarks')");
 		
 		$fetchstock=mysql_query("select * FROM `stock_quantity` where `item_id`='$item_id'");
 		$count=mysql_num_rows($fetchstock);
@@ -68,12 +68,12 @@
 												<select name="vender_id" class="form-control class_id select2me" required="required" placeholder="Select..." id="sname">
 													<option value=""></option>
 															<?php
-																$r1=mysql_query("select `id`,`vender_name` from master_vender ");
+																$r1=mysql_query("select `id`,`vendor_name` from master_vendor ");
 																$i=0;
 																while($row1=mysql_fetch_array($r1))
 																{
 																$id=$row1['id'];
-																$vender_name=$row1['vender_name'];
+																$vender_name=$row1['vendor_name'];
 															?>
 													<option value="<?php echo $id; ?>" ><?php echo $vender_name;?></option>
 														<?php } ?> 
@@ -158,10 +158,6 @@
 		</div>
 	</body>
 <?php footer(); ?>
-
-<?php scripts();?>
-
-
 <script src="assets/global/plugins/jquery.min.js" type="text/javascript"></script>
 <script>
 
@@ -169,26 +165,17 @@ $(document).ready(function() {
 	$('.class_id').change(function(){	
 		var amount = $(this).find('option:selected').attr('amount');
 		$('#item_rate').val(amount);
-		
-		
 	});
-
-		
 });
 function myFunction() 
 	{
-		
-	var x = document.getElementById("quantity");
-    var y = document.getElementById("item_rate");
-    var z = document.getElementById("total");
-	z.value = parseInt(x.value * y.value);
-
+		var x = document.getElementById("quantity");
+		var y = document.getElementById("item_rate");
+		var z = document.getElementById("total");
+		z.value = parseInt(x.value * y.value);
 	}
-	
-
-
 </script>
-
+<?php scripts();?>
 
 </html>
  
