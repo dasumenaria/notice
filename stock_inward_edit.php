@@ -77,7 +77,7 @@ if(isset($_POST['update_details']))
 										$quantity=$row1['quantity'];
 										$item_rate=$row1['item_rate'];
 										$total=$row1['total'];
-										$date=$row1['date'];
+										$dateftc=date('d-m-Y',strtotime($row1['date']));
 										$remarks=$row1['remarks']; 
 								?>
 								
@@ -149,7 +149,7 @@ if(isset($_POST['update_details']))
 										<label class="control-label col-md-3">Date</label>
 										<div class="col-md-6">
 											<div class="input-icon right">
-												<input type="text" class="form-control date-picker" required="required" placeholder="select date"  name="date" value="<?php echo $date ; ?>" >	
+												<input type="text" class="form-control date-picker" required="required" placeholder="select date"  name="date" value="<?php echo $dateftc ; ?>" >	
 											</div>
 										</div>
 									</div>
