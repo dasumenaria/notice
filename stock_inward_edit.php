@@ -3,7 +3,7 @@
  include("database.php");
  $id=$_GET['id'];
   
-if(isset($_POST['update_details'])) 
+if(isset($_POST['update_details']))  
 	{
 		$vender_id=$_POST['vender_id'];
 		$item_id=$_POST['item_id'];
@@ -13,27 +13,13 @@ if(isset($_POST['update_details']))
 		$date=date('Y-m-d', strtotime($_POST['date']));
 		 $remarks=$_POST['remarks'];
 		$update_id=$_POST['update_id'];
-<<<<<<< HEAD
- 		mysql_query("update `stock_inward` set `vender_id`='$vender_id' ,`item_id`='$item_id' ,`quantity`='$quantity' ,`item_rate`='$item_rate' , `total`='$total' ,`date`='$date' , `remarks`='$remarks' where `id` = '$id' ");
-=======
  		mysql_query("update `stock_inward` set `vendor_id`='$vender_id' ,`item_id`='$item_id' ,`quantity`='$quantity' ,`item_rate`='$item_rate' , `total`='$total' ,`date`='$date' , `remarks`='$remarks' where `id` = '$id' ");
->>>>>>> b3f0f6a594a9187af523b48d2ff60399dfb6813f
 		$message='Stock Inward update successfully';	
 
 		$set=mysql_query("select SUM(quantity) FROM `stock_inward` where `item_id`='$item_id'");
 		$fet=mysql_fetch_array($set);
 		$total_quantity=$fet[0];
 
-<<<<<<< HEAD
-$set1=mysql_query("select * from `stock_quantity` where `item_id`='$item_id'");
-$count=mysql_num_rows($set1);
-if(!empty($count)){
-			mysql_query("update `stock_quantity` set `quantity`='$total_quantity' where `item_id`='$item_id'");
-}else{
-mysql_query("insert into `stock_quantity` (`item_id`,`quantity`) values('$item_id','$quantity')");
-}
-	}
-=======
 	$set1=mysql_query("select * from `stock_quantity` where `item_id`='$item_id'");
 	$count=mysql_num_rows($set1);
 	if(!empty($count))
@@ -46,7 +32,6 @@ mysql_query("insert into `stock_quantity` (`item_id`,`quantity`) values('$item_i
 	}
 	@header("location:stock_inward_view.php");
 }
->>>>>>> b3f0f6a594a9187af523b48d2ff60399dfb6813f
 
 
  ?> 
@@ -80,11 +65,7 @@ mysql_query("insert into `stock_quantity` (`item_id`,`quantity`) values('$item_i
                         <form  class="form-horizontal" id="form_sample_2"  role="form" method="post"  > 
                         <table class="table-condensed table-bordered" style="width:100%;">
 							<tbody>
-<<<<<<< HEAD
-								<form  class="form-horizontal" id="form_sample_2"  role="form" method="post"  > 
-=======
 								
->>>>>>> b3f0f6a594a9187af523b48d2ff60399dfb6813f
 								<div class="form-body">
 								<?php
 									
@@ -107,21 +88,11 @@ mysql_query("insert into `stock_quantity` (`item_id`,`quantity`) values('$item_i
 										<div class="col-md-6">
 											<i class="fa"></i>
 											<select name="vender_id" class="form-control class_id select2me" required="required" placeholder="Select..." id="sname">
-<<<<<<< HEAD
-												<option value="item_name"></option>
-														<?php
-															$r1=mysql_query("select * from master_vender where `flag` = '0' ");		
-															$i=0;
-															while($row1=mysql_fetch_array($r1))
-															{
-																
-=======
 												<option value=""> Select...</option>
 													<?php
 														$r1=mysql_query("select * from master_vendor where `flag` = '0' ");		
  														while($row1=mysql_fetch_array($r1))
 														{
->>>>>>> b3f0f6a594a9187af523b48d2ff60399dfb6813f
 															$ids=$row1['id'];
 															$vendor_name=$row1['vendor_name'];
 														?>
@@ -175,11 +146,7 @@ mysql_query("insert into `stock_quantity` (`item_id`,`quantity`) values('$item_i
 											</div>
 										</div>
 										<input  type="hidden" name="update_id" value="<?php echo $id ; ?>" >	
-<<<<<<< HEAD
-									</div></br></br>
-=======
 									</div>
->>>>>>> b3f0f6a594a9187af523b48d2ff60399dfb6813f
 									<div class="form-group">
 										<label class="control-label col-md-3">Date</label>
 										<div class="col-md-6">
