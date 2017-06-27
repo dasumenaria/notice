@@ -65,12 +65,12 @@ $sql="insert into user_management(role_id,module_id)values('$role_id','$module')
                                             $i=0;
                                             while($row1=mysql_fetch_array($r1))
                                             {
-                                            $id=$row1['id'];
-                                            $role_name=$row1['role_name'];
+												$id=$row1['id'];
+												$role_name=$row1['role_name'];
                                             ?>
                               <option value="<?php echo $id;?>"><?php echo $role_name;?></option>                              
                               <?php }?> 
-                              <select/>
+                              </select>
 										</div>
 									</div>
                                     
@@ -97,12 +97,12 @@ $sql="insert into user_management(role_id,module_id)values('$role_id','$module')
 <script>
 $(document).ready(function(){
   $("#sid").change(function(){
-        var ids=1;
+        var item_id = $('#sid option:selected').val();
 	  	$.ajax({
-			url: "view_rights.php?id="+ids,
-			}).done(function(response) {
-		   $("#data").html(""+response+"");
-			});
+		url: "view_rights.php?id="+item_id,
+		}).done(function(response) {
+	    $("#data").html(""+response+"");
+		});
 });
 });
 </script>
