@@ -11,7 +11,7 @@ if(isset($_POST['update_details']))
 		$item_rate=$_POST['item_rate']; 
 		$total=$_POST['total'];
 		$date=date('Y-m-d', strtotime($_POST['date']));
-		 $remarks=$_POST['remarks'];
+		$remarks=$_POST['remarks'];
 		$update_id=$_POST['update_id'];
  		mysql_query("update `stock_inward` set `vendor_id`='$vender_id' ,`item_id`='$item_id' ,`quantity`='$quantity' ,`item_rate`='$item_rate' , `total`='$total' ,`date`='$date' , `remarks`='$remarks' where `id` = '$id' ");
 		$message='Stock Inward update successfully';	
@@ -68,8 +68,6 @@ if(isset($_POST['update_details']))
 								
 								<div class="form-body">
 								<?php
-									
-									
 									$r1=mysql_query("select * from `stock_inward` where `id`='$id'");
 									$row1=mysql_fetch_array($r1);
 									
@@ -151,7 +149,7 @@ if(isset($_POST['update_details']))
 										<label class="control-label col-md-3">Date</label>
 										<div class="col-md-6">
 											<div class="input-icon right">
-												<input  type="date" class="form-control" required="required" placeholder="select date"  name="date" value="<?php echo $date ; ?>" >	
+												<input type="text" class="form-control date-picker" required="required" placeholder="select date"  name="date" value="<?php echo $date ; ?>" >	
 											</div>
 										</div>
 									</div>
