@@ -17,7 +17,7 @@ if(isset($_POST['submit']))
 	$sql="insert into acedmic_calendar(category_id,description,date,tag,curent_date,user_id)values('$type','$name','$date','$x_d','$curent_date','$user_id')";
 	$r=mysql_query($sql);
 	$message="Calendar Add Successfully ";
-	header("Location:create_news.php");  
+	//header("Location:create_news.php");  
 }
  	
 ?> 

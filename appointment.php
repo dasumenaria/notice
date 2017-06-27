@@ -314,7 +314,7 @@ span {
                         <input type="hidden" name="update_id" value="<?php echo $id; ?>">
                         <div class="modal-footer">
                             <button type="button" class="btn default" data-dismiss="modal">Close</button>
-                            <button type="submit" name="approve_details" class="btn red">Delete</button>
+                            <button type="submit" name="approve_details" class="btn red">Approved</button>
                         </div>
                     </div>
                     </form>
@@ -332,7 +332,7 @@ span {
                         <input type="hidden" name="update_id" value="<?php echo $id; ?>">
                         <div class="modal-footer">
                             <button type="button" class="btn default" data-dismiss="modal">Close</button>
-                            <button type="submit" name="reject_details" class="btn red">Delete</button>
+                            <button type="submit" name="reject_details" class="btn red">Reject</button>
                         </div>
                     </div>
                     </form>
@@ -350,7 +350,7 @@ span {
                         <input type="hidden" name="update_id" value="<?php echo $id; ?>">
                         <div class="modal-footer">
                             <button type="button" class="btn default" data-dismiss="modal">Close</button>
-                            <button type="submit" name="complete_details" class="btn red">Delete</button>
+                            <button type="submit" name="complete_details" class="btn red">Completed</button>
                         </div>
                     </div>
                     </form>
