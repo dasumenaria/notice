@@ -129,7 +129,7 @@
 											<label class="control-label col-md-3">Date</label>
 											<div class="col-md-6">
 												<div class="input-icon right">
-													<input  type="date" class="form-control" required="required" placeholder="select date"  name="date" value="date-picker($today)" >	
+													<input  type="text" class="form-control date-picker" required="required" placeholder="DD-MM-YYYY"  name="date" value="" >	
 												</div>
 											</div>
 										</div>

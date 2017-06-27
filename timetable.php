@@ -147,13 +147,14 @@ $(".user").live("change",function(){
 		var s=$(this).val();
 		
 		$.ajax({
-		url: "	.php?pon="+t+"&pon1="+s,
+		url: "ajax_time_table.php?pon="+t+"&pon1="+s,
 		}).done(function(response) {
 		
 		$("#data").html(""+response+"");
 		 
 		
 		});
+
 	});	  
 
 });
