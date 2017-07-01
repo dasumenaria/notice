@@ -36,7 +36,6 @@ padding-right:2px;
 	background-color:#CCC;
 }
 </style>
-<link href="csss/photo.css" type="text/css" rel="stylesheet" />
 </head>
 
 <body>
@@ -51,6 +50,7 @@ padding-right:2px;
     </div>
 
 <table width="100%" border="1" style="border-collapse:collapse;" bordercolor="#10A062">
+  <tr><td align='right' colspan='8'><a style="background-color:#48D1CC" href="outward_report_excel.php?fromdat=<?php echo $fromdat; ?>&todat=<?php echo $todat; ?>">Download Excel</a>
   <tr style="background-color:#DFF0D8;" >
     <th width="3%">S.No</th>
     <th width="10%">Vendor Name</th>

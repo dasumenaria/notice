@@ -7,7 +7,7 @@
 		$item_id=$_POST['item_id'];
 		$no_of_item=$_POST['no_of_item'];	
 		$date1=$_POST['date'];
-		$date=date('Y-m-d',strtotime($date1));	
+			$date=date('Y-m-d',strtotime($date1));	
 		$remarks=$_POST['remarks'];
 		$maintenance_cost=$_POST['maintenance_cost'];
 		
