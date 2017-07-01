@@ -145,7 +145,7 @@ if(isset($_POST['submit']))
 									$ftc_data1=mysql_fetch_array($dataftc1);
 									$item_name=$ftc_data1['item_name'];
 							?>
-                        	<tr>
+                        	<tr style="height:30px">
                             	<td><?php echo $i;?></td><td><?php echo $item_name;?></td><td><?php echo $quantity;?></td>
                             </tr>
                             <?php
