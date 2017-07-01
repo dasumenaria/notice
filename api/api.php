@@ -2176,7 +2176,7 @@ $time=time();
 			 $student_ids=sizeof($student_id);
 		$st_id=0;
 		for($i=0; $i<$student_ids; $i++)
-		{ 
+		{
 			$st_id=$student_id[$i];
 			$sql_insert = $this->db->prepare("INSERT into assignment(user_id,class_id,section_id,subject_id,topic,student_id,description,submission_date,curent_date,file)
 				VALUES(:user_id,:class_id,:section_id,:subject_id,:topic,:student_id,:description,:submission_date,:curent_date,:file)");
@@ -2254,9 +2254,9 @@ $time=time();
  						curl_close($ch);
  					//-- 
 		}
-$successa = array('assignment_type'=> $assignment_type, "user_id" => $user_id, "class_id" => $class_id, "section_id" => $section_id, "student_id" => $student_id, "subject_id" => $subject_id, "topic" => $topic, "description" => $description, "submission_date" => $submission_date,"filename" => $filename);
                 $success = array('status'=> true, "Error" => "Thank you your assignment updated successfully");
                 $this->response($this->json($success), 200);
+			
 			
 		}
 		else{
