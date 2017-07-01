@@ -28,7 +28,7 @@ td
 {
 padding-left:2px;
 padding-right:2px;
-
+height:30px
 }
 
 .ad:hover
@@ -51,7 +51,7 @@ padding-right:2px;
     </div>
 
 <table width="100%" border="1" style="border-collapse:collapse;" bordercolor="#10A062">
-  <tr style="background-color:#DFF0D8;" >
+  <tr style="background-color:#DFF0D8;height:35px" >
     <th width="3%">S.No</th>
     <th width="10%">Vendor Name</th>
     <th  width="7%">Item Name</th>
