@@ -3963,7 +3963,7 @@ $string_insert[$x]['time']=$time;
             $this->response('', 406);
         }
 		
-		$sql_fetch = $this->db->prepare("SELECT * FROM `master_bus` order by `id` ASC ");
+		$sql_fetch = $this->db->prepare("SELECT * FROM `master_bus` where flag = 0 order by `id` ASC ");
 		$sql_fetch->execute();
 		 if ($sql_fetch->rowCount() != 0) {  
 			$x=0;  
