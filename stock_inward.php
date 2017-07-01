@@ -1,41 +1,70 @@
 <?php
 	include("index_layout.php");
 	include("database.php");
- 
+	$message="";
 	if(isset($_POST['sub']))	
 	{
 		
+		
+		$stock_type=$_POST['stock'];
 		$vendor_id=$_POST['vender_id'];
 		$item_id=$_POST['item_id'];
 		$quantity=$_POST['quantity'];	
-		$date=$_POST['date'];	
+		$date1=$_POST['date']; 
+			$date=date('Y-m-d',strtotime($date1));
 		$total=$_POST['total'];	
 		$item_rate=$_POST['item_rate'];	
 		$remarks=$_POST['remarks'];
-	 
-		mysql_query("insert into `stock_inward` (`vendor_id`,`item_id`,`quantity`,`item_rate`,`date`,`total`,`remarks`) values('$vendor_id','$item_id','$quantity','$item_rate','$date','$total','$remarks')");
-		
-		$fetchstock=mysql_query("select * FROM `stock_quantity` where `item_id`='$item_id'");
-		$count=mysql_num_rows($fetchstock);
-		if($count >0)
+		if($stock_type==1)
 		{
-			//update
-			$row1=mysql_fetch_array($fetchstock);
-			$FTCid=$row1['id'];
-			$FTCquantity=$row1['quantity'];
+		mysql_query("insert into `stock_inward` (`stock_type`,`vendor_id`,`item_id`,`quantity`,`item_rate`,`date`,`total`,`remarks`) values('$stock_type','$vendor_id','$item_id','$quantity','$item_rate','$date','$total','$remarks')");
+		
+			$fetchstock=mysql_query("select * FROM `stock_quantity` where `item_id`='$item_id'");
+			$count=mysql_num_rows($fetchstock);
+			if($count >0)
+			{
+				//update
+				$row1=mysql_fetch_array($fetchstock);
+				$FTCid=$row1['id'];
+				$FTCquantity=$row1['quantity'];
 			
-			$FTCitem_id=$row1['item_id'];
-			$totalquantity=$FTCquantity+$quantity;
-			mysql_query("update `stock_quantity` set `quantity`='$totalquantity' where `id`='$FTCid'");
+				$FTCitem_id=$row1['item_id'];
+				$totalquantity=$FTCquantity+$quantity;
+				mysql_query("update `stock_quantity` set `quantity`='$totalquantity' where `id`='$FTCid'");
 
+			}
+				else
+				{
+					//insert
+					mysql_query("insert into `stock_quantity` (`item_id`,`quantity`) values('$item_id','$quantity')");
+
+				}
+			$message1="Stock sucessfully submited";
 		}
-		else
+		else if($stock_type==2)
 		{
-			//insert
-			mysql_query("insert into `stock_quantity` (`item_id`,`quantity`) values('$item_id','$quantity')");
+			
+			$fetchstock=mysql_query("select * FROM `stock_quantity` where `item_id`='$item_id'");
+							$row1=mysql_fetch_array($fetchstock);
+				$FTCid=$row1['id'];
+				$FTCquantity=$row1['quantity'];
+			if($FTCquantity >=$quantity)
+			{
+				//update
 
-		}
-		
+				mysql_query("insert into `stock_inward` (`stock_type`,`vendor_id`,`item_id`,`quantity`,`item_rate`,`date`,`total`,`remarks`) values('$stock_type','$vendor_id','$item_id','$quantity','$item_rate','$date','$total','$remarks')");
+				$FTCitem_id=$row1['item_id'];
+				$totalquantity=$FTCquantity-$quantity;
+				
+				mysql_query("update `stock_quantity` set `quantity`='$totalquantity' where `id`='$FTCid'");
+
+			}
+			else
+			{
+				$message="Input quantity should be less then available quantity";
+
+			}
+		}	
 	}
 ?>
 
@@ -59,9 +88,34 @@
 							</div>
 							<div class="portlet-body form">
 							<!-- BEGIN FORM-->
-								<form  class="form-horizontal" id="form_sample_2"  role="form" method="post"> 
+								<form  class="form-horizontal" id="form_sample_2"  role="form" method="post"><br>
+									<?php
+									if(!empty($message1))
+									{
+									?>
+									<div class="alert alert-success">
+											<strong>Success ! : </strong> <?php echo $message1;?>
+									</div>									
+									<?php } ?>
+									<?php
+									if(!empty($message))
+									{
+									?>
+									<div class="alert alert-danger">
+										<strong>Error ! </strong> <?php echo $message;?>
+									</div>
+																		
+									<?php } ?>
 									<div class="form-body">
 										<div class="form-group">
+											<div style="padding-left:25%" class="radio-list">
+												<label class="radio-inline">
+													<input type="radio" name="stock" id="stock_inward" value="1" checked> Stock Inward</label>
+												<label class="radio-inline">
+													<input type="radio" name="stock" id="stock_outward" value="2">Stock Outward</label>	
+											</div>
+										</div>
+										<div class="form-group">	
 											<label class="control-label col-md-3">Vender Name</label>
 											<div class="col-md-6">
 												<i class="fa"></i>
