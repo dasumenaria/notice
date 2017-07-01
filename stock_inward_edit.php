@@ -158,7 +158,7 @@ if(isset($_POST['update_details']))
 										<div class="col-md-6">
 											<div class="input-icon right">
 												<i class="fa"></i>
-												<input class="form-control" placeholder="Please Enter Remarks" required name="remarks" autocomplete="off" value="<?php echo $remarks ; ?>" type="text">
+												<input class="form-control" placeholder="Please Enter Remarks" name="remarks" autocomplete="off" value="<?php echo $remarks ; ?>" type="text">
 											</div>
 										</div>
 									</div>

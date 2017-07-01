@@ -90,7 +90,7 @@
 											<div class="col-md-6">
 												<div class="input-icon right">
 													<i class="fa"></i>
-													<input class="form-control" placeholder="Please Enter Remarks" required name="remarks" autocomplete="off" type="text">
+													<input class="form-control" placeholder="Please Enter Remarks" name="remarks" autocomplete="off" type="text">
 												</div>
 											</div>
 										</div>
