@@ -32,7 +32,8 @@
 									 
 									<div class="col-md-12" >
                                         
-                                        <div class="form-group col-md-8">
+                                        <div class="form-group col-md-2">&nbsp;</div>
+                                        <div class="form-group col-md-6">
                                             <label class="control-label col-md-3">Search By Date</label>
                                             <div class="col-md-4">
                                                 <div class="input-group input-large date-picker input-daterange" data-date-format="mm/dd/yyyy">
@@ -49,11 +50,12 @@
                                     </div>
                                     </div>	
 									 <div id="viewdata" class="scroller" style="height: 400px;" >
+									 <div align="right">
+											<a style="background-color:#48D1CC" class="btn btn-primary" href="visitor_report_excel.php?from_date=<?php echo date('Y-m-d')?>&to_date=<?php echo date('Y-m-d')?>">Download Excel</a>
+									</div>
 									<table aria-describedby="sample_1_info" class="table table-striped table-bordered dataTable" id="sample_1">
 									<thead>
-										<tr><td align='right' colspan="11">
-											<a style="background-color:#48D1CC" class="btn btn-primary" href="visitor_report_excel.php">Download Excel</a>
-										</td></tr>
+										
 										<tr>
 											<th>S.No</th>
                                             <th>Visitor Name</th>
@@ -69,7 +71,6 @@
 										</tr>
 									</thead>
 									<tbody>
-										<tr>
                                         <?php
 										$i=0;
 										$reg_all=mysql_query("select * from `visitor_reg` where DATE(in_date)= DATE(NOW()) ORDER BY ID DESC");
@@ -101,7 +102,7 @@
 													$city = $ftc_data['city'];
 													$remark=$ftc_data['remark'];
 											?>
-									
+											<tr>
 											<td><?php echo $i ?></td>
 											<td><?php echo $visitor_name ?></td>
                                             <td><?php echo $contact_no ?></td>
@@ -112,14 +113,15 @@
                                             <td><?php echo $in_date_frmt ?></td>
                                             <td><?php echo $out_date_frmt ?></td>
 											<td><?php echo $city ?></td>
-											<td><?php echo $remark ?></td></tr>
+											<td><?php echo $remark ?></td>
+											</tr>
                                         <?php
                                         }
-											}
-											else
-											{	echo "<p style='color:red'><strong>No Data Found</strong></p>";
-											}
-											
+									}
+										else
+										{	echo "<tr><td colspan='12' align='center'><p style='color:red'><strong>No Data Found</strong></p></td></tr>";
+										}
+										
 										?>
 									</tbody>
 								</table>

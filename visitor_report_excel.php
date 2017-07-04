@@ -1,5 +1,11 @@
 <?php
-	include("database.php");
+include("database.php");
+   $from = $_GET['from_date'];
+    $from_date=date('Y-m-d',strtotime($from));
+     
+   $to = $_GET['to_date'];
+    $to_date=date('Y-m-d',strtotime($to)); 
+	
 $filename="inward_report_excel";
     header ("Expires: 0");
     header ("Last-Modified: " . gmdate("D,d M YH:i:s") . " GMT");
@@ -12,8 +18,8 @@ $filename="inward_report_excel";
 
 							<!-- BEGIN FORM-->
 							
-                                <div class="caption" style="text-align:center" colspan="11">
-									<i class="fa fa-gift"></i>View Report Today
+                                <div class="caption" style="text-align:center" colspan="10">
+									<i class="fa fa-gift"></i>View Report visitor
 								</div>
 									<table aria-describedby="sample_1_info" border="1" class="table table-striped table-bordered dataTable" id="sample_1">
 									<thead>
@@ -35,7 +41,8 @@ $filename="inward_report_excel";
 										<tr>
                                         <?php
 										$i=0;
-										$reg_all=mysql_query("select * from `visitor_reg`");
+										
+										$reg_all=mysql_query("select * from `visitor_reg` where in_date between '$from_date' and '$to_date'");
 										$num_rows =mysql_num_rows($reg_all);
 										if($num_rows > 0)
 											{
@@ -80,7 +87,7 @@ $filename="inward_report_excel";
                                         }
 											}
 											else
-											{	echo "<p style='color:red'><strong>No Data Found</strong></p>";
+											{	echo "<tr><td colspan='12' align='center'><p style='color:red'><strong>No Data Found</strong></p></td></tr>";
 											}
 											
 										?>

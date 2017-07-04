@@ -10,7 +10,7 @@ include('database.php');
 									<table aria-describedby="sample_1_info" class="table table-striped table-bordered dataTable" id="sample_1">
 									<thead>
 										<tr><td align='right' colspan="11">
-											<a style="background-color:#48D1CC" class="btn btn-primary" href="date_wise_visitor_report_excel.php">Download Excel</a>
+											<a style="background-color:#48D1CC" class="btn btn-primary" href="visitor_report_excel.php?from_date=<?php echo $from_date;?>&to_date=<?php echo $to_date;?>">Download Excel</a>
 										</td></tr>
 										<tr>
 											<th>S.No</th>
@@ -76,7 +76,7 @@ include('database.php');
                                         }
 											}
 											else
-											{	echo "<p style='color:red'><strong>No Data Found</strong></p>";
+											{	echo "<tr><td colspan='12' align='center'><p style='color:red'><strong>No Data Found</strong></p></td></tr>";
 											}
 											
 										?>
