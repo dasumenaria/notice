@@ -4,7 +4,8 @@ include("database.php");
 $firstSearch=mysql_query("select * from `login`");		
 $i=0;
 while($row=mysql_fetch_array($firstSearch))
-{$i++;
+{	
+	/*$i++;
 	$id=$row['id'];
 	$dob=$row['dob'];
 	$exdob=explode('/', $dob);
@@ -17,7 +18,15 @@ while($row=mysql_fetch_array($firstSearch))
 	
 	mysql_query("update `login` set `dob` = '$date_of_birth' , `password` = '$password'  where `id` = '$id' ");
 	echo "update `login` set `dob` = '$date_of_birth' , `password` = '$password'  where `id` = '$id' <br>";	
-	//if($i==10){ exit;}		
+	//if($i==10){ exit;}	
+	*/
+	$name=$row['name'];	
+	$dob=$row['dob'];
+	$year=date('Y', strtotime($dob));
+	$exdobname=explode(' ', $name);
+	$first_name=$exdobname[1];
+	echo $user_name=$first_name.$year.'<br />';
+
 }
 
  ?>

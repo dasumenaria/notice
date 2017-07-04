@@ -3963,7 +3963,7 @@ $string_insert[$x]['time']=$time;
             $this->response('', 406);
         }
 		
-		$sql_fetch = $this->db->prepare("SELECT * FROM `master_bus` order by `id` ASC ");
+		$sql_fetch = $this->db->prepare("SELECT * FROM `master_bus` where flag = 0 order by `id` ASC ");
 		$sql_fetch->execute();
 		 if ($sql_fetch->rowCount() != 0) {  
 			$x=0;  
@@ -3980,7 +3980,6 @@ $string_insert[$x]['time']=$time;
 				$ResultArray=array();
 				while($stds = $sql_stds->fetch(PDO::FETCH_ASSOC)){
 			 
-					
 					$station_id=$stds['station_id'];	 
 					$sql_std = $this->db->prepare("SELECT `station` FROM master_station WHERE id='".$station_id."'");
 					$sql_std->execute();
@@ -4164,7 +4163,6 @@ $string_insert[$x]['time']=$time;
 		$class_id=$row_gps[0]['class_id'];
 		$name=$row_gps[0]['name'];  
 		
-		 	 
 		$note_sql = $this->db->prepare("SELECT * FROM student_marks where `student_id` = '$student_id' && `class_id` = '$class_id' && `section_id` = '$section_id' order by `subject_id` ASC");
 		$note_sql->execute();
 		if($note_sql->rowCount()>0)
@@ -4175,7 +4173,6 @@ $string_insert[$x]['time']=$time;
 			 foreach($row_gp as $key=>$valye)	
 			 {
 				 
-				
 				$subject_id=$valye['subject_id'];
 					$sql_stds = $this->db->prepare("SELECT `subject_name` FROM master_subject WHERE id='".$subject_id."'");
 					$sql_stds->execute();
@@ -4194,7 +4191,6 @@ $string_insert[$x]['time']=$time;
 				$max_marks=$valye['max_marks'];
 				$obtained_marks=$valye['obtained_marks'];
 					
- 				 
 				$string_insert[$x]['student_name']=$name;
 				$string_insert[$x]['marks']=$obtained_marks.'/'.$max_marks;
 				$string_insert[$x]['max_marks']=$max_marks;
