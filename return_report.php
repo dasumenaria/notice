@@ -51,10 +51,8 @@ height:30px
 
 <table width="100%" border="1" style="border-collapse:collapse;" bordercolor="#10A062">
 
-  <tr><td align='right' colspan='9'><a style="background-color:#48D1CC" href="return_report_excel.php?fromdat=<?php echo $fromdat; ?>&todat=<?php echo $todat; ?>">Download Excel</a>
-  <tr style="background-color:#DFF0D8;" >
-
-  <tr style="background-color:#DFF0D8;height:35px" >
+  <tr><td align='right' colspan='9'><a style="background-color:#48D1CC" href="return_report_excel.php?fromdat=<?php echo $fromdat; ?>&todat=<?php echo $todat; ?>">Download Excel</a></td></tr>
+ <tr style="background-color:#DFF0D8;height:35px" >
 
     <th width="3%">S.No</th>
     <th  width="7%">Name</th>
