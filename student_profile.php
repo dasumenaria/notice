@@ -3,6 +3,13 @@
  include("database.php");
 $session_id=$_SESSION['id'];
 $student_id=$_GET['stdnt_id'];
+@session_start();
+date_default_timezone_set('asia/kolkata');
+$session=$_SESSION['session'];
+$crrnt_year=date('Y');
+$nextyear=date('Y', strtotime('+1 year'));
+$year_st=$crrnt_year."-".$nextyear;
+ 
 
   ?> 
    
@@ -28,26 +35,27 @@ $student_id=$_GET['stdnt_id'];
 						<!-- PORTLET MAIN -->
 						<div class="portlet light profile-sidebar-portlet">
 							<!-- SIDEBAR USERPIC -->
-								<?php 
-                                $query=mysql_query("select * from `login` where `id`='$student_id'");
-                                $fetch=mysql_fetch_array($query);
-                                $id=$fetch['id'];
-                                $name=$fetch['name'];
-                                $image=$fetch['image'];
-                                $class_id=$fetch['class_id'];
-                                $section_id=$fetch['section_id'];
-                                $mobile_no=$fetch['mobile_no'];
-                                $dob=$fetch['dob'];
-                                $dob_chng=date('d-m-Y',strtotime($dob));
-                                
-                                $father_name=$fetch['father_name'];
-                                $mother_name=$fetch['mother_name'];
-                                $cls=mysql_query("select * from `master_class` where `id`='$class_id'");
-                                $fet_cls=mysql_fetch_array($cls);
-                                $class_name=$fet_cls['class_name'];
-                                $sec=mysql_query("select * from `master_section` where `id`='$section_id'");
-                                $fet_sec=mysql_fetch_array($sec);
-                                $section_name=$fet_sec['section_name'];
+<?php 
+$query=mysql_query("select * from `login` where `id`='$student_id'");
+$fetch=mysql_fetch_array($query);
+$id=$fetch['id'];
+$reg_no=$fetch['reg_no'];
+$name=$fetch['name'];
+$image=$fetch['image'];
+$class_id=$fetch['class_id'];
+$section_id=$fetch['section_id'];
+$mobile_no=$fetch['mobile_no'];
+$dob=$fetch['dob'];
+ $dob_chng=date('d-m-Y',strtotime($dob));
+
+$father_name=$fetch['father_name'];
+$mother_name=$fetch['mother_name'];
+	$cls=mysql_query("select * from `master_class` where `id`='$class_id'");
+	$fet_cls=mysql_fetch_array($cls);
+$class_name=$fet_cls['class_name'];
+	$sec=mysql_query("select * from `master_section` where `id`='$section_id'");
+	$fet_sec=mysql_fetch_array($sec);
+$section_name=$fet_sec['section_name'];
 
 
 
@@ -88,13 +96,13 @@ $student_id=$_GET['stdnt_id'];
 										<label Style="color:#5a7391;font-weight:bold;">Mother Name:</label> <?php echo $mother_name;?> </a>
 									</li>
 									<li>
-										<a href="#" target="_blank">
+										<a href="#"  >
 										<label Style="color:#5a7391;font-weight:bold;">Mobile No :</label> 
 										<i class="icon-call-out"></i>
 										<?php echo $mobile_no;?> </a>
 									</li>
 									<li>
-										<a href="extra_profile_help.html">
+										<a href="#">
 										<label Style="color:#5a7391;font-weight:bold;">Date Of Birth :</label> 
 										<i class="icon-present"></i> 
 										 <?php echo $dob_chng;?> </a>
@@ -163,10 +171,10 @@ $student_id=$_GET['stdnt_id'];
 								<!-- BEGIN PORTLET -->
 								<div class="portlet light ">
 									<div class="portlet-title">
-										<div style="font-weight:300; font-size:18px">
+										<div class="caption">
 											<center>
-												<span class="caption-subject font-blue-madison bold uppercase" >Attendance Status </span>
-											</center> 
+												<span class="caption-subject font-blue-madison bold uppercase" style="padding-left:10px">Attendance Status </span>
+											 
  										</div>
 	 
 									</div>
@@ -244,13 +252,13 @@ $student_id=$_GET['stdnt_id'];
 												 $first_date= $current_year."-".$i."-01";
 												 $last_date= date("Y-m-t", strtotime($first_date));
 												 
-												$mnth_wise_attnd=mysql_query("select `attendance_mark` from `attendance` where attendance_date BETWEEN '$first_date' AND '$last_date' && `attendance_mark`='1'" );
+												$mnth_wise_attnd=mysql_query("select `attendance_mark` from `attendance` where attendance_date BETWEEN '$first_date' AND '$last_date' && `attendance_mark`='1' && `student_id`='".$student_id."'" );
 												 $tot_prsnt=mysql_num_rows($mnth_wise_attnd);
 												 
-												 $mnth_wise_absnt=mysql_query("select `attendance_mark` from `attendance` where attendance_date BETWEEN '$first_date' AND '$last_date' && `attendance_mark`='2'" );
+												 $mnth_wise_absnt=mysql_query("select `attendance_mark` from `attendance` where attendance_date BETWEEN '$first_date' AND '$last_date' && `attendance_mark`='2' && `student_id`='".$student_id."'" );
 												 $tot_absnt=mysql_num_rows($mnth_wise_absnt);
 												 
-												 $mnth_wise_lev=mysql_query("select `attendance_mark` from `attendance` where attendance_date BETWEEN '$first_date' AND '$last_date' && `attendance_mark`='3'" );
+												 $mnth_wise_lev=mysql_query("select `attendance_mark` from `attendance` where attendance_date BETWEEN '$first_date' AND '$last_date' && `attendance_mark`='3' && `student_id`='".$student_id."'" );
 												 $tot_lev=mysql_num_rows($mnth_wise_lev);
 												 
 												
@@ -260,8 +268,8 @@ $student_id=$_GET['stdnt_id'];
 														<td>
 															<a href="#" class="primary-link"><?php echo date('M',strtotime($first_date));?></a>
 														</td>
-														<td>&nbsp;
-															 
+														<td>
+															 &nbsp;
 														</td>
 														<td>
 															 <span style="color:#12B770;"><?php if($tot_prsnt==0) { echo "0"; }else{echo $tot_prsnt; }?></span>
@@ -291,7 +299,7 @@ $student_id=$_GET['stdnt_id'];
 										<div class="caption">
 											<center>
 											<span class="caption-subject font-blue-madison bold uppercase" style="padding-left:60px">Class Test Report </span>
-											 
+											<img src="assets/images/14.png" width='55px' height='50px'>
 											</center>
  										</div>
 	 
@@ -325,60 +333,60 @@ $student_id=$_GET['stdnt_id'];
 											<table class="table table-hover table-light" >
 											<thead>
 											<tr class="uppercase">
-												<th colspan="2">
-													Exam Terms
-												</th>
-												<th>
+												 
+												<th >
 													Subject
 												</th>
 												<th>
-														Maximum Marks
+												   Average
 												</th>
-												<th>
-													Obtained Marks
-												</th> 
+												 
 											</tr>
 											</thead>
 											<?php 
-											$exm_trm=mysql_query("SELECT   `student_marks`.`subject_id`
-																, `student_marks`.`max_marks`
-																, `student_marks`.`obtained_marks`
-																, `master_exam`.`id`
-																, `master_exam`.`exam_type`
-																FROM
-																`new_notice`.`student_marks`
-																INNER JOIN `new_notice`.`master_exam` 
-																ON (`student_marks`.`exam_type_id` = `master_exam`.`id`) WHERE student_id='".$student_id."'");
-											while($fetch_exm_trm=mysql_fetch_array($exm_trm))
-											{
-												$ex_subject_id=$fetch_exm_trm['subject_id'];
-															$sub=mysql_query("select `subject_name` from master_subject where id='".$ex_subject_id."'" );
-															$fetch_sub=mysql_fetch_array($sub);
-															$subject_name=$fetch_sub['subject_name'];
-												
-												$max_marks=$fetch_exm_trm['max_marks'];
-												$obtained_marks=$fetch_exm_trm['obtained_marks'];
-												$exam_type=$fetch_exm_trm['exam_type'];
+												$cls_fet=mysql_query("SELECT  * from  subject_mapping where $class_id='".$class_id."' && $section_id='".$section_id."' ");
+												$fetch_cls=mysql_fetch_array($cls_fet);
+													$exm_subject_id=$fetch_cls['subject_id'];
+													$exm_sub_explod =(explode(",",$exm_subject_id)); 
+													
 
+												foreach($exm_sub_explod as $value)	
+												{
+															$exm_sub_explod=$value;
+
+															$sub_nm=mysql_query("SELECT  * from master_subject where  id='$exm_sub_explod'");
+															$fetch_sub_nm=mysql_fetch_array($sub_nm);
+																 $sub_subject_name=$fetch_sub_nm['subject_name'];
+																 $exm_sub_explod;
+																$avg=0;
+																$total_subject_mark=0;
+													$total_obtianed_mark=0;
+																$exm_stdn_avg=mysql_query("SELECT  * from student_marks where subject_id='$exm_sub_explod' && student_id='".$student_id."'");
+																while($fetch_exm_stdn_avg=mysql_fetch_array($exm_stdn_avg))
+																	{
+																		$exm_stdn_avg_subject=$fetch_exm_stdn_avg['subject_id'];
+																		$exm_stdn_avg_max_marks=$fetch_exm_stdn_avg['max_marks'];
+																		$exm_stdn_avg_obtained_marks=$fetch_exm_stdn_avg['obtained_marks'];
+																		
+																		$total_subject_mark=+$exm_stdn_avg_max_marks;	
+																		$total_obtianed_mark=+$exm_stdn_avg_obtained_marks;
+																	}
+																		 $total_obtianed_mark;
+																		 $total_subject_mark;
+																		 $avg=$total_obtianed_mark *100/$total_subject_mark;
+															 
 											?>
-											<tr> 
-												<td>
-													<a href="#" class="primary-link"><?php echo $exam_type; ?></a>
-												</td>
-												<td>&nbsp;
-													 
-												</td>
-												<td>
-													 <?php echo $subject_name; ?>
-												</td>
-												<td align="center">
-													 <?php echo $max_marks; ?>
-												</td>
-												<td align="center">
-													 <?php echo $obtained_marks; ?>
-												</td>
-											</tr>
-											<?php }?>
+															<tr> 
+															<td> <?php echo $sub_subject_name; ?> </td>
+															<td> <?php if(!empty($avg)) { echo $avg; } else { echo '0'; } ?> </td>
+															</tr>
+											<?php 
+											
+											} 	
+											
+											?>
+											
+											 
 											   </table>
 										</div>
 									</div>
@@ -412,32 +420,47 @@ $student_id=$_GET['stdnt_id'];
 													Fee 
 												</th> 
 											</tr>
-											</thead>
-											<?php
-											$current_year=date('Y');
+											</thead> 
+<?php
+
+$reg_no=$fetch['reg_no'];
+$connect = mysql_connect("localhost","root",""); //database connection
+mysql_select_db($year_st,$consnect); // select database1 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+$fee_status=mysql_query("SELECT
+      `mnth_fee2`.`mnth`
+    , `mnth_fee2`.`fee`
+FROM
+    `2017-2018`.`mnth_fee_1`
+    INNER JOIN `2017-2018`.`mnth_fee2` 
+        ON (`mnth_fee_1`.`sno` = `mnth_fee2`.`mnth_fee1_sno`)
+    INNER JOIN `2017-2018`.`stdnt_reg` 
+        ON (`stdnt_reg`.`id` = `mnth_fee_1`.`schlr_no_id`) WHERE fee_type='5' && reg_no='1'");
+		while($fetch_fee=mysql_fetch_array($fee_status))
+			{
+			 $mnth=$fetch_fee['mnth'];
+			 $fee=$fetch_fee['fee'];
+			 $month_match[$mnth]=$fetch_fee['fee'];
+			 
+			}
+ ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+?>
+											<?php 
+												$current_year=date('Y');
 												for ($i = 1; $i <= 12; $i++)
 												{
-												 $first_date= $current_year."-".$i."-01";
-												 $last_date= date("Y-m-t", strtotime($first_date));
-												 ?>
-													<tr> 
-														<td>
-															<a href="#" class="primary-link"><?php echo date('F ',strtotime($first_date));?></a>
-														</td>
-														<td>&nbsp;
-															 
-														</td>
-														<td>
-															 Paid
-														</td>
-														 
-													</tr>
-												 <?php
-												 
-												} 	
-											?>
-											
-											 </table>
+													$first_date= $current_year."-".$i."-01";
+													$last_date= date("Y-m-t", strtotime($first_date));
+													$mnth_f=date('M',strtotime($first_date));
+													$fee_month=strtolower($mnth_f);?>
+														<tr> 
+															<td><a href="#" class="primary-link"><?php echo $fee_month;?></a></td>
+															<td>&nbsp;</td>
+															<td><?php if(!empty($month_match[$fee_month])) { echo "PAID";}
+															else{ echo "DUE";}?></td>
+														</tr>
+											<?php } ?>
+										</table>
 										</div>
 									</div>
 								</div>
@@ -489,11 +512,11 @@ $student_id=$_GET['stdnt_id'];
 												<!-- END START TASK LIST -->
 											</div>
 										</div>
-										<div class="task-footer">
+											<!--<div class="task-footer">
 											<div class="btn-arrow-link pull-right">
 												<a href="#">See All Tasks</a>
 											</div>
-										</div>
+										</div> -->
 									</div>
 								</div>
 								<!-- END PORTLET -->
