@@ -59,7 +59,7 @@
                                         <select name="role_id" class="form-control select select2 select2me" placeholder="Select..." id="sid">
                                          <option value=""></option>
                                             <?php
-                                            $r1=mysql_query("select * from master_role");		
+                                            $r1=mysql_query("select `id`,`role_name` from master_role");		
                                             $i=0;
                                             while($row1=mysql_fetch_array($r1))
                                             {

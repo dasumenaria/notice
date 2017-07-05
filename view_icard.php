@@ -69,9 +69,9 @@ $FeeSession=$cur."-".$back;
                 </tr>
                 <tr>
                 	<td colspan="2">
-                    	 <table border="1" width="100%" style="border-collapse:collapse;height:130px; font-size:14px">
+                    	 <table border="1" width="100%" style="border-collapse:collapse;height:140px; font-size:14px">
                             <tr>
-                                <td align="center" width="25%" height="129px"rowspan="7"><img width="115px" height="104px" src="user/student0.jpg"></td>
+                                <td align="center" width="25%" height="139px"rowspan="7"><img width="115px" height="134px" src="user/student0.jpg"></td>
                                 <td align="left">&nbsp;Student </td>
                                 <td>&nbsp; <?php echo $name; ?></td>
                                 
