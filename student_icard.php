@@ -10,7 +10,7 @@ if(isset($_POST['submit']))
 	$class_id=$_REQUEST["class_id"];
 	$section_id=$_REQUEST["section_id"];
 	echo "<script>
-		location='inventory_report.php';
+		location='student_icard.php';
 		window.open('view_icard.php?class=$class_id&section=$section_id','_newtab');
 	</script>";	
 }
@@ -20,7 +20,7 @@ if(isset($_POST['submit']))
 <head>
 <?php css();?>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Time Table</title>
+<title>Student I-Card</title>
 </head>
 <?php contant_start(); menu();  ?>
 <body>

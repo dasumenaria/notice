@@ -10,6 +10,7 @@ $cur=date('Y');
 $back=$cur+1;
 $FeeSession=$cur."-".$back;		 
 ?>
+<link href="assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
 <html>
 <head> 
  <title></title>
@@ -26,7 +27,7 @@ $FeeSession=$cur."-".$back;
  </style> 
 </head>
     <body style="background-color:#FFF">
-        
+   
         <?php
 			$ftc_school=mysql_query("select * from `school`");
 			$data_ftc=mysql_fetch_array($ftc_school);
@@ -53,57 +54,52 @@ $FeeSession=$cur."-".$back;
 			$section_name=$fet_sec['section_name'];
 			
         ?>
-            
-        	<table border="1" width="400px" align="center" style="text-align:center;border-collapse:collapse;">
+        
+			<div class='col-md-6 form-group' style="width:50%;height:270px;float:left">
+			<table border="1" align="center" style="text-align:center;border-collapse:collapse;">
             	<tr>
                 	<td colspan="2" class="header"><?php  echo $data_ftc['school_name'];?></td>
                 </tr>
                 <tr>
-                	<td colspan="2" class="header_sexcond"><?php  echo $data_ftc['address'].' PH. '.$data_ftc['phone'];?></td>
+                	<td colspan="2" class="header_sexcond"><?php  echo $data_ftc['address'].' Ph. '.$data_ftc['phone'];?></td>
                 </tr>
-                <tr style="font-size:16px;font-weight:600">
-                	<td align="left"><em>IDENTITY-CARD</em></td>
-                    <td align="right"><em>SESSION-<?php echo $FeeSession;?></em></td>
+                <tr style="font-size:14px;font-weight:600">
+                	<td align="center">IDENTITY-CARD</td>
+                    <td align="center">SESSION-<?php echo $FeeSession;?></td>
                 </tr>
                 <tr>
                 	<td colspan="2">
-                    	 <table border="1" width="100%" style="border-collapse:collapse; font-size:15px">
+                    	 <table border="1" width="100%" style="border-collapse:collapse;height:130px; font-size:14px">
                             <tr>
-                                <td align="left" width="30%" rowspan="7"><img width="115px" height="104px" src="user/student0.jpg"></td>
-                                <td align="left">Student Name</td>
-                                <td>: <?php echo $name; ?></td>
+                                <td align="center" width="25%" height="129px"rowspan="7"><img width="115px" height="104px" src="user/student0.jpg"></td>
+                                <td align="left">&nbsp;Student </td>
+                                <td> <?php echo $name; ?></td>
                                 
                             </tr>
                             <tr>
-                            	<td align="left">Father's Name</td>
-                                <td>: <?php echo $father_name; ?></td>
+                            	<td align="left">&nbsp;Father's </td>
+                                <td> <?php echo $father_name; ?></td>
                             </tr>
                              <tr>
-                            	<td align="left">Mobile No.</td>
-                                <td>: <?php echo $mobile_no; ?></td>
+                            	<td align="left">&nbsp;Mobile No.</td>
+                                <td> <?php echo $mobile_no; ?></td>
                             </tr>
                              <tr>
-                            	<td align="left">Class - Section</td>
-                                <td>: <?php echo $class_name.' - '.$section_name; ?></td>
+                            	<td align="left">&nbsp;Class </td>
+                                <td> <?php echo $class_name.' - '.$section_name; ?></td>
                              </tr>
                              <tr>
-                            	<td align="left">Date of Birth</td>
-                                <td>: <?php echo $date_birth; ?></td>
+                            	<td align="left">&nbsp;Date of Birth</td>
+                                <td> <?php echo $date_birth; ?></td>
                             </tr>
-                             
-                            
-                            
-                        </table>
+                         </table>
                     </td>
                 </tr>
             </table>
-            
-           <?php
+			</div>
+		   <?php
 		}
-		   ?>
-            
-            
-         
+		   ?>     
     </body>
 </html>
                         
