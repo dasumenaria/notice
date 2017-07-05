@@ -97,7 +97,7 @@ $(document).ready(function(){
   $("#sid").change(function(){
         var item_id = $('#sid option:selected').val();
 	  	$.ajax({
-		url: "demo.php?id="+item_id,
+		url: "view_rights.php?id="+item_id,
 		}).done(function(response) {
 	    $("#data").html(""+response+"");
 		});
