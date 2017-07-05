@@ -80,7 +80,7 @@ $id1=$_GET['id'];
                                             </div>
                                         </td>
 										<td>
-										<a class="accordion-toggle accordion-toggle-styled collapsed" data-toggle="collapse" data-parent="#sub_button" href="#sub_menu<?php echo $i;?>">
+										<a class="accordion-toggle accordion-toggle-styled collapsed btn btn-primary btn-sm" data-toggle="collapse"  data-parent="#sub_button" href="#sub_menu<?php echo $i;?>">
 													Sub Menu </a>
 										</td>			
 								</tr>			

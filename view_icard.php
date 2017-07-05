@@ -73,24 +73,24 @@ $FeeSession=$cur."-".$back;
                             <tr>
                                 <td align="center" width="25%" height="129px"rowspan="7"><img width="115px" height="104px" src="user/student0.jpg"></td>
                                 <td align="left">&nbsp;Student </td>
-                                <td> <?php echo $name; ?></td>
+                                <td>&nbsp; <?php echo $name; ?></td>
                                 
                             </tr>
                             <tr>
                             	<td align="left">&nbsp;Father's </td>
-                                <td> <?php echo $father_name; ?></td>
+                                <td>&nbsp; <?php echo $father_name; ?></td>
                             </tr>
                              <tr>
                             	<td align="left">&nbsp;Mobile No.</td>
-                                <td> <?php echo $mobile_no; ?></td>
+                                <td>&nbsp; <?php echo $mobile_no; ?></td>
                             </tr>
                              <tr>
                             	<td align="left">&nbsp;Class </td>
-                                <td> <?php echo $class_name.' - '.$section_name; ?></td>
+                                <td>&nbsp; <?php echo $class_name.' - '.$section_name; ?></td>
                              </tr>
                              <tr>
                             	<td align="left">&nbsp;Date of Birth</td>
-                                <td> <?php echo $date_birth; ?></td>
+                                <td>&nbsp; <?php echo $date_birth; ?></td>
                             </tr>
                          </table>
                     </td>
