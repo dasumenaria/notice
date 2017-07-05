@@ -75,7 +75,7 @@ $id1=$_GET['id'];
                                         <td width="5%;">
                                             <div class="checkbox-list">
                                                 <label>
-                                                    <input type="checkbox" <?php if(in_array($id,$mng_mdul_id)){ echo 'checked="checked"';}?>  class="chk_boxes1" name="module_id[]" onclick="sub_menu(<?php echo  $main_menu_arr ; ?>,<?php echo $id ;?>)" id="chk_main<?php echo $id; ?>" value="<?php echo $id?>">
+                                                    <input type="checkbox" <?php if(in_array($id,$mng_mdul_id)){ echo 'checked="checked"';}?>  class="chk_boxes1" name="module_id[]"  value="<?php echo $id;?>">
                                                 </label>
                                             </div>
                                         </td>
@@ -90,11 +90,12 @@ $id1=$_GET['id'];
 											<table class="table  table-advance table-hover" >
 												
 													<?php
-													$r=mysql_query("SELECT name FROM modules where `main_menu`='$main_menu'");		
+													$r=mysql_query("SELECT * FROM modules where `main_menu`='$main_menu'");		
 													$j=0;
 													while($row=mysql_fetch_array($r))
 													{
 														$j++;
+														$ids=$row['id'];
 														$name=$row['name'];
 													?>
 												<tr  style="background-color:#DFF0D8;">
@@ -104,7 +105,7 @@ $id1=$_GET['id'];
 													<td width="5%" >
 														<div class="checkbox-list">
 															<label>
-																<input type="checkbox" <?php if(in_array($id,$mng_mdul_id)){ echo 'checked="checked"';}?>  class="chk_boxes2<?php echo $id;?> chkall" id="check_i_sub_<?php echo $i;?><?php echo $j;?>" name="module_id1[]"  value="<?php echo $id;?>">
+																<input type="checkbox" <?php if(in_array($ids,$mng_mdul_id)){ echo 'checked="checked"';}?>  class="chk_boxes2<?php echo $id;?> chkall"  name="module_id[]"  value="<?php echo $ids;?>">
 															</label>
 														</div>
 													</td>
