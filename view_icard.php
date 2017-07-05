@@ -26,7 +26,7 @@ $FeeSession=$cur."-".$back;
  </style> 
 </head>
     <body style="background-color:#FFF">
-        <div align="center" style="width:100%; position:absolute; margin-left:-10px; margin-right:-10px; margin-top:-8px;"> 
+        
         <?php
 			$ftc_school=mysql_query("select * from `school`");
 			$data_ftc=mysql_fetch_array($ftc_school);
@@ -97,13 +97,13 @@ $FeeSession=$cur."-".$back;
                     </td>
                 </tr>
             </table>
-            </div>
+            
            <?php
 		}
 		   ?>
             
             
-        </div> 
+         
     </body>
 </html>
                         
