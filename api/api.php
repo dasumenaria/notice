@@ -6,11 +6,10 @@ class API extends REST {
 
     public $data = "";
     
-   
     const DB_SERVER = "localhost";
-    const DB_USER = "root";
-    const DB_PASSWORD = "";
-    const DB = "new_notice";
+    const DB_USER = "wwwcreat_app";
+    const DB_PASSWORD = "5Ze;D0{^zJtJ";
+    const DB = "wwwcreat_app";
 	
 	
    private $db = NULL;
@@ -64,7 +63,7 @@ public function login()
 		$login_identity=$this->_request['login_identity'];
 		
 		if($login_identity=='student')
-		{
+		{ 
 			$sql = $this->db->prepare("SELECT * FROM login WHERE eno='".$enrollment_no."' AND password='".$newpassword."'");
 			$sql->execute();
 			 if($sql->rowCount()>0)
@@ -98,11 +97,12 @@ public function login()
 					$std12 = $sql_std12->fetch(PDO::FETCH_ASSOC);
 					$role_name=$std12['role_name'];
  $class_terche = $this->db->prepare("SELECT `user_name`,`mobile_no` FROM faculty_login WHERE class_id='".$class_id."' AND section_id='".$section_id."'");
+ 
 				 $class_terche->execute();
 				 $ftcc = $class_terche->fetch(PDO::FETCH_ASSOC);
-				 $Tuser_name=$ftcc['user_name'];
+				$Tuser_name=$ftcc['user_name'];
 				 $Tmobile_no=$ftcc['mobile_no'];
-					
+				 	
 				$result = array('id' => $row_login['id'],
 					'enrollment_no' => $row_login['eno'],
 					'designation' => '',
@@ -164,9 +164,9 @@ public function login()
 					$role_name=$std12['role_name'];
 				
 				if(!empty($row_login ['image'])){
-					$row_login ['image'] = $site_url."faculty/".$row_login ['image'];
+				$row_login ['image'] = $site_url."faculty/".$row_login ['image'];
 				}else{
-					$row_login ['image'] = "";
+				$row_login ['image'] = "";
 				}
 
 				$result = array('id' => $row_login['id'],
@@ -440,7 +440,31 @@ public function user_forgot_password()
 				} 	
 		}
 		////
-		
+		public function change_forgot_password() 
+	{
+		if ($this->get_request_method() != "POST") {
+            $this->response('', 406);
+        }
+		$otp=$this->_request['otp'];
+		$password=$this->_request['password'];
+		$mobile_no=$this->_request['mobile_no'];
+			$check_mobile = $this->db->prepare("SELECT * FROM login WHERE mobile_no='".$mobile_no."' AND otp='".$otp."'");
+			$check_mobile->execute();
+			if ($check_mobile->rowCount() > 0) {
+			$fetch_s_logins = $check_mobile->fetch(PDO::FETCH_ASSOC);
+			  $s_id=$fetch_s_logins['id'];
+			$s_newpassword=md5($password);
+			 $sql_s=$this->db->prepare("UPDATE `login` SET password='".$s_newpassword."', otp=0 WHERE id='".$s_id."'");
+             
+			 $sql_s->execute();
+			$success = array('Type' => "Successfully", "Error" => "Password change successfully.", 'Responce' => '1');
+				$this->response($this->json($success), 200);
+			}
+			else{
+				$error = array('Type' => "Error", "Error" => "Please Check Your Otp.", 'Responce' => '1');
+				$this->response($this->json($error), 200);				
+				} 			
+		}
 //////////////////////////
 public function notification_home() {
     include_once("common/global.inc.php");
@@ -682,7 +706,17 @@ $user_id=$this->_request['user_id'];
 			$event_fet = $event_sql->fetchALL(PDO::FETCH_ASSOC);
 			foreach($event_fet as $row_event)
             {
- 
+/*$exist_sql = $this->db->prepare("SELECT * FROM add_to_calendar where user_id='".$user_id."' AND event_id='".$row_event['id']."'");
+				$exist_sql->execute();
+				$exist_sql1 = $exist_sql->fetch(PDO::FETCH_ASSOC);
+
+				if($exist_sql->rowCount()>0)
+				{
+					$event_exist=true;
+				}
+				else{
+					$event_exist=false;
+				}..............*/
 
 $event_sql_id = $this->db->prepare("SELECT * FROM gallery where event_news_id='".$row_event['id']."' AND category_id='4'");
 $event_sql_id->execute();
@@ -763,6 +797,7 @@ $event_folder_name2=$event_folder_name1.$row_event['id'];
                              {$shareable=true;}else{$shareable=false;}
                 
 			$result[] = array('id' => $row_event['id'],
+
 					'title' => $row_event['title'],
                     'discription' => $row_event['description'],
 					'details' => $row_event['description'],
@@ -804,234 +839,209 @@ $event_folder_name2=$event_folder_name1.$row_event['id'];
 
 
 public function home_screen_api() {
-              include_once("common/global.inc.php");
-        global $link;
-                     
-		if ($this->get_request_method() != "POST") {
-            $this->response('', 406);
-        }
-				
-
-				//$user_id = $this->_request['user_id'];
-        $home_sql = $this->db->prepare("SELECT * FROM home_gallery where flag=0 order by id ASC LIMIT 0 , 5");
-		$home_sql->execute();
-			if($home_sql->rowCount()>0)
-			{
-			$home_sql1 = $home_sql->fetchALL(PDO::FETCH_ASSOC);
-			
-			foreach($home_sql1 as $home_sql)
-			{
-			if(!empty($home_sql['pic'])){
-						 $home_sql['pic'] = $site_url."home/".$home_sql['pic'];
-					}else{
-						 $home_sql['pic'] = "";
-					}	
-						
-			$result3[]= array('id' => $home_sql['id'],
-					'title' => $home_sql['title'],
-                    'discription' => $home_sql['pic'],
-					);	
-}
-			}
-			else{
-				$result3[] = array();
-			}
-			
+	include_once("common/global.inc.php");
+	global $link;
+	if ($this->get_request_method() != "POST") {
+	$this->response('', 406);
+	}
+// Slider Images
+	$home_sql = $this->db->prepare("SELECT * FROM home_gallery where flag=0 order by id ASC LIMIT 0 , 5");
+	$home_sql->execute();
+	if($home_sql->rowCount()>0)
+	{
+		$home_sql1 = $home_sql->fetchALL(PDO::FETCH_ASSOC);
 		
-				
-				
-				
-        $event_sql = $this->db->prepare("SELECT * FROM event where flag=0 order by id DESC LIMIT 0 , 5");
-		$event_sql->execute();
-			if($event_sql->rowCount()>0)
-			{
-			$row_event1 = $event_sql->fetchALL(PDO::FETCH_ASSOC);
+		foreach($home_sql1 as $home_sql)
+		{
+			if(!empty($home_sql['pic'])){
+				$home_sql['pic'] = $site_url."home/".$home_sql['pic'];
+			}else{
+				$home_sql['pic'] = "";
+			}	
 			
-			foreach($row_event1 as $row_event)
+			$result3[]= array('id' => $home_sql['id'],
+				'title' => $home_sql['title'],
+				'discription' => $home_sql['pic'],
+			);	
+		}
+	}
+	else{
+		$result3[] = array();
+	}
+//	Events Last 5 Events
+	$event_sql = $this->db->prepare("SELECT * FROM event where flag=0 order by id DESC LIMIT 0 , 5");
+	$event_sql->execute();
+	if($event_sql->rowCount()>0)
+	{
+		$row_event1 = $event_sql->fetchALL(PDO::FETCH_ASSOC);
+		
+		foreach($row_event1 as $row_event)
+		{
+			$event_id=$row_event['id'];
+			$event_folder_name1='event';
+			$event_folder_name2=$event_folder_name1.$event_id;
+			
+			$event_sql_id = $this->db->prepare("SELECT * FROM gallery where event_news_id='".$event_id."' AND category_id='4'");
+			$event_sql_id->execute();
+			$event_sql_id1 = $event_sql_id->fetch(PDO::FETCH_ASSOC);
+			
+			if(!empty($event_sql_id1))
 			{
-				$event_id=$row_event['id'];
-				$event_folder_name1='event';
-				$event_folder_name2=$event_folder_name1.$event_id;
-				
-				$event_sql_id = $this->db->prepare("SELECT * FROM gallery where event_news_id='".$event_id."' AND category_id='4'");
-				$event_sql_id->execute();
-				$event_sql_id1 = $event_sql_id->fetch(PDO::FETCH_ASSOC);
-
-				if(!empty($event_sql_id1))
-				{
 				$event_sql_id2=$event_sql_id1['id'];
 				$isgallery=true;		
-				}
-				else{
+			}
+			else
+			{
 				$event_sql_id2='';
 				$isgallery=false;
-				}
-				
-/*$exist_sql = $this->db->prepare("SELECT * FROM add_to_calendar where user_id='".$user_id."' AND event_id='".$event_id."'");
-				$exist_sql->execute();
-				$exist_sql1 = $exist_sql->fetch(PDO::FETCH_ASSOC);
-				
-				if($exist_sql->rowCount()>0)
-				{
-					$event_exist=true;
-				}
-				else{
-					$event_exist=false;
-				}*/
-
-
+			}
+			
+			
+			
 			if(!empty($row_event['image'])){
-				
-						  $row_event['image']= $site_url."event/".$event_folder_name2."/".$row_event['image'];
-					}else{
-						 $row_event['image'] = "";
-					}	
-						$timestamp=$row_event['event_date'];
-$dt=str_replace('-', '', $timestamp);
-$event_time=$row_event['event_time'];
-$newDateTime = date('h:i', strtotime($event_time));
-$npm = date('A', strtotime($event_time));
-$tm=str_replace(':', '', $newDateTime);
-$exact_trim=$dt.$tm;
-$datetime = DateTime::createFromFormat('YmdHi', $exact_trim);
-$ed=$datetime->format('d');
-$edd=$datetime->format('D');
-$em=$datetime->format('M');
-$ey=$datetime->format('Y');
-$eh=$datetime->format('H');
-$ei=$datetime->format('i');
-
-$emm=$datetime->format('m');
-$x_emm=$emm-1;
-$date_time=array('date' => $ed,
-'day' => $edd,
-'month' => $em,
-'month_id' => $x_emm,
-'year' => $ey,
-'H' => $eh,
-'I' => $ei,
-'A' => $npm);
-			   
-			$result[]= array('id' => $row_event['id'],
-					'title' => $row_event['title'],
-                    'discription' => $row_event['discription'],
-					'details' => $row_event['details'],
-                    'event_date'=> $row_event['event_date'],
-                    'current_date'=> $row_event['curent_date'],
-                    'event_pic'=>$row_event['event_pic'],
-					'event_time' => $row_event['event_time'],
-					'gallery_id' => $event_sql_id2,
-					'isgallery' => $isgallery,
-					'location' => $row_event['location'],
-					'date_time' => $date_time,
-//'event_tag' =>$event_exist
-					
-					);	
-}
-			}
-			else{
-				$result[] = array();
-			}
-		
-
-        $news_sql = $this->db->prepare("SELECT * FROM news where flag=0 order by id DESC LIMIT 0 , 5 ");
-		$news_sql->execute();
-			if($news_sql->rowCount()>0)
-			{
-			$news_fsql = $news_sql->fetchALL(PDO::FETCH_ASSOC);
-			foreach($news_fsql as $row_news)
-            {
-				$news_id=$row_news['news_id'];
-				$news_folder_name1='news';
-				$news_folder_name2=$news_folder_name1.$news_id;
-				
-				
-				$nws_sql_id = $this->db->prepare("SELECT * FROM gallery where event_news_id='".$news_id."' AND category_id='5'");
-				$nws_sql_id->execute();
-				$nws_sql_id1 = $nws_sql_id->fetch(PDO::FETCH_ASSOC);
-				if(!empty($nws_sql_id1))
-				{
-				$nws_sql_id2=$nws_sql_id1['id'];	
-				}
-				else{
-				$nws_sql_id2='';
-				}
-				if(!empty($row_news['featured_image'])){
-						 $row_news['featured_image']= $site_url."news/".$news_folder_name2."/".$row_news['featured_image'];
-					}else{
-						 $row_news['featured_image'] = "";
-					}
-					
-$timestamp=$row_news['date'];
-$dt=str_replace('-', '', $timestamp);
-$exact_trim=$dt;
-$datetime = DateTime::createFromFormat('Ymd', $exact_trim);
-$ed=$datetime->format('d');
-$edd=$datetime->format('D');
-$em=$datetime->format('M');
-$ey=$datetime->format('Y');
-
-$date_time=array('date' => $ed,
-'day' => $edd,
-'month' => $em,
-'year' => $ey,
-);
-			$result1[] = array('id' => $row_news['id'],
-					'news_title' => $row_news['title'],
-					'news_sub_description'=>$row_news['description'],
-                    'news_details' => $row_news['description'],
-                    'news_date'=> $row_news['date'],
-					'gallery_id'=>$nws_sql_id2,
-                    'news_pic'=>$row_news['featured_image'],
-					'news_location'=>'',
-					'date_time'=>$date_time
-					
-					);
-					
-   }
+			
+				$row_event['image']= $site_url."event/".$event_folder_name2."/".$row_event['image'];
 			}else{
-				$result1[] = array();
-			}
-
-
-                $sfg_sql = $this->db->prepare("SELECT * FROM gallery where category_id='4' order by id DESC");
-				$sfg_sql->execute();
-				$sfg_sql1 = $sfg_sql->fetch(PDO::FETCH_ASSOC);
-				$exid=$sfg_sql1['id'];
-				$exevent_news_id=$sfg_sql1['event_news_id'];
-				
- $fg_sql = $this->db->prepare("SELECT * FROM sub_gallery where  gallery_id='".$exid."' order by id DESC LIMIT 0 , 4");
-				$fg_sql->execute();
-				$fcg_sql = $fg_sql->fetchALL(PDO::FETCH_ASSOC);
-                $src= $fg_sql->rowCount();
-				if($src>0)
-				{
-					
-				$gallry_folder_name1='event';
-				$gallry_folder_name2=$gallry_folder_name1.$exevent_news_id;
-					
-				foreach($fcg_sql as $row_gallery)
-				{
-                if(!empty($row_gallery['gallery_pic'])){
-						 $row_gallery['gallery_pic']= $site_url."event/".$gallry_folder_name2."/".$row_gallery['gallery_pic'];
-						 $row_gallery['gallery_pic'] = "";
-					}
-                    $result6[] = array(
-					'gallery' => $row_gallery['gallery_pic']
-					);
-                }
-				}else{
-				$result6[] = array();
-			}
-   
-   
-   $result2=array('slider' => $result3, 'events' => $result, 'news' => $result1, 'gallery' => $result6);
-   
-  $success = array('status'=> true, "Error" => "home screens",'responce' => $result2);
-	$this->response($this->json($success), 200);   
-  	
-
+				$row_event['image'] = "";
 			}	
+			$date_from=$row_event['date_from'];
+			$time=$row_event['time'];
+			  
+			$ed=date('d',strtotime($date_from));
+			$edd=date('D',strtotime($date_from));
+			$em=date('M',strtotime($date_from));
+			$ey=date('Y',strtotime($date_from));
+			$eh=date('H',strtotime($time));
+			$ei=date('i',strtotime($time));
+			$emm=date('m',strtotime($time));
+			$npm=date('A',strtotime($time));
+			$x_emm=$emm-1;
+			$date_time=array('date' => $ed,
+				'day' => $edd,
+				'month' => $em,
+				'month_id' => $x_emm,
+				'year' => $ey,
+				'H' => $eh,
+				'I' => $ei,
+				'A' => $npm
+			);
+			
+			$result[]= array('id' => $row_event['id'],
+				'title' => $row_event['title'],
+				'discription' => $row_event['description'],
+				'event_date'=> $row_event['date_from'],
+				'current_date'=> $row_event['curent_date'],
+				'event_pic'=>$row_event['image'],
+				'event_time' => $row_event['time'],
+				'gallery_id' => $event_sql_id2,
+				'isgallery' => $isgallery,
+				'location' => $row_event['location'],
+				'date_time' => $date_time,
+			);	
+		}
+	}
+	else
+	{
+		$result[] = array();
+	}
+	
+	// News Image
+	$news_sql = $this->db->prepare("SELECT * FROM news where flag=0 order by id DESC LIMIT 0 , 5 ");
+	$news_sql->execute();
+	if($news_sql->rowCount()>0)
+	{
+		$news_fsql = $news_sql->fetchALL(PDO::FETCH_ASSOC);
+		foreach($news_fsql as $row_news)
+		{
+			$news_id=$row_news['news_id'];
+			$news_folder_name1='news';
+			$news_folder_name2=$news_folder_name1.$news_id;
+			$nws_sql_id = $this->db->prepare("SELECT * FROM gallery where event_news_id='".$news_id."' AND category_id='5'");
+			$nws_sql_id->execute();
+			$nws_sql_id1 = $nws_sql_id->fetch(PDO::FETCH_ASSOC);
+			if(!empty($nws_sql_id1))
+			{
+				$nws_sql_id2=$nws_sql_id1['id'];	
+			}
+			else
+			{
+				$nws_sql_id2='';
+			}
+			if(!empty($row_news['featured_image']))
+			{
+				$row_news['featured_image']= $site_url."news/".$news_folder_name2."/".$row_news['featured_image'];
+			}
+			else
+			{
+				$row_news['featured_image'] = "";
+			}
+			
+			$date=$row_news['date'];
+			 
+			$ed=date('d', strtotime($date));
+			$edd=date('D', strtotime($date));
+			$em=date('M', strtotime($date));
+			$ey=date('Y', strtotime($date));
+			
+			$date_time=array('date' => $ed,
+				'day' => $edd,
+				'month' => $em,
+				'year' => $ey,
+			);
+			$result1[] = array('id' => $row_news['id'],
+				'news_title' => $row_news['title'],
+				'news_sub_description'=>$row_news['description'],
+				'news_details' => $row_news['description'],
+				'news_date'=> $row_news['date'],
+				'gallery_id'=>$nws_sql_id2,
+				'news_pic'=>$row_news['featured_image'],
+				'news_location'=>'',
+				'date_time'=>$date_time
+			);
+		}
+	}
+	else
+	{
+		$result1[] = array();
+	}
+	// Gallery Image
+	$sfg_sql = $this->db->prepare("SELECT * FROM gallery where category_id='4' order by id DESC");
+	$sfg_sql->execute();
+	$sfg_sql1 = $sfg_sql->fetch(PDO::FETCH_ASSOC);
+	$exid=$sfg_sql1['id'];
+	$exevent_news_id=$sfg_sql1['event_news_id'];
+	
+	$fg_sql = $this->db->prepare("SELECT * FROM sub_gallery where  gallery_id='".$exid."' order by id DESC LIMIT 0 , 4");
+	$fg_sql->execute();
+	$fcg_sql = $fg_sql->fetchALL(PDO::FETCH_ASSOC);
+	$src= $fg_sql->rowCount();
+	if($src>0)
+	{
+		$gallry_folder_name1='event';
+		$gallry_folder_name2=$gallry_folder_name1.$exevent_news_id;
+		
+		foreach($fcg_sql as $row_gallery)
+		{
+			if(!empty($row_gallery['gallery_pic']))
+			{
+				$row_gallery['gallery_pic']= $site_url."event/".$gallry_folder_name2."/".$row_gallery['gallery_pic'];
+				$row_gallery['gallery_pic'] = "";
+			}
+			$result6[] = array(
+				'gallery' => $row_gallery['gallery_pic']
+			);
+		}
+	}
+	else
+	{
+		$result6[] = array();
+	}
+	//-- Response
+	$result2=array('slider' => $result3, 'events' => $result, 'news' => $result1, 'gallery' => $result6);
+	$success = array('status'=> true, "Error" => "home screens",'responce' => $result2);
+	$this->response($this->json($success), 200);   
+	
+}	
 
 ///
 		
@@ -2176,7 +2186,7 @@ $time=time();
 			 $student_ids=sizeof($student_id);
 		$st_id=0;
 		for($i=0; $i<$student_ids; $i++)
-		{
+		{ 
 			$st_id=$student_id[$i];
 			$sql_insert = $this->db->prepare("INSERT into assignment(user_id,class_id,section_id,subject_id,topic,student_id,description,submission_date,curent_date,file)
 				VALUES(:user_id,:class_id,:section_id,:subject_id,:topic,:student_id,:description,:submission_date,:curent_date,:file)");
@@ -2254,9 +2264,9 @@ $time=time();
  						curl_close($ch);
  					//-- 
 		}
+$successa = array('assignment_type'=> $assignment_type, "user_id" => $user_id, "class_id" => $class_id, "section_id" => $section_id, "student_id" => $student_id, "subject_id" => $subject_id, "topic" => $topic, "description" => $description, "submission_date" => $submission_date,"filename" => $filename);
                 $success = array('status'=> true, "Error" => "Thank you your assignment updated successfully");
                 $this->response($this->json($success), 200);
-			
 			
 		}
 		else{
@@ -3393,8 +3403,8 @@ $ResultMainArray=array();
 						$x=0;
 						foreach($f_timtbl as $f_timtbl1)
 						{
-							$from_id=date('h:i', strtotime($f_timtbl1['from_id']));
-							$to_id=date('h:i', strtotime($f_timtbl1['to_id']));
+							$from_id=date('h:i', strtotime($f_timtbl1['time_from']));
+							$to_id=date('h:i', strtotime($f_timtbl1['time_to']));
 							$subject_id=$f_timtbl1['subject_id'];
 								$sql = $this->db->prepare("SELECT `subject_name` FROM master_subject WHERE id='".$subject_id."'");
 								$sql->execute();
@@ -3915,7 +3925,7 @@ $string_insert[$x]['time']=$time;
   		
 	}
 
-    public function ExamTimeTable() 
+        public function ExamTimeTable() 
 	{
 		include_once("common/global.inc.php");
         global $link;
@@ -3963,7 +3973,7 @@ $string_insert[$x]['time']=$time;
             $this->response('', 406);
         }
 		
-		$sql_fetch = $this->db->prepare("SELECT * FROM `master_bus` where flag = 0 order by `id` ASC ");
+		$sql_fetch = $this->db->prepare("SELECT * FROM `master_bus`  where flag = 0 order by `id` ASC ");
 		$sql_fetch->execute();
 		 if ($sql_fetch->rowCount() != 0) {  
 			$x=0;  
@@ -3980,6 +3990,7 @@ $string_insert[$x]['time']=$time;
 				$ResultArray=array();
 				while($stds = $sql_stds->fetch(PDO::FETCH_ASSOC)){
 			 
+					
 					$station_id=$stds['station_id'];	 
 					$sql_std = $this->db->prepare("SELECT `station` FROM master_station WHERE id='".$station_id."'");
 					$sql_std->execute();
@@ -4004,8 +4015,7 @@ $string_insert[$x]['time']=$time;
 			$this->response($this->json($error), 400);
 		}
  	}
-	
-	public function NoteData() 
+public function NoteData() 
 	{
 		include_once("common/global.inc.php");
         global $link;
@@ -4042,8 +4052,7 @@ $string_insert[$x]['time']=$time;
 							$this->response($this->json($success), 200); 
 				}
 	}
-	
-	public function AchiveMentData() 
+public function AchiveMentData() 
 	{
 		include_once("common/global.inc.php");
         global $link;
@@ -4092,7 +4101,6 @@ $string_insert[$x]['time']=$time;
 			$this->response($this->json($success), 200); 
 		}
 	}
-	
 	public function SportGallery() 
 	{
 		include_once("common/global.inc.php");
@@ -4145,7 +4153,6 @@ $string_insert[$x]['time']=$time;
 			$this->response($this->json($success), 200); 
 		}
 	}
-	
 	public function ClassTest() 
 	{
 		include_once("common/global.inc.php");
@@ -4163,6 +4170,7 @@ $string_insert[$x]['time']=$time;
 		$class_id=$row_gps[0]['class_id'];
 		$name=$row_gps[0]['name'];  
 		
+		 	 
 		$note_sql = $this->db->prepare("SELECT * FROM student_marks where `student_id` = '$student_id' && `class_id` = '$class_id' && `section_id` = '$section_id' order by `subject_id` ASC");
 		$note_sql->execute();
 		if($note_sql->rowCount()>0)
@@ -4173,6 +4181,7 @@ $string_insert[$x]['time']=$time;
 			 foreach($row_gp as $key=>$valye)	
 			 {
 				 
+				
 				$subject_id=$valye['subject_id'];
 					$sql_stds = $this->db->prepare("SELECT `subject_name` FROM master_subject WHERE id='".$subject_id."'");
 					$sql_stds->execute();
@@ -4191,6 +4200,7 @@ $string_insert[$x]['time']=$time;
 				$max_marks=$valye['max_marks'];
 				$obtained_marks=$valye['obtained_marks'];
 					
+ 				 
 				$string_insert[$x]['student_name']=$name;
 				$string_insert[$x]['marks']=$obtained_marks.'/'.$max_marks;
 				$string_insert[$x]['max_marks']=$max_marks;
@@ -4212,7 +4222,6 @@ $string_insert[$x]['time']=$time;
 			$this->response($this->json($success), 200); 
 		}
 	}
-	
 	public function ClassTestData() 
 	{
 		include_once("common/global.inc.php");
@@ -4277,7 +4286,8 @@ $string_insert[$x]['time']=$time;
 													$note_sql = $this->db->prepare("insert into `student_marks` set `student_id` = '$StudentID' , `class_id` = '$class_id' , `section_id` = '$section_id' , `subject_id` = '$subject_id' , `max_marks` = '$max_marks' , `obtained_marks` = '$Marks' , `teacher_id` = '$teacher_id' , `exam_type_id` = '$exam_term_id' , `test_date` = '$test_date'");
 													$note_sql->execute();			
 												}
-											//	$Rarray=array('class_id' => $class_id , 'section_id' => $section_id , 'subject_id' => $subject_id , 'max_marks' => $max_marks , 'teacher_id' =>$teacher_id , 'term_name' => $term_name , 'test_date' => $test_date, 'student_id' => $student_id , 'marks' => $marks);
+												//$Rarray=array('class_id' => $class_id , 'section_id' => $section_id , 'subject_id' => $subject_id , 'max_marks' => $max_marks , 'teacher_id' =>$teacher_id , 'term_name' => $term_name , 'test_date' => $test_date, 'student_id' => $student_id , 'marks' => $marks);
+												//$success = array('status'=> true, "Error" => "Data Successfully Submitted",'responce' => $Rarray);
 												$success = array('status'=> true, "Error" => "Data Successfully Submitted",'responce' => '');
 												$this->response($this->json($success), 200);   	
 											}
@@ -4292,6 +4302,7 @@ $string_insert[$x]['time']=$time;
 											$success = array('status'=> false, "Error" => "Test date not found",'responce' =>'');
 											$this->response($this->json($success), 200); 
 										}
+			
 									}
 									else
 									{
@@ -4343,6 +4354,7 @@ $string_insert[$x]['time']=$time;
 		
 		
 	}
+
 	public function ClassTestDataUpdate() 
 	{
 		include_once("common/global.inc.php");
@@ -4385,7 +4397,7 @@ $string_insert[$x]['time']=$time;
 											{ 
 												$StudentID=$student_id[$i];
 												$Marks=$marks[$i];
-												if($Marks == '-'){}
+							 					if($Marks == '-'){}
 												else
 												{
 							 					$note_sql = $this->db->prepare("update `student_marks` set  `test_date` = '$test_date' , `obtained_marks` = '$Marks'    WHERE  `student_id` = '$StudentID' && `class_id` = '$class_id' && `section_id` = '$section_id' && `subject_id` = '$subject_id' && `teacher_id` = '$teacher_id' && `exam_type_id` = '$exam_type_id'");
@@ -4450,7 +4462,7 @@ $string_insert[$x]['time']=$time;
 			$this->response($this->json($success), 200); 
 		}
 	}
-	public function ClassTestTeacher() 
+public function ClassTestTeacher() 
 	{
 		include_once("common/global.inc.php");
         global $link;
@@ -4488,7 +4500,12 @@ $string_insert[$x]['time']=$time;
 					$sql_stds->execute();
 					$stds = $sql_stds->fetch(PDO::FETCH_ASSOC);
 					$subject_name=$stds['subject_name'];
-			 
+			 $class_id=$row_gp1[0]['class_id'];
+$sql_stds = $this->db->prepare("SELECT `class_name` FROM master_class WHERE id='".$class_id."'");
+					$sql_stds->execute();
+					$stds = $sql_stds->fetch(PDO::FETCH_ASSOC);
+					$class_name=$stds['class_name'];
+ 
 				$test_date=$row_gp1[0]['test_date'];
 				if($test_date=='0000-00-00' || $test_date=='1970-01-01'){$test_date='';}
 				else {$test_date=date('d-m-Y',strtotime($test_date));}
@@ -4497,6 +4514,8 @@ $string_insert[$x]['time']=$time;
 			 	$string_insert[$x]['exam_type']=$exam_type;
 			 	$string_insert[$x]['subject_name']=$subject_name;
 				$string_insert[$x]['test_date']=$test_date;
+$string_insert[$x]['class_id']=$class_name;
+ 
 				$string_insert[$x]['teacher_id']=$teacher_id;
 				
  			 $x++;
@@ -4512,7 +4531,7 @@ $string_insert[$x]['time']=$time;
 		}
 	}
 
-	public function ClassTestTeacherFetch() 
+public function ClassTestTeacherFetch() 
 	{
 		include_once("common/global.inc.php");
         global $link;
@@ -4532,7 +4551,6 @@ $string_insert[$x]['time']=$time;
 			 $x=0;
 			 foreach($row_gp as $key=>$valye)	
 			 {
-				
 				$subject_id=$valye['subject_id'];
 					$sql_stds = $this->db->prepare("SELECT `subject_name` FROM master_subject WHERE id='".$subject_id."'");
 					$sql_stds->execute();
@@ -4570,11 +4588,12 @@ $string_insert[$x]['time']=$time;
 				$string_insert[$x]['obtained_marks']=$obtained_marks;
 				$string_insert[$x]['student_id']=$student_id;
 				
-				$class_id=$valye['class_id'];
+$class_id=$valye['class_id'];
 				$section_id=$valye['section_id'];
 				$FirstArray['class_id']=$class_id;
+
 				$FirstArray['section_id']=$section_id;
-				
+
 				$FirstArray['subject_id']=$subject_id;
 				$FirstArray['subject_name']=$subject_name;
 				
@@ -4600,7 +4619,6 @@ $string_insert[$x]['time']=$time;
 			$this->response($this->json($success), 200); 
 		}
 	}
-
 	public function ClassWiseSubjectList()
 	{
 		if ($this->get_request_method() != "POST") {
@@ -4653,7 +4671,7 @@ $string_insert[$x]['time']=$time;
 			$this->response($this->json($success), 200);
 		
 	}
-	public function ForgotPassword() 
+public function ForgotPassword() 
 	{
 			global $link;
 			include_once("common/global.inc.php");
@@ -4666,12 +4684,12 @@ $string_insert[$x]['time']=$time;
 				if($login_identity=='student')
 				{
 					@$scholer_no = $this->_request['scholer_no'];
-					$sql = $this->db->prepare("SELECT `name` FROM login WHERE mobile_no LIKE '%".$mobile_no."%' AND eno='".$scholer_no."'");
+					$sql = $this->db->prepare("SELECT `name`,`id` FROM login WHERE mobile_no LIKE '%".$mobile_no."%' AND eno='".$scholer_no."'");
 					$sql->execute();
 					if ($sql->rowCount()>0) 
 					{ 
 						$row_gp1 = $sql->fetch(PDO::FETCH_ASSOC);
-						$name=$row_gp1['name'];
+						$name=$row_gp1['name'];$id=$row_gp1['id'];
 	
 						$random=(string)mt_rand(1000,9999);
 						$time=date('h:i:s a', time());
@@ -4682,9 +4700,9 @@ $string_insert[$x]['time']=$time;
 						$sms_sender='FLEXIL';
 						file_get_contents('http://alerts.sinfini.com/api/web2sms.php?workingkey='.$working_key.'&sender='.$sms_sender.'&to='.$mobile_no.'&message='.$sms1.'');
 					 
-						$result=array('OTP' => $random,'mobile_no' => $mobile_no,'scholer_no' => $scholer_no);
+						$result=array('OTP' => $random,'mobile_no' => $mobile_no,'scholer_no' => $scholer_no,'id'=>$id);
 						$error = array('status' => true, "Error" => "Instructions for accessing your account have been sent to ".$mobile_no."", 'Responce' => $result);
-						$this->response($this->json($error), 400);
+						$this->response($this->json($error), 200);
 					
 					}
 					else
@@ -4695,12 +4713,12 @@ $string_insert[$x]['time']=$time;
 				}
 				else if($login_identity=='faculty')
 				{
-					$sql = $this->db->prepare("SELECT `user_name` FROM faculty_login WHERE mobile_no LIKE '%".$mobile_no."%' ");
+					$sql = $this->db->prepare("SELECT `user_name`,`id` FROM faculty_login WHERE mobile_no LIKE '%".$mobile_no."%' ");
 					$sql->execute();
 					if ($sql->rowCount()>0) 
 					{ 
 						$row_gp1 = $sql->fetch(PDO::FETCH_ASSOC);
-						$name=$row_gp1['user_name'];
+						$name=$row_gp1['user_name'];$id=$row_gp1['id'];
 	
 						$random=(string)mt_rand(1000,9999);
 						$time=date('h:i:s a', time());
@@ -4711,9 +4729,9 @@ $string_insert[$x]['time']=$time;
 						$sms_sender='FLEXIL';
 						file_get_contents('http://alerts.sinfini.com/api/web2sms.php?workingkey='.$working_key.'&sender='.$sms_sender.'&to='.$mobile_no.'&message='.$sms1.'');
 					 
-						$result=array('OTP' => $random,'mobile_no' => $mobile_no);
+						$result=array('OTP' => $random,'mobile_no' => $mobile_no,'id'=>$id);
 						$error = array('status' => true, "Error" => "Instructions for accessing your account have been sent to ".$mobile_no."", 'Responce' => $result);
-						$this->response($this->json($error), 400);
+						$this->response($this->json($error), 200);
 					
 					}
 					else
@@ -4722,9 +4740,9 @@ $string_insert[$x]['time']=$time;
 						$this->response($this->json($error), 400);
 					}
 				}
+			 
 		}
-	
-	public function ChangePassword() 
+public function ChangePassword() 
 	{
 		if ($this->get_request_method() != "POST") {
             $this->response('', 406);
@@ -4746,12 +4764,11 @@ $string_insert[$x]['time']=$time;
 		}
 		else
 		{
-			$error = array('Type' => "Error", "Error" => "You are not registerd.", 'Responce' => '1');
+			$error = array(status => false , "Error" => "You are not registered.", 'Responce' => '1');
 			$this->response($this->json($error), 400);				
 		} 			
 	}
-	
-	
+
 	public function CurrentApiVersion() 
 	{
 		include_once("common/global.inc.php");
@@ -4760,21 +4777,19 @@ $string_insert[$x]['time']=$time;
 		$sql1 = $this->db->prepare("SELECT * FROM api_versions WHERE id=1");
 		$sql1->execute();
 		$version = $sql1->fetch(PDO::FETCH_ASSOC);
-		$curent_version1=$version['version'];   
-		if($curent_version1==$current_version) 
-		{     
-			$success = array('status' => true, "Error" => 'yes');
-			$this->response($this->json($success), 200);
-		} 
-		else 
-		{
-			$error = array('status' => false, "Error" => "Sorry, Please update new version of App.");
-			$this->response($this->json($error), 200);
-		}
+			$curent_version1=$version['version'];   
+			if($curent_version1==$current_version) 
+			{     
+				$success = array('status' => true, "Error" => 'yes');
+				$this->response($this->json($success), 200);
+			} 
+			else 
+			{
+				$error = array('status' => false, "Error" => "Sorry, Please update new version of App.");
+				$this->response($this->json($error), 200);
+			}
 	}
-
-	
-	///////////////////////////////////////		
+///////////////////////////////////////		
     /*
      *  Encode array into JSON
      */

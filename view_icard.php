@@ -53,7 +53,6 @@ $FeeSession=$cur."-".$back;
 			$section_name=$fet_sec['section_name'];
 			
         ?>
-        	<div class="col=md-6">
             
         	<table border="1" width="400px" align="center" style="text-align:center;border-collapse:collapse;">
             	<tr>
