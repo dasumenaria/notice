@@ -3,6 +3,7 @@
 include("database.php");
  $class_id=$_GET['pon'];
  $sect_id=$_GET['pon1'];
+ $stdnt_id=$_GET['pon2'];
  
   	if((!empty($class_id)) && (empty($sect_id))){ ?>
 
@@ -11,7 +12,7 @@ include("database.php");
 							<div class="col-md-8">
 							   <div class="input-icon right">
 									<i class="fa"></i>
-									<select class="form-control user1 select2me input-medium" required name="section_id">
+									<select class="form-control user1 select2me input-medium" id="sec_id" required name="section_id">
 										<option value="">---Select Section---</option>
 											<?php 
 												$query2=mysql_query("select * from `class_section` where `class_id`='$class_id'"); 

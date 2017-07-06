@@ -90,9 +90,10 @@ $date=date('Y-m-d');
 
 						}
 						//-------------------------
-				}
+				 
 			elseif($yesno==2)
 			{
+				echo 'hello';
 				 $student_id=$_POST["student_id"];
 				 
 				 
@@ -177,7 +178,7 @@ $date=date('Y-m-d');
 			}
      
 		
-		
+		}
 		
 		
 	
@@ -319,9 +320,9 @@ $date=date('Y-m-d');
 											</div>
 										</div>
 									</div>									
-								 <div  align="center">
-									<input  type="submit" class="btn green" name="submit"  value="Submit">
-						</div> 
+									<div  align="center">
+										<input  type="submit" class="btn green" name="submit"  value="Submit">
+									</div> 
 								</div>
 							</form>
 						</div>
