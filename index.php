@@ -110,6 +110,7 @@ if(isset($_GET["session_expired"])) {
 		</div>
         </div>
 		<div class="">
+			 <a href="forget_password.php" style="">Forget Your Password</a> 
 			<button type="submit" name="sub_log" class="btn pull-right" style="background-color:#3C8DBC;color:#fff; align:right" >Login <i class="fa fa-sign-in"></i></button>
 		</div>
 		

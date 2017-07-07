@@ -23,21 +23,27 @@ $date=date('Y-m-d');
 				{
 					$sql="insert into assignment(user_id,student_id,topic,description,class_id,section_id,subject_id,submission_date,curent_date) values('$user_id','$student_id','$topic','$description','$class_id','$section_id','$subject_id','$sub_date','$date')";
 					$r=mysql_query($sql);
+					
+					
 					$time=time();
 					$ids=mysql_insert_id();
 					$file_name=$_FILES["file"]["name"]; 
 					$ext=pathinfo($file_name,PATHINFO_EXTENSION);
 					$photo=$topic.$time.'.'.$ext;
 					move_uploaded_file($_FILES["file"]["tmp_name"],"homework/".$photo);
-					 
 					if($r)
 					{	
 						$r1=mysql_query("update `assignment` set file='$photo' where id='$ids'");
 					}
-						//---------------------------------------------------------------
-						$std_nm=mysql_query("SELECT `device_token`,`notification_key`,`id`,`role_id` FROM `login` where section_id='".$section_id."' AND  class_id='".$class_id."' AND device_token != '' ");
+				
+				
+					//---------------------------------------------------------------
+//						echo "SELECT `device_token`,`notification_key`,`id`,`role_id` FROM `login` where section_id='".$section_id."' AND  class_id='".$class_id."' AND device_token != ''";
+			
+						$std_nm=mysql_query("SELECT `device_token`,`notification_key`,`id`,`role_id` FROM `login` where section_id='".$section_id."' AND  class_id='".$class_id."' AND device_token != ''");
 						while($ftc_nm=mysql_fetch_array($std_nm))
 							{
+
 								$device_token = $ftc_nm['device_token'];
 								$notification_key = $ftc_nm['notification_key'];
 								$user_ids=$ftc_nm['id'];
@@ -70,7 +76,7 @@ $date=date('Y-m-d');
 									'Content-Type: application/json'
 								);
 								//--- NOTIFICATIO INSERT
-								$NOTY_insert="INSERT into notification(title,message,user_id,submitted_by,date,time,role_id)VALUES('$title','$message','$user_id','$submitted_by','$date','$time','$role_id')";
+							   	$NOTY_insert="INSERT into notification(title,message,user_id,submitted_by,date,time,role_id)VALUES('$title','$message','$user_id','$submitted_by','$date','$time','$role_id')";
 								$rr=mysql_query($NOTY_insert);
 								//-- END
 
@@ -88,12 +94,14 @@ $date=date('Y-m-d');
 							}
 						//--
 
-						}
+				}
 						//-------------------------
-				 
-			elseif($yesno==2)
+		  
+	
+			else if($yesno==2)
 			{
-				echo 'hello';
+
+			
 				 $student_id=$_POST["student_id"];
 				 
 				 
@@ -101,7 +109,6 @@ $date=date('Y-m-d');
 				{
 					
 					$student_id=$value;
-			 
 					$sql1="insert into assignment(user_id,student_id,topic,description,class_id,section_id,subject_id,submission_date,curent_date) values('$user_id','$student_id','$topic','$description','$class_id','$section_id','$subject_id','$sub_date','$date')";
 					$r2=mysql_query($sql1);
 					$time=time();
@@ -342,6 +349,7 @@ $(document).ready(function() {
 $(".rd").live("click",function(){
 
  var valu=$(this).val();
+ alert();
 	if(valu==2)
 	{ 
 	 $('.ifyes').show();

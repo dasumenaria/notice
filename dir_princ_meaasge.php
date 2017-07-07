@@ -3,19 +3,152 @@
  include("database.php");
  $role_id = $_SESSION['category']; 
  $login_id=$_SESSION['id']; 
+ $user_id=$_SESSION['id'];
  $update_id=0;
 
  
   $message='';
 	if(isset($_POST['submit'])) 
 	{
-		$message=$_POST['message'];
-		$sms_to_role=$_POST['sms_to_role'];
-		$sms_from_role=$_POST['sms_from_role'];
-	
-  		mysql_query("insert into `director_principle_message` set `message`='$message1' , `sms_receive_role`='$sms_to_role' , `sms_sender_role`='$sms_from_role' , `login_id`='$login_id'");
+		 	$text_messgae=$_POST['text_messgae'];
+		 	$sms_to_role=$_POST['sms_to_role'];
+		 	$sms_from_role=$_POST['sms_from_role'];
+		 
+			mysql_query("insert into `director_principle_message` set `message`='$text_messgae' , `sms_receive_role`='$sms_to_role' , `sms_sender_role`='$sms_from_role' , `login_id`='$login_id'");
 		$update_id=mysql_insert_id();
   		$message='SMS send successfully';
+		
+				if($sms_to_role==5)
+				{
+					  
+					 
+					$std_nm=mysql_query("SELECT `device_token`,`notification_key`,`id`,`role_id` FROM `login` where device_token != ''");
+						while($ftc_nm=mysql_fetch_array($std_nm))
+							{ 
+						
+								$device_token = $ftc_nm['device_token'];
+								$notification_key = $ftc_nm['notification_key'];
+								$user_ids=$ftc_nm['id'];
+								$role_id=$ftc_nm['role_id'];
+
+									//echo '1</br>';
+									 $message='New Assignment Submitted';
+									//echo '</br>';
+									//echo '2</br>';
+									 $title='Assignment';
+									//echo '</br>';
+									//echo '3</br>';
+									 $submitted_by=$sms_from_role;									
+									//echo '</br>';
+									//echo '4</br>';
+									 $user_idss=$user_ids;
+									//echo '</br>';
+									//echo '5</br>';
+									 $date=date("M d Y");
+									//echo '</br>';
+									//echo '6</br>';
+									 $time=date("h:i:A");
+									//echo '7</br>';
+								 
+
+								$msg = array
+								(
+									'title'=> $title ,
+									'message'  => $message,
+									'button_text' => 'View',
+									'link' => 'notice://Assignment?id='.$insert_id.'&student_id=',
+									'notification_id' => $insert_id,
+								);
+								$url = 'https://fcm.googleapis.com/fcm/send';
+								$fields = array
+								(
+									'registration_ids'  => array($device_token),
+									'data'   => $msg
+								);
+								$headers = array
+								(
+									'Authorization: key=' .$notification_key,
+									'Content-Type: application/json'
+								);
+								//--- NOTIFICATIO INSERT
+							  // 	echo "INSERT into notification(title,message,user_id,submitted_by,date,time,role_id)VALUES('$title','$message','$user_id','$sms_from_role','$date','$time','$role_id')";
+								 
+								$NOTY_insert="INSERT into notification(title,message,user_id,submitted_by,date,time,role_id)VALUES('$title','$message','$user_id','$sms_from_role','$date','$time','$role_id')";
+								$rr=mysql_query($NOTY_insert);
+								//-- END
+
+								json_encode($fields);
+								$ch = curl_init();
+								curl_setopt($ch, CURLOPT_URL, $url);
+								curl_setopt($ch, CURLOPT_POST, true);
+								curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+								curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+								curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+								curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+								curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+								$result = curl_exec($ch);
+								curl_close($ch);
+							}
+				}
+			 
+			else if(!empty($sms_to_role))
+			{
+				 
+				$std_nm=mysql_query("SELECT `device_token`,`notification_key`,`id`,`role_id` FROM `faculty_login` where device_token != ''");
+						while($ftc_nm=mysql_fetch_array($std_nm))
+							{
+
+								 $device_token = $ftc_nm['device_token'];
+								$notification_key = $ftc_nm['notification_key'];
+								$user_ids=$ftc_nm['id'];
+								$role_id=$ftc_nm['role_id'];
+
+							echo	$message='New Assignment Submitted';
+							echo	$title='Assignment';
+							echo	$submitted_by=$sms_from_role;
+							echo	$user_idss=$user_ids;
+							echo	$date=date("M d Y");
+							echo	$time=date("h:i:A");
+							xml_error_string;
+								$msg = array
+								(
+									'title'=> $title ,
+									'message'  => $message,
+									'button_text' => 'View',
+									'link' => 'notice://Assignment?id='.$insert_id.'&student_id=',
+									'notification_id' => $insert_id,
+								);
+								$url = 'https://fcm.googleapis.com/fcm/send';
+								$fields = array
+								(
+									'registration_ids'  => array($device_token),
+									'data'   => $msg
+								);
+								$headers = array
+								(
+									'Authorization: key=' .$notification_key,
+									'Content-Type: application/json'
+								);
+								//--- NOTIFICATIO INSERT
+								echo "INSERT into notification(title,message,user_id,submitted_by,date,time,role_id)VALUES('$title','$message','$user_id','$sms_from_role','$date','$time','$role_id')";
+								exit;
+							   	$NOTY_insert="INSERT into notification(title,message,user_id,submitted_by,date,time,role_id)VALUES('$title','$message','$user_id','$sms_from_role','$date','$time','$role_id')";
+								$rr=mysql_query($NOTY_insert);
+								//-- END
+
+								json_encode($fields);
+								$ch = curl_init();
+								curl_setopt($ch, CURLOPT_URL, $url);
+								curl_setopt($ch, CURLOPT_POST, true);
+								curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+								curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+								curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+								curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+								curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+								$result = curl_exec($ch);
+								curl_close($ch);
+							}
+			}
 		
 	}
 ?> 
@@ -113,7 +246,7 @@ span {
                                     <div class="form-group">
 										<label class="col-md-3 control-label">Message</label>
 										<div class="col-md-6">
-											<textarea class="form-control input-md" required type="text" name="message1"></textarea>
+											<textarea class="form-control input-md" required type="text" name="text_messgae"></textarea>
 										</div>
 									</div>
 									<div class=" right1" align="center">
@@ -133,8 +266,8 @@ span {
 										</div>
 									</div>
 									<div class="portlet-body form">
-										<div class="table-scrollable" >
-											<table class="table   table-hover" width="100%" style="font-family:Open Sans;">
+										<div class="table-scrollable"  style="height:300px; overflow-y:scroll;">
+											<table class="table table-hover" width="100%" style="font-family:Open Sans;" >
 												<thead>
 													<tr style="background:#F5F5F5">
 														<th> #</th>
@@ -148,7 +281,7 @@ span {
 											<tbody>
 											<?php
 											
-											$sets=mysql_query("select * from `director_principle_message` where `flag`=0");		
+											$sets=mysql_query("select * from `director_principle_message` where `flag`=0 order by id Desc");		
 												
 												while($fets=mysql_fetch_array($sets))
 											{
