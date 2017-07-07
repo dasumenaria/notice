@@ -10,10 +10,16 @@ if(isset($_POST["Import"])){
  		  	$file = fopen($filename, "r");
 	         while (($emapData = fgetcsv($file, 10000, ",")) !== FALSE)
 	         {
-				 
-				  $mdeno=md5($emapData[6]);
-	           $sql = "INSERT into login (`name`,`father_name`,`mother_name`,`dob`,`address`,`eno`,`role_no`,`class_id`,`section_id`,`image`,`user_id`,`role_id`,`school_id`,`notification_key`,`password`) 
-	            	values('$emapData[1]','$emapData[2]','$emapData[3]','$emapData[4]','$emapData[5]','$emapData[6]','$emapData[7]','$emapData[8]','$emapData[9]','$emapData[10]','$emapData[11]','$emapData[12]','$emapData[13]','$emapData[14]','$mdeno')";
+		
+		 
+				   
+echo "INSERT into login (`name`,`dob`,`father_name`,`mother_name`,`address`,`roll_no`,`class_id`,`section_id`,`medium`,`eno`,`mobile_no`,`father_mobile`,`mother_mobile`)
+values
+('$emapData[0]','$emapData[1]','$emapData[2]','$emapData[3]','$emapData[4]','$emapData[5]','$emapData[6]','$emapData[7]','$emapData[8]','$emapData[9]','$emapData[10]','$emapData[11]','$emapData[12]')";
+exit;
+$sql = "INSERT into login (`name`,`dob`,`father_name`,`mother_name`,`address`,`roll_no`,`class_id`,`section_id`,`medium`,`eno`,`mobile_no`,`father_mobile`,`mother_mobile`)
+values
+('$emapData[0]','$emapData[1]','$emapData[2]','$emapData[3]','$emapData[4]','$emapData[5]','$emapData[6]','$emapData[7]','$emapData[8]','$emapData[9]','$emapData[10]','$emapData[11]','$emapData[12]')";
 	          $result = mysql_query( $sql);
 			   	if(! $result )
 				{
