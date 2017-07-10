@@ -1,48 +1,48 @@
 <?php
- include("index_layout.php");
- include("database.php");
- ?>
- <?php
-if(isset($_POST["Import"])){
- 		$filename=$_FILES["file"]["tmp_name"];
- 		 if($_FILES["file"]["size"] > 0)
-		 {
- 		  	$file = fopen($filename, "r");
-	         while (($emapData = fgetcsv($file, 10000, ",")) !== FALSE)
-	         {
-		
-		 
-				   
-echo "INSERT into login (`name`,`dob`,`father_name`,`mother_name`,`address`,`roll_no`,`class_id`,`section_id`,`medium`,`eno`,`mobile_no`,`father_mobile`,`mother_mobile`)
-values
-('$emapData[0]','$emapData[1]','$emapData[2]','$emapData[3]','$emapData[4]','$emapData[5]','$emapData[6]','$emapData[7]','$emapData[8]','$emapData[9]','$emapData[10]','$emapData[11]','$emapData[12]')";
-exit;
-$sql = "INSERT into login (`name`,`dob`,`father_name`,`mother_name`,`address`,`roll_no`,`class_id`,`section_id`,`medium`,`eno`,`mobile_no`,`father_mobile`,`mother_mobile`)
-values
-('$emapData[0]','$emapData[1]','$emapData[2]','$emapData[3]','$emapData[4]','$emapData[5]','$emapData[6]','$emapData[7]','$emapData[8]','$emapData[9]','$emapData[10]','$emapData[11]','$emapData[12]')";
-	          $result = mysql_query( $sql);
-			   	if(! $result )
+	include("index_layout.php");
+	include("database.php");
+?>
+<?php
+
+	if(isset($_POST["Import"]))
+	{
+		$filename=$_FILES["file"]["tmp_name"];
+		if($_FILES["file"]["size"] > 0)
+		{
+			$file = fopen($filename, "r");
+			$records=0;
+			while(($emapData = fgetcsv($file, 10000, ",")) !== FALSE)
 				{
-					echo "<script type=\"text/javascript\">
-							alert(\"Invalid File:Please Upload CSV File.\");
-							window.location = \"import_data.php\"
-						</script>";
-				}
- }
-	         fclose($file);
-	         //throws a message if data successfully imported to mysql database from excel file
+					$numcols = count($emapData);
+					$check_data[]=$emapData;
+				 
+					++$records;
+				}	
+					$i=0;
+					$emapData=0;
+					$unseppoeted=0;
+					$last_row=sizeof($test)+1;
+				print_r($check_data);	
+				foreach($check_data as $value)
+					{ 
+						$i++;
+						$name=$value[1];
+					 }
+						if(!empty($value[1]))
+						{
+							echo $name=$value[1];
+						}
+						else
+						{
+							echo $name='Other';
+						}
+						exit;
+	}}
+?>		
 
-    	         echo "<script type=\"text/javascript\">
-    						alert(\"CSV File has been successfully Imported.\");
-    						window.location = \"import_data.php\"
-    					</script>";
-         		 }
-    	}	 
-    ?>		
 
 
-	
-	
+
 	
 <html>
 <head>

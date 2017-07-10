@@ -9,26 +9,28 @@ $mmessage="";
 if(isset($_POST['submit']))
 {
 	$role_id=5;
-$name=mysql_real_escape_string($_REQUEST["name"]);
-$eno=mysql_real_escape_string($_REQUEST["eno"]);
-$mobile_no=mysql_real_escape_string($_REQUEST["mobile_no"]);
-$parent_mobile_no=mysql_real_escape_string($_REQUEST["parent_mobile_no"]);
-$password=md5($eno);
-$father_name=mysql_real_escape_string($_REQUEST["father_name"]);
-$mother_name=mysql_real_escape_string($_REQUEST["mother_name"]);
-$class_id=mysql_real_escape_string($_REQUEST["class_id"]);
-$section_id=mysql_real_escape_string($_REQUEST["section_id"]);
-$medium_id=mysql_real_escape_string($_REQUEST["medium_id"]);
-$dob1=mysql_real_escape_string($_REQUEST["dob"]);
-$dob=date('Y-m-d',strtotime($dob1));
+ $name=mysql_real_escape_string($_REQUEST["name"]);
+ $eno=mysql_real_escape_string($_REQUEST["eno"]);
+ $mobile_no=mysql_real_escape_string($_REQUEST["mobile_no"]);
+ $parent_mobile_no=mysql_real_escape_string($_REQUEST["parent_mobile_no"]);
+ $password=md5($eno);
+ $father_name=mysql_real_escape_string($_REQUEST["father_name"]);
+ $mother_name=mysql_real_escape_string($_REQUEST["mother_name"]);
+ $class_id=mysql_real_escape_string($_REQUEST["class_id"]);
+ $section_id=mysql_real_escape_string($_REQUEST["section_id"]);
+ $medium_id=mysql_real_escape_string($_REQUEST["medium_id"]);
+ $dob1=mysql_real_escape_string($_REQUEST["dob"]);
+ $dob=date('Y-m-d',strtotime($dob1));
 $curent_date=date('Y-m-d');
+ 
 $notification_key='AAAArt9gILg:APA91bFwFhemkzYV7Sq83t7zvpLC8QY27DC__xWUFIbI1GefXTDD0_4S8hOuOJ88q0oZ3gmWjshoRSwU08xqcWTb1a1PofkKp52nUdN9tB-voht0KhDW4O4Ch39ycj0VNogAuYRj29dN';
 			  $fetch_st=mysql_query("select * from student where flag='0' AND eno='$eno'");		
 					$fetch_st1=mysql_fetch_array($fetch_st);
 					
 					if(empty($fetch_st1))
 					{
-					
+
+
 $sql="insert into login(name,eno,mobile_no,father_name,mother_name,class_id,section_id,medium,dob,parent_mobile_no,curent_date,user_id,role_id,notification_key,password)values('$name','$eno','$mobile_no','$father_name','$mother_name','$class_id','$section_id','$medium_id','$dob','$parent_mobile_no','$curent_date','$user_id','$role_id','$notification_key','$password')";
 $r=mysql_query($sql);
 $mmessage="Student Registration Successfully";
