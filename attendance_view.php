@@ -7,7 +7,7 @@
 <head>
 <?php css();?>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Exam Terms</title>
+<title>Report | Attendance</title>
 </head>
 <?php contant_start(); menu();  ?>
 <body>
@@ -18,11 +18,11 @@
 			<div class="portlet box blue">
 						<div class="portlet-title">
 							<div class="caption">
-								<i class="fa fa-gift"></i>Exam Terms
+								<i class="fa fa-gift"></i>Attendance View
 							</div>
 							<div class="tools">
-							 
-								
+							
+							
 							</div>
 						</div>
 						<div class="portlet-body form">
@@ -96,7 +96,7 @@ $(document).ready(function() {
 		 
 		$.ajax(
 		{
-			url: "ajax_class_test.php?pon="+t,
+			url: "ajax_attendance_view.php?pon="+t,
 		}).done(function(response) 
 		{
 			$("#dt").html(""+response+""); 
@@ -110,7 +110,7 @@ $(document).ready(function() {
 		var c = $('.user').val();
 		var t = '';
  		$.ajax({
-		url: "ajax_class_test.php?pon1="+s+"&pon2="+t+"&pon="+c,
+		url: "ajax_attendance_view.php?pon1="+s+"&pon2="+t+"&pon="+c,
 		}).done(function(response) 
 		{
 			$("#data").html(""+response+"");
@@ -123,26 +123,27 @@ $(document).ready(function() {
 		var sb=$(this).val();
 		var t=$(".user").val();
 		var s=$(".user1").val();
+		var d=$(".user3").val()
 
 		$.ajax({
-		url: "ajax_class_test.php?pon="+t+"&pon1="+s+"&pon2="+sb,
+		url: "ajax_attendance_view.php?pon="+t+"&pon1="+s+"&pon2="+sb+"&dt="+d,
 		}).done(function(response) 
 		{
-			$("#si").html(""+response+"");
+			$("#data").html(""+response+"");
 		});
-	});	
+	});
 
 	$(".user3").live("change",function()
 	{
 		var t=$(".user").val();
 		var s=$(".user1").val();
 		var sb=$(".user2").val();
-		var ex=$(this).val();
+		var d=$(this).val();
 		$.ajax({
-		url: "ajax_class_test.php?pon="+t+"&pon1="+s+"&pon2="+sb+"&pon3="+ex,
+		url: "ajax_attendance_view.php?pon="+t+"&pon1="+s+"&pon2="+sb+"&dt="+d,
 		}).done(function(response) 
 		{
-			$("#ext").html(""+response+"");
+			$("#data").html(""+response+"");
 		});
 	});
 
