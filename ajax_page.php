@@ -41,12 +41,7 @@ $appoint_to=$ftc_detail['appoint_to'];
               <div class="row col-md-12">  
                 <div class="col-sm-6">
                 <label>Appointment To</label>
-                <div class="radio-list" style="margin-left: 31px;">
-                    <label class="radio-inline">
-                    <input type="radio" name="appoint_to" value="Director" <?php if($appoint_to=='Director' || $appoint_to==''){ ?> checked <?php } ?>> Director </label>
-                    <label class="radio-inline">
-                    <input type="radio" name="appoint_to" value="Principle" <?php if($appoint_to=='Principle'){ ?> checked <?php } ?>> Principle </label>
-                </div>
+                <input class="form-control input-medium " required  value="<?php echo $ftc_detail['appoint_to']; ?>" placeholder="dd-mm-yyyy" type="text" name="appoint_to">
             </div>
 
                  

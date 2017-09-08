@@ -12,7 +12,7 @@
 		$reason=$_POST['reason'];
 		$appoint_date=date('Y-m-d', strtotime($_POST['appoint_date']));;
  		mysql_query("update `appointment` set `appoint_to`='$appoint_to' , `appoint_date`='$appoint_date' , `appoint_time`='$appoint_time' , `reason`='$reason' where `id` = '$update_id' ");
-		$message='Faculty update successfully';	
+		$message='Appointment update successfully';	
 	}
 	if(isset($_POST['approve_details'])) 
 	{
@@ -22,54 +22,6 @@
 		$sub_sqls = mysql_query("SELECT `student_id` FROM `appointment` where id='".$update_id."'");
 		$sub_sqlsa= mysql_fetch_array($sub_sqls);
 		$student_id = $sub_sqlsa['student_id'];
-		/*
- 			$std_nm = mysql_query("SELECT `device_token`,`notification_key`,`role_id` FROM `login` where id='".$student_id."'");
-			$ftc_nm= mysql_fetch_array($std_nm);
-			$device_token = $ftc_nm['device_token'];
-			$notification_key = $ftc_nm['notification_key'];
-			$role_id = $ftc_nm['role_id'];
-				
-				$message='Your Appointment is Approve';
-					$title='Appointment';
-					$submitted_by=$faculty_login_id;
-					$user_id=$student_id;
-					$date=date("M d Y");
-					$time=date("h:i A");
-				 
-				$msg = array
-				(
-					'message' 	=> 'Your Appointment is Approve',
-					'button_text'	=> 'View',
-					'link'	=> 'leaveApprove://leave_note?id='.$update_id,
-					'notification_id'	=> $update_id,
-				);
-				$url = 'https://fcm.googleapis.com/fcm/send';
-				$fields = array
-				(
-					'registration_ids' 	=> array($device_token),
-					'data'			=> $msg
-				);
-				$headers = array
-				(
-					'Authorization: key=' .$notification_key,
-					'Content-Type: application/json'
-				);	
-					//--- NOTIFICATIO INSERT
-					$NOTY_insert = mysql_query("INSERT into notification(title,message,user_id,submitted_by,date,time,role_id)VALUES('$title','$message','$user_id','$submitted_by','$date','$time','$role_id')");
- 					//-- END
-						json_encode($fields);
-						$ch = curl_init();
-						curl_setopt($ch, CURLOPT_URL, $url);
-						curl_setopt($ch, CURLOPT_POST, true);
-						curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-						curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-						curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-						curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-						curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
-						$result = curl_exec($ch);
-						curl_close($ch);
-				//--
-				*/
 		$message='Appointment approve successfully';	
 	}
 	if(isset($_POST['reject_details'])) 
@@ -80,53 +32,6 @@
 		$sub_sqls = mysql_query("SELECT `student_id` FROM `appointment` where id='".$update_id."'");
 		$sub_sqlsa= mysql_fetch_array($sub_sqls);
 		$student_id = $sub_sqlsa['student_id'];
- 		/*	$std_nm = mysql_query("SELECT `device_token`,`notification_key`,`role_id` FROM `login` where id='".$student_id."'");
-			$ftc_nm= mysql_fetch_array($std_nm);
-			$device_token = $ftc_nm['device_token'];
-			$notification_key = $ftc_nm['notification_key'];
-			$role_id = $ftc_nm['role_id'];
-				
-				$message='Your Appointment is Reject';
-					$title='Appointment';
-					$submitted_by=$faculty_login_id;
-					$user_id=$student_id;
-					$date=date("M d Y");
-					$time=date("h:i A");
-				 
-				$msg = array
-				(
-					'message' 	=> 'Your Appointment is Reject',
-					'button_text'	=> 'View',
-					'link'	=> 'leaveApprove://leave_note?id='.$update_id,
-					'notification_id'	=> $update_id,
-				);
-				$url = 'https://fcm.googleapis.com/fcm/send';
-				$fields = array
-				(
-					'registration_ids' 	=> array($device_token),
-					'data'			=> $msg
-				);
-				$headers = array
-				(
-					'Authorization: key=' .$notification_key, 
-					'Content-Type: application/json'
-				);	
-					//--- NOTIFICATIO INSERT
-					$NOTY_insert = mysql_query("INSERT into notification(title,message,user_id,submitted_by,date,time,role_id)VALUES('$title','$message','$user_id','$submitted_by','$date','$time','$role_id')");
- 					//-- END
-						json_encode($fields);
-						$ch = curl_init();
-						curl_setopt($ch, CURLOPT_URL, $url);
-						curl_setopt($ch, CURLOPT_POST, true);
-						curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-						curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-						curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-						curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-						curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
-						$result = curl_exec($ch);
-						curl_close($ch);
-				//--
-				*/
 		$message='Appointment reject successfully';	
 	}
 	if(isset($_POST['complete_details'])) 
@@ -137,53 +42,6 @@
 		$sub_sqls = mysql_query("SELECT `student_id` FROM `appointment` where id='".$update_id."'");
 		$sub_sqlsa= mysql_fetch_array($sub_sqls);
 		$student_id = $sub_sqlsa['student_id'];
- 		/*	$std_nm = mysql_query("SELECT `device_token`,`notification_key`,`role_id` FROM `login` where id='".$student_id."'");
-			$ftc_nm= mysql_fetch_array($std_nm);
-			$device_token = $ftc_nm['device_token'];
-			$notification_key = $ftc_nm['notification_key'];
-			$role_id = $ftc_nm['role_id'];
-				
-				$message='Your Appointment is Complete';
-					$title='Appointment';
-					$submitted_by=$faculty_login_id;
-					$user_id=$student_id;
-					$date=date("M d Y");
-					$time=date("h:i A");
-				 
-				$msg = array
-				(
-					'message' 	=> 'Your Appointment is Complete',
-					'button_text'	=> 'View',
-					'link'	=> 'leaveApprove://leave_note?id='.$update_id,
-					'notification_id'	=> $update_id,
-				);
-				$url = 'https://fcm.googleapis.com/fcm/send';
-				$fields = array
-				(
-					'registration_ids' 	=> array($device_token),
-					'data'			=> $msg
-				);
-				$headers = array
-				(
-					'Authorization: key=' .$notification_key,
-					'Content-Type: application/json'
-				);	
-					//--- NOTIFICATIO INSERT
-					$NOTY_insert = mysql_query("INSERT into notification(title,message,user_id,submitted_by,date,time,role_id)VALUES('$title','$message','$user_id','$submitted_by','$date','$time','$role_id')");
- 					//-- END
-						json_encode($fields);
-						$ch = curl_init();
-						curl_setopt($ch, CURLOPT_URL, $url);
-						curl_setopt($ch, CURLOPT_POST, true);
-						curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-						curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-						curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-						curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-						curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
-						$result = curl_exec($ch);
-						curl_close($ch);
-				//--
-			*/
 		$message='Appointment complete successfully';	
 	}
 	
@@ -233,12 +91,13 @@ span {
 								<thead>
 								<tr style="background-color:#FFFFFF; color:rgba(94, 94, 94, 0.82);">
 									<th>S. No.</th>
+									<th>Name</th>
 									<th>Appointmenat To</th>
+									<th>Mobile No</th>
 									<th>Date</th>
 									<th>Time</th>
 									<th>Reason</th>
-                                    <th>Student Name</th>
-									<th>Status</th>
+                                    <th>Status</th>
                                     <?php if($status_ftc!=3){ ?> <th>Action</th><?php } ?>
 								</tr>
 								</thead>
@@ -254,18 +113,12 @@ span {
 												$appoint_date=$row1['appoint_date'];        
 												$appoint_time=$row1['appoint_time'];
 												$reason=$row1['reason'];
+												$mobile_no=$row1['mobile_no'];
 												$date=date('d-m-Y',strtotime($appoint_date));
 												$status_dup=$row1['status'];
-													$role=mysql_query("select `role_name` from `master_role`  where `id`= '$appoint_to' ");
-													$fetrole=mysql_fetch_array($role);
-													$rome_mname=$fetrole['role_name'];	
-												$student_id=$row1['student_id']; 
-													$std=mysql_query("select `name` from `login`  where `id`= '$student_id' ");
-													$stdftc=mysql_fetch_array($std);
-													$name=$stdftc['name'];
+												$name=$row1['name'];
 										if($status_dup==0){
                                             $recod='<span class="label label-sm label-warning">In-Process</span>';
-											 
                                         }
                                         if($status_dup==1){
                                             $recod='<span class="label label-sm label-success">Approved</span>';
@@ -276,20 +129,19 @@ span {
                                         else if($status_dup==3){
                                             $recod='<span class="label label-danger label-sm btn blue btn-sm">Completed</span>';
                                          }
-                                        
 												
                                         ?>
                                         <tr>
                                             <td><?php echo $i;?></td>
-                                            <td><?php echo $rome_mname;?></td>
+                                            <td><?php echo $name; ?></td>
+                                            <td><?php echo $appoint_to;?></td>
+                                            <td><?php echo $mobile_no;?></td>
                                             <td><?php echo $date;?></td>
                                             <td><?php echo $appoint_time;?></td>	
                                             <td><?php echo $reason;?></td>
-                                            <td><?php echo $name; ?></td>
                                             <td><?php echo $recod;?></td>
                                             <?php if($status_ftc!=3){ ?>
                                             <td>
-                                            
                                             <div class="btn-group">
 														<button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">Action <i class="fa fa-angle-down"></i></button>
 														<ul class="dropdown-menu" role="menu">

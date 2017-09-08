@@ -3882,28 +3882,31 @@ else { }
 		if ($this->get_request_method() != "POST") {
             $this->response('', 406);
         }
-		@$user_id = $this->_request['user_id'];
-		@$role_id = $this->_request['role_id'];
-		@$role_id = $this->_request['role_id'];
-		$sql_fetch = $this->db->prepare("SELECT * FROM `text_message` order by `id` DESC ");
+  		$sql_fetch = $this->db->prepare("SELECT * FROM `text_message` order by `id` DESC limit 1 ");
 		$sql_fetch->execute();
 		 if ($sql_fetch->rowCount() != 0) {  
 			$x=0;   
 			while($row_gp = $sql_fetch->fetch(PDO::FETCH_ASSOC)){
 				foreach($row_gp as $key=>$valye)	
 				{
+					$file_name=$row_gp['text_image'];  
+					$FilePath='';
+					if(!empty($file_name))
+					{
+						$FilePath = $site_url."text_message/".$file_name;
+						$string_insert[$x]['image_fullpath']=$FilePath;
+					}
 					$string_insert[$x][$key]=$row_gp[$key];
 				}
 				$x++;
 			}
-			 
-			$result1 = array("text" => $string_insert);
-			$success = array('Type' => 'OK', "Error" => '', 'Response' => $result1);
+ 			//$result1 = array("text" => $string_insert);
+			$success = array('status' => true, "Error" => '', 'Response' => $string_insert);
 			$this->response($this->json($success), 200);
 		} 
 		else {
 			
-			$error = array('Type' => "Error", "Error" => "No data found", 'Response' => '');
+			$error = array('status' => false, "Error" => "No data found", 'Response' => '');
 			$this->response($this->json($error), 200);
 		}
  	}
@@ -4005,57 +4008,8 @@ $string_insert[$x]['time']=$time;
 		} 
 	}
 
-	public function BusRoutes() 
-	{
-		global $link;
-		include_once("common/global.inc.php");
-		if ($this->get_request_method() != "POST") {
-            $this->response('', 406);
-        }
-		
-		$sql_fetch = $this->db->prepare("SELECT * FROM `master_bus`  where flag = 0 order by `id` ASC ");
-		$sql_fetch->execute();
-		 if ($sql_fetch->rowCount() != 0) {  
-			$x=0;  
-			//$ResulmaintArray=array(); 
-			$y=0;
-			while($row_gp = $sql_fetch->fetch(PDO::FETCH_ASSOC)){
-				
-				$bus_id=$row_gp['id'];
-				$vehicle_no=$row_gp['vehicle_no'];
-				$ResulmaintArray[$y]['bus_name']=$vehicle_no;
-				$sql_stds = $this->db->prepare("SELECT * FROM `bus_routes` WHERE `vehicle_id`='".$bus_id."' &&  flag = 0 ");
-				$sql_stds->execute();
-				$x=0;
-				$ResultArray=array();
-				while($stds = $sql_stds->fetch(PDO::FETCH_ASSOC)){
-			 
-					
-					$station_id=$stds['station_id'];	 
-					$sql_std = $this->db->prepare("SELECT `station` FROM master_station WHERE id='".$station_id."' ");
-					$sql_std->execute();
-					$std = $sql_std->fetch(PDO::FETCH_ASSOC);
-					$station=$std['station'];
-					$ResultArray[]=$station;
-						$x++;
-				}
-				
-				$ResulmaintArray[$y]['routs']=$ResultArray;
-				unset($ResultArray);
-				$y++; 
-			}
-			$result1 = array("buses" => $ResulmaintArray);
-			$success = array('Type' => 'OK', "Error" => '', 'Response' => $result1);
-			$this->response($this->json($success), 200);
-		} 
-		else 
-		{
-			
-			$error = array('Type' => "Error", "Error" => "No data found", 'Response' => '');
-			$this->response($this->json($error), 200);
-		}
- 	}
-public function NoteData() 
+	 
+	public function NoteData() 
 	{
 		include_once("common/global.inc.php");
         global $link;

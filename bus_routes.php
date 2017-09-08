@@ -17,11 +17,13 @@ if(isset($_POST['submit']))
 	$time_to=$_POST['time_to'];
 	$station_id=$_POST['station_id'];
 	$vehicle_id=$_POST['vehicle_id'];
-	$count=sizeof($station_id);
+	  $count=sizeof($station_id); 
 	for($i=0; $i<$count; $i++)
 	{
-		$station= $station_id[$i];
-		$r=mysql_query("insert into `bus_routes` SET `vehicle_id`='$vehicle_id' , `station_id`='$station'");
+		$station=$station_id[$i];
+		$time_froms= $time_from[$i];
+		$time_tos= $time_to[$i];
+		$r=mysql_query("insert into `bus_routes` SET `vehicle_id`='$vehicle_id',`time_from`='$time_froms',`time_to`='$time_tos' , `station_id`='$station'");
 		$sql=mysql_query($r);
 	}
 	header("location:bus_routes.php");
@@ -72,17 +74,17 @@ if(isset($_POST['submit']))
 							</div>
 						</div>
  				<div style="width:100%" align="center">	  
-				<table class="table table-striped table-hover" style="text-align:center">
-					<tr>
+				<table class="table table-bordered table-striped table-hover" style="text-align:center">
+					<tr style="text-align:center">
 						<td width="100px">Subject</td>
 						 
 						<td>Pick Time</td>
 						<td>Drop Time</td>
-						<td>&nbsp;</td>
+						<th>&nbsp;</th>
 					</tr>
 					 
 					<tr>
-					<td width="250px" align="center">
+					<td width="250px" >
 						 
 						<select class="form-control" name="station_id[]">
 							<option value="">---Select Station---</option>
@@ -99,7 +101,7 @@ if(isset($_POST['submit']))
 						  
 					</td>
 					 
-					<td align="right">
+					<td align="center">
 						<input type='text' class="form-control timepicker timepicker-no-seconds input-small" name="time_from[]">
 					</td>
 					<td align="right">
@@ -136,12 +138,14 @@ if(isset($_POST['submit']))
 			</div>
 			<div class="portlet-body form">
 			 <div class="table-scrollable" >
-				<!--	<table class="table table-hover" width="100%" style="font-family:Open Sans;">
+					<table class="table table-hover" width="100%" style="font-family:Open Sans;">
 					<thead>
 						<tr style="background:#F5F5F5">
 							<th>S.No.</th>
-							<th>vehicle No</th>
+							<th>Vehicle No</th>
 							<th>Bus Station</th>
+							<th>Pick Time</th>
+							<th>Drop Time</th>
 							<th>Action</th>
 						</tr>
 					</thead>
@@ -158,6 +162,8 @@ if(isset($_POST['submit']))
 						$bus_ftc=mysql_fetch_array($bus);
 						$vehicle_no=$bus_ftc['vehicle_no'];
 					
+                    $time_from=$row1['time_from'];
+                    $time_to=$row1['time_to'];
                     $station_id=$row1['station_id'];
 						$bus=mysql_query("select * from master_station where id='$station_id'");		
 						$bus_ftc=mysql_fetch_array($bus);
@@ -171,9 +177,9 @@ if(isset($_POST['submit']))
 									<td class="search">
 									<?php echo $vehicle_no; ?>
 									</td>
-                                    <td>
-									<?php echo $station;?>
-									</td>
+                                    <td><?php echo $station;?></td>
+                                    <td><?php echo $time_from;?></td>
+                                    <td><?php echo $time_to;?></td>
 									<td>
            
              
