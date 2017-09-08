@@ -3,8 +3,7 @@
  include("database.php");
  $user=$_SESSION['category'];
  $user_id=$_SESSION['id'];
- $message=false;
- $mmessage="";	
+  $message="";	
 	if(isset($_POST['submit']))
 	{
 		$role_id=5;
@@ -22,19 +21,13 @@
 
 			$sql="insert into contact_detail(name,mobile_no,email,designation)values('$name','$mobile_no','$email','$designation')";
 			$r=mysql_query($sql); 
-			$mmessage="Thank You, registration has been successfully.";
-			$message =true;	
-		}
+			$message="Thank You, registration has been successfully.";
+ 		}
 		else{
-			$mmessage="User already exist!";
-			$message =true;	
-		}
-						
-	}
-	else
-	{
-		echo mysql_error();
-	}
+			$message="User already exist!";
+ 		}
+ 	}
+	
     
   ?> 
 
@@ -58,9 +51,11 @@
  							</div>
 						</div>
 						<div class="portlet-body form" style="min-height:480px">
-							<?php if($message){ ?>
-                                    <h5 id="success" style="color:red; text-align:center;"><b><?php echo $mmessage; ?></b></h5>
-                                <?php } ?>	
+<?php if($message!="") { ?>
+<div id="success" class="alert alert-success" style="margin-top:10px; width:50%">
+<?php echo $message; ?>
+</div>
+<?php } ?>	
 												<form class="form-horizontal" role="form" id="noticeform" method="post" enctype="multipart/form-data">
                                                   <div class="row col-md-12">  
                                                     <div class="col-sm-6">

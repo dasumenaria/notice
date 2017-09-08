@@ -43,54 +43,49 @@ if((!empty($class_id)) && (!empty($sect_id))){
 <div class="portlet-body">
   <table class="table table-striped table-hover" style="text-align:center">
     <tr>
-	<td width="100px">Subject</td>
-	 
-	<td>Time of Starting</td>
-	 
-	<td>Time of Ending</td>
-	 
-	 <td>&nbsp;</td>
-	 
+		<td width="100px">Subject</td>
+		<td width="100px">Teacher Name</td>
+		<td>Period</td>
+		<td>Time of Starting</td>
+		<td>Time of Ending</td>
+		<td>&nbsp;</td>
 	</tr>
 	 
 	<tr>
 	<td width="250px" align="center">
 		 
-			<select class="select2me form-control" name="subject_id[]">
-				<option value="">---Select Subject---</option>
-											<?php 
-												$query2=mysql_query("select * from `master_subject`"); 
-					 							while($fetch2=mysql_fetch_array($query2))
-												{
-													$i++;
-													 
-													$subject_name=$fetch2['subject_name'];
-													$subject_id=$fetch2['id'];
-													
-												 
-												?>
-												<option value="<?php echo $subject_id; ?>"><?php echo $subject_name; ?></option>
-											<?php } ?>
-			</select>
+		<select class="select2me form-control" name="subject_id[]">
+			<option value="">---Select Subject---</option>
+		<?php 
+			$query2=mysql_query("select * from `master_subject`"); 
+			while($fetch2=mysql_fetch_array($query2))
+			{
+				$i++;
+				 
+				$subject_name=$fetch2['subject_name'];
+				$subject_id=$fetch2['id'];
+				
+			 
+			?>
+			<option value="<?php echo $subject_id; ?>"><?php echo $subject_name; ?></option>
+		<?php } ?>
+		</select>
 		  
 	</td>
-	 
 	<td align="right">
-		<input type='text'class="form-control timepicker timepicker-no-seconds input-medium" name="time_from[]">
+		<input type='text' class="form-control input-small" name="teacher_name[]">
 	</td>
-	 
+	<td align="right">
+		<input type='text'class="form-control input-small" name="period[]">
+	</td>
+	<td align="right">
+		<input type='text' class="form-control timepicker timepicker-no-seconds input-small" name="time_from[]">
+	</td>
  	<td align="right">
-		<input type='text' class="form-control timepicker timepicker-no-seconds input-medium" name="time_to[]">
+		<input type='text' class="form-control timepicker timepicker-no-seconds input-small" name="time_to[]">
 	</td>
-	 
-		 
-	 
-    
-	 
-	 
 	<td>
 		<input type='button' class='AddNew btn btn-icon-only green' value='+'>
-		
 	</td>
 		 
 	</tr>

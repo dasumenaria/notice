@@ -3,6 +3,13 @@
  include("database.php");
  $user=$_SESSION['category'];
   $datet=date('Y-m-d');
+
+	if(isset($_POST['sub_del']))
+	{
+		$delet_model=$_POST['delet_model'];
+		$r=mysql_query("update `event` SET `flag`='1' where id='$delet_model'" );
+		$sql=mysql_query($r);
+	}
   ?> 
 <html>
 <head>

@@ -10,7 +10,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>View Syllabus</title>
 </head>
-<?php contant_start(); menu();  ?>
+<?php contant_start(); menu();?>
 <body>
 	<div class="page-content-wrapper">
 		 <div class="page-content">

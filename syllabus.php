@@ -11,8 +11,7 @@ if(isset($_POST['submit']))
 {
 $class_id=mysql_real_escape_string($_REQUEST["class_id"]);
 $section_id=mysql_real_escape_string($_REQUEST["section_id"]);
-$subject_id=mysql_real_escape_string($_REQUEST["subject_id"]);
-$date=mysql_real_escape_string($_REQUEST["date"]);
+ $date=mysql_real_escape_string($_REQUEST["date"]);
 $date1=date('Y-m-d',strtotime($date));
 $curent_date=date("Y-m-d");
 
@@ -21,45 +20,39 @@ $curent_date=date("Y-m-d");
 		$q=mysql_query("select * from class_section where class_id='$class_id'");		
 		while($f=mysql_fetch_array($q))
 		{
-			 $sect_id=$f['section_id'];
-			
-			
-			
-			$fetch_st=mysql_query("select * from syllabus where flag='0' AND class_id='$class_id' AND section_id='$sect_id'");		
-			$fetch_st1=mysql_fetch_array($fetch_st);
-			if(empty($fetch_st1))
-			{
-				@$file_name=$_FILES["file"]["name"];
+			$sect_id=$f['section_id'];
+ 				@$file_name=$_FILES["file"]["name"];
 				$filedata=explode('/', $_FILES["file"]["type"]);
 				  $filedata[1];
 				 
 				if($filedata[1]=='pdf' || $filedata[1]=='PDF' )
 				{
-				$sql="insert into syllabus(class_id,section_id,subject_id,date,user_id,curent_date)values('$class_id','$sect_id','$subject_id','$date1','$user_id','$curent_date')";
-				$r=mysql_query($sql);
-				$sid=mysql_insert_id();
-				$pdf="pdf";
-				$pdff=".pdf";
-				@$file_name=$_FILES["file"]["name"];
-				if(!empty($file_name))
-				{
+					$sql="insert into syllabus(class_id,section_id,subject_id,date,user_id,curent_date)values('$class_id','$sect_id','$subject_id','$date1','$user_id','$curent_date')";
+					$r=mysql_query($sql);
+					$sid=mysql_insert_id();
+					$insert_id=$sid;
+					$pdf="pdf";
+					$pdff=".pdf";
 					@$file_name=$_FILES["file"]["name"];
-					$file_tmp_name=$_FILES['file']['tmp_name'];
-					$target ="syllabus/";
-					$file_name=$pdf.$sid.$pdff;
-					$filedata=explode('/', $_FILES["file"]["type"]);
-					$filedata[1];
-					if($filedata[1]=='pdf')
+					if(!empty($file_name))
 					{
-						$target=$target.basename($file_name);
-						move_uploaded_file($file_tmp_name,$target);
+						@$file_name=$_FILES["file"]["name"];
+						$file_tmp_name=$_FILES['file']['tmp_name'];
+						$target ="syllabus/";
 						$file_name=$pdf.$sid.$pdff;
+						$filedata=explode('/', $_FILES["file"]["type"]);
+						$filedata[1];
+						if($filedata[1]=='pdf')
+						{
+							$target=$target.basename($file_name);
+							move_uploaded_file($file_tmp_name,$target);
+							$file_name=$pdf.$sid.$pdff;
+						}
 					}
-				}
-				else
-				{
-					$file_name='no_data.pdf';
-				}
+					else
+					{
+						$file_name='no_data.pdf';
+					}
 				
 					$xsql=mysql_query("update `syllabus` SET `file`='$file_name' where id='".$sid."'" );
 					$xsqlr=mysql_query($xsql);    
@@ -70,29 +63,18 @@ $curent_date=date("Y-m-d");
 			    {
 					$message1 = "file type different, Please select pdf file.";
 				}
-			}
-			else
-			{
-				
-				$message2 = "Syllabus Already exist.";
-			}
 		} 
 	}
-	else
+	else if(!empty($class_id) && !empty($section_id))
 	{
-			$fetch_st=mysql_query("select * from syllabus where flag='0' AND class_id='$class_id' AND section_id='$section_id'");		
-			$fetch_st1=mysql_fetch_array($fetch_st);
-			if(empty($fetch_st1))
+  			@$file_name=$_FILES["file"]["name"]; 
+			$filedata=explode('/', $_FILES["file"]["type"]);
+			if($filedata[1]=='pdf' || $filedata[1]=='PDF')
 			{
-				@$file_name=$_FILES["file"]["name"];
-				$filedata=explode('/', $_FILES["file"]["type"]);
-				  $filedata[1];
-			 
-				if($filedata[1]=='pdf' || $filedata[1]=='PDF')
-				{
 				$sql="insert into syllabus(class_id,section_id,subject_id,date,user_id,curent_date)values('$class_id','$section_id','$subject_id','$date1','$user_id','$curent_date')";
 				$r=mysql_query($sql);
 				$sid=mysql_insert_id();
+				$insert_id=$sid;
 				$pdf="pdf";
 				$pdff=".pdf";
 				@$file_name=$_FILES["file"]["name"];
@@ -120,23 +102,18 @@ $curent_date=date("Y-m-d");
 					$xsqlr=mysql_query($xsql);    
 					$message = "Syllabus Add Successfully.";
 					$insert_id=$sid;
-			   }
-			   else
-			    {
-					$message1 = "file type different, Please select pdf file.";
-				}
 			}
 			else
 			{
-				
-				$message2 = "Syllabus Already exist.";
+				$message1 = "file type different, Please select pdf file.";
 			}
-			
+		 
 	}
-
-	
-}
-  ?> 
+	else{
+		$message2 = "Please select class and section";	
+	}
+	 
+}  ?> 
 <html>
 <head>
 <?php css();?>
@@ -161,18 +138,22 @@ $curent_date=date("Y-m-d");
 						</div>
 						<div class="portlet-body form">
 <?php if($message!="") { ?>
-                       <!-- <input id="alert_message" type="text" class="form-control" value="some alert text goes here..." placeholder="enter a text ...">-->
-<div class="message" id="success" style="color:#44B6AE; text-align:center"><label class="control-label"><?php echo $message; ?></label></div>
+<div id="success" class="alert alert-success" style="margin-top:10px; width:50%">
+<?php echo $message; ?>
+</div>
 <?php } ?>
 <?php if($message1!="") { ?>
-                       <!-- <input id="alert_message" type="text" class="form-control" value="some alert text goes here..." placeholder="enter a text ...">-->
-<div class="message" id="success" style="color:#44B6AE; text-align:center"><label class="control-label"><?php echo $message1; ?></label></div>
+<div id="success" class="alert alert-danger" style="margin-top:10px; width:50%">
+<?php echo $message1; ?>
+</div>
 <?php } ?>
 <?php if($message2!="") { ?>
-                       <!-- <input id="alert_message" type="text" class="form-control" value="some alert text goes here..." placeholder="enter a text ...">-->
-<div class="message" id="success" style="color:#44B6AE; text-align:center"><label class="control-label"><?php echo $message2; ?></label></div>
-<?php } ?>						 
-<form  class="form-horizontal" id="form_sample_2"  role="form" method="post"> 
+<div id="success" class="alert alert-danger" style="margin-top:10px; width:50%">
+<?php echo $message2; ?>
+</div>
+<?php } ?>
+ 					 
+<form  class="form-horizontal" id="form_sample_2"   role="form" method="post"  enctype="multipart/form-data"> 
 					<div class="form-body">
 					<div class="form-group">
 										<label class="col-md-3 control-label">Date</label>
@@ -211,7 +192,7 @@ $curent_date=date("Y-m-d");
                                                         </select>
                                                     </div></div>
 											</div>
-											<div class="form-group">
+											<!--<div class="form-group">
                                                     <label class="control-label col-md-3">Subject</label>
 													<div class="col-md-3">
                                                    <select class="form-control select select2 select2me" placeholder="Select subject.." name="subject_id">
@@ -227,7 +208,7 @@ $curent_date=date("Y-m-d");
                                             <option value="<?php echo $id;?>"><?php echo $subject_name;?></option>
                                             <?php } ?>
                                                         </select></div>
-                                                    </div>
+                                                    </div>--->
 													
 													
 														<div class="form-group">
@@ -268,25 +249,38 @@ $curent_date=date("Y-m-d");
 <script src="assets/global/plugins/jquery.min.js" type="text/javascript"></script>
 
 <script>
- 
-	$(document).ready(function() 
+<?php if($insert_id>0){ ?>
+var update_id = <?php echo $insert_id; ?>;
+		$.ajax({
+			url: "notification_page.php?function_name=create_syllabus_notifys&id="+update_id,
+			type: "POST",
+			success: function(data)
+			{
+ 			}
+		});
+<?php } ?>
+var myVar=setInterval(function(){myTimerr()},4000);
+	function myTimerr() 
 	{
-		//alert();
-		$(".user").live("change",function()
-		{			
-			
-			var s=$(this).val();
-			
-			$.ajax({
-			url: "ajax_syllabus.php?pon="+s,
-			}).done(function(response) {
-				//alert(response);  
-				$("#dt").html(""+response+"");
-				$('.select2me').select2();
-			});
-		});	  
+		$("#success").hide();
+	}
 
-	});
+$(document).ready(function() 
+{
+	//alert();
+	$(".user").live("change",function()
+	{			
+		var s=$(this).val();
+		$.ajax({
+		url: "ajax_syllabus.php?pon="+s,
+		}).done(function(response) {
+			//alert(response);  
+			$("#dt").html(""+response+"");
+			$('.select2me').select2();
+		});
+	});	  
+
+});
 	</script>
 
 

@@ -80,7 +80,7 @@ $id1=$_GET['id'];
                                             </div>
                                         </td>
 										<td>
-										<a class="accordion-toggle accordion-toggle-styled collapsed btn btn-primary btn-sm" data-toggle="collapse"  data-parent="#sub_button" href="#sub_menu<?php echo $i;?>">
+										<a class="accordion-toggle accordion-toggle-styled collapsed" data-toggle="collapse" data-parent="#sub_button" href="#sub_menu<?php echo $i;?>">
 													Sub Menu </a>
 										</td>			
 								</tr>			
@@ -90,7 +90,7 @@ $id1=$_GET['id'];
 											<table class="table  table-advance table-hover" >
 												
 													<?php
-													$r=mysql_query("SELECT `id`,`name` FROM modules where `main_menu`='$main_menu'");		
+													$r=mysql_query("SELECT * FROM modules where `main_menu`='$main_menu'");		
 													$j=0;
 													while($row=mysql_fetch_array($r))
 													{

@@ -1,30 +1,71 @@
 <?php
  include("index_layout.php");
  include("database.php");
- $user=$_SESSION['category'];
- $student_name=$_GET['std_name'];
+	$user=$_SESSION['category'];
+	$stdn_name=$_GET['stdn_name'];
+	$stdn_cls=$_GET['stdn_cls'];
+	$stdn_sec=$_GET['stdn_sec'];
+	
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  $qury='';
+  
+	if(!empty($stdn_cls) && empty($stdn_sec) && empty($stdn_name))
+	{
+		$qury="`class_id` = '$stdn_cls'";
+	}
+		if(empty($stdn_cls) && !empty($stdn_sec) && empty($stdn_name))
+	{
+		$qury="`section_id` = '$stdn_sec'";
+	}
+		if(empty($stdn_cls) && empty($stdn_sec) && !empty($stdn_name))
+	{
+		$qury="`id` = '$stdn_name'";
+	}
+		if(!empty($stdn_cls) && !empty($stdn_sec) && empty($stdn_name))
+	{
+		$qury="`class_id` = '$stdn_cls' && `section_id` = '$stdn_sec'";
+	}
+		if(empty($stdn_cls) && !empty($stdn_sec) && !empty($stdn_name))
+	{
+		$qury="`section_id` = '$stdn_sec' && `id` = '$stdn_name'";
+	}
+	if(!empty($stdn_cls) && empty($stdn_sec) && !empty($stdn_name))
+	{
+		$qury="`class_id` = '$stdn_cls' && `id` = '$stdn_name'";
+	}
+	if(!empty($stdn_cls) && !empty($stdn_sec) && !empty($stdn_name))
+	{
+		$qury="`class_id` = '$stdn_cls' && `section_id` = '$stdn_sec' && `id` = '$stdn_name'";
+	}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
  
- if(isset($_POST['sub_del']))
+if(isset($_POST['sub_del']))
 {
     $delet_student=$_POST['delet_student'];
-	$r=mysql_query("update `login` SET `flag`='1' where id='$delet_student'" );
+	$r=mysql_query("update `login` SET `flag`='1' where id='$delet_student'");
     $sql=mysql_query($r);
-  }
+}
 
   ?> 
   
 <table class="table table-bordered table-hover dataTable no-footer" id="sample_1" role="grid" aria-describedby="sample_1_info">
 	<thead>
 		<tr role="row" style="background:#f9f9f9;">
+<th width = "15px">S.No</th>
 		<th class="sorting_asc" tabindex="0" aria-controls="sample_1" rowspan="1" colspan="1" style="width: 177px;" aria-sort="ascending" aria-label="Username: activate to sort column ascending">Student Name</th>
 		<th class="sorting_disabled" rowspan="1" colspan="1" style="width: 301px;" aria-label="Email">Scholler No.</th>
+<th class="sorting_disabled" rowspan="1" colspan="1" style="width: 301px;" aria-label="Email">Class</th>
+<th class="sorting_disabled" rowspan="1" colspan="1" style="width: 301px;" aria-label="Email">Section</th> 
+<th class="sorting_disabled" rowspan="1" colspan="1" style="width: 301px;" aria-label="Email">Mobile No.</th>
 		<th class="sorting_disabled" rowspan="1" colspan="1" style="width: 163px;" aria-label="Status">Action</th></tr>
 	</thead>
 
 	<?php
-	 
-		$r1=mysql_query("select * from login where  id='".$student_name."'&& flag='0'");
-		$row1=mysql_fetch_array($r1);
+ $x=0;
+		$r1=mysql_query("select * from login where ".$qury." && flag='0'");
+		while($row1=mysql_fetch_array($r1))
+		{  $x++;
 		$id=$row1['id'];
 		$name=$row1['name'];
 		$eno=$row1['eno'];
@@ -52,12 +93,20 @@
  	?>
 <tbody>
 	<tr>
-		 
+		<td width = "15px">
+			<?php echo $x;?>
+		</td>
 		<td class="search">
 			<?php echo $name;?>
 		</td>
 		<td>
 			<?php echo $eno;?>
+		</td>
+<td><?php echo $class_name;?></td>
+<td><?php echo$section_name;?></td>
+ 
+<td>
+			<?php echo $mobile_no;?>
 		</td>
 		<td>
 			<a class="btn btn-circle btn-xs" style="color:#FFF; background-color:#39F"  rel="tooltip" title="Delete"  data-toggle="modal" href="#delete1<?php echo $id ;?>"><i class="fa fa-search"></i></a>
@@ -137,7 +186,7 @@
 		</td>
 	</tr>
 </tbody>
-
+		<?php  }?>
 </table>
 							
 

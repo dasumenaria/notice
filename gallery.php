@@ -19,11 +19,14 @@ if(isset($_POST['submit']))
 		{
 				$n_name='event';
 				$folderName2=$n_name.$e_id;
-					$gallery_pic=$_FILES["gallery_pic"]["tmp_name"];
-					$o=sizeof($gallery_pic);
+					$gallery_pic=array_filter($_FILES["gallery_pic"]["tmp_name"]);
+					
+					$o=sizeof($gallery_pic);  
 					$gp=0;
 					for($j=0; $j<$o; $j++)
 					{
+					
+						
 						$rnd=rand(100, 10000);
 						$random=$rnd.$e_id;
 						  
@@ -32,7 +35,7 @@ if(isset($_POST['submit']))
 						move_uploaded_file( $gp,"event/".$folderName2."/".$photo1);
 						$sql1="insert into sub_gallery(gallery_id,gallery_pic)values('$e_id','$photo1')"; 
 						$rl=mysql_query($sql1);
-						$insert_id=mysql_insert_id();
+						 
 					}	
 		}
 		else
@@ -43,7 +46,7 @@ if(isset($_POST['submit']))
 			$n_name='event';
 			$folderName2=$n_name.$event_id;
 			
-			   $gallery_pic=$_FILES["gallery_pic"]["tmp_name"];
+			   $gallery_pic=array_filter($_FILES["gallery_pic"]["tmp_name"]);
 			   $o=sizeof($gallery_pic);
 			   $gp=0;
 				  for($j=0; $j<$o; $j++){
@@ -54,34 +57,37 @@ if(isset($_POST['submit']))
 					 move_uploaded_file( $gp,"event/".$folderName2."/".$photo1);
 					$sql1="insert into sub_gallery(gallery_id,gallery_pic)values('$ids','$photo1')"; 
 					$rl=mysql_query($sql1);
-					$insert_id=mysql_insert_id();
+					
 					}
 			}
 		}
 		else if($type==5)
 		{
+	
 		$r1=mysql_query("select * from gallery where event_news_id='$news_id' AND category_id='$type'");		
 		$row1=mysql_fetch_array($r1);
-		$e_id=$row1['id'];
+		$countt=mysql_num_rows($r1);
+		$e_id=$row1['id'];;
 		
-			if(!empty($row1))
+			if($countt>0)
 			{
 				$n_name='news';
-				$folderName2=$n_name.$e_id;
-				$gallery_pic=$_FILES["gallery_pic"]["tmp_name"];
+				$folderName2=$n_name.$news_id;
+				$gallery_pic=array_filter($_FILES["gallery_pic"]["tmp_name"]);
+				 
 				$o=sizeof($gallery_pic);
 				$gp=0;
 				for($j=0; $j<$o; $j++)
 				{
+					
 					$rnd=rand(100, 10000);
 					$random=$rnd.$e_id;
-				
 					$gp=$gallery_pic[$j];
 					$photo1="event".$random.".jpg";
 					move_uploaded_file( $gp,"news/".$folderName2."/".$photo1);
 					$sql1="insert into sub_gallery(gallery_id,gallery_pic)values('$e_id','$photo1')"; 
 					$rl=mysql_query($sql1);
-					$insert_id=mysql_insert_id();
+					
 				}	
 			}
 			else
@@ -93,9 +99,8 @@ if(isset($_POST['submit']))
 				
 				$n_name='news';
 				$folderName2=$n_name.$news_id;
-			
-			   $gallery_pic=$_FILES["gallery_pic"]["tmp_name"];
-			   $o=sizeof($gallery_pic);
+				$gallery_pic=array_filter($_FILES["gallery_pic"]["tmp_name"]);
+			   	$o=sizeof($gallery_pic);
 			   $gp=0;
 				for($j=0; $j<$o; $j++)
 				{
@@ -106,13 +111,12 @@ if(isset($_POST['submit']))
 					move_uploaded_file( $gp,"news/".$folderName2."/".$photo1);
 					$sql1="insert into sub_gallery(gallery_id,gallery_pic)values('$ids','$photo1')"; 
 					$rl=mysql_query($sql1);
-					$insert_id=mysql_insert_id();
+					
 				}
 			}	
 			$message="Images Added Successfully";
 		}
-		header("Location:gallery.php");
-}   
+ }   
  
     
   ?> 
@@ -133,15 +137,8 @@ if(isset($_POST['submit']))
 <body>
 	<div class="page-content-wrapper">
 		 <div class="page-content">
-			
-			
-			<div class="portlet box blue">
-			
-			
-			
-			
-			
-						<div class="portlet-title">
+ 			<div class="portlet box blue">
+ 						<div class="portlet-title">
 							<div class="caption">
 								<i class="fa fa-gift"></i> Gallery
 							</div>
@@ -153,9 +150,10 @@ if(isset($_POST['submit']))
 							</div>
 						</div>
 						<div class="portlet-body form">
-                      <?php if($message!="") { ?>
-                       <!-- <input id="alert_message" type="text" class="form-control" value="some alert text goes here..." placeholder="enter a text ...">-->
-<div class="message" id="success" style="color:#44B6AE; text-align:center"><label class="control-label"><?php echo $message; ?></label></div>
+<?php if($message!="") { ?>
+<div id="success" class="alert alert-success" style="margin-top:10px; width:50%">
+<?php echo $message; ?>
+</div>
 <?php } ?>
                         
                         

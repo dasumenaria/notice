@@ -106,10 +106,10 @@
 										</div>
 										</div>
 									</div>
-						
+			</form>			
 						<div id="data"></div>
 			</div>
-			</form>
+			
 			</div></div></div></div>
 </body>
 

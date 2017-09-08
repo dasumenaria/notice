@@ -17,26 +17,24 @@ if(isset($_POST['submit']))
  	}
 	
 	
-	$gallery_pic=$_FILES["gallery_pic"]["tmp_name"];
+	$gallery_pic=($_FILES["gallery_pic"]["tmp_name"]);
 	$o=sizeof($gallery_pic);
-	$gp=0;
-	
-	for($j=0; $j<$o; $j++)
+   	for($j=0; $j<$o; $j++)
 	{
-		
- 		$tmp_name=$gallery_pic[$j];
-		$file_name=$_FILES["gallery_pic"]["name"][$j];
-		$ext = pathinfo($file_name, PATHINFO_EXTENSION);
-		$Filename=rand();
- 		$photo1=$Filename.".".$ext;
-		$curent_date=date('Y-m-d');	   
-		$insert_name=$target.'/'.$photo1;
-		@move_uploaded_file($tmp_name, $target.'/'.$photo1);
-		$sql1="insert into subsports_gallery(sports_id,gallery_pic,curent_date)values('$sports_id','$insert_name','$curent_date')"; 
-		$rl=mysql_query($sql1);
-		 
- 	}
-	 
+  		$tmp_name=$gallery_pic[$j];
+		$file_name=($_FILES["gallery_pic"]["name"][$j]);
+		if(!empty($file_name))
+		{
+			$ext = pathinfo($file_name, PATHINFO_EXTENSION);
+			$Filename=rand();
+			$photo1=$Filename.".".$ext;
+			$curent_date=date('Y-m-d');	   
+			$insert_name=$target.'/'.$photo1;
+			@move_uploaded_file($tmp_name, $target.'/'.$photo1);
+			$sql1="insert into subsports_gallery(sports_id,gallery_pic,curent_date)values('$sports_id','$insert_name','$curent_date')"; 
+			$rl=mysql_query($sql1);
+		}
+  	}
 	ob_start();
 	echo "<meta http-equiv='refresh' content='0;url=sports.php'>";
 	ob_flush();
@@ -63,12 +61,7 @@ if(isset($_POST['submit']))
 			
 			
 			<div class="portlet box blue">
-			
-			
-			
-			
-			
-						<div class="portlet-title">
+				<div class="portlet-title">
 							<div class="caption">
 								<i class="fa fa-gift"></i> sports
 							</div>

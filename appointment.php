@@ -22,6 +22,7 @@
 		$sub_sqls = mysql_query("SELECT `student_id` FROM `appointment` where id='".$update_id."'");
 		$sub_sqlsa= mysql_fetch_array($sub_sqls);
 		$student_id = $sub_sqlsa['student_id'];
+		/*
  			$std_nm = mysql_query("SELECT `device_token`,`notification_key`,`role_id` FROM `login` where id='".$student_id."'");
 			$ftc_nm= mysql_fetch_array($std_nm);
 			$device_token = $ftc_nm['device_token'];
@@ -68,6 +69,7 @@
 						$result = curl_exec($ch);
 						curl_close($ch);
 				//--
+				*/
 		$message='Appointment approve successfully';	
 	}
 	if(isset($_POST['reject_details'])) 
@@ -78,7 +80,7 @@
 		$sub_sqls = mysql_query("SELECT `student_id` FROM `appointment` where id='".$update_id."'");
 		$sub_sqlsa= mysql_fetch_array($sub_sqls);
 		$student_id = $sub_sqlsa['student_id'];
- 			$std_nm = mysql_query("SELECT `device_token`,`notification_key`,`role_id` FROM `login` where id='".$student_id."'");
+ 		/*	$std_nm = mysql_query("SELECT `device_token`,`notification_key`,`role_id` FROM `login` where id='".$student_id."'");
 			$ftc_nm= mysql_fetch_array($std_nm);
 			$device_token = $ftc_nm['device_token'];
 			$notification_key = $ftc_nm['notification_key'];
@@ -124,6 +126,7 @@
 						$result = curl_exec($ch);
 						curl_close($ch);
 				//--
+				*/
 		$message='Appointment reject successfully';	
 	}
 	if(isset($_POST['complete_details'])) 
@@ -134,7 +137,7 @@
 		$sub_sqls = mysql_query("SELECT `student_id` FROM `appointment` where id='".$update_id."'");
 		$sub_sqlsa= mysql_fetch_array($sub_sqls);
 		$student_id = $sub_sqlsa['student_id'];
- 			$std_nm = mysql_query("SELECT `device_token`,`notification_key`,`role_id` FROM `login` where id='".$student_id."'");
+ 		/*	$std_nm = mysql_query("SELECT `device_token`,`notification_key`,`role_id` FROM `login` where id='".$student_id."'");
 			$ftc_nm= mysql_fetch_array($std_nm);
 			$device_token = $ftc_nm['device_token'];
 			$notification_key = $ftc_nm['notification_key'];
@@ -180,6 +183,7 @@
 						$result = curl_exec($ch);
 						curl_close($ch);
 				//--
+			*/
 		$message='Appointment complete successfully';	
 	}
 	
@@ -233,6 +237,7 @@ span {
 									<th>Date</th>
 									<th>Time</th>
 									<th>Reason</th>
+                                    <th>Student Name</th>
 									<th>Status</th>
                                     <?php if($status_ftc!=3){ ?> <th>Action</th><?php } ?>
 								</tr>
@@ -251,9 +256,13 @@ span {
 												$reason=$row1['reason'];
 												$date=date('d-m-Y',strtotime($appoint_date));
 												$status_dup=$row1['status'];
-												$role=mysql_query("select `role_name` from `master_role`  where `id`= '$appoint_to' ");
-												$fetrole=mysql_fetch_array($role);
-												$rome_mname=$fetrole['role_name'];	
+													$role=mysql_query("select `role_name` from `master_role`  where `id`= '$appoint_to' ");
+													$fetrole=mysql_fetch_array($role);
+													$rome_mname=$fetrole['role_name'];	
+												$student_id=$row1['student_id']; 
+													$std=mysql_query("select `name` from `login`  where `id`= '$student_id' ");
+													$stdftc=mysql_fetch_array($std);
+													$name=$stdftc['name'];
 										if($status_dup==0){
                                             $recod='<span class="label label-sm label-warning">In-Process</span>';
 											 
@@ -276,6 +285,7 @@ span {
                                             <td><?php echo $date;?></td>
                                             <td><?php echo $appoint_time;?></td>	
                                             <td><?php echo $reason;?></td>
+                                            <td><?php echo $name; ?></td>
                                             <td><?php echo $recod;?></td>
                                             <?php if($status_ftc!=3){ ?>
                                             <td>

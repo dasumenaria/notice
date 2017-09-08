@@ -101,7 +101,8 @@ if(isset($_GET["session_expired"])) {
 			<input style="background-color:#fff; color:#000;" class="form-control form-control-solid placeholder-no-fix" type="password" autocomplete="off" placeholder="Password" name="pass"/>
 		</div>
 		<div class="form-actions">
- 			<button type="submit" name="sub_log" class="btn pull-right" style="background-color:#3C8DBC;color:#fff; align:right" >Login</button>
+		<!--<a href="registration.php" class="btn btn-default">For Registration click here!</a>-->
+			<button type="submit" name="sub_log" class="btn pull-right" style="background-color:#3C8DBC;color:#fff; align:right" >Login</button>
 		</div>
 		
 	

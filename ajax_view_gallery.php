@@ -37,8 +37,11 @@ include("database.php");
 								</tr>
 								</thead>
 							 <?php
+ 
 				$gallry_sql=mysql_query("select * from gallery where category_id='$cat_id' AND event_news_id='$en_id' order by id Desc ");
 				$gallry_sql_row=mysql_fetch_array($gallry_sql);
+$gcount=mysql_num_rows($gallry_sql);
+if($gcount > 0){
 				$gallery_id=$gallry_sql_row['id'];
 			    $r1=mysql_query("select * from sub_gallery where gallery_id='$gallery_id' order by id Desc ");		
 					$i=0;
@@ -86,7 +89,14 @@ include("database.php");
 									</td>
 								</tr>
 								</tbody>
-                    <?php } ?>
+                    <?php } 
+}
+else
+{
+?>
+<tr><td align="center" colspan="10">No Data Found</td></tr>
+<?php
+}?>
 								</table>
 							
 </div>

@@ -29,41 +29,63 @@
 						<div class="portlet-body">
 							
 							<div id="sample_1_wrapper" class="dataTables_wrapper no-footer">
-							<div class="row">
-							<div class="col-md-6 col-sm-12">
-							<div class="dataTables_length" id="sample_1_length"><label>
-							<select name="sample_1_length" aria-controls="sample_1" class="form-control input-medium input-inline find_records">
-                                <option value="300">Select</option>
-                                <option value="300">300</option>
-                                <option value="600">600</option>
-                                <option value="900">900</option>
-                                <option value="1200">1200</option>
-                                <option value="1500">1500</option>
-                                <option value="1800">1800</option>
-                                <option value="2100">2100</option>
-                                <option value="2400">2400</option>
-                                <option value="2700">2700</option>
-                                <option value="3000">3000</option>
-                                <option value="3300">3300</option>
-							</select> Records</label></div></div>
-							
-							<div class="col-md-6 col-sm-12">
-							<div class="dataTables_length" id="sample_1_length"><label>Student Name</label>
-							<select name="sample_1_length" id="users" class="form-control input-inline input-medium users select2me">
-                                <option value="300">Select</option>
-                                <?php
-			  $r1=mysql_query("select * from login where flag='0'");
+	<div class="row">
+		
+		<div class="col-md-4 col-sm-12">
+			<div class="dataTables_length" id="sample_1_length"><label>Student class</label>
+				<select name="sample_1_length" id="cls" class="form-control users select2me">
+					<option value="">Select</option>
+					<?php
+					$r2=mysql_query("select * from master_class where flag='0'");
+					$i=0;
+					while($row2=mysql_fetch_array($r2))
+					{
+						$i++;
+						echo $class_id=$row2['id'];
+						$class_name=$row2['class_name'];
+					?> 
+					<option value="<?php echo $class_id; ?>"><?php echo $class_name;?></option>
+				<?php } ?>
+				</select>
+			</div>
+		</div>
+		<div class="col-md-4 col-sm-12">
+			<div class="dataTables_length" id="sample_1_length"><label>Student Section</label>
+				<select name="sample_1_length" id="sec" class="form-control users select2me">
+					<option value="">Select</option>
+					<?php
+				    $r3=mysql_query("select * from master_section where flag='0'");
+					$i=0;
+					while($row3=mysql_fetch_array($r3))
+					{
+						$i++;
+						$id=$row3['id'];
+						$section_name=$row3['section_name'];
+					?> 
+					<option value="<?php echo $id;?>"><?php echo $section_name;?></option>
+				<?php } ?>
+				</select>
+			</div>
+		</div>
+<div class="col-md-4 col-sm-12">
+			<div class="dataTables_length" id="sample_1_length"><label>Student Name</label>
+				<select name="sample_1_length" id="users" class="form-control users select2me">
+					<option value="">Select</option>
+					<?php
+					$r1=mysql_query("select * from login where flag='0'");
 					$i=0;
 					while($row1=mysql_fetch_array($r1))
 					{
-					$i++;
-                    $id=$row1['id'];
-					$name=$row1['name'];
-                     ?> 
-					 <option value="<?php echo $id?>"><?php echo $name?></option>
-					 <?php } ?>
-							</select> </div></div>
-       						</div>
+						$i++;
+						$id=$row1['id'];
+						$name=$row1['name'];
+					?> 
+					<option value="<?php echo $id?>"><?php echo $name?></option>
+				<?php } ?>
+				</select>
+			</div>
+		</div>
+	</div>
 							<div id="data" class="scroller" style="height:400px; padding-top:5px"  data-always-visible="1" data-rail-visible="0">
 							</div>
 							
@@ -85,26 +107,13 @@
 <script src="assets/global/plugins/jquery.min.js" type="text/javascript"></script>
 <script>
 $(document).ready(function(){    
-        $(".find_records").die().live("change",function(){
-	    var view_u=$(".find_records").val();
-	  	$.ajax({
-			url: "ajax_view_profiles.php?view_u="+view_u,
-			}).done(function(response) {
-		   $("#data").html(""+response+"");
-			});
-});
-});
-</script>
-
-
-<script>
-$(document).ready(function(){    
-        $("#users").die().live("change",function(){
+        $(".users").die().live("change",function(){
 			
-	    var stdn_name=$("#users").val();
-		 
-	  	$.ajax({
-			url: "studentwise_reg.php?std_name="+stdn_name,
+			var stdn_name=$("#users").val();
+			var stdn_cls=$("#cls").val(); 
+			var stdn_sec=$("#sec").val();
+		 	$.ajax({
+			url: "studentwise_reg.php?stdn_name="+stdn_name+"&stdn_cls="+stdn_cls+"&stdn_sec="+stdn_sec,
 			}).done(function(response) {
 		   $("#data").html(""+response+"");
 			});

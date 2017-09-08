@@ -51,7 +51,6 @@ if(isset($_POST['submit']))
 						<div class="form-group">
 							<label class="control-label col-md-3">Student Name</label>
 							<div class="col-md-4">
-							  
 									<select class="form-control user select2me " required name="student_id" >
 									<option value="">---Select Name---</option>
 								    <?php 
@@ -64,7 +63,6 @@ if(isset($_POST['submit']))
 									<option value="<?php echo $id; ?>"><?php echo $name; ?></option>
 									<?php } ?>
 									</select>
-								 
 								<span class="help-block">
 								Please select student name</span>
 							</div>

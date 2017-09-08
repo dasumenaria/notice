@@ -10,6 +10,10 @@ include("database.php");
 									<th>
 										 #
 									</th>
+									
+									<th>
+										Name
+									</th>
 									<th>
 										User Name
 									</th>
@@ -25,13 +29,14 @@ include("database.php");
 								</tr>
 								</thead>
 							 <?php
-			  $r1=mysql_query("select * from faculty_login where role_id='".$view_u."'");		
+			  $r1=mysql_query("select * from faculty_login where role_id='".$view_u."' && flag = 0 ");		
 					$i=0;
 					while($row1=mysql_fetch_array($r1))
 					{
 					$i++;
 					$id=$row1['id'];
 					$user_name=$row1['user_name'];
+					$name=$row1['name'];
                     $role_id=$row1['role_id'];
 					$mobile_no=$row1['mobile_no'];
 					                              
@@ -44,6 +49,9 @@ include("database.php");
 								<tr>
 									<td>
 							<?php echo $i;?>
+									</td>
+									<td>
+									<?php echo $name;?>
 									</td>
 									<td>
 									<?php echo $user_name;?>

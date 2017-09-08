@@ -37,9 +37,7 @@ if($function_for=='exam')
 				<th>
 					#
 				</th>
-				<th>
-					Subject
-				</th>
+				<th>Subject</th>
                 <th>Exam Date</th>
 				<th>
 					Time From
@@ -138,18 +136,12 @@ if($function_for=='timetable')
 				<td>
 					#
 				</td>
-				<td>
-					Subject
-				</td>
-				<td>
-					Time From
-				</td>
-				<td>
-					Time To 
-				</td>
-				<td>
-					Action
-				</td>
+				<td>Subject</td>
+				<td>Teacher Name</td>
+				<td>Period</td>
+				<td>Time From</td>
+				<td>Time To</td>
+				<td>Action</td>
 			</tr>
 		</thead>
 		<?php
@@ -167,6 +159,8 @@ if($function_for=='timetable')
 			else
 			{ $date1=date("d-m-Y", strtotime($date)); }
 			$time_from=$row1['time_from'];
+			$teacher_name=$row1['teacher_name'];
+			$period=$row1['period'];
 			$time_to=$row1['time_to'];
 			$subject_id=$row1['subject_id'];
 			$class=mysql_query("select * from master_subject where id='".$subject_id."'");		
@@ -184,6 +178,12 @@ if($function_for=='timetable')
 					</td>
 					<td class="search">
 						<?php echo $subject_name;?>
+						 
+					<td>
+						<?php echo $teacher_name;?>
+					</td>
+					<td>
+						<?php echo $period;?>
 					</td>
 					<td>
 						<?php echo $time_from;?>

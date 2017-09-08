@@ -62,9 +62,9 @@ if($function_name=='principle_director_message')
 							'Authorization: key=' .$notification_key,
 							'Content-Type: application/json'
 						);
-					 
+						$link='notice://'.$link.'?id='.$up_id;
 							//--- NOTIFICATIO INSERT
-					$NOTY_insert = mysql_query("INSERT into notification(title,message,user_id,submitted_by,date,time,role_id)VALUES('$title','$message','$user_id','$submitted_by','$date','$time','$role_id')");
+					$NOTY_insert = mysql_query("INSERT into notification(title,message,user_id,submitted_by,date,time,role_id,link)VALUES('$title','$message','$user_id','$submitted_by','$date','$time','$role_id','$link')");
 							//-- END
 								json_encode($fields);
 								$ch = curl_init();
@@ -111,9 +111,9 @@ if($function_name=='principle_director_message')
 							'Authorization: key=' .$notification_key,
 							'Content-Type: application/json'
 						);
-					 
+					$link='notice://'.$link.'?id='.$up_id;
 							//--- NOTIFICATIO INSERT
-					$NOTY_insert = mysql_query("INSERT into notification(title,message,user_id,submitted_by,date,time,role_id)VALUES('$title','$message','$user_id','$submitted_by','$date','$time','$role_id')");
+					$NOTY_insert = mysql_query("INSERT into notification(title,message,user_id,submitted_by,date,time,role_id,link)VALUES('$title','$message','$user_id','$submitted_by','$date','$time','$role_id','$link')");
 							//-- END
 								json_encode($fields);
 								$ch = curl_init();
@@ -139,7 +139,7 @@ if($function_name=='principle_director_message')
 					$device_token = $ftc_nm['device_token'];
 					$notification_key = $ftc_nm['notification_key'];
 					$role_id = $ftc_nm['role_id'];
-					  $id = $ftc_nm['id'];
+					$id = $ftc_nm['id'];
 						$submitted_by=$login_id;
 						$user_id=$id;
 						$date=date("M d Y");
@@ -164,9 +164,10 @@ if($function_name=='principle_director_message')
 							'Authorization: key=' .$notification_key,
 							'Content-Type: application/json'
 						);
-					 
+						
+					 $link='notice://'.$link.'?id='.$up_id;
 							//--- NOTIFICATIO INSERT
-					$NOTY_insert = mysql_query("INSERT into notification(title,message,user_id,submitted_by,date,time,role_id)VALUES('$title','$message','$user_id','$submitted_by','$date','$time','$role_id')");
+					$NOTY_insert = mysql_query("INSERT into notification(title,message,user_id,submitted_by,date,time,role_id,link)VALUES('$title','$message','$user_id','$submitted_by','$date','$time','$role_id','$link')");
 							//-- END
 								json_encode($fields);
 								$ch = curl_init();
@@ -179,6 +180,7 @@ if($function_name=='principle_director_message')
 								curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
 								$result = curl_exec($ch);
 								curl_close($ch);
+ 
 						//--	
 					}
 			}
@@ -203,7 +205,7 @@ if($function_name=='create_event_notify')
 			}
 			if($role_id=='4')
 			{
-				$std_nm = mysql_query("SELECT `device_token`,`notification_key`,`role_id`,`id` FROM `faculty_login` where role_id='4' ");
+				$std_nm = mysql_query("SELECT `device_token`,`notification_key`,`role_id`,`id` FROM `faculty_login` where role_id='4' && `device_token` !='' ");
 			}
 			if($role_id=='5')
 			{
@@ -244,9 +246,9 @@ if($function_name=='create_event_notify')
 							'Authorization: key=' .$notification_key,
 							'Content-Type: application/json'
 						);
-					 
+					 $link='notice://event?id='.$Eid;
 							//--- NOTIFICATIO INSERT
-					$NOTY_insert = mysql_query("INSERT into notification(title,message,user_id,submitted_by,date,time,role_id)VALUES('$title','$message','$user_id','$submitted_by','$date','$time','$role_id')");
+					$NOTY_insert = mysql_query("INSERT into notification(title,message,user_id,submitted_by,date,time,role_id,link)VALUES('$title','$message','$user_id','$submitted_by','$date','$time','$role_id','$link')");
 							//-- END
 								json_encode($fields);
 								$ch = curl_init();
@@ -294,8 +296,8 @@ if($function_name=='create_event_notify')
 							'Content-Type: application/json'
 						);
 					 
-							//--- NOTIFICATIO INSERT
-					$NOTY_insert = mysql_query("INSERT into notification(title,message,user_id,submitted_by,date,time,role_id)VALUES('$title','$message','$user_id','$submitted_by','$date','$time','$role_id')");
+					$link='notice://event?id='.$Eid;		//--- NOTIFICATIO INSERT
+					$NOTY_insert = mysql_query("INSERT into notification(title,message,user_id,submitted_by,date,time,role_id,link)VALUES('$title','$message','$user_id','$submitted_by','$date','$time','$role_id','$link')");
 							//-- END
 								json_encode($fields);
 								$ch = curl_init();
@@ -346,9 +348,9 @@ if($function_name=='create_event_notify')
 							'Authorization: key=' .$notification_key,
 							'Content-Type: application/json'
 						);
-					 
+					$link='notice://event?id='.$Eid;
 							//--- NOTIFICATIO INSERT
-					$NOTY_insert = mysql_query("INSERT into notification(title,message,user_id,submitted_by,date,time,role_id)VALUES('$title','$message','$user_id','$submitted_by','$date','$time','$role_id')");
+					$NOTY_insert = mysql_query("INSERT into notification(title,message,user_id,submitted_by,date,time,role_id,link)VALUES('$title','$message','$user_id','$submitted_by','$date','$time','$role_id','$link')");
 							//-- END
 								json_encode($fields);
 								$ch = curl_init();
@@ -428,9 +430,9 @@ if($function_name=='create_news_notifys')
 							'Authorization: key=' .$notification_key,
 							'Content-Type: application/json'
 						);
-					 
+					$link='notice://news?id='.$Eid;
 							//--- NOTIFICATIO INSERT
-					$NOTY_insert = mysql_query("INSERT into notification(title,message,user_id,submitted_by,date,time,role_id)VALUES('$title','$message','$user_id','$submitted_by','$date','$time','$role_id')");
+					$NOTY_insert = mysql_query("INSERT into notification(title,message,user_id,submitted_by,date,time,role_id,link)VALUES('$title','$message','$user_id','$submitted_by','$date','$time','$role_id','$link')");
 							//-- END
 								json_encode($fields);
 								$ch = curl_init();
@@ -477,9 +479,9 @@ if($function_name=='create_news_notifys')
 							'Authorization: key=' .$notification_key,
 							'Content-Type: application/json'
 						);
-					 
+					$link='notice://news?id='.$Eid;
 							//--- NOTIFICATIO INSERT
-					$NOTY_insert = mysql_query("INSERT into notification(title,message,user_id,submitted_by,date,time,role_id)VALUES('$title','$message','$user_id','$submitted_by','$date','$time','$role_id')");
+					$NOTY_insert = mysql_query("INSERT into notification(title,message,user_id,submitted_by,date,time,role_id,link)VALUES('$title','$message','$user_id','$submitted_by','$date','$time','$role_id','$link')");
 							//-- END
 								json_encode($fields);
 								$ch = curl_init();
@@ -530,9 +532,9 @@ if($function_name=='create_news_notifys')
 							'Authorization: key=' .$notification_key,
 							'Content-Type: application/json'
 						);
-					 
+					$link='notice://news?id='.$Eid;
 							//--- NOTIFICATIO INSERT
-					$NOTY_insert = mysql_query("INSERT into notification(title,message,user_id,submitted_by,date,time,role_id)VALUES('$title','$message','$user_id','$submitted_by','$date','$time','$role_id')");
+					$NOTY_insert = mysql_query("INSERT into notification(title,message,user_id,submitted_by,date,time,role_id,link)VALUES('$title','$message','$user_id','$submitted_by','$date','$time','$role_id','$link')");
 							//-- END
 								json_encode($fields);
 								$ch = curl_init();
@@ -623,9 +625,9 @@ if($function_name=='create_gallery_notifys')
 							'Authorization: key=' .$notification_key,
 							'Content-Type: application/json'
 						);
-					 
+						$link='notice://gallery?id='.$Eid;
 							//--- NOTIFICATIO INSERT
-					$NOTY_insert = mysql_query("INSERT into notification(title,message,user_id,submitted_by,date,time,role_id)VALUES('$title','$message','$user_id','$submitted_by','$date','$time','$role_id')");
+					$NOTY_insert = mysql_query("INSERT into notification(title,message,user_id,submitted_by,date,time,role_id,link)VALUES('$title','$message','$user_id','$submitted_by','$date','$time','$role_id','$link')");
 							//-- END
 								json_encode($fields);
 								$ch = curl_init();
@@ -672,9 +674,9 @@ if($function_name=='create_gallery_notifys')
 							'Authorization: key=' .$notification_key,
 							'Content-Type: application/json'
 						);
-					 
+					$link='notice://gallery?id='.$Eid;
 							//--- NOTIFICATIO INSERT
-					$NOTY_insert = mysql_query("INSERT into notification(title,message,user_id,submitted_by,date,time,role_id)VALUES('$title','$message','$user_id','$submitted_by','$date','$time','$role_id')");
+					$NOTY_insert = mysql_query("INSERT into notification(title,message,user_id,submitted_by,date,time,role_id,link)VALUES('$title','$message','$user_id','$submitted_by','$date','$time','$role_id','$link')");
 							//-- END
 								json_encode($fields);
 								$ch = curl_init();
@@ -725,9 +727,9 @@ if($function_name=='create_gallery_notifys')
 							'Authorization: key=' .$notification_key,
 							'Content-Type: application/json'
 						);
-					 
+					$link='notice://gallery?id='.$Eid;
 							//--- NOTIFICATIO INSERT
-					$NOTY_insert = mysql_query("INSERT into notification(title,message,user_id,submitted_by,date,time,role_id)VALUES('$title','$message','$user_id','$submitted_by','$date','$time','$role_id')");
+					$NOTY_insert = mysql_query("INSERT into notification(title,message,user_id,submitted_by,date,time,role_id,link)VALUES('$title','$message','$user_id','$submitted_by','$date','$time','$role_id','$link')");
 							//-- END
 								json_encode($fields);
 								$ch = curl_init();
@@ -768,7 +770,7 @@ if($function_name=='create_syllabus_notifys')
  	$role_id = $ftc_nmg['role_id'];
  	$send='0';
 	 
-				$std_nm = mysql_query("SELECT `device_token`,`notification_key`,`role_id`,`id` FROM `login` where class_id='$class_id' && section_id = '$section_id'");
+				$std_nm = mysql_query("SELECT `device_token`,`notification_key`,`role_id`,`id` FROM `login` where class_id='$class_id' && section_id = '$section_id' && `device_token` !=''");
 				while($ftc_nm= mysql_fetch_array($std_nm))
 				{
 					$device_token = $ftc_nm['device_token'];
@@ -799,9 +801,9 @@ if($function_name=='create_syllabus_notifys')
 							'Authorization: key=' .$notification_key,
 							'Content-Type: application/json'
 						);
-					 
+					$link='notice://syllabus?id='.$Eid;
 							//--- NOTIFICATIO INSERT
-					$NOTY_insert = mysql_query("INSERT into notification(title,message,user_id,submitted_by,date,time,role_id)VALUES('$title','$message','$user_id','$submitted_by','$date','$time','$role_id')");
+					$NOTY_insert = mysql_query("INSERT into notification(title,message,user_id,submitted_by,date,time,role_id,link)VALUES('$title','$message','$user_id','$submitted_by','$date','$time','$role_id','$link')");
 							//-- END
 								json_encode($fields);
 								$ch = curl_init();
@@ -837,7 +839,7 @@ if($function_name=='create_timetable_notify')
 	$message=$description;
   	$send='0';
 	 
-				$std_nm = mysql_query("SELECT `device_token`,`notification_key`,`role_id`,`id` FROM `login` where class_id='$class_id' && section_id = '$section_id'");
+				$std_nm = mysql_query("SELECT `device_token`,`notification_key`,`role_id`,`id` FROM `login` where class_id='$class_id' && section_id = '$section_id' && `device_token` !=''");
 				while($ftc_nm= mysql_fetch_array($std_nm))
 				{
 					$device_token = $ftc_nm['device_token'];
@@ -867,8 +869,9 @@ if($function_name=='create_timetable_notify')
 							'Authorization: key=' .$notification_key,
 							'Content-Type: application/json'
 						);
+						$link='notice://timetable?id='.$Eid;
  							//--- NOTIFICATIO INSERT
-					$NOTY_insert = mysql_query("INSERT into notification(title,message,user_id,submitted_by,date,time,role_id)VALUES('$title','$message','$user_id','$submitted_by','$date','$time','$role_id')");
+					$NOTY_insert = mysql_query("INSERT into notification(title,message,user_id,submitted_by,date,time,role_id,link)VALUES('$title','$message','$user_id','$submitted_by','$date','$time','$role_id','$link')");
 							//-- END
 								json_encode($fields);
 								$ch = curl_init();
@@ -981,4 +984,70 @@ if($function_name=='create_timetable_notify')
 		else {}	
 		
 	}
+if($function_name=='notice') 
+{
+	$update_id=$_GET['id'];
+	$notice_x_id=mysql_query("select * from notice where id='$update_id'");		
+	$ftc_notice=mysql_fetch_array($notice_x_id);
+	$Nid=$ftc_notice['id'];	 
+	$title=$ftc_notice['title'];
+	$description = $ftc_notice['description'];
+	$message=$description;
+	$class_id = $ftc_notice['class_id'];
+	$send='0';
+	$epld_cls = explode(",", $class_id);
+	foreach($epld_cls as $value)
+	{
+		$value;	 
+
+		$std_nm = mysql_query("SELECT `device_token`,`notification_key`,`role_id`,`id` FROM `login` where class_id='$value' && device_token != ''");
+		while($ftc_nm= mysql_fetch_array($std_nm))
+			{
+				$device_token = $ftc_nm['device_token'];
+				$notification_key = $ftc_nm['notification_key'];
+				$role_id = $ftc_nm['role_id'];
+				$id = $ftc_nm['id'];  
+				$submitted_by=$login_id;
+				$user_id=$id;
+				$date=date("M d Y");
+				$time=date("h:i A");
+				$msg = array
+					(
+						'title' => $title,
+						'message' 	=> $description,
+						'button_text'	=> 'View Notice',
+						'link'	=> 'notice://notice?id='.$Nid,
+						'notification_id'	=> $Nid,
+					);
+				$url = 'https://fcm.googleapis.com/fcm/send';
+				$fields = array
+					(
+						'registration_ids' 	=> array($device_token),
+						'data'			=> $msg
+					);
+				$headers = array
+					(
+						'Authorization: key=' .$notification_key,
+						'Content-Type: application/json'
+					);
+				$link='notice://notice?id='.$Nid;
+				//--- NOTIFICATIO INSERT
+				$NOTY_insert = mysql_query("INSERT into notification(title,message,user_id,submitted_by,date,time,role_id,link)VALUES('$title','$message','$user_id','$submitted_by','$date','$time','$role_id','$link')");
+				//-- END
+					json_encode($fields);
+					$ch = curl_init();
+					curl_setopt($ch, CURLOPT_URL, $url);
+					curl_setopt($ch, CURLOPT_POST, true);
+					curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+					curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+					curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+					curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+					curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+					$result = curl_exec($ch);
+					curl_close($ch);
+ 
+				//--	
+			}
+	}
+}
 ?>

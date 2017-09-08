@@ -16,10 +16,8 @@ if(isset($_POST['submit']))
 	$x_d=$d["month"];
 	$sql="insert into acedmic_calendar(category_id,description,date,tag,curent_date,user_id)values('$type','$name','$date','$x_d','$curent_date','$user_id')";
 	$r=mysql_query($sql);
-	$message="Calendar Add Successfully ";
-	//header("Location:create_news.php");  
+	$message="Calendar Added Successfully ";
 }
- 	
 ?> 
 <html>
 <head>
@@ -44,9 +42,11 @@ if(isset($_POST['submit']))
 							</div>
 							</div>
 						<div class="portlet-body form">
-                       <?php if($message!="") { ?>
-<div class="message" id="success" style="color:#44B6AE; text-align:center"><label class="control-label"><?php echo $message; ?></label></div>
-                        </br><?php } ?>
+<?php if($message!="") { ?>
+<div id="success" class="alert alert-success" style="margin-top:10px; width:50%">
+<?php echo $message; ?>
+</div>
+<?php } ?>
 							<form class="form-horizontal" role="form" id="noticeform" method="post" enctype="multipart/form-data">
 								<div class="form-body">
                                	<div class="form-group">

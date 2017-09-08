@@ -12,7 +12,6 @@ if(isset($_POST['update_submit']))
 {
 $class_id=mysql_real_escape_string($_REQUEST["class_id"]);
 $section_id=mysql_real_escape_string($_REQUEST["section_id"]);
-$subject_id=mysql_real_escape_string($_REQUEST["subject_id"]);
 $pdf_file=$_REQUEST["pdf_file"];
 $date=mysql_real_escape_string($_REQUEST["date"]);
 $date1=date('Y-m-d',strtotime($date));
@@ -21,8 +20,7 @@ $curent_date=date("Y-m-d");
 @$file_name=$_FILES["file"]["name"];
 
 
-$sql="insert into syllabus(class_id,section_id,subject_id,date,user_id,curent_date)values('$class_id','$section_id','$subject_id','$date1','$user_id','$curent_date')";
-$r=mysql_query("update `syllabus` SET `class_id`='$class_id',`section_id`='$section_id',`subject_id`='$subject_id',`date`='$date1',`user_id`='$user_id' where id='$view_u'" );
+$r=mysql_query("update `syllabus` SET `class_id`='$class_id',`section_id`='$section_id',`date`='$date1',`user_id`='$user_id' where id='$view_u'" );
 
 $pdf="pdf";
 $pdff=".pdf";
@@ -49,10 +47,6 @@ $xsql=mysql_query("update `syllabus` SET `file`='$file_name' where id='".$view_u
 $xsqlr=mysql_query($xsql);    
 $message = "Syllabus Update Successfully.";
    }
-	else
-	{
-		echo mysql_error();
-	}
   ?> 
 <html>
 <head>
@@ -98,7 +92,6 @@ $message = "Syllabus Update Successfully.";
 					$row1=mysql_fetch_array($r1);
 					$id=$row1['id'];
 					$class_id=$row1['class_id'];
-                    $subject_id=$row1['subject_id'];
 					$date=$row1['date'];
                     $section_id=$row1['section_id'];
 					$file=$row1['file'];
@@ -111,9 +104,7 @@ $message = "Syllabus Update Successfully.";
 					$classid=mysql_fetch_array($class);
 					$class_name=$classid['class_name'];
 					
-					$subject=mysql_query("select * from master_subject where id='".$subject_id."'");		
-					$subjectid=mysql_fetch_array($subject);
-					$subject_name=$subjectid['subject_name'];
+					
 					?>
 
 							<div class="form-body">
@@ -163,7 +154,7 @@ $message = "Syllabus Update Successfully.";
                                                         </select>
                                                     </div></div>
 													
-													<div class="form-group">
+													<!--<div class="form-group">
                                                     <label class="control-label col-md-3">Subject</label>
 													<div class="col-md-3">
                                                    <select class="form-control select select2 select2me input-medium" placeholder="Select subject.." name="subject_id">
@@ -180,7 +171,7 @@ $message = "Syllabus Update Successfully.";
                                             <?php } ?>
                                                         </select></div>
                                                     </div>
-													
+											--->		
 													
 													<div class="form-group">
 										 <label class="control-label col-md-3">Upload PDF File</label>

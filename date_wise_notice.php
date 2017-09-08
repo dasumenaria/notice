@@ -6,6 +6,18 @@ include('database.php');
  $to = $_GET['to'];
      $to_date=date('Y-m-d',strtotime($to));
 ?>
+<?php 
+ 
+ if(isset($_POST['sub_del']))
+{
+  $delet_notice=$_POST['delet_notice'];
+  mysql_query("update `notice` SET `flag`='1' where id='$delet_notice'" );
+  
+  } 
+
+
+
+  ?> 
  <div id="viewdata" class="scroller" style="height: 400px;" data-always-visible="1" data-rail-visible="0">
 							<table class="table table-bordered table-hover" id="sample_1">
  
@@ -29,6 +41,9 @@ include('database.php');
 								</th>
 								<th>
 									PDF
+								</th>
+								<th>
+									Action
 								</th>
 							 </tr>
 							</thead>
@@ -56,7 +71,7 @@ include('database.php');
 								</td>
 								
 								<td>
-									 <?php echo $dateofpublish;?>
+									 <?php echo date("d-m-Y",strtotime($dateofpublish));?>
 								</td>
 								<td>
 									 <?php echo $title;?>
@@ -65,9 +80,34 @@ include('database.php');
 									<?php echo $description;?>
 								</td>
 								
-								<td>
-<a href="notice/<?php echo $notice_file; ?>"><i class="btn btn-circle btn-xs fa fa-cloud-download" style="background-color:#C30; color:#FFF"></i></a>
+								<td><?php if(!empty($notice_file)){ ?>
+<a href="notice/<?php echo $notice_file; ?>"><i class="btn btn-circle btn-xs fa fa-cloud-download" style="background-color:#C33; color:#FFF" ></i></a>
+								<?php } ?>
 								</td>
+								<td> 
+	<a class="btn blue-madison red-stripe btn-sm"  rel="tooltip" title="Delete"  data-toggle="modal" href="#delete<?php echo $id ;?>">
+		<i class="fa fa-trash"></i>
+	</a>
+	<div class="modal fade" id="delete<?php echo $id ;?>" tabindex="-1" aria-hidden="true" style="padding-top:35px">
+		<div class="modal-dialog modal-md">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+					<span class="modal-title" style="font-size:14px; text-align:left">Are you sure, you want to delete this Notcie?</span>
+				</div>
+				<div class="modal-footer">
+					<form method="post" name="delete<?php echo $id ;?>">
+					<input type="hidden" name="delet_notice" value="<?php echo $id; ?>" />
+
+					<button type="submit" name="sub_del" value="" class="btn btn-sm red-sunglo ">Yes</button> 
+					</form>
+				</div>
+			</div>
+		<!-- /.modal-content -->
+		</div>
+	<!-- /.modal-dialog -->
+	</div>
+							</td>
 							</tr>
 							</tbody>
                     <?php } ?>

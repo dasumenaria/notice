@@ -52,9 +52,10 @@
 				(
 					'Authorization: key=' .$notification_key,
 					'Content-Type: application/json'
-				);	
+				);
+$link=	'leaveApprove://leave_note?id='.$update_id;			
 					//--- NOTIFICATIO INSERT
-$NOTY_insert = mysql_query("INSERT into notification(title,message,user_id,submitted_by,date,time,role_id)VALUES('$title','$message','$user_id','$submitted_by','$date','$time','$role_id')");
+$NOTY_insert = mysql_query("INSERT into notification(title,message,user_id,submitted_by,date,time,role_id,link)VALUES('$title','$message','$user_id','$submitted_by','$date','$time','$role_id','$link')");
  					//-- END
 						json_encode($fields);
 						$ch = curl_init();
@@ -109,8 +110,9 @@ $NOTY_insert = mysql_query("INSERT into notification(title,message,user_id,submi
 					'Authorization: key=' .$notification_key,
 					'Content-Type: application/json'
 				);	
+			$link=	'leaveApprove://leave_note?id='.$update_id;			
 					//--- NOTIFICATIO INSERT
-$NOTY_insert = mysql_query("INSERT into notification(title,message,user_id,submitted_by,date,time,role_id)VALUES('$title','$message','$user_id','$submitted_by','$date','$time','$role_id')");
+$NOTY_insert = mysql_query("INSERT into notification(title,message,user_id,submitted_by,date,time,role_id,link)VALUES('$title','$message','$user_id','$submitted_by','$date','$time','$role_id','$link')");
  					//-- END
 						json_encode($fields);
 						$ch = curl_init();
@@ -157,10 +159,8 @@ span {
                              	<a href="leave_note.php?s=0" class="<?php if($status_ftc==0){ echo 'btn btn-sm red'; } else { echo 'btn btn-sm blue'; }  ?>">In-Process <i class="glyphicon glyphicon-refresh"></i></a>
                                 <a href="leave_note.php?s=1" class="<?php if($status_ftc==1){echo 'btn btn-sm red'; } else { echo 'btn btn-sm blue'; }  ?>">Approved <i class="glyphicon glyphicon-ok"></i></a>
                                 <a href="leave_note.php?s=2" class="<?php if($status_ftc==2){echo 'btn btn-sm red'; } else { echo 'btn btn-sm blue'; }  ?>">Rejected <i class="glyphicon glyphicon-remove"></i></a>
-                                
                               </div>
-                             
-								 <div class="scroller" style="height:500px;"  data-always-visible="1" data-rail-visible="0">
+							<div class="scroller" style="height:500px;"  data-always-visible="1" data-rail-visible="0">
                                <?php if($message){ ?>
                                <div id="success">
                                     <div class="alert alert-success">

@@ -44,6 +44,8 @@ $em=$datetime->format('M');
 										 #
 									</td>
 									<td>
+										Submitted By
+									</td><td>
 										Name
 									</td>
 									<td>
@@ -62,8 +64,7 @@ $em=$datetime->format('M');
 									  <td>
                                         Query
 									</td>
-									  
-																</tr>
+								</tr>
 								</thead>
 								<tbody id="view_data">
 							 <?php
@@ -80,7 +81,10 @@ $em=$datetime->format('M');
 					$mobile_no=$row1['mobile_no'];
 					$query=$row1['query'];
 					$curent_date=$row1['curent_date'];
-					
+					$user_id=$row1['user_id'];
+					$ftc_data=mysql_query("select `name` from `login` where `id`='$user_id'");
+					$data=mysql_fetch_array($ftc_data);
+					$submittedBy=$data['name'];
 					
 					$news_date1=str_replace('-', '', $curent_date);
 					$exact_trim=$news_date1;
@@ -95,9 +99,12 @@ $em=$datetime->format('M');
 
 								<tr>
 									<td>
-							<?php echo $i;?>
+										<?php echo $i;?>
 									</td>
-									<td class="search">
+									<td>
+										<?php echo $submittedBy;?>
+									</td>
+									<td>
 									<?php echo $name;?>
 									</td>
                                     <td>
@@ -115,10 +122,7 @@ $em=$datetime->format('M');
 									 <td>
 									<?php echo $query;?>
 									</td>
-									
-									
-                                   
-													</tr>
+							</tr>
                     <?php } ?>
 					</tbody>
 								</table>

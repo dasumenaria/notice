@@ -1,10 +1,12 @@
 <?php
 session_start();
+if(!empty($_SESSION['id']))
+{
+	header("location:index1.php");
+}
 require_once("database.php");
-
 ?>
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
@@ -54,22 +56,31 @@ include("functions.php");
 $message="";
 	if(!empty($_POST['username']) && !empty($_POST['password'])) {
 		
-		$result=mysql_query("select * from `faculty_login` where `user_name`='".$_POST['username']."' and `password`='".md5($_POST['password'])."'");
-	if(mysql_num_rows($result)>0)
-	{
-		$row= mysql_fetch_array($result);
-		 
-		$_SESSION['id']=$row['id'];
-		$_SESSION['username']=$row['user_name'];
-		$_SESSION['category']=$row['role_id'];
-		$_SESSION['loggedin_time'] = time();
-		
-		ob_start();
-		echo "<meta http-equiv='refresh' content='0;url=index1.php'/>";
-		ob_flush();
-	} else {
-		$message = "Invalid Username or Password!";
-	}
+		$result=mysql_query("select * from `faculty_login` where `user_name`='".$_POST['username']."'");
+		if(mysql_num_rows($result)>0)
+		{
+			$pass=mysql_query("select * from `faculty_login` where `user_name`='".$_POST['username']."' and `password`='".md5($_POST['password'])."'");
+			if(mysql_num_rows($pass)>0)
+			{
+				$row= mysql_fetch_array($pass);
+				$_SESSION['id']=$row['id'];
+				$_SESSION['username']=$row['user_name'];
+				$_SESSION['category']=$row['role_id'];
+				$_SESSION['loggedin_time'] = time();
+				
+				ob_start();
+				echo "<meta http-equiv='refresh' content='0;url=index1.php'/>";
+				ob_flush();
+			}
+			else
+			{
+				$message = "Invalid Password!";
+			}
+		} 
+		else 
+		{
+			$message = "Invalid Username or Password!";
+		}
 }
  
 if(isset($_GET["session_expired"])) {

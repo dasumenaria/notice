@@ -8,24 +8,22 @@
  if(isset($_POST['submit']))
 {
 	$module_id=$_REQUEST["module_id"];
+
 	$role_id=$_REQUEST["role_id"];
 	$modulesize=sizeof($module_id);
+
 	$module=0;
+                $ru=mysql_query("delete from user_management where role_id='$role_id' ");		
+		$ru1=mysql_fetch_array($ru);
 	for($j=0; $j<$modulesize; $j++)
 	{
 		$module=$module_id[$j];
-		$ru=mysql_query("select * from user_management where role_id='$role_id' AND module_id='$module' ");		
-		$ru1=mysql_fetch_array($ru);
-		if($ru1>0)
-		{
-			$ru=mysql_query("update `user_management` SET `role_id`='$role_id',`module_id`='$module' where role_id='$role_id' AND module_id='$module'" );
-			$sql=mysql_query($ru);
-		}
-		else
-		{
+		
+		 
+		 
 			$sql="insert into user_management(role_id,module_id)values('$role_id','$module')";
 			$r=mysql_query($sql);	
-		}
+		 
 	 }
 
 }
@@ -59,7 +57,7 @@
                                         <select name="role_id" class="form-control select select2 select2me" placeholder="Select..." id="sid">
                                          <option value=""></option>
                                             <?php
-                                            $r1=mysql_query("select `id`,`role_name` from master_role");		
+                                            $r1=mysql_query("select * from master_role");		
                                             $i=0;
                                             while($row1=mysql_fetch_array($r1))
                                             {

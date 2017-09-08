@@ -3,7 +3,8 @@
  include("database.php");
 @$session_id=$_SESSION['id'];
  date_default_timezone_set('Asia/Calcutta');
-ini_set('max_execution_time', 100000); 
+ini_set('max_execution_time', 100000);
+$message=''; 
 if(isset($_POST['submit']))
 {
 $class_id=$_REQUEST["class_id"];
@@ -25,36 +26,27 @@ $date_current=date('Y-m-d');
 		 $t_t=$time_to[$i];
 		 $e_d=date('Y-m_d',strtotime($exam_date[$i]));
 		 $r_n=$room_no[$i];
- //echo $q="SELECT `id` from `exam_time_table` where `class_id`='$class_id' && `section_id`='$section_id' && `subject_id`='$subject_id'";
- 
-	$q="SELECT `id` from `exam_time_table` where `class_id`='$class_id' && `section_id`='$section_id' && `subject_id`='$subject_id'";
-$f=mysql_query($q);
-$r=mysql_num_rows($f);	
+		$q="SELECT `id` from `exam_time_table` where `class_id`='$class_id' && `section_id`='$section_id' && `subject_id`='$subject_id'";
+		$f=mysql_query($q);
+		$r=mysql_num_rows($f);	
 
-if($r>0)
-{	
-
-$ftc=mysql_fetch_array($f);
-echo $id=$ftc['id'];  
-
-//echo"update `exam_time_table` SET `user_id`='$session_id',`class_id`='$class_id',`section_id`='$section_id',`subject_id`='$subject_id',`time_from`='$t_f',`time_to`='$t_t',`exam_date`='$e_d',`room_no`='$r_n',`curent_date`='$date_current' where `id`='".$id."'";
- 
-  
-$sql1="update `exam_time_table` SET `user_id`='$session_id',`class_id`='$class_id',`section_id`='$section_id',`subject_id`='$subject_id',`time_from`='$t_f',`time_to`='$t_t',`exam_date`='$e_d',`room_no`='$r_n',`curent_date`='$date_current' where `id`='".$id."'";
-$r1=mysql_query($sql1);		  
-}
-else{
- 		  
-$sql="insert into exam_time_table(user_id,class_id,section_id,time_from,time_to,subject_id,exam_date,room_no,curent_date)values('$session_id','$class_id','$section_id','$t_f','$t_t','$subject_id','$e_d','$r_n','$date_current')";
-$r=mysql_query($sql);
-	 $i++;
-	 }
+		if($r>0)
+		{	
+			$ftc=mysql_fetch_array($f);
+			$id=$ftc['id'];  
+			$sql1="update `exam_time_table` SET `user_id`='$session_id',`class_id`='$class_id',`section_id`='$section_id',`subject_id`='$subject_id',`time_from`='$t_f',`time_to`='$t_t',`exam_date`='$e_d',`room_no`='$r_n',`curent_date`='$date_current' where `id`='".$id."'";
+			$r1=mysql_query($sql1);		  
+		}
+		else
+		{
+			$sql="insert into exam_time_table(user_id,class_id,section_id,time_from,time_to,subject_id,exam_date,room_no,curent_date)values('$session_id','$class_id','$section_id','$t_f','$t_t','$subject_id','$e_d','$r_n','$date_current')";
+			$r=mysql_query($sql);
+			$i++;
+		}
+		$message='Exam Time table added successfully'; 
 	 }
 }
-	else
-	{
-		echo mysql_error();
-	}
+	 
   ?> 
 <html>
 <head>
@@ -78,7 +70,11 @@ $r=mysql_query($sql);
 							</div>
 						</div>
 						<div class="portlet-body form">
-						 
+<?php if($message!="") { ?>
+<div id="success" class="alert alert-success" style="margin-top:10px; width:50%">
+<?php echo $message; ?>
+</div>
+<?php } ?>						 
 <form  class="form-horizontal" id="form_sample_2"  role="form" method="post"> 
 					<div class="form-body">
 						<div class="form-group">
@@ -122,7 +118,7 @@ $r=mysql_query($sql);
 <script src="assets/global/plugins/jquery.min.js" type="text/javascript"></script>
 
 <script>
-		$(document).ready(function() {
+$(document).ready(function() {
 			
 
 $(".chk_input").live("click",function(){
@@ -169,6 +165,11 @@ else
 			  });	  
  			  
 		 });
+	var myVar=setInterval(function(){myTimerr()},4000);
+	function myTimerr() 
+	{
+		$("#success").hide();
+	}
 	</script>
 
 

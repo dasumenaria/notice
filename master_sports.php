@@ -2,42 +2,54 @@
  include("index_layout.php");
  include("database.php");
  
- if(isset($_POST['sub'])){
+if(isset($_POST['sub']))
+{
 	
-$sports_name=$_POST['sports_name'];	
- 
- 
-mysql_query("insert into `master_sports` SET `sports_name`='$sports_name'");	
- 
+	$sports_name=$_POST['sports_name'];
+ 	$file_tmp_name=$_FILES['image']['tmp_name'];
+	$target ="sports/";
+	$file_name=strtotime(date('d-m-Y h:i:s'));
+	$filedata=explode('/', $_FILES["image"]["type"]);
+	$filedata[1];
+	$random=rand(100, 10000);
+	$target=$target.basename($random.'.'.$filedata[1]);
+	move_uploaded_file($file_tmp_name,$target);
+	$item_image=$target.$random.'.'.$filedata[1];
+	mysql_query("insert into `master_sports` SET `sports_name`='$sports_name',`image`='$target'");	
+	header("location:master_sports.php");
 }
 ?>
  <?php 
  
- if(isset($_POST['sub_del']))
+if(isset($_POST['sub_del']))
 {
   $delet_Sports=$_POST['delet_Sports'];
   mysql_query("update `master_sports` SET `flag`='1' where id='$delet_Sports'" );
-  
-  }
+  header("location:master_sports.php");
+}
 if(isset($_POST['sub_edit']))
 {
-$edit=$_REQUEST['edit_id'];  
-$sports_name=mysql_real_escape_string($_REQUEST["sports_name"]);
-$r=mysql_query("update `master_sports` SET `sports_name`='$sports_name' where id='$edit'" );
-$r=mysql_query($r);
-
-echo '<script text="javascript">alert(Sectiion Added Successfully")</script>';	
- 
+	$edit=$_REQUEST['edit_id'];  
+	$sports_name=mysql_real_escape_string($_REQUEST["sports_name"]);
+	if(!empty($_FILES["image"]["name"]))
+	{
+ 		$file_tmp_name=$_FILES['image']['tmp_name'];
+		$target ="sports/";
+		$file_name=strtotime(date('d-m-Y h:i:s'));
+		$filedata=explode('/', $_FILES["image"]["type"]);
+		$filedata[1];
+		$random=rand(100, 10000);
+		$target=$target.basename($random.'.'.$filedata[1]);
+		move_uploaded_file($file_tmp_name,$target);
+		$item_image=$target.$random.'.'.$filedata[1];
+		$r=mysql_query("update `master_sports` SET `sports_name`='$sports_name',`image`='$target' where id='$edit'" );
+	}
+	else
+	{
+		$r=mysql_query("update `master_sports` SET `sports_name`='$sports_name' where id='$edit'" );
+	}
+	header("location:master_sports.php");
 }
-else
-{
-  
-	echo mysql_error();
-}  
-  
-
-
-
   ?> 
 <html>
 <head>
@@ -59,7 +71,7 @@ else
 			</div>
 			<div class="portlet-body form">
 			<!-- BEGIN FORM-->
-				<form  class="form-horizontal" id="form_sample_2"  role="form" method="post"> 
+				<form  class="form-horizontal" id="form_sample_2"  role="form" method="post" enctype="multipart/form-data"> 
 					<div class="form-body">
 						 
 						<div class="form-group">
@@ -70,6 +82,15 @@ else
 								<input class="form-control" placeholder="Please Enter Sports Name" required name="sports_name" autocomplete="off" type="text">
 								</div>
 								
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-md-3">Icon Image</label>
+							<div class="col-md-6">
+								<div class="input-icon right">
+								<i class="fa"></i>
+								<input type="file" class="default" required name="image" id="file1">
+ 								</div>
 							</div>
 						</div>
  
@@ -110,6 +131,7 @@ else
 									
                                     Sports Name
 									</th>
+									<th>Icon Image</th>
 									 
                                     <th>
                                         Action
@@ -124,6 +146,7 @@ else
 					$i++;
 					$id=$row1['id'];
 					$sports_name=$row1['sports_name'];
+					$image=$row1['image'];
   					?>
                     <tbody>
 								<tr>
@@ -132,6 +155,10 @@ else
 									</td>
 									<td class="search">
 									<?php echo $sports_name;?>
+									</td>
+									<td class="search">
+									<img src="<?php echo $image;?>" height="35px" width="35px"/>
+									
 									</td>
  
 									<td>
@@ -157,6 +184,16 @@ else
 								<div class="input-icon right">
 								<i class="fa"></i>
 								<input class="form-control" placeholder="Please Enter Sports Name" required name="sports_name" autocomplete="off" type="text" value="<?php echo $sports_name;?>">
+								</div>
+								
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-md-3">Icon Image</label>
+							<div class="col-md-6">
+								<div class="input-icon right">
+								<i class="fa"></i>
+								 <input type="file" class="default" required name="image" id="file1">
 								</div>
 								
 							</div>

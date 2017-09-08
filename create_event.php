@@ -111,8 +111,7 @@ $eventid=0;
 			$ar=mysql_query($asql);	
 		}		
 		$message = "Event Add Successfully.";
-		header("Location:create_event.php");        
-	}
+ 	}
 ?> 
 <html>
 <head>
@@ -143,9 +142,10 @@ $eventid=0;
 						</div>
 						<div class="portlet-body form">
 						
-						<?php if($message!="") { ?>
-                       <!-- <input id="alert_message" type="text" class="form-control" value="some alert text goes here..." placeholder="enter a text ...">-->
-<div class="message" id="success" style="color:#44B6AE; text-align:center"><label class="control-label"><?php echo $message; ?></label></div>
+<?php if($message!="") { ?>
+<div id="success" class="alert alert-success" style="margin-top:10px; width:50%">
+<?php echo $message; ?>
+</div>
 <?php } ?>
 
       

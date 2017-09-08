@@ -8,10 +8,11 @@
 if(isset($_POST['update_submit']))
 {
 $username=mysql_real_escape_string($_REQUEST["user_name"]);
-//$password1=mysql_real_escape_string($_REQUEST["password"]);
-//$password=md5($password1);
+$password1=mysql_real_escape_string($_REQUEST["password"]);
+$password=md5($password1);
 $role_id=mysql_real_escape_string($_REQUEST["role_id"]);
 $mobile_no=mysql_real_escape_string($_REQUEST["mobile_no"]);
+$name=mysql_real_escape_string($_REQUEST["name"]);
 $address=mysql_real_escape_string($_REQUEST["address"]);
 $class_id=mysql_real_escape_string($_REQUEST["class_id"]);
 $section_id=mysql_real_escape_string($_REQUEST["section_id"]);
@@ -34,13 +35,17 @@ $date=date('Y-m-d');
 				else{
 					$item_image=$k_image;
 				}
-				$r=mysql_query("update `faculty_login` SET `user_name`='$username',`role_id`='$role_id',`mobile_no`='$mobile_no',`address`='$address',`image`='$item_image',`class_id`='$class_id',`section_id`='$section_id' where id='".$get_id."'" );
-				$message="User Added Successfully";
+		if(!empty($password1))
+		{
+			$r=mysql_query("update `faculty_login` SET `password`='$password',`name`='$name',`user_name`='$username',`role_id`='$role_id',`mobile_no`='$mobile_no',`address`='$address',`image`='$item_image',`class_id`='$class_id',`section_id`='$section_id' where id='".$get_id."'" );
+		}
+		else
+		{
+			$r=mysql_query("update `faculty_login` SET `name`='$name',`user_name`='$username',`role_id`='$role_id',`mobile_no`='$mobile_no',`address`='$address',`image`='$item_image',`class_id`='$class_id',`section_id`='$section_id' where id='".$get_id."'" );
+		}
+		$message="User update Successfully";
     }
-	else
-	{
-		echo mysql_error();
-	}
+	 
   ?> 
 <html>
 <head>
@@ -76,6 +81,7 @@ $date=date('Y-m-d');
 									$row1=mysql_fetch_array($r1);
 									$id=$row1['id'];
 									$user_name=$row1['user_name'];
+									$name=$row1['name'];
 									$role_id=$row1['role_id'];
 									$mobile_no=$row1['mobile_no'];
 									$address=$row1['address'];
@@ -118,7 +124,7 @@ $date=date('Y-m-d');
                                         <select name="role_id" class="form-control select select2 select2me input-medium" placeholder="Select..." id="sid">
                                          <option value=""></option>
                                             <?php
-                                            $r1=mysql_query("select * from master_role where id!=4");		
+                                            $r1=mysql_query("select * from master_role where id!=1");		
                                             $i=0;
                                             while($row1=mysql_fetch_array($r1))
                                             {
@@ -131,7 +137,14 @@ $date=date('Y-m-d');
 										</div>
 										</div>
 										</div>
-								
+								 <div class="row">
+								        <div class="form-group">
+										<label class="col-md-3 control-label"> Name</label>
+										<div class="col-md-4">
+											<input class="form-control input-medium" required placeholder="Name" value="<?php echo $name;?>" type="text" name="name">
+										</div>
+									</div>
+									</div>
 								        <div class="row">
 								        <div class="form-group">
 										<label class="col-md-3 control-label">User Name</label>
@@ -140,14 +153,22 @@ $date=date('Y-m-d');
 										</div>
 									</div>
 									</div>
+								        <div class="row">
+								        <div class="form-group">
+										<label class="col-md-3 control-label">Password</label>
+										<div class="col-md-4">
+											<input class="form-control input-medium" placeholder="New Password" value="" type="text" name="password">
+										</div>
+									</div>
+									</div>
 									
 									<div class="row">
-                                    <div class="form-group">
-										<label class="col-md-3 control-label">Mobile No</label>
-										<div class="col-md-4">
-											<input class="form-control input-medium" required placeholder="Mobile No" value="<?php echo $mobile_no;?>" type="text" name="mobile_no">
-										</div>									
-									</div>
+										<div class="form-group">
+											<label class="col-md-3 control-label">Mobile No</label>
+											<div class="col-md-4">
+												<input class="form-control input-medium" required placeholder="Mobile No" value="<?php echo $mobile_no;?>" type="text" name="mobile_no">
+											</div>									
+										</div>
 									</div>
 									<div class="row">
                                         <div class="form-group">

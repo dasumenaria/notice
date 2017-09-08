@@ -1,6 +1,7 @@
 <?php
  include("index_layout.php");
  include("database.php");
+ require_once('ImageManipulator.php'); 
  $role_id = $_SESSION['category']; 
  $login_id=$_SESSION['id']; 
  $user_id=$_SESSION['id'];
@@ -10,168 +11,79 @@
   $message='';
 	if(isset($_POST['submit'])) 
 	{
-		 	$text_messgae=$_POST['text_messgae'];
-		 	$sms_to_role=$_POST['sms_to_role'];
-		 	$sms_from_role=$_POST['sms_from_role'];
-		 
-			mysql_query("insert into `director_principle_message` set `message`='$text_messgae' , `sms_receive_role`='$sms_to_role' , `sms_sender_role`='$sms_from_role' , `login_id`='$login_id'");
+		$text_messgae=$_POST['text_messgae'];
+		$sms_to_role=$_POST['sms_to_role'];
+		$sms_from_role=$_POST['sms_from_role'];
+		mysql_query("insert into `director_principle_message` set `message`='$text_messgae' , `sms_receive_role`='$sms_to_role' , `sms_sender_role`='$sms_from_role',`login_id`='$login_id'");
 		$update_id=mysql_insert_id();
-  		$message='SMS send successfully';
-		
-				if($sms_to_role==5)
-				{
-					  
-					 
-					$std_nm=mysql_query("SELECT `device_token`,`notification_key`,`id`,`role_id` FROM `login` where device_token != ''");
-						while($ftc_nm=mysql_fetch_array($std_nm))
-							{ 
-						
-								$device_token = $ftc_nm['device_token'];
-								$notification_key = $ftc_nm['notification_key'];
-								$user_ids=$ftc_nm['id'];
-								$role_id=$ftc_nm['role_id'];
-
-									//echo '1</br>';
-									 $message='New Assignment Submitted';
-									//echo '</br>';
-									//echo '2</br>';
-									 $title='Assignment';
-									//echo '</br>';
-									//echo '3</br>';
-									 $submitted_by=$sms_from_role;									
-									//echo '</br>';
-									//echo '4</br>';
-									 $user_idss=$user_ids;
-									//echo '</br>';
-									//echo '5</br>';
-									 $date=date("M d Y");
-									//echo '</br>';
-									//echo '6</br>';
-									 $time=date("h:i:A");
-									//echo '7</br>';
-								 
-
-								$msg = array
-								(
-									'title'=> $title ,
-									'message'  => $message,
-									'button_text' => 'View',
-									'link' => 'notice://Assignment?id='.$insert_id.'&student_id=',
-									'notification_id' => $insert_id,
-								);
-								$url = 'https://fcm.googleapis.com/fcm/send';
-								$fields = array
-								(
-									'registration_ids'  => array($device_token),
-									'data'   => $msg
-								);
-								$headers = array
-								(
-									'Authorization: key=' .$notification_key,
-									'Content-Type: application/json'
-								);
-								//--- NOTIFICATIO INSERT
-							  // 	echo "INSERT into notification(title,message,user_id,submitted_by,date,time,role_id)VALUES('$title','$message','$user_id','$sms_from_role','$date','$time','$role_id')";
-								 
-								$NOTY_insert="INSERT into notification(title,message,user_id,submitted_by,date,time,role_id)VALUES('$title','$message','$user_id','$sms_from_role','$date','$time','$role_id')";
-								$rr=mysql_query($NOTY_insert);
-								//-- END
-
-								json_encode($fields);
-								$ch = curl_init();
-								curl_setopt($ch, CURLOPT_URL, $url);
-								curl_setopt($ch, CURLOPT_POST, true);
-								curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-								curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-								curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-								curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-								curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
-								$result = curl_exec($ch);
-								curl_close($ch);
-							}
-				}
-			 
-			else if(!empty($sms_to_role))
+		$message='SMS send successfully';		
+	
+		if ($_FILES['fileToUpload']['error'] > 0) 
+		{	
+			echo "Error: " . $_FILES['fileToUpload']['error'] . "<br />";
+		}
+		else 
 			{
-				 
-				$std_nm=mysql_query("SELECT `device_token`,`notification_key`,`id`,`role_id` FROM `faculty_login` where device_token != ''");
-						while($ftc_nm=mysql_fetch_array($std_nm))
-							{
+				$validExtensions = array('.jpg', '.jpeg', '.gif', '.png');
+				 $fileExtension = strrchr($_FILES['fileToUpload']['name'], ".");
+			
+				if (in_array($fileExtension, $validExtensions)) 
+				{
+					$newNamePrefix = uniqid();
+					$manipulator = new ImageManipulator($_FILES['fileToUpload']['tmp_name']);
+					$newImage = $manipulator->resample(640, 360);
+					$_FILES['fileToUpload']['name'];		
+					$manipulator->save('message/' . $newNamePrefix . $_FILES['fileToUpload']['name']);
+					$insert_path=$newNamePrefix.$_FILES['fileToUpload']['name'];
+					$sql1="update `director_principle_message` set `pic`='$insert_path' where `id`='$update_id'"; 
+					$rl=mysql_query($sql1);
 
-								 $device_token = $ftc_nm['device_token'];
-								$notification_key = $ftc_nm['notification_key'];
-								$user_ids=$ftc_nm['id'];
-								$role_id=$ftc_nm['role_id'];
-
-							echo	$message='New Assignment Submitted';
-							echo	$title='Assignment';
-							echo	$submitted_by=$sms_from_role;
-							echo	$user_idss=$user_ids;
-							echo	$date=date("M d Y");
-							echo	$time=date("h:i:A");
-							xml_error_string;
-								$msg = array
-								(
-									'title'=> $title ,
-									'message'  => $message,
-									'button_text' => 'View',
-									'link' => 'notice://Assignment?id='.$insert_id.'&student_id=',
-									'notification_id' => $insert_id,
-								);
-								$url = 'https://fcm.googleapis.com/fcm/send';
-								$fields = array
-								(
-									'registration_ids'  => array($device_token),
-									'data'   => $msg
-								);
-								$headers = array
-								(
-									'Authorization: key=' .$notification_key,
-									'Content-Type: application/json'
-								);
-								//--- NOTIFICATIO INSERT
-								echo "INSERT into notification(title,message,user_id,submitted_by,date,time,role_id)VALUES('$title','$message','$user_id','$sms_from_role','$date','$time','$role_id')";
-								exit;
-							   	$NOTY_insert="INSERT into notification(title,message,user_id,submitted_by,date,time,role_id)VALUES('$title','$message','$user_id','$sms_from_role','$date','$time','$role_id')";
-								$rr=mysql_query($NOTY_insert);
-								//-- END
-
-								json_encode($fields);
-								$ch = curl_init();
-								curl_setopt($ch, CURLOPT_URL, $url);
-								curl_setopt($ch, CURLOPT_POST, true);
-								curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-								curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-								curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-								curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-								curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
-								$result = curl_exec($ch);
-								curl_close($ch);
-							}
+				}  
 			}
-		
 	}
-?> 
-<?php 
+	  
+	if(isset($_POST['sub_del']))
+	{
+		$delet_Message=$_POST['delet_Message'];
+		mysql_query("update `director_principle_message` SET `flag`='1' where id='$delet_Message'" );
+		@header('Location:dir_princ_meaasge.php'); 
+	}
+	if(isset($_POST['sub_edit']))
+	{
+		$edit=$_REQUEST['edit_id'];  
+		$sms_sender_role=mysql_real_escape_string($_REQUEST["sms_sender_role"]);
+		$sms_receive_role=mysql_real_escape_string($_REQUEST["sms_receive_role"]);
+		$message1=mysql_real_escape_string($_REQUEST["message"]);
+		
  
- if(isset($_POST['sub_del']))
-{
-   $delet_Message=$_POST['delet_Message'];
-  mysql_query("update `director_principle_message` SET `flag`='1' where id='$delet_Message'" );
-   @header('Location:dir_princ_meaasge.php'); 
-  }
-if(isset($_POST['sub_edit']))
-{
-$edit=$_REQUEST['edit_id'];  
-$sms_sender_role=mysql_real_escape_string($_REQUEST["sms_sender_role"]);
-$sms_receive_role=mysql_real_escape_string($_REQUEST["sms_receive_role"]);
-$message1=mysql_real_escape_string($_REQUEST["message"]);
+		$r=mysql_query("update `director_principle_message` SET `sms_sender_role`='$sms_sender_role',`sms_receive_role`='$sms_receive_role',`message`='$message1' where id='$edit'" );
+		$r=mysql_query($r);
+		
+		
+			 $fil_name =	$_FILES['fileToUpload']['tmp_name'];		
+			if(!empty($fil_name))
+			{
+				
+				$validExtensions = array('.jpg', '.jpeg', '.gif', '.png');
+				 $fileExtension = strrchr($_FILES['fileToUpload']['name'], ".");			
+				if (in_array($fileExtension, $validExtensions)) 
+				{
+					$newNamePrefix = uniqid();
+					$manipulator = new ImageManipulator($_FILES['fileToUpload']['tmp_name']);
+					$newImage = $manipulator->resample(640, 360);
+					$_FILES['fileToUpload']['name'];		
+					
+					$manipulator->save('message/' . $newNamePrefix . $_FILES['fileToUpload']['name']);
+					$insert_path=$newNamePrefix.$_FILES['fileToUpload']['name'];
+					$sql1="update `director_principle_message` set `pic`='$insert_path' where `id`='$edit'"; 
+					$rl=mysql_query($sql1);
 
-$r=mysql_query("update `director_principle_message` SET `sms_sender_role`='$sms_sender_role',`sms_receive_role`='$sms_receive_role',`message`='$message1' where id='$edit'" );
-$r=mysql_query($r);
-echo '<script text="javascript">alert(Message Update Successfully")</script>';	
- 
-}
+				}  
+			
+		echo '<script text="javascript">alert(Message Update Successfully")</script>';	
+			}
+			
+	}
 
 
 
@@ -200,6 +112,11 @@ span {
 							 
 						</div>
 						<div class="portlet-body form">
+<?php if($message!="") { ?>
+<div id="success" class="alert alert-success" style="margin-top:10px; width:50%">
+<?php echo $message; ?>
+</div>
+<?php } ?>
 							<div class="form-body">
 								<div class="scroller"   data-always-visible="1" data-rail-visible="0">
 								   
@@ -208,7 +125,7 @@ span {
                                     <div class="form-group">
 										<label class="col-md-3 control-label">Message From</label>
 										<div class="col-md-6">
-                                            <select name="sms_from_role" class="form-control select2me " placeholder="Select..." id="role_id">
+                                            <select name="sms_from_role" class="form-control select2me " required placeholder="Select..." id="role_id">
                                                 <option value=""></option>
                                                     <?php
                                                     $r1=mysql_query("select * from master_role where id=2 OR id=3");		
@@ -227,7 +144,7 @@ span {
                                		<div class="form-group">
 										<label class="col-md-3 control-label">Message To</label>
 										<div class="col-md-6">
-                                            <select name="sms_to_role" class="form-control select2me " placeholder="Select..." id="sid">
+                                            <select name="sms_to_role" required class="form-control select2me " placeholder="Select..." id="sid">
                                                 <option value=""></option>
                                                     <?php
                                                     $r1=mysql_query("select * from master_role where id=1 OR id=4 OR id=5");		
@@ -237,8 +154,7 @@ span {
                                                         $id=$row1['id'];
                                                         $role_name=$row1['role_name'];
                                                         ?>
-                                                        <option value="<?php echo $id;?>"><?php echo $role_name;?></option>                              
-                                                    <?php 
+                                                        <option value="<?php echo $id;?>"><?php echo $role_name;?></option> <?php 
                                                     }?> 
                                             </select>
 										</div>
@@ -248,6 +164,10 @@ span {
 										<div class="col-md-6">
 											<textarea class="form-control input-md" required type="text" name="text_messgae"></textarea>
 										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-md-3 control-label">Images</label>
+										<input type="file" class="form-control input-medium" name="fileToUpload" />
 									</div>
 									<div class=" right1" align="center">
                                         <button type="submit" class="btn green formsubmit" name="submit" >Submit</button>
@@ -274,6 +194,7 @@ span {
 														<th>Message From</th>
 														<th>Message To</th>
 														<th>Message</th>
+														<th>Image</th>
 														<th>Action</th>
 													</tr>
 												</thead>
@@ -297,6 +218,7 @@ span {
 														$fetch_name=mysql_fetch_array($qry_vender_name);
 														$role_name1=$fetch_name['role_name'];
 											$message1=$fets['message'];
+											$pic=$fets['pic'];
 											?>
 											
 														<tr>
@@ -311,6 +233,9 @@ span {
 															</td>
 															<td class="search">
 															<?php echo $message1;?>
+															</td>
+															<td class="search">
+																<img src= "message/<?php echo $pic;?>" style="width:50px;height:50px;">
 															</td>
 															<td>
 																<a class="btn blue-madison blue-stripe btn-sm" rel="tooltip" title="Edit" data-toggle="modal" href="#edit<?php echo $id;?>"><i class="fa fa-edit"></i></a>
@@ -374,11 +299,15 @@ span {
 													<div class="col-md-6">
 														<div class="input-icon right">
 														<i class="fa"></i>
-														<input class="form-control" placeholder="Please Enter Message From" required name="message" autocomplete="off" type="text" value="<?php echo $message1;?>">
+														<textarea class="form-control" placeholder="Please Enter Message From" required name="message" autocomplete="off"  ><?php echo $message1;?></textarea >
 														</div>
-														
-													</div>
+											 		</div>
 												</div>
+												<div class="form-group">
+													<label class="col-md-3 control-label">Images</label>
+													<input type="file" class="form-control input-medium" name="fileToUpload" />
+												</div>
+											 
 												 <div class=" right1" align="right" style="margin-right:10px">
 															<button type="submit" class="btn green" name="sub_edit">Update</button>
 														</div>
@@ -441,7 +370,7 @@ span {
 </body>
  
 <?php footer();?>
-<?php scripts();?>
+
 <script>
 <?php if($update_id>0){?>
 		var update_id = <?php echo $update_id; ?>;
@@ -465,4 +394,5 @@ span {
  	
 	
  </script>
+ <?php scripts();?>
 </html>

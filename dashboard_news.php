@@ -2,6 +2,12 @@
  include("index_layout.php");
  include("database.php");
  $user=$_SESSION['category'];
+	 if(isset($_POST['sub_del']))
+	{
+		$delet_model=$_POST['delet_model'];
+		$r=mysql_query("update `news` SET `flag`='1' where id='$delet_model'" );
+		$sql=mysql_query($r);
+	}
 
   ?> 
 <html>
@@ -27,7 +33,7 @@
                                  <div class="row">
 								<div class="col-md-12">
 								<div class="form-group">
-										<label class="col-md-2 control-label" style="text-align:right">Select Role Wise</label>
+										<label class="col-md-2 control-label" style="text-align:right">Select Role </label>
 										<div class="col-md-3">
                                         <select name="role_id" class="form-control select select2 select2me input-medium" placeholder="Select..." id="view_u">
                                          <option value=""></option>
@@ -44,7 +50,7 @@
                               <select/>
 </div>
 
-										<label class="col-md-2 control-label" style="text-align:right">Select Month Wise</label>
+										<label class="col-md-2 control-label" style="text-align:right">Select Month </label>
 										<div class="col-md-3">
 <select name="news_id"  class="date_wise_news form-control select2me select2 select" placeholder="Select Month.." >
 								<option value=""></option>
@@ -88,19 +94,19 @@ $(document).ready(function(){
 <script>
 $(document).ready(function(){
  $(".date_wise_news").change(function(){
- var ids=$(this).val();
-   if(ids)
- {
-    $.ajax({
-			url: "ajax_date_wise_news.php?date_wise_news_id="+ids,
-			}).done(function(response) {
-		   $("#data").html(""+response+"");
-			});
-}
-else{
-	   window.location.href="dashboard_news.php";
-}
- });
+	 var ids=$(this).val();
+	if(ids)	
+	{
+		$.ajax({
+				url: "ajax_date_wise_news.php?date_wise_news_id="+ids,
+				}).done(function(response) {
+			   $("#data").html(""+response+"");
+				});
+	}
+	else{
+		   window.location.href="dashboard_news.php";
+	}
+	});
 
 });
 </script>

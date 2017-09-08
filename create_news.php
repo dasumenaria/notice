@@ -43,8 +43,6 @@ if(isset($_POST['submit']))
 		$xsql=mysql_query("update `news` SET `featured_image`='$item_image' where id='".$newsid."'" );
 		$xsqlr=mysql_query($xsql);    
 		$message = "News Add Successfully.";
-		
-		header("Location:create_news.php");  
    }
   ?> 
 <html>
@@ -69,9 +67,10 @@ if(isset($_POST['submit']))
  							</div>
 						</div>
 						<div class="portlet-body form">
-						<?php if($message!="") { ?>
-                       <!-- <input id="alert_message" type="text" class="form-control" value="some alert text goes here..." placeholder="enter a text ...">-->
-<div class="message" id="success" style="color:#44B6AE; text-align:center"><label class="control-label"><?php echo $message; ?></label></div>
+<?php if($message!="") { ?>
+<div id="success" class="alert alert-success" style="margin-top:10px; width:50%">
+<?php echo $message; ?>
+</div>
 <?php } ?>
 							<form class="form-horizontal" role="form" id="noticeform" method="post" enctype="multipart/form-data">
 								<div class="form-body">

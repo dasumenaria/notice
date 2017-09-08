@@ -6,39 +6,48 @@
 if(isset($_POST['submit']))
 {
 	$username=mysql_real_escape_string($_REQUEST["user_name"]);
+	$name=mysql_real_escape_string($_REQUEST["name"]);
 	$password1=mysql_real_escape_string($_REQUEST["password"]);
 	$password=md5($password1);
 	$role_id=mysql_real_escape_string($_REQUEST["role_id"]);
 	$mobile_no=mysql_real_escape_string($_REQUEST["mobile_no"]);
-	$address=mysql_real_escape_string($_REQUEST["address"]);
-	$class_id=mysql_real_escape_string($_REQUEST["class_id"]);
-	$section_id=mysql_real_escape_string($_REQUEST["section_id"]);
-	@$file_name=$_FILES["image"]["name"];
-	$date=date('Y-m-d');
-	
-	if(!empty($file_name))
+	$dta=mysql_query("select  * from `faculty_login` where `mobile_no` = '$mobile_no'  &&  `flag` = '0' ");
+	$count=mysql_num_rows($dta);
+	if($count==0)
 	{
+		$address=mysql_real_escape_string($_REQUEST["address"]);
+		$class_id=mysql_real_escape_string($_REQUEST["class_id"]);
+		$section_id=mysql_real_escape_string($_REQUEST["section_id"]);
 		@$file_name=$_FILES["image"]["name"];
-		$file_tmp_name=$_FILES['image']['tmp_name'];
-		$target ="faculty/";
-		$file_name=strtotime(date('d-m-Y h:i:s'));
-		$filedata=explode('/', $_FILES["image"]["type"]);
-		$filedata[1];
-		$random=rand(100, 10000);
-		$target=$target.basename($random.$file_name.'.'.$filedata[1]);
-		move_uploaded_file($file_tmp_name,$target);
-		$item_image=$random.$file_name.'.'.$filedata[1];
+		$date=date('Y-m-d');
+		
+		if(!empty($file_name))
+		{
+			@$file_name=$_FILES["image"]["name"];
+			$file_tmp_name=$_FILES['image']['tmp_name'];
+			$target ="faculty/";
+			$file_name=strtotime(date('d-m-Y h:i:s'));
+			$filedata=explode('/', $_FILES["image"]["type"]);
+			$filedata[1];
+			$random=rand(100, 10000);
+			$target=$target.basename($random.$file_name.'.'.$filedata[1]);
+			move_uploaded_file($file_tmp_name,$target);
+			$item_image=$random.$file_name.'.'.$filedata[1];
+		}
+		else
+		{
+			$item_image='no_image.png';
+		}
+		$notification_key="AAAAJs4r62Q:APA91bHtzaHry7Y63No5sTrsD09dl7Bu5Xj3ZuVxmY614VKvtA6a4eOKz6sydOzWZDAfLgAbqld1OkiuGA7o-ex_hnEUDNg2CWNZOUbkJDMYv5kJ-Q6816vOrtLAkDvZP3U_WizaqUql";
+		$sql="insert into faculty_login(name,user_name,role_id,password,mobile_no,address,image,curent_date,class_id,section_id,notification_key)
+		values('$name','$username','$role_id','$password','$mobile_no','$address','$item_image','$date','$class_id','$section_id',$notification_key)";
+		$r=mysql_query($sql);
+	$message="User Added Successfully";
 	}
 	else
 	{
-		$item_image='no_image.png';
+		$message="User Already Exist";
 	}
-	
-	$sql="insert into faculty_login(user_name,role_id,password,mobile_no,address,image,curent_date,class_id,section_id)
-	values('$username','$role_id','$password','$mobile_no','$address','$item_image','$date','$class_id','$section_id')";
-	$r=mysql_query($sql);
-	$message="User Added Successfully";
-	header("Location:create_user.php");
 }
  
   ?> 
@@ -63,16 +72,19 @@ if(isset($_POST['submit']))
 						</div>
                         
 						<div class="portlet-body form">
-                        <?php if($message!="") { ?>
-<div class="message" id="success" style="color:#44B6AE; text-align:center"><label class="control-label"><?php echo $message; ?></label></div>
-                        </br><?php } ?>
+<?php if($message!="") { ?>
+<div id="success" class="alert alert-success" style="margin-top:10px; width:50%">
+<?php echo $message; ?>
+</div>
+<?php } ?>
 							<form class="form-horizontal" role="form" id="noticeform" method="post" enctype="multipart/form-data">
 								<div class="form-body">
 								
 								<div class="row">
-								<div class="form-group">
-										<label class="col-md-2 control-label">Select Role</label>
-										<div class="col-md-3">
+								<div class="form-group col-md-12" >
+										
+										<div class="col-md-4">
+										<label class="col-md-12">Select Role</label>
                                         <select name="role_id" class="form-control select select2 select2me" placeholder="Select..." id="sid">
                                          <option value=""></option>
                                             <?php
@@ -87,11 +99,19 @@ if(isset($_POST['submit']))
                               <?php }?> 
                               <select/>
 										</div>
-								
-										<label class="col-md-2 control-label">User Name</label>
-										<div class="col-md-3">
+										
+										
+										<div class="col-md-4">
+											<label class="col-md-12"> Name</label>
+											<input class="form-control input-md" required placeholder=" Name" type="text" name="name">
+										</div>
+										
+										
+										<div class="col-md-4">
+											<label class="col-md-12">User Name</label>
 											<input class="form-control input-md" required placeholder="User Name" type="text" name="user_name">
 										</div>
+										
 									</div>
 									</div>
 									

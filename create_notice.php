@@ -1,15 +1,15 @@
 <?php
 include("index_layout.php");
 include("database.php");
-require_once 'dompdf/autoload.inc.php';
-use Dompdf\Dompdf; 
-$session_id=@$_SESSION['id'];
- 
-$message="";
-$category_id=6;
+	$session_id=@$_SESSION['id']; 
+	$user_id=$_SESSION['id'];
+	$category=$_SESSION['category'];
+	$e_id=0;
+	$message="";
+	$category_id=6;
 
-if(isset($_POST['submit']))
-{
+	if(isset($_POST['submit']))
+	{
 	$noticenum=$_POST['noticenum'];
 	$notice_no=$_POST['notice_no'];
 	$title=$_POST['title'];
@@ -18,64 +18,41 @@ if(isset($_POST['submit']))
 	$dateofpublish=date('Y-m-d',strtotime($dateofpublish1));
 	$curent_time=date("h:i A");
 	$s=isset($_POST['shareable']);
-		if(!empty($s))
-		{
-			$shareable=$s;
-		}
-		else
-		{
-			$shareable='0';
-		}
-	@$class_id=$_POST['class_id'];
-	@$bw=$_POST['bw'];
-		if( isset( $_POST['bw'] ) ) 
-		{
-			 $bw = 'YES';
-		}
-		else 
-		{
-			 $bw = 'NO';
-		}
-    $bwfoo = isset( $_POST['bw'] ) ? $_POST['bw'] : 'no';
-		if($bwfoo=='no')
-		{
-			$class='';
-		}
-		else
-		{ 
-			$class=implode(',',$class_id);
-		}
-	 
-     
-	$noticedetail=$_POST['editor1']; 
-	$na='notice';
-	$noticename=$noticenum;
-	$nc='.pdf';
-	$x_notice_name=$na.$noticename.$nc;
-	$approval=0;
-	$dompdf = new dompdf();
-	$dompdf->loadHtml($noticedetail);
-	$dompdf->setPaper('A4', 'potrait');
-	$dompdf->render();
-	$output = $dompdf->output();
-    file_put_contents('notice/notice'.$noticenum.'.pdf', $output); //dynamically change the file name
-	
-	$sql="INSERT INTO `notice`(`role_id`,`notice_no`, `title`, `description`, `time`, `dateofpublish`, `class_id`,`user_id`,`noticedetails`,`file_name`,`shareable`,`category_id`) VALUES ('".$user."','".$notice_no."','".$title."','".$description."','".$curent_time."','".$dateofpublish."','".$class."', ".$session_id.",'".$noticedetail."','".$x_notice_name."','".$shareable."','".$category_id."')";
-	$res=mysql_query($sql);
-	$e_id=mysql_insert_id();
-
-	$file_upload='noimage.png';
-	$photo1="notice".$e_id.".jpg";
-	if(move_uploaded_file($_FILES["image"]["tmp_name"],"notice/notice_image/".$photo1))
+	if(!empty($s))
 	{
-		$r=mysql_query("update notice set image='$photo1' where id='$e_id'");
+		$shareable=$s;
 	}
 	else
 	{
-		$r=mysql_query("update notice set image='$file_upload' where id='$e_id'");
+		$shareable='0';
 	}
+	$curent_date=date("Y-m-d");
+	@$class_id=$_POST['class_id'];
+	$class='';
+	if(!empty($class_id))
+	{
+		$class=implode(',',$class_id);
+	}
+
+	$sql="INSERT INTO `notice`(`role_id`,`notice_no`, `title`, `description`, `time`, `dateofpublish`, `class_id`,`user_id`,`shareable`,`category_id`,`curent_date`) VALUES ('".$category."','".$notice_no."','".$title."','".$description."','".$curent_time."','".$dateofpublish."','".$class."','".$session_id."','".$shareable."','".$category_id."','".$curent_date."')";
+	$res=mysql_query($sql);
+	$update_id=mysql_insert_id();
+	$message="Notice Successfully Created";
+		if($_FILES["image"]["tmp_name"])
+		{	
+			@$filename =$_FILES["image"]["name"];
+			@$ext = pathinfo($filename, PATHINFO_EXTENSION);  
+			if($ext == 'pdf' )
+			{ 
+				$photo1="notice".$update_id.".pdf";
+				if(move_uploaded_file($_FILES["image"]["tmp_name"],"notice/".$photo1))
+				{
+					$r=mysql_query("update notice set file_name='$photo1' where id='$update_id'");
+				}
+			}	
+		}
+  
 	
-	echo "<meta http-equiv='refresh' content='0;url=create_notice.php'/>";
 }
 
 ?>
@@ -86,12 +63,13 @@ if(isset($_POST['submit']))
 <title></title>
 </head>
 <?php contant_start(); menu();  ?>
-<body>
-<img src="http://www.shantismelting.com/home/wwwshantismeltin/public_html/watermate/app/api/../webroot/images/LatLongImg/google-map_1494487107.PNG	" >
+<body> 
 	<div class="page-content-wrapper">
 		 <div class="page-content">
-		 <?php if($message!="") { ?>
-<div class="message"><?php echo $message; ?></div>
+<?php if($message!="") { ?>
+<div id="success" class="alert alert-success" style="margin-top:10px; width:50%">
+<?php echo $message; ?>
+</div>
 <?php } ?>
 						<div class="portlet box blue">
 						<div class="portlet-title">
@@ -158,81 +136,47 @@ if(isset($_POST['submit']))
 											</div>
 											</div>
 									</div>
-									
-									
 									<div class="form-group">
-										<label class="col-md-3 control-label">Notice Image</label>
-										<div class="col-md-3">
-											
-											
-											 <div class=" col-md-12 fileinput fileinput-new" style="padding-left: 0px;" data-provides="fileinput">
-                                                <div class="col-md-10 fileinput-new thumbnail" style="width: 200px;  height: 100px;">
-                                                    <img src="img/noimage.png" style="width:100%;" alt=""/>
-                                                </div>
-                                                <div class="col-md-10 fileinput-preview fileinput-exists thumbnail" style="max-width: 1000px; max-height: 100px;">
-                                                </div>
-                                                <div>
-                                                <div class="col-md-2">
-                                                    <span class="btn default btn-file addbtnfile" style="background-color:#00CCFF; color:#FFF">
-                                                    <span class="fileinput-new">
-                                                    <i class="fa fa-plus"></i> </span>
-                                                    <span class="fileinput-exists">
-                                                    <i class="fa fa-plus"></i> </span>
-                                                    <input type="file" class="default" name="image" id="file1">
-                                                    </span>
-                                                    <a href="#" class="btn red fileinput-exists" data-dismiss="fileinput" style=" color:#FFF">
-                                                    <i class="fa fa-trash"></i> </a></div>
-                                                </div>
-                                            </div>
-											
-											
-										</div>
-									</div>
-									
-								<div class="form-group">
                               <label class="control-label col-md-3">Send To:</label>
                                             
 											<div class="form-group">
 											<div class="col-md-3">
-									<label class="checkbox line">
-			  <input type="checkbox" id="bw" name="bw" value="NO" onChange="myfunction()"/> Class Wise
-			  </label>
-			<div class="control-group" id="branchselect" style="display:none;">
-				<div class="controls">
-				<?php 
-				$sql="select distinct(class_name),id from master_class";
-				$res=mysql_query($sql) or die(mysql_error());
-				$count=0;
-				while($result=mysql_fetch_array($res)) { $count++; 				
-				
-				 if($count==7){ $count=1;?><?php } 
-                       	?>
-				<td class="checkbox">
-				<label><input type="checkbox" value="<?php echo $result['id']; ?>" id="<?php echo $result['class_name']; ?>" name="class_id[]" /><?php echo $result['class_name']; ?></label>
-				</td>
-				<?php
-				}
-				?>
-				</div>
-			</div></br>
-						
-				 
-			
-			
-			</div></div></div>
-			
+											 
+									<div class="control-group" id="branchselect" >
+										<div class="controls">
+										<?php 
+										$sql="select distinct(class_name),id from master_class";
+										$res=mysql_query($sql) or die(mysql_error());
+										$count=0;
+										while($result=mysql_fetch_array($res)) { $count++; 				
+										
+										 if($count==4){ $count=1;?><?php } 
+												?>
+										<td class="checkbox">
+										<label><input type="checkbox" value="<?php echo $result['id']; ?>" id="<?php echo $result['class_name']; ?>" name="class_id[]" /><?php echo $result['class_name']; ?></label>
+										</td>
+										<?php
+										}
+										?>
+										</div>
+									</div>
+								</div></div></div>
 									
-			
-								
-						<div class="control-group">
-						<textarea rows="20" type="text" name="editor1" id="editor1"><center><img src="img/CBAlogo.png" width="150px" height="150px"></img></center></textarea>
-						
-						</div>
+									<div class="form-group">
+										<label class="col-md-3 control-label">Upload PDF</label>
+										<div class="col-md-3">
+											
+											<input type="file" class="default" name="image" id="file1">
+												
+										</div>
+									</div>
+									
+									
+								</div>
+							</div>
+								 
 						</br>
-						</br>
-
-					
-								<div class=" right1" align="right" style="margin-right:10px">
+ 								<div class="" align="center" style="margin-right:10px">
 									<button type="submit" class="btn green" name="submit">Submit</button>
 								</div>
 								</div>
@@ -244,10 +188,27 @@ if(isset($_POST['submit']))
 <?php footer();?>
 
 <script src="assets/global/plugins/jquery.min.js" type="text/javascript"></script>
-
+<script>
+<?php if($update_id>0){?>
+		var update_id = <?php echo $update_id; ?>;
+		$.ajax({
+			url: "notification_page.php?function_name=notice&id="+update_id,
+			type: "POST",
+			success: function(data)
+			{   
+ 			}
+		});
+	 
+<?php }?>
+	var myVar=setInterval(function(){myTimerr()},4000);
+	function myTimerr() 
+	{
+		$("#success").hide();
+	}
+ </script>
 
 <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
-  <script>tinymce.init({ selector:'textarea' });</script>
+<script>tinymce.init({ selector:'textarea' });</script>
 <script>
 $(document).ready(function(){    
 	 $("#bw").live("click",function(){
@@ -258,14 +219,14 @@ $(document).ready(function(){
 				$("#branchselect").hide();
 			}
         });
-		  $("#mw").live("click",function(){
+		$("#mw").live("click",function(){
 		   if($(this).prop("checked") == true){
 			 $("#mediumselect").show();
 			}
 			else if($(this).prop("checked") == false){
 				$("#mediumselect").hide();
 			}
-		   });
+		});
 	});	
 </script>
 <?php scripts();?>

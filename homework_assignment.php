@@ -5,187 +5,165 @@ include("database.php");
 $user=$_SESSION['category'];
 $user_id=$_SESSION['id'];
 $date=date('Y-m-d');
- 
- 
-	if(isset($_POST['submit']))
-		{
-			
-			$class_id=$_POST["class_id"];
-			$section_id=$_POST["section_id"];
-			$subject_id=$_POST["subject_id"];				
-			$yesno=$_POST["yesno"];				
-			$topic=$_POST["topic"];
-			$submission_date=$_POST["submission_date"];
-			$sub_date=date('Y-m-d',strtotime($submission_date));
-			$description=$_POST["description"];
-		  
-			if($yesno==1)
-				{
-					$sql="insert into assignment(user_id,student_id,topic,description,class_id,section_id,subject_id,submission_date,curent_date) values('$user_id','$student_id','$topic','$description','$class_id','$section_id','$subject_id','$sub_date','$date')";
-					$r=mysql_query($sql);
-					
-					
-					$time=time();
-					$ids=mysql_insert_id();
-					$file_name=$_FILES["file"]["name"]; 
-					$ext=pathinfo($file_name,PATHINFO_EXTENSION);
-					$photo=$topic.$time.'.'.$ext;
-					move_uploaded_file($_FILES["file"]["tmp_name"],"homework/".$photo);
-					if($r)
-					{	
-						$r1=mysql_query("update `assignment` set file='$photo' where id='$ids'");
-					}
-				
-				
-					//---------------------------------------------------------------
-//						echo "SELECT `device_token`,`notification_key`,`id`,`role_id` FROM `login` where section_id='".$section_id."' AND  class_id='".$class_id."' AND device_token != ''";
-			
-						$std_nm=mysql_query("SELECT `device_token`,`notification_key`,`id`,`role_id` FROM `login` where section_id='".$section_id."' AND  class_id='".$class_id."' AND device_token != ''");
-						while($ftc_nm=mysql_fetch_array($std_nm))
-							{
-
-								$device_token = $ftc_nm['device_token'];
-								$notification_key = $ftc_nm['notification_key'];
-								$user_ids=$ftc_nm['id'];
-								$role_id=$ftc_nm['role_id'];
-
-								$message='New Assignment Submitted';
-								$title='Assignment';
-								$submitted_by=$user_id;
-								$user_idss=$user_ids;
-								$date=date("M d Y");
-								$time=date("h:i:A");
-
-								$msg = array
-								(
-									'title'=> $title ,
-									'message'  => $message,
-									'button_text' => 'View',
-									'link' => 'notice://Assignment?id='.$insert_id.'&student_id=',
-									'notification_id' => $insert_id,
-								);
-								$url = 'https://fcm.googleapis.com/fcm/send';
-								$fields = array
-								(
-									'registration_ids'  => array($device_token),
-									'data'   => $msg
-								);
-								$headers = array
-								(
-									'Authorization: key=' .$notification_key,
-									'Content-Type: application/json'
-								);
-								//--- NOTIFICATIO INSERT
-							   	$NOTY_insert="INSERT into notification(title,message,user_id,submitted_by,date,time,role_id)VALUES('$title','$message','$user_id','$submitted_by','$date','$time','$role_id')";
-								$rr=mysql_query($NOTY_insert);
-								//-- END
-
-								json_encode($fields);
-								$ch = curl_init();
-								curl_setopt($ch, CURLOPT_URL, $url);
-								curl_setopt($ch, CURLOPT_POST, true);
-								curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-								curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-								curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-								curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-								curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
-								$result = curl_exec($ch);
-								curl_close($ch);
-							}
-						//--
-
-				}
-						//-------------------------
-		  
+ 		
+if(isset($_POST['submit']))
+{
 	
-			else if($yesno==2)
-			{
+	$class_id=$_POST["class_id"];
+	$section_id=$_POST["section_id"];
+	$subject_id=$_POST["subject_id"];				
+	$yesno=$_POST["yesno"];				
+	$topic=$_POST["topic"];
+	$submission_date=$_POST["submission_date"];
+	$sub_date=date('Y-m-d',strtotime($submission_date));
+	$description=$_POST["description"];
+	$student_id=$_POST["student_id"]; 
 
+	if($yesno=='1')
+	{
+			$sql="insert into assignment(user_id,student_id,topic,description,class_id,section_id,subject_id,submission_date,curent_date) values('$user_id','','$topic','$description','$class_id','$section_id','$subject_id','$sub_date','$date')";
+			$r=mysql_query($sql);
+			$time=time();
+			$eventid=mysql_insert_id();
+			$file_name=$_FILES["file"]["name"]; 
+			$ext=pathinfo($file_name,PATHINFO_EXTENSION);
+			$photo=$topic.$time.'.'.$ext;
+			move_uploaded_file($_FILES["file"]["tmp_name"],"homework/".$photo);
+			$r1=mysql_query("update `assignment` set file='$photo' where id='$eventid'");
 			
-				 $student_id=$_POST["student_id"];
-				 
-				 
-				foreach($student_id as $value)
-				{
-					
-					$student_id=$value;
-					$sql1="insert into assignment(user_id,student_id,topic,description,class_id,section_id,subject_id,submission_date,curent_date) values('$user_id','$student_id','$topic','$description','$class_id','$section_id','$subject_id','$sub_date','$date')";
-					$r2=mysql_query($sql1);
-					$time=time();
-					$ids=mysql_insert_id();
-					$file_name=$_FILES["file"]["name"]; 
-					$ext=pathinfo($file_name,PATHINFO_EXTENSION);
-					$photo=$topic.$time.'.'.$ext;
-					move_uploaded_file($_FILES["file"]["tmp_name"],"homework/".$photo);
-					 
-					if($r2)
-					{	
-					 
-					//echo "update `assignment` set file='$photo' where id='$ids'";
-					//exit;
-			 
-					$r4=mysql_query("update `assignment` set file='$photo' where id='$ids'");
-			 
+			
+				//---------------------------------------------------------------
+				$std_nm=mysql_query("SELECT `device_token`,`notification_key`,`id`,`role_id` FROM `login` where section_id='".$section_id."' AND  class_id='".$class_id."' AND device_token != '' ");
+				while($ftc_nm=mysql_fetch_array($std_nm))
+					{
+						$device_token = $ftc_nm['device_token'];
+						$notification_key = $ftc_nm['notification_key'];
+						$user_ids=$ftc_nm['id'];
+						$role_id=$ftc_nm['role_id'];
 
+						$message='New Assignment Submitted';
+						$title='Assignment';
+						$submitted_by=$user_id;
+						$user_idss=$user_ids;
+						$date=date("M d Y");
+						$time=date("h:i:A");
+
+						$msg = array
+						(
+							'title'=> $title,
+							'message'  => $message,
+							'button_text' => 'View',
+							'link' => 'notice://Assignment?id='.$eventid.'&student_id='.$user_idss,
+							'notification_id' => $eventid,
+						);
+						$url = 'https://fcm.googleapis.com/fcm/send';
+						$fields = array
+						(
+							'registration_ids'  => array($device_token),
+							'data'   => $msg
+						);
+						$headers = array
+						(
+							'Authorization: key=' .$notification_key,
+							'Content-Type: application/json'
+						);
+						$link='notice://Assignment?id='.$eventid.'&student_id='.$user_idss;
+						//--- NOTIFICATIO INSERT
+						$NOTY_insert="INSERT into notification(title,message,user_id,submitted_by,date,time,role_id,link)VALUES('$title','$message','$user_id','$submitted_by','$date','$time','$role_id','$link')";
+						$rr=mysql_query($NOTY_insert);
+						//-- END
+
+						json_encode($fields);
+						$ch = curl_init();
+						curl_setopt($ch, CURLOPT_URL, $url);
+						curl_setopt($ch, CURLOPT_POST, true);
+						curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+						curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+						curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+						curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+						curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+						$result = curl_exec($ch);
+						curl_close($ch);
 					}
-							//---------------------------------------------------------------
-						$std_nm=mysql_query("SELECT `device_token`,`notification_key`,`id`,`role_id` FROM `login` where section_id='".$section_id."' AND  class_id='".$class_id."' AND device_token != '' ");
-						while($ftc_nm=mysql_fetch_array($std_nm))
-							{
-								$device_token = $ftc_nm['device_token'];
-								$notification_key = $ftc_nm['notification_key'];
-								$user_ids=$ftc_nm['id'];
-								$role_id=$ftc_nm['role_id'];
-
-								$message='New Assignment Submitted';
-								$title='Assignment';
-								$submitted_by=$user_id;
-								$user_idss=$user_ids;
-								$date=date("M d Y");
-								$time=date("h:i:A");
-
-								$msg = array
-								(
-									'title'=> $title ,
-									'message'  => $message,
-									'button_text' => 'View',
-									'link' => 'notice://Assignment?id='.$insert_id.'&student_id=',
-									'notification_id' => $insert_id,
-								);
-								$url = 'https://fcm.googleapis.com/fcm/send';
-								$fields = array
-								(
-									'registration_ids'  => array($device_token),
-									'data'   => $msg
-								);
-								$headers = array
-								(
-									'Authorization: key=' .$notification_key,
-									'Content-Type: application/json'
-								);
-								//--- NOTIFICATIO INSERT
-								$NOTY_insert="INSERT into notification(title,message,user_id,submitted_by,date,time,role_id)VALUES('$title','$message','$user_id','$submitted_by','$date','$time','$role_id')";
-								$rr=mysql_query($NOTY_insert);
-								//-- END
-
-								json_encode($fields);
-								$ch = curl_init();
-								curl_setopt($ch, CURLOPT_URL, $url);
-								curl_setopt($ch, CURLOPT_POST, true);
-								curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-								curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-								curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-								curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-								curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
-								$result = curl_exec($ch);
-								curl_close($ch);
-							}
-						//--
-				}	
-			}
-     
-		
+				//--
+				//-------------------------
 		}
+	else if($yesno=='2')
+	{
+		$implodestsdnt=implode(',',$student_id);
+		$sql1="insert into assignment(user_id,student_id,topic,description,class_id,section_id,subject_id,submission_date,curent_date) values('$user_id','$implodestsdnt','$topic','$description','$class_id','$section_id','$subject_id','$sub_date','$date')";
+			$r2=mysql_query($sql1); 
+			$time=time();
+			$eventid=mysql_insert_id();
+			$file_name=$_FILES["file"]["name"]; 
+			$ext=pathinfo($file_name,PATHINFO_EXTENSION);
+			$photo=$topic.$time.'.'.$ext;
+			move_uploaded_file($_FILES["file"]["tmp_name"],"homework/".$photo);
+			$r4=mysql_query("update `assignment` set file='$photo' where id='$eventid'");
+			 
+			foreach($student_id as $value)
+			{
+				$student_ids=$value;
+					//---------------------------------------------------------------
+				$std_nm=mysql_query("SELECT `device_token`,`notification_key`,`id`,`role_id` FROM `login` where id='".$student_ids."' AND device_token != '' ");
+				while($ftc_nm=mysql_fetch_array($std_nm))
+					{
+						$device_token = $ftc_nm['device_token'];
+						$notification_key = $ftc_nm['notification_key'];
+						$user_ids=$ftc_nm['id'];
+						$role_id=$ftc_nm['role_id'];
+
+						$message='New Assignment Submitted';
+						$title='Assignment';
+						$submitted_by=$user_id;
+						$user_idss=$user_ids;
+						$date=date("M d Y");
+						$time=date("h:i:A");
+
+						$msg = array
+						(
+							'title'=> $title ,
+							'message'  => $message,
+							'button_text' => 'View',
+							'link' => 'notice://Assignment?id='.$eventid.'&student_id='.$student_ids,
+							'notification_id' => $eventid,
+						);
+						$url = 'https://fcm.googleapis.com/fcm/send';
+						$fields = array
+						(
+							'registration_ids'  => array($device_token),
+							'data'   => $msg
+						);
+						$headers = array
+						(
+							'Authorization: key=' .$notification_key,
+							'Content-Type: application/json'
+						);
+						$link='notice://Assignment?id='.$eventid.'&student_id='.$student_ids;
+						//--- NOTIFICATIO INSERT
+						$NOTY_insert="INSERT into notification(title,message,user_id,submitted_by,date,time,role_id,link)VALUES('$title','$message','$user_idss','$submitted_by','$date','$time','$role_id','$link')";
+						$rr=mysql_query($NOTY_insert);
+						//-- END
+
+
+						json_encode($fields);
+						$ch = curl_init();
+						curl_setopt($ch, CURLOPT_URL, $url);
+						curl_setopt($ch, CURLOPT_POST, true);
+						curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+						curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+						curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+						curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+						curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+						$result = curl_exec($ch);
+						curl_close($ch);
+					}
+				//--
+		}	
+	}
+
+}
+		
 		
 		
 	
@@ -222,27 +200,7 @@ $date=date('Y-m-d');
 												</div>
 											</div>
 									 </div>
-									 <div class="col-sm-6">
-										<div class="ifYes" style="display:none">
-											<div class="form-group">
-													<label class=" col-md-3 control-label">Select Student </label>
-												<div class="col-md-3">
-													<select name="student_id[]" class="form-control select2me input-medium"   multiple='multiple' placeholder="Select...">
-													<option value=""></option>
-														<?php
-														$r1=mysql_query("select `name`,`id` from login order by id ASC");		
-														$i=0;
-														while($row1=mysql_fetch_array($r1))
-														{
-															$id=$row1['id'];
-															$name=$row1['name'];
-														?>
-													<option value="<?php echo $id;?>"><?php echo $name;?></option>                              
-													<?php }?> 
-													</select>
-												</div>
-											</div>
-										</div>
+									 
 									</div>
 								</div>
 									 
@@ -251,11 +209,11 @@ $date=date('Y-m-d');
 											<div class="form-group"	>
 												<label class="col-md-3 control-label">Class</label>
 												<div class="col-md-3">
-													<select name="class_id" id="cls_id" class=" user form-control select2me input-medium" placeholder="Select Class" id="sid">
+													<select name="class_id" id="cls_id" class=" user form-control select2me input-medium" placeholder="Select Class">
 													<option value=""></option>
 													<?php
 													$cls_ftc=mysql_query("select * from master_class");		
-													 while($ftc_cls=mysql_fetch_array($cls_ftc))
+													while($ftc_cls=mysql_fetch_array($cls_ftc))
 													{
 													$id=$ftc_cls['id'];
 													$class_name=$ftc_cls['class_name'];
@@ -320,16 +278,38 @@ $date=date('Y-m-d');
 										</div>
 									</div>
 								<div class="row">
-									<div class="col-md-6">
+                                	<div class="col-md-6 ifYes" style="display:none">
+										 
+											<div class="form-group">
+													<label class=" col-md-3 control-label">Select Student </label>
+												<div class="col-md-3">
+													<select name="student_id[]" class="form-control select2me input-medium"   multiple='multiple' placeholder="Select...">
+													<option value=""></option>
+														<?php
+														$r1=mysql_query("select `name`,`id` from login where `flag`=0  order by id ASC");		
+														$i=0;
+														while($row1=mysql_fetch_array($r1))
+														{
+															$id=$row1['id'];
+															$name=$row1['name'];
+														?>
+															<option value="<?php echo $id;?>"><?php echo $name;?></option>                              
+													<?php }?> 
+													</select>
+												</div>
+											</div>
+										 
+                                    </div>
+										<div class="col-md-6">
 											<label class="col-md-3 control-label" align="center">Discription</label>
 											<div class="col-md-3">
 											<textarea class="form-control input-medium" rows="1" required placeholder="Discription" type="text" name="description"></textarea>										 	
 											</div>
 										</div>
 									</div>									
-									<div  align="center">
-										<input  type="submit" class="btn green" name="submit"  value="Submit">
-									</div> 
+								 <div  align="center">
+									<input  type="submit" class="btn green" name="submit"  value="Submit">
+						</div> 
 								</div>
 							</form>
 						</div>
@@ -342,37 +322,32 @@ $date=date('Y-m-d');
 </body>
 
 <?php  footer();?>
- <script src="assets/global/plugins/jquery.min.js" type="text/javascript"></script>
-  
+<script src="assets/global/plugins/jquery.min.js" type="text/javascript"></script>
 <script> 
+ 
 $(document).ready(function() {
-$(".rd").live("click",function(){
-
- var valu=$(this).val();
- alert();
-	if(valu==2)
-	{ 
-	 $('.ifyes').show();
-	}
-	else
-	{
-	 $('.ifyes').hide();
-	}
-});
-
-$(".user").live("change",function(){
-	var t=$(this).val();
-	
-	$.ajax({
-	url: "ajax_homework.php?pon="+t,
-	}).done(function(response) {
-	
-	$("#dt").html(""+response+"");
-	
-	$('.select2me').select2();  
-	
+		
+	$(".rd").live("click",function(){
+	 var valu=$(this).val();
+		if(valu==2)
+		{ 
+		 $('.ifyes').show();
+		}
+		else
+		{
+		 $('.ifyes').hide();
+		}
 	});
-});	 
+	
+	$(".user").live("change",function(){
+		var t=$(this).val();
+		$.ajax({
+		url: "ajax_homework.php?pon="+t,
+		}).done(function(response) {
+		$("#dt").html(""+response+"");
+			$('.select2me').select2();  
+		});
+	});	 
 
 	$(".user1").live("change",function(){
  		var t=$("#cls_id").val();

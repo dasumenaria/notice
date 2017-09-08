@@ -59,6 +59,32 @@ $view_u=$_GET['view_u'];
 									<td>	
 										 <?php echo $news_date;?>
 									</td>
+									<td>
+									<a class="btn btn-circle btn-xs" style="color:#FFF; background-color:#09F" href="news_edit.php?id=<?php echo $id;?>">
+										<i class="fa fa-edit"></i></a>
+                                        &nbsp;				
+                                        &nbsp;
+									 <a class="btn btn-circle btn-xs" style="color:#FFF; background-color:#F00"
+  rel="tooltip" title="Delete"  data-toggle="modal" href="#delete<?php echo $id ;?>"><i class="fa fa-trash"></i></a>
+            <div class="modal fade" id="delete<?php echo $id ;?>" tabindex="-1" aria-hidden="true" style="padding-top:35px">
+                <div class="modal-dialog modal-md">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                            <span class="modal-title" style="font-size:14px; text-align:left">Are you sure, you want to delete this news?</span>
+                        </div>
+                        <div class="modal-footer">
+                        <form method="post" name="delete<?php echo $id ;?>">
+                            <input type="hidden" name="delet_model" value="<?php echo $id; ?>" />
+                            <button type="submit" name="sub_del" value="" class="btn btn-sm red-sunglo ">Yes</button> 
+                        </form>
+                        </div>
+                    </div>
+                <!-- /.modal-content -->
+                </div>
+        <!-- /.modal-dialog -->
+            </div>
+									</td>
 								</tr>
 								</tbody>
                     <?php } ?>

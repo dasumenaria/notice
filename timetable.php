@@ -4,7 +4,7 @@
 @$session_id=@$_SESSION['id'];
  date_default_timezone_set('Asia/Calcutta');
 ini_set('max_execution_time', 100000); 
-
+$message='';
 if(isset($_POST['submit']))
 {
 	$class_id=$_REQUEST["class_id"];
@@ -12,14 +12,19 @@ if(isset($_POST['submit']))
 	$subject_id=$_REQUEST["subject_id"];
 	$time_from=$_REQUEST["time_from"];
 	$time_to=$_REQUEST["time_to"]; 
+	$teacher_name=$_REQUEST["teacher_name"]; 
+	$period=$_REQUEST["period"]; 
 	$date_current=date('Y-m-d');
 	$i=0;
+	
 	 foreach($subject_id as $value)
 	 {
 		 $t_f=$time_from[$i];
 	 	 $subject_id=$value;
 		 $t_t=$time_to[$i];
- 
+		 $TN=$teacher_name[$i];
+		 $PP=$period[$i];
+
 	$q="SELECT `id` from `time_table` where `class_id`='$class_id' && `section_id`='$section_id' && `subject_id`='$subject_id'";
 	$f=mysql_query($q);
 	$r=mysql_num_rows($f);	
@@ -27,17 +32,19 @@ if(isset($_POST['submit']))
 		if($r>0)
 		{	
 			$ftc=mysql_fetch_array($f);
-			$id=$ftc['id']; 
-			$sql1="update `time_table` SET `user_id`='$session_id',`class_id`='$class_id',`section_id`='$section_id',`subject_id`='$subject_id',`time_from`='$t_f',`time_to`='$t_t',`curent_date`='$date_current' where `id`='".$id."'";
-			$r1=mysql_query($sql1);		  
+			$insert_id=$ftc['id']; 
+			$sql1="update `time_table` SET `user_id`='$session_id',`class_id`='$class_id',`section_id`='$section_id',`subject_id`='$subject_id',`time_from`='$t_f',`time_to`='$t_t',`curent_date`='$date_current',`teacher_name`='$TN',`period`='$PP' where `id`='".$insert_id."'";
+			$r1=mysql_query($sql1);
 		}
 		else
-		{
-		
-			$sql="insert into time_table(user_id,class_id,section_id,time_from,time_to,subject_id,curent_date)values('$session_id','$class_id','$section_id','$t_f','$t_t','$subject_id','$date_current')";
+		{ 
+			$sql="insert into time_table(user_id,class_id,section_id,time_from,time_to,subject_id,curent_date,teacher_name,period)values('$session_id','$class_id','$section_id','$t_f','$t_t','$subject_id','$date_current','$TN','$PP')";
 			$r=mysql_query($sql);
-				 $i++;
+			 
+			$insert_id=mysql_insert_id();
+			$i++;
 		 }
+		 $message='Timetable added successfully';
 	 }
 }
 	 
@@ -65,7 +72,11 @@ if(isset($_POST['submit']))
 							</div>
 						</div>
 						<div class="portlet-body form">
-						 
+<?php if($message!="") { ?>
+<div id="success" class="alert alert-success" style="margin-top:10px; width:50%">
+<?php echo $message; ?>
+</div>
+<?php } ?>						 
 <form  class="form-horizontal" id="form_sample_2"  role="form" method="post"> 
 					<div class="form-body">
 						<div class="form-group">
@@ -109,6 +120,16 @@ if(isset($_POST['submit']))
 <script src="assets/global/plugins/jquery.min.js" type="text/javascript"></script>
 
 <script>
+<?php if($insert_id>0){ ?>
+var update_id = <?php echo $insert_id; ?>;
+		$.ajax({
+			url: "notification_page.php?function_name=create_timetable_notify&id="+update_id,
+			type: "POST",
+			success: function(data)
+			{
+ 			}
+		});
+<?php } ?>
 $(document).ready(function() {
 
 
@@ -158,6 +179,11 @@ $(".user").live("change",function(){
 	});	  
 
 });
+var myVar=setInterval(function(){myTimerr()},4000);
+	function myTimerr() 
+	{
+		$("#success").hide();
+	}
 	</script>
 
 

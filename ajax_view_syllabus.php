@@ -20,7 +20,7 @@ if(!empty($syllabus_delete))
 										Class
 									</th>
 									<th>
-										 Subject
+										 Section
 									</th>
 									
                                     <th>
@@ -39,8 +39,7 @@ if(!empty($syllabus_delete))
 					$i++;
 					$id=$row1['id'];
 					$class_id=$row1['class_id'];
-                    $subject_id=$row1['subject_id'];
-					$date=$row1['date'];
+ 					$date=$row1['date'];
                     $section_id=$row1['section_id'];
 					if($date=='0000-00-00')
 					{	$date1='';}
@@ -51,17 +50,11 @@ if(!empty($syllabus_delete))
 					$class=mysql_query("select * from master_class where id='".$class_id."'");		
 					$classid=mysql_fetch_array($class);
 					$class_name=$classid['class_name'];
-					
-					$subject=mysql_query("select * from master_subject where id='".$subject_id."'");		
+ 					$subject=mysql_query("select * from master_section where id='".$section_id."'");		
 					$subjectid=mysql_fetch_array($subject);
-					$subject_name=$subjectid['subject_name'];
-					
-					
-
-					
+					$subject_name=$subjectid['section_name'];
 					?>
-					
-								<tbody>
+						<tbody>
 								<tr>
 									<td>
 							<?php echo $i;?>

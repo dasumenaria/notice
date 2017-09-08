@@ -8,7 +8,7 @@ $databasename = "new_notice";
  
 define("ROOT_WWW", "http://localhost/new_notice/");
 
-$site_url = "http://localhost/new_notice/";
+$site_url = "http://app.creativebrainacademy.org/";
 
 
 ?>
