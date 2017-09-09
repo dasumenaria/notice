@@ -118,8 +118,7 @@ $(document).ready(function() {
 	});
 
 	$(".user2").live("change",function()
-	{
-		 			    
+	{	
 		var sb=$(this).val();
 		var t=$(".user").val();
 		var s=$(".user1").val();
