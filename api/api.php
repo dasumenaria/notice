@@ -2903,7 +2903,7 @@ if ($std_nm->rowCount() != 0) {
 	
 	}
 //-- Leave Action  // Push  // Notification
-	public function leaveAction() 
+	public function leaveAction()
 	{
 		global $link;
 		include_once("common/global.inc.php");
@@ -5064,6 +5064,31 @@ public function ChangePassword()
 			$this->response($this->json($error), 200);	
 		}
 	}
+	//--WorkReport
+	public function WorkReport() 
+	{
+		global $link;
+		include_once("common/global.inc.php");
+		if ($this->get_request_method() != "POST") {
+            $this->response('', 406);
+        }
+		//Insert
+			$user_id=$this->_request['user_id'];
+			$field=$this->_request['field'];/// YMD
+			$description=$this->_request['description'];/// YMD
+			$remarks=$this->_request['remarks'];
+ 			 
+			$sql_insert = $this->db->prepare("INSERT into work_report(user_id,field,description,remarks)VALUES(:user_id,:field,:description,:remarks)");
+			$sql_insert->bindParam(":user_id", $user_id, PDO::PARAM_STR);
+			$sql_insert->bindParam(":field", $field, PDO::PARAM_STR);
+			$sql_insert->bindParam(":description", $description, PDO::PARAM_STR);
+			$sql_insert->bindParam(":remarks", $remarks, PDO::PARAM_STR);
+			$sql_insert->execute();	
+			$insert_id = $this->db->lastInsertId();
+			$success = array('status'=> true, "Error" =>"" , 'Responce' => "Successfully Submitted");
+			$this->response($this->json($success), 200);
+	}
+	
 ///////////////////////////////////////		
     /*
      *  Encode array into JSON
