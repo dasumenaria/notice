@@ -2575,14 +2575,16 @@ public function fetch_syllabus() {
 			{//Insert
 				$appoint_to=$this->_request['appoint_to'];
 				$appoint_date=$this->_request['appoint_date'];/// YMD
+				$mobile_no=$this->_request['mobile_no'];/// YMD
 				$appoint_date_cnv=date('Y-m-d', strtotime($appoint_date));
 				$appoint_time=$this->_request['appoint_time'];
 				$reason=$this->_request['reason'];
 				$student_id=$this->_request['student_id'];
 				$name=$this->_request['name'];
 				 
-				$sql_insert = $this->db->prepare("INSERT into appointment(appoint_to,appoint_date,appoint_time,reason,student_id,name)VALUES(:appoint_to,:appoint_date,:appoint_time,:reason,:student_id,:name)");
+				$sql_insert = $this->db->prepare("INSERT into appointment(appoint_to,appoint_date,appoint_time,reason,student_id,name,mobile_no)VALUES(:appoint_to,:appoint_date,:appoint_time,:reason,:student_id,:name,:mobile_no)");
 				$sql_insert->bindParam(":appoint_to", $appoint_to, PDO::PARAM_STR);
+				$sql_insert->bindParam(":mobile_no", $mobile_no, PDO::PARAM_STR);
 				$sql_insert->bindParam(":appoint_date", $appoint_date_cnv, PDO::PARAM_STR);
 				$sql_insert->bindParam(":appoint_time", $appoint_time, PDO::PARAM_STR);
 				$sql_insert->bindParam(":reason", $reason, PDO::PARAM_STR);
@@ -4933,6 +4935,134 @@ public function ChangePassword()
 				$error = array('status' => false, "Error" => "Sorry, Please update new version of App.");
 				$this->response($this->json($error), 200);
 			}
+	}
+	//-- Banned Student
+	public function BannedStudents() 
+	{
+		global $link;
+		include_once("common/global.inc.php");
+		if ($this->get_request_method() != "POST") {
+            $this->response('', 406);
+        }
+		if(isset($this->_request['response_type']))
+		{
+			$response_type=$this->_request['response_type'];
+			//-- Response Type = 1 Insert  2 Fetch
+			if($response_type==1)
+			{//Insert
+				$user_id=$this->_request['user_id'];
+				$class_id=$this->_request['class_id'];/// YMD
+				$section_id=$this->_request['section_id'];/// YMD
+ 				$student_id=$this->_request['student_id'];
+				$reason=$this->_request['reason'];
+				$banned_facility=$this->_request['banned_facility'];
+ 				 
+				$sql_insert = $this->db->prepare("INSERT into banned_students(user_id,class_id,section_id,reason,student_id,banned_facility)VALUES(:user_id,:class_id,:section_id,:reason,:student_id,:banned_facility)");
+				$sql_insert->bindParam(":user_id", $user_id, PDO::PARAM_STR);
+				$sql_insert->bindParam(":class_id", $class_id, PDO::PARAM_STR);
+				$sql_insert->bindParam(":section_id", $section_id, PDO::PARAM_STR);
+				$sql_insert->bindParam(":reason", $reason, PDO::PARAM_STR);
+				$sql_insert->bindParam(":student_id", $student_id, PDO::PARAM_STR);
+				$sql_insert->bindParam(":banned_facility", $banned_facility, PDO::PARAM_STR);
+				$sql_insert->execute();	
+				$insert_id = $this->db->lastInsertId();
+ 				//--
+ 					$std_nm = $this->db->prepare("SELECT `device_token`,`notification_key`,`role_id` FROM `login` where id='".$student_id."'");
+					$std_nm->execute();
+					$ftc_nm= $std_nm->fetch(PDO::FETCH_ASSOC);
+					$device_token = $ftc_nm['device_token'];
+					$notification_key = $ftc_nm['notification_key'];
+					$role_id = $ftc_nm['role_id'];
+					
+					$message='Your are banned.';
+					$title='Banned';
+					$submitted_by=$user_id;
+					$user_id=$student_id;
+					$date=date("M d Y");
+					$time=date("h:i A");
+					
+ 					$msg = array
+					(
+						'title' => $title,
+						'message' 	=> $message,
+						'button_text'	=> 'View',
+						'link'	=> 'notice://banned?id='.$insert_id,
+						'notification_id'	=> $insert_id,
+					);
+					$url = 'https://fcm.googleapis.com/fcm/send';
+					$fields = array
+					(
+						'registration_ids' 	=> array($device_token),
+						'data'			=> $msg
+					);
+					$headers = array
+					(
+						'Authorization: key=' .$notification_key,
+						'Content-Type: application/json'
+					);
+					//--- NOTIFICATIO INSERT
+						$NOTY_insert = $this->db->prepare("INSERT into notification(title,message,user_id,submitted_by,date,time,role_id)VALUES(:title,:message,:user_id,:submitted_by,:date,:time,:role_id)");
+						$NOTY_insert->bindParam(":title", $title, PDO::PARAM_STR);
+						$NOTY_insert->bindParam(":message", $message, PDO::PARAM_STR);
+						$NOTY_insert->bindParam(":user_id", $user_id, PDO::PARAM_STR);
+						$NOTY_insert->bindParam(":submitted_by", $submitted_by, PDO::PARAM_STR);
+						$NOTY_insert->bindParam(":time", $time, PDO::PARAM_STR);
+						$NOTY_insert->bindParam(":date", $date, PDO::PARAM_STR);
+						$NOTY_insert->bindParam(":role_id", $role_id, PDO::PARAM_STR);
+						$NOTY_insert->execute();	
+					//-- END
+						json_encode($fields);
+						$ch = curl_init();
+						curl_setopt($ch, CURLOPT_URL, $url);
+						curl_setopt($ch, CURLOPT_POST, true);
+						curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+						curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+						curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+						curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+						curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+						$result = curl_exec($ch);
+						curl_close($ch);
+				//--
+ 
+				$success = array('status'=> true, "Error" =>"" , 'Responce' => "Student successfully Banned");
+                $this->response($this->json($success), 200);
+			}
+			
+			else if($response_type==2)
+			{//Fetch
+				$sql_fetch = $this->db->prepare("SELECT * FROM banned_students order by `id` DESC");
+ 				$sql_fetch->execute();
+				 if ($sql_fetch->rowCount() != 0) {  
+				 	$x=0;   
+					while($row_gp = $sql_fetch->fetch(PDO::FETCH_ASSOC)){
+						foreach($row_gp as $key=>$valye)	
+						{
+							$string_insert[$x][$key]=$row_gp[$key];
+						}
+						$x++;
+					}
+  					$success = array('status' => true , "Error" => '', 'Responce' => $string_insert);
+					$this->response($this->json($success), 200);
+				} 
+				else {
+					
+					$error = array('status' => false , "Error" => "No data found", 'Responce' => '');
+					$this->response($this->json($error), 200);
+				}				
+				
+			}
+			else
+			{// INvalid
+				$error = array('status' => false , "Error" => "Invalid Response Type", 'Responce' => '');
+				$this->response($this->json($error), 200);	
+			}
+			
+		}
+		else
+		{
+			$error = array('status' => false , "Error" => "Please Provide Response Type to Get Data", 'Responce' => '');
+			$this->response($this->json($error), 200);	
+		}
 	}
 ///////////////////////////////////////		
     /*
