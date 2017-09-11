@@ -5022,6 +5022,11 @@ public function ChangePassword()
 						curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
 						$result = curl_exec($ch);
 						curl_close($ch);
+						
+ $class_tercher = $this->db->prepare("SELECT `user_name`  FROM `faculty_login` WHERE  `id`  = '".$row_gp['user_id']."'");
+ $class_terche->execute();
+				 $ftcc = $class_terche->fetch(PDO::FETCH_ASSOC);
+				 $Tuser_name=$ftcc['user_name'];
 				//--
  
 				$success = array('status'=> true, "Error" =>"" , 'Responce' => "Student successfully Banned");
