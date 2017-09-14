@@ -1050,4 +1050,114 @@ if($function_name=='notice')
 			}
 	}
 }
+
+if($function_name=='create_videos_notifys') 
+{
+ 	$update_id=$_GET['id'];
+	$msgftc = mysql_query("SELECT * FROM `videos` where id='$update_id'");
+	$ftc_nmg= mysql_fetch_array($msgftc);
+	$up_id = $ftc_nmg['id'];
+	$user_id = $ftc_nmg['user_id'];
+	$title = $ftc_nmg['title'];
+	$message = $ftc_nmg['description']; 
+	  
+		$std_nm = mysql_query("SELECT `device_token`,`notification_key`,`role_id`,`id` FROM `faculty_login` where role_id='4'");
+		while($ftc_nm= mysql_fetch_array($std_nm))
+		{
+			$device_token = $ftc_nm['device_token'];
+			$notification_key = $ftc_nm['notification_key'];
+			$role_id = $ftc_nm['role_id'];
+			$id = $ftc_nm['id'];
+			$submitted_by=$user_id;
+			$user_id=$id;
+			$date=date("M d Y");
+			$time=date("h:i A");
+			 
+			$msg = array
+			(
+				'title' => $title,
+				'message' 	=> $message,
+				'button_text'	=> 'View',
+				'link'	=> 'notice://video?id='.$up_id,
+				'notification_id'	=> $up_id,
+			);
+			$url = 'https://fcm.googleapis.com/fcm/send';
+			$fields = array
+			(
+				'registration_ids' 	=> array($device_token),
+				'data'			=> $msg
+			);
+			$headers = array
+			(
+				'Authorization: key=' .$notification_key,
+				'Content-Type: application/json'
+			);
+			$link='notice://video?id='.$up_id;
+				//--- NOTIFICATIO INSERT
+		$NOTY_insert = mysql_query("INSERT into notification(title,message,user_id,submitted_by,date,time,role_id,link)VALUES('$title','$message','$user_id','$submitted_by','$date','$time','$role_id','$link')");
+				//-- END
+					json_encode($fields);
+					$ch = curl_init();
+					curl_setopt($ch, CURLOPT_URL, $url);
+					curl_setopt($ch, CURLOPT_POST, true);
+					curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+					curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+					curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+					curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+					curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+					$result = curl_exec($ch);
+					curl_close($ch);
+			//--	
+		}
+		//---  Student
+		$std_nm1 = mysql_query("SELECT `device_token`,`notification_key`,`role_id`,`id` FROM `login` where role_id='5' "); 
+		while($ftc_nm1= mysql_fetch_array($std_nm1))
+		{
+			$device_token = $ftc_nm1['device_token'];
+			$notification_key = $ftc_nm1['notification_key'];
+			$role_id = $ftc_nm1['role_id'];
+			$id = $ftc_nm1['id'];
+			$submitted_by=$login_id;
+			$user_id=$id;
+			$date=date("M d Y");
+			$time=date("h:i A");
+			 
+			$msg = array
+			(
+				'title' => $title,
+				'message' 	=> $message,
+				'button_text'	=> 'View',
+				'link'	=> 'notice://video?id='.$up_id,
+				'notification_id'	=> $up_id,
+			);
+			$url = 'https://fcm.googleapis.com/fcm/send';
+			$fields = array
+			(
+				'registration_ids' 	=> array($device_token),
+				'data'			=> $msg
+			);
+			$headers = array
+			(
+				'Authorization: key=' .$notification_key,
+				'Content-Type: application/json'
+			);
+			$link='notice://video?id='.$up_id;
+					//--- NOTIFICATIO INSERT
+			$NOTY_insert = mysql_query("INSERT into notification(title,message,user_id,submitted_by,date,time,role_id,link)VALUES('$title','$message','$user_id','$submitted_by','$date','$time','$role_id','$link')");
+				//-- END
+					json_encode($fields);
+					$ch = curl_init();
+					curl_setopt($ch, CURLOPT_URL, $url);
+					curl_setopt($ch, CURLOPT_POST, true);
+					curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+					curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+					curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+					curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+					curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+					$result = curl_exec($ch);
+					curl_close($ch);
+			//--	
+		}
+ 		 
+ }
 ?>

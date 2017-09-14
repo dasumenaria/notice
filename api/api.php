@@ -5022,11 +5022,6 @@ public function ChangePassword()
 						curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
 						$result = curl_exec($ch);
 						curl_close($ch);
-						
- $class_tercher = $this->db->prepare("SELECT `user_name`  FROM `faculty_login` WHERE  `id`  = '".$row_gp['user_id']."'");
- $class_terche->execute();
-				 $ftcc = $class_terche->fetch(PDO::FETCH_ASSOC);
-				 $Tuser_name=$ftcc['user_name'];
 				//--
  
 				$success = array('status'=> true, "Error" =>"" , 'Responce' => "Student successfully Banned");
@@ -5042,11 +5037,36 @@ public function ChangePassword()
 					while($row_gp = $sql_fetch->fetch(PDO::FETCH_ASSOC)){
 						foreach($row_gp as $key=>$valye)	
 						{
-							$string_insert[$x][$key]=$row_gp[$key];
+$sql_stds = $this->db->prepare("SELECT `class_name` FROM master_class WHERE id='".$row_gp['class_id']."'");
+					$sql_stds->execute();
+					$stds = $sql_stds->fetch(PDO::FETCH_ASSOC);
+					$class_name=$stds['class_name'];
+
+$sql_std1 = $this->db->prepare("SELECT `section_name` FROM master_section WHERE id='".$row_gp['section_id']."'");
+			$sql_std1->execute();
+			$std1 = $sql_std1->fetch(PDO::FETCH_ASSOC);
+			$section_name=$std1['section_name'];
+
+$std_nm = $this->db->prepare("SELECT `name` FROM `login` where id='".$row_gp['student_id']."'");
+						$std_nm->execute();
+						$ftc_nm= $std_nm->fetch(PDO::FETCH_ASSOC);
+						$student_name= $ftc_nm['name'];
+
+ $class_terchera = $this->db->prepare("SELECT `user_name`  FROM `faculty_login` WHERE  `id`  = '".$row_gp['user_id']."'");
+ $class_terchera->execute();
+				 $ftcc = $class_terchera->fetch(PDO::FETCH_ASSOC);
+				 $Tuser_name=$ftcc['user_name'];
+
+$string_insert[$x][$key]=$row_gp[$key];
+$string_insert[$x]['class_name']=$class_name;
+$string_insert[$x]['section_name']=$section_name;
+$string_insert[$x]['student_name']=$student_name;
+$string_insert[$x]['teacher_name']=$Tuser_name;
 						}
 						$x++;
 					}
-  					$success = array('status' => true , "Error" => '', 'Responce' => $string_insert);
+					  
+					$success = array('status' => true , "Error" => '', 'Responce' => $string_insert);
 					$this->response($this->json($success), 200);
 				} 
 				else {
@@ -5093,7 +5113,34 @@ public function ChangePassword()
 			$success = array('status'=> true, "Error" =>"" , 'Responce' => "Successfully Submitted");
 			$this->response($this->json($success), 200);
 	}
-	
+//--
+    public function VideosList() 
+	{
+		global $link;
+		include_once("common/global.inc.php");
+		if ($this->get_request_method() != "POST") {
+            $this->response('', 406);
+        }
+		$sql_fetch = $this->db->prepare("SELECT * FROM videos order by `id` DESC");
+		$sql_fetch->execute();
+		 if ($sql_fetch->rowCount() != 0) {  
+			$x=0;   
+			while($row_gp = $sql_fetch->fetch(PDO::FETCH_ASSOC)){
+				foreach($row_gp as $key=>$valye)	
+				{
+					$string_insert[$x][$key]=$row_gp[$key];
+				}
+				$x++;
+			}
+			$success = array('status' => true , "Error" => '', 'Responce' => $string_insert);
+			$this->response($this->json($success), 200);
+		} 
+		else {
+			
+			$error = array('status' => false , "Error" => "No data found", 'Responce' => '');
+			$this->response($this->json($error), 200);
+		}	
+	}
 ///////////////////////////////////////		
     /*
      *  Encode array into JSON
