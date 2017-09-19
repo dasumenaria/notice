@@ -3656,7 +3656,7 @@ if(!empty($row_gp ['pic'])){
 				 	$x=0;   
 					while($row_gp = $sql_fetch->fetch(PDO::FETCH_ASSOC)){
 
-						     $student_id = $row_gp['student_id'];
+						    $student_id = $row_gp['student_id'];
 							$sql_std = $this->db->prepare("SELECT `name` FROM login WHERE id='".$student_id."'");
 							$sql_std->execute();
 							$std = $sql_std->fetch(PDO::FETCH_ASSOC);
@@ -3672,11 +3672,16 @@ if(!empty($row_gp ['pic'])){
 							$std1 = $sql_std1->fetch(PDO::FETCH_ASSOC);
 							$section_name=$std1['section_name'];
 $user_id=$row_gp['login_id'];
-							$sub_sql1 = $this->db->prepare("SELECT `user_name` FROM faculty_login where id='".$user_id."'");
+							$sub_sql1 = $this->db->prepare("SELECT `user_name`,`image` FROM faculty_login where id='".$user_id."'");
 							$sub_sql1->execute();
 							$sub_sqls1= $sub_sql1->fetch(PDO::FETCH_ASSOC);
 							$user_name = $sub_sqls1['user_name'];
-
+							$image = $sub_sqls1['image'];
+							$teacher_image='';
+							if(!empty($image))
+							{
+								$teacher_image=$site_url.'faculty/'.$image;
+							}
 
 						foreach($row_gp as $key=>$valye)	
 						{
@@ -3684,7 +3689,9 @@ $user_id=$row_gp['login_id'];
 						}
 						$string_insert[$x]['class_name']=$class_name;
 						$string_insert[$x]['section_name']=$section_name;
-						$string_insert[$x]['student_name']=$std_name;$string_insert[$x]['teacher_name']=$user_name;
+						$string_insert[$x]['student_name']=$std_name;
+						$string_insert[$x]['teacher_name']=$user_name;
+						$string_insert[$x]['teacher_image']=$teacher_image;
 						$x++;
 					} 
 					 
