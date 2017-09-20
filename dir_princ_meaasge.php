@@ -370,18 +370,17 @@ span {
 </body>
  
 <?php footer();?>
-
+<script src="assets/global/plugins/jquery.min.js" type="text/javascript"></script>
 <script>
 <?php if($update_id>0){?>
-		var update_id = <?php echo $update_id; ?>;
-		$.ajax({
-			url: "notification_page.php?function_name=principle_director_message&id="+update_id,
-			type: "POST",
-			success: function(data)
-			{   
- 			}
-		});
-	 
+	var update_id = <?php echo $update_id; ?>;
+	$.ajax({
+		url: "notification_page.php?function_name=principle_director_message&id="+update_id,
+		type: "POST",
+		success: function(data)
+		{
+		}
+	});
 <?php }?>
 
 
