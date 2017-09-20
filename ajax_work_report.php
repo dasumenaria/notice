@@ -4,7 +4,7 @@ include("database.php");
   	if((!empty($faculty_id))){ ?>
  
 					<div class="table-responsive">
-					 <a style="padding: 3px 15px; background-color:rgba(218, 73, 73, 0.74); color:#FFF" href="work_report_excel.php" target="blank"><strong>Excel</strong></a><br>
+					 <!--a style="padding: 3px 15px; background-color:rgba(218, 73, 73, 0.74); color:#FFF" href="work_report_excel.php" target="blank"><strong>Excel</strong></a--><br>
 						<table class="table table-bordered">
 							<thead>
 								<tr>
