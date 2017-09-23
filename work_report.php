@@ -37,11 +37,11 @@
 									<select class="form-control user" required name="class_id" >
 									<option value="">---Select teacher---</option>
 								    <?php 
-									$query=mysql_query("select `name`,`id` from `faculty_login` order by `name`");
+									$query=mysql_query("select `user_name`,`id` from `faculty_login` order by `user_name`");
 									while($fetch=mysql_fetch_array($query))
 									{$i++;
 										$fac_id=$fetch['id'];
-										$fac_name=$fetch['name'];
+										$fac_name=$fetch['user_name'];
 									?>
 									<option value="<?php echo $fac_id; ?>"><?php echo $fac_name; ?></option>
 									<?php } ?>

@@ -5128,6 +5128,7 @@ $string_insert[$x]['teacher_name']=$Tuser_name;
 		if ($this->get_request_method() != "POST") {
             $this->response('', 406);
         }
+		
 		$sql_fetch = $this->db->prepare("SELECT * FROM videos order by `id` DESC");
 		$sql_fetch->execute();
 		 if ($sql_fetch->rowCount() != 0) {  
@@ -5148,6 +5149,92 @@ $string_insert[$x]['teacher_name']=$Tuser_name;
 			$this->response($this->json($error), 200);
 		}	
 	}
+//--
+	public function PollList() 
+	{
+		global $link;
+		include_once("common/global.inc.php");
+		if ($this->get_request_method() != "POST") {
+			$this->response('', 406);
+		}
+		$user_id=$this->_request['user_id'];
+		$role_id=$this->_request['role_id'];
+		$sql_fetch = $this->db->prepare("SELECT * FROM poll where `flag`='0' order by `id` DESC Limit 1");
+		$sql_fetch->execute();
+		if($sql_fetch->rowCount() != 0) 
+		{ 
+			$row_gp = $sql_fetch->fetch(PDO::FETCH_ASSOC);
+			$poll_id=$row_gp['id'];
+			$question=$row_gp['question'];
+			//--- USER_check
+			
+			$USER_check = $this->db->prepare("SELECT * FROM poll_feedback where `user_id`='$user_id' && `role_id`='$role_id' && `poll_id`='$poll_id'");
+			$USER_check->execute();
+			if($USER_check->rowCount() == 0) 
+			{ 
+			
+				$image='';
+				if(!empty($row_gp['image'])){
+					$image= $site_url."poll/".$row_gp['image'];
+				}
+			
+				$option = $this->db->prepare("SELECT * FROM poll_option where `poll_id` ='$poll_id'");
+				$option->execute();
+				$string_insert=array();
+				if ($option->rowCount() != 0) {  
+					$x=0;   
+					while($row_gps = $option->fetch(PDO::FETCH_ASSOC)){
+						foreach($row_gps as $key=>$valye)	
+						{
+							$string_insert[$x][$key]=$row_gps[$key];
+						}
+						$x++;
+					}
+					
+				}
+				$results=array('id'=>$poll_id,'question'=>$question,'image'=>$image,"options"=> $string_insert);
+				$success = array('status' => true , "Error" => '', 'Responce' => $results);
+				$this->response($this->json($success), 200);
+			}
+			else 
+			{			
+				$error = array('status' => false , "Error" => "No data found", 'Responce' => '');
+				$this->response($this->json($error), 200);
+			}
+		}
+		else {
+			
+			$error = array('status' => false , "Error" => "No data found", 'Responce' => '');
+			$this->response($this->json($error), 200);
+		}	
+	}
+	//--Poll Feedback
+	public function PollFeedback() 
+	{
+		global $link;
+		include_once("common/global.inc.php");
+		if ($this->get_request_method() != "POST") {
+            $this->response('', 406);
+        }
+		//Insert
+			$user_id=$this->_request['user_id'];
+			$role_id=$this->_request['role_id'];
+			$poll_id=$this->_request['poll_id'];
+			@$feedback=$this->_request['feedback'];/// YMD
+			@$suggestion=$this->_request['suggestion'];/// YMD
+   			 
+			$sql_insert = $this->db->prepare("INSERT into poll_feedback(user_id,role_id,poll_id,feedback,suggestion)VALUES(:user_id,:role_id,:poll_id,:feedback,:suggestion)");
+			$sql_insert->bindParam(":user_id", $user_id, PDO::PARAM_STR);
+			$sql_insert->bindParam(":role_id", $role_id, PDO::PARAM_STR);
+			$sql_insert->bindParam(":poll_id", $poll_id, PDO::PARAM_STR);
+			$sql_insert->bindParam(":feedback", $feedback, PDO::PARAM_STR);
+			$sql_insert->bindParam(":suggestion", $suggestion, PDO::PARAM_STR);
+			$sql_insert->execute();	
+			$insert_id = $this->db->lastInsertId();
+			$success = array('status'=> true, "Error" =>"" , 'Responce' => "Successfully Submitted");
+			$this->response($this->json($success), 200);
+	}
+//--
 ///////////////////////////////////////		
     /*
      *  Encode array into JSON

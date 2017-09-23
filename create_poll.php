@@ -32,7 +32,9 @@ if(isset($_POST['submit']))
 			$target=$target.basename($random.$file_name.'.'.$filedata[1]);
 			move_uploaded_file($file_tmp_name,$target);
 			$item_image=$random.$file_name.'.'.$filedata[1];
-		}else{
+		}
+		else
+		{
 			if(!empty($polls_id)){
 				$sts=mysql_query("select * from `poll` where `id`='$polls_id'");
 				$fts=mysql_fetch_array($sts);
@@ -43,16 +45,19 @@ if(isset($_POST['submit']))
 			}
 		}
 		
-	if(empty($polls_id)){
-	mysql_query("insert into `poll` SET `user_id`='$user_id',`question`='$poll',`image`='$item_image'");
-	$poll_id=mysql_insert_id();
-	
-	foreach($poll_options as $poll_option){
+	if(empty($polls_id))
+	{
+		mysql_query("insert into `poll` SET `user_id`='$user_id',`question`='$poll',`image`='$item_image'");
+		$poll_id=mysql_insert_id();
 		
-		mysql_query("insert into `poll_option` SET `poll_id`='$poll_id',`user_id`='$user_id',`poll_option`='$poll_option'");
-		
+		foreach($poll_options as $poll_option){
+			
+			mysql_query("insert into `poll_option` SET `poll_id`='$poll_id',`user_id`='$user_id',`poll_option`='$poll_option'");
+			
+		}
 	}
-	}else if(!empty($polls_id)){
+	else if(!empty($polls_id))
+	{
 		mysql_query("update `poll` SET `user_id`='$user_id',`question`='$poll',`image`='$item_image' where `id`='$polls_id'");
 		
 		mysql_query("delete from `poll_option` where `poll_id`='$polls_id'");
@@ -60,11 +65,8 @@ if(isset($_POST['submit']))
 		{
 			mysql_query("insert into `poll_option` SET `poll_id`='$polls_id',`user_id`='$user_id',`poll_option`='$poll_option'");
 		}
-		
-		
 	}
-	header("location:create_poll.php");
- 	
+	$insert_id=mysql_insert_id();  
 }
 ?>
 <html>
@@ -206,11 +208,11 @@ if(isset($_POST['submit']))
 					<thead>
 						<tr style="background:#F5F5F5">
 							<th>S.No.</th>
-							<th>Poll Question</th>
+							<th >Poll Question</th>
 							<th>Image</th>
 							<th>Created By</th>
 							<th>Created On</th>
-							<th style="text-align:center">Action</th>
+							<th style="text-align:center" width="14%">Action</th>
 						</tr>
 					</thead>
 				 <?php
@@ -321,6 +323,16 @@ if(isset($_POST['submit']))
 <?php footer(); ?>
 <script src="assets/global/plugins/jquery.min.js" type="text/javascript"></script>
 <script>
+<?php if($insert_id>0){ ?>
+var update_id = <?php echo $insert_id; ?>;
+		$.ajax({
+			url: "notification_page.php?function_name=create_poll_notifys&id="+update_id,
+			type: "POST",
+			success: function(data)
+			{
+ 			}
+		});
+<?php } ?>
 $(document).ready(function() {
 	$('table').on('click', '.AddNew', function(){ 
   	//$('.AddNew').click(function(){  
