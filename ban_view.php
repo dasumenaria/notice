@@ -1,7 +1,11 @@
 <?php
- include("index_layout.php");
- include("database.php");
- 
+include("index_layout.php");
+include("database.php");
+if(isset($_POST['sub_del']))
+{
+	$delet_bus=$_POST['delet_bus'];
+ 	mysql_query("update `banned_students` SET `flag`='1' where id='$delet_bus'" );
+}
   ?> 
 <html>
 <head>

@@ -1268,4 +1268,124 @@ if($function_name=='create_poll_notifys')
 			//--	
 		}
  }
+ 
+if($function_name=='create_achivement_notify') 
+{
+	$update_id=$_GET['id'];
+	$notice_x_id=mysql_query("select * from achivements where id='$update_id'");		
+	$ftc_notice=mysql_fetch_array($notice_x_id);
+	$Nid=$ftc_notice['id'];	 
+	$student_id=$ftc_notice['student_id'];	 
+	$category_id=$ftc_notice['category_id'];
+	$login_id=$ftc_notice['login_id'];	
+	$achivement=$ftc_notice['achivement'];	
+	$query=mysql_query("select `name` from `achivements_category` where id='".$category_id."'"); 
+	$fetch=mysql_fetch_array($query);
+	$cname=$fetch['name'];	
+	 
+	$title=$cname;
+	$description = $achivement;
+	$message=$description;
+ 	//----
+	$std_nm = mysql_query("SELECT `device_token`,`notification_key`,`role_id`,`id` FROM `faculty_login` where `device_token` !='' ");
+		while($ftc_nm= mysql_fetch_array($std_nm))
+		{
+			$device_token = $ftc_nm['device_token'];
+			$notification_key = $ftc_nm['notification_key'];
+			$role_id = $ftc_nm['role_id'];
+			$id = $ftc_nm['id'];
+			$submitted_by=$login_id;
+			$user_id=$id;
+			$date=date("M d Y");
+			$time=date("h:i A");
+			 
+			$msg = array
+			(
+				'title' => $title,
+				'message' 	=> $message,
+				'button_text'	=> 'View',
+				'link'	=> 'notice://achivement?id='.$category_id,
+				'notification_id'	=> $category_id,
+			);
+			$url = 'https://fcm.googleapis.com/fcm/send';
+			$fields = array
+			(
+				'registration_ids' 	=> array($device_token),
+				'data'			=> $msg
+			);
+			$headers = array
+			(
+				'Authorization: key=' .$notification_key,
+				'Content-Type: application/json'
+			);
+			$link='notice://achivement?id='.$category_id;
+				//--- NOTIFICATIO INSERT
+		$NOTY_insert = mysql_query("INSERT into notification(title,message,user_id,submitted_by,date,time,role_id,link)VALUES('$title','$message','$user_id','$submitted_by','$date','$time','$role_id','$link')");
+				//-- END
+					json_encode($fields);
+					$ch = curl_init();
+					curl_setopt($ch, CURLOPT_URL, $url);
+					curl_setopt($ch, CURLOPT_POST, true);
+					curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+					curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+					curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+					curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+					curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+					$result = curl_exec($ch);
+					curl_close($ch);
+			//--	
+		}
+		//---  Student
+		$std_nm1 = mysql_query("SELECT `device_token`,`notification_key`,`role_id`,`id` FROM `login` where role_id='5' && `device_token` !='' "); 
+		while($ftc_nm1= mysql_fetch_array($std_nm1))
+		{
+			$device_token = $ftc_nm1['device_token'];
+			$notification_key = $ftc_nm1['notification_key'];
+			$role_id = $ftc_nm1['role_id'];
+			$id = $ftc_nm1['id'];
+			$submitted_by=$login_id;
+			$user_id=$id;
+			$date=date("M d Y");
+			$time=date("h:i A");
+			 
+			$msg = array
+			(
+				'title' => $title,
+				'message' 	=> $message,
+				'button_text'	=> 'View',
+				'link'	=> 'notice://achivement?id='.$category_id,
+				'notification_id'	=> $category_id,
+			);
+			$url = 'https://fcm.googleapis.com/fcm/send';
+			$fields = array
+			(
+				'registration_ids' 	=> array($device_token),
+				'data'			=> $msg
+			);
+			$headers = array
+			(
+				'Authorization: key=' .$notification_key,
+				'Content-Type: application/json'
+			);
+			$link='notice://achivement?id='.$category_id;
+					//--- NOTIFICATIO INSERT
+			$NOTY_insert = mysql_query("INSERT into notification(title,message,user_id,submitted_by,date,time,role_id,link)VALUES('$title','$message','$user_id','$submitted_by','$date','$time','$role_id','$link')");
+				//-- END
+					json_encode($fields);
+					$ch = curl_init();
+					curl_setopt($ch, CURLOPT_URL, $url);
+					curl_setopt($ch, CURLOPT_POST, true);
+					curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+					curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+					curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+					curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+					curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+					$result = curl_exec($ch);
+					print_r($result);
+					curl_close($ch);
+			//--	
+		}
+	
+}
+
 ?>

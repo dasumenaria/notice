@@ -42,6 +42,9 @@ if(isset($_POST['sub_delete']))
 							Student Name
 						</th>
 						<th>
+							Category
+						</th>
+						<th>
 							Achivement
 						</th>
 						<th>
@@ -54,7 +57,7 @@ if(isset($_POST['sub_delete']))
 					</thead>
 					<tbody>
 						<?php 
-						$query2=mysql_query("select * from `achivements` order by id DESC limit 10"); 
+						$query2=mysql_query("select * from `achivements` order by id DESC "); 
 						$i=0;
 						while($fetch2=mysql_fetch_array($query2))
 						{
@@ -66,6 +69,11 @@ if(isset($_POST['sub_delete']))
 							$name=$fetch['name'];
 							$achivement=$fetch2['achivement'];
 							$rank=$fetch2['rank'];
+							
+							$category_id=$fetch2['category_id'];
+							$query=mysql_query("select `name` from `achivements_category` where id='".$category_id."'"); 
+							$fetch=mysql_fetch_array($query);
+							$cname=$fetch['name'];
 						?>
 						<tr class="odd gradeX">
 						<td>
@@ -73,6 +81,9 @@ if(isset($_POST['sub_delete']))
 						</td>
 						<td>
 							<?php echo $name?>
+						</td>
+						<td>
+							<?php echo $cname?>
 						</td>
 						<td>
 							<?php echo $achivement?>

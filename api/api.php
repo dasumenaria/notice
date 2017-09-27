@@ -4055,7 +4055,7 @@ $string_insert[$x]['time']=$time;
 							$this->response($this->json($success), 200); 
 				}
 	}
-public function AchiveMentData() 
+	public function AchiveMentData() 
 	{
 		include_once("common/global.inc.php");
         global $link;
@@ -4063,46 +4063,106 @@ public function AchiveMentData()
 		{
 			$this->response('', 406);
 		}
-			 
-		$note_sql = $this->db->prepare("SELECT * FROM achivements order by id DESC Limit 5");
-		$note_sql->execute();
-		if($note_sql->rowCount()>0)
-		{
-		    $resultArray=array();
-			$row_gp = $note_sql->fetchALL(PDO::FETCH_ASSOC);
-			 $x=0;
-			 foreach($row_gp as $key=>$valye)	
-			 {
+		$mainarray=array();
+		$categorys = $this->db->prepare("SELECT * FROM `achivements_category` order by `id` ASC ");
+		$categorys->execute();
+		$row_gpcategorys = $categorys->fetchALL(PDO::FETCH_ASSOC);
+		
+ 		foreach($row_gpcategorys as $keys=>$valyes)	
+ 		{ 
+			$cate_id=$valyes['id'];
+			$cname=$valyes['name'];
+			$string_insert=array();
+		   
+			$note_sql = $this->db->prepare("SELECT * FROM achivements where `category_id`='$cate_id' order by id DESC ");
+			$note_sql->execute();
+			if($note_sql->rowCount()>0)
+			{
+ 				$row_gp = $note_sql->fetchALL(PDO::FETCH_ASSOC);
+				 $x=0;
+				 foreach($row_gp as $key=>$valye)	
+				 {
 					$student_id=$valye['student_id'];
 					$sql_stds = $this->db->prepare("SELECT `name`,`image` FROM login WHERE id='".$student_id."'");
 					$sql_stds->execute();
 					$stds = $sql_stds->fetch(PDO::FETCH_ASSOC);
 					$name=$stds['name'];
 					$image=$stds['image'];
-				if(!empty($image)){
-				$FilePath = $site_url."user/".$image;
-				}else{
-				$FilePath = "";
-				}
-				
-				$curent_date=$valye['curent_date'];
-				$c_date=date('d-m-Y',strtotime($curent_date));
-				$string_insert[$key]=$row_gp[$key];
-				$string_insert[$x]['date']=$c_date;
-				$string_insert[$x]['student_name']=$name;
-				$string_insert[$x]['student_image']=$FilePath;
- 				  
-			 $x++;
-			 }
-			$result = array("achivements"=> $string_insert);
-			$success = array('status'=> true, "Error" => "",'responce' => $result);
-			$this->response($this->json($success), 200);   	
+					if(!empty($image)){
+					$FilePath = $site_url."user/".$image;
+					}else{
+					$FilePath = "";
+					}
+					
+					$curent_date=$valye['curent_date'];
+					$c_date=date('d-m-Y',strtotime($curent_date));
+					$string_insert[$key]=$row_gp[$key];
+					$string_insert[$x]['date']=$c_date;
+					$string_insert[$x]['student_name']=$name;
+					$string_insert[$x]['student_image']=$FilePath;
+					  
+				 $x++;
+				 }
+  			}
+			else{
+				$string_insert=[];
+			}  
+	
+ 			$mainarray[] = array('id'=>$cate_id, "name"=> $cname , 'data'=> $string_insert); 
+ 			unset($string_insert); 
 		}
-		else
+		$success = array('status'=> true, "Error" => "",'responce' => $mainarray);
+		$this->response($this->json($success), 200); 
+		 
+	}
+	public function CategorywiseAchiveMentData() 
+	{
+		include_once("common/global.inc.php");
+        global $link;
+		if ($this->get_request_method() != "POST") 
 		{
-			$success = array('status'=> false, "Error" => "No data found",'responce' =>'');
-			$this->response($this->json($success), 200); 
+			$this->response('', 406);
 		}
+		$category_ids = $this->_request['category_id'];
+		 
+			$string_insert=array();
+		   
+			$note_sql = $this->db->prepare("SELECT * FROM achivements where `category_id`='$category_ids' order by id DESC ");
+			$note_sql->execute();
+			if($note_sql->rowCount()>0)
+			{
+ 				$row_gp = $note_sql->fetchALL(PDO::FETCH_ASSOC);
+				 $x=0;
+				 foreach($row_gp as $key=>$valye)	
+				 {
+					$student_id=$valye['student_id'];
+					$sql_stds = $this->db->prepare("SELECT `name`,`image` FROM login WHERE id='".$student_id."'");
+					$sql_stds->execute();
+					$stds = $sql_stds->fetch(PDO::FETCH_ASSOC);
+					$name=$stds['name'];
+					$image=$stds['image'];
+					if(!empty($image)){
+					$FilePath = $site_url."user/".$image;
+					}else{
+					$FilePath = "";
+					}
+					
+					$curent_date=$valye['curent_date'];
+					$c_date=date('d-m-Y',strtotime($curent_date));
+					$string_insert[$key]=$row_gp[$key];
+					$string_insert[$x]['date']=$c_date;
+					$string_insert[$x]['student_name']=$name;
+					$string_insert[$x]['student_image']=$FilePath;
+					  
+				 $x++;
+				 }
+  			}
+			else{
+				$string_insert=[];
+			}  
+ 		$success = array('status'=> true, "Error" => "",'responce' => $string_insert);
+		$this->response($this->json($success), 200); 
+		 
 	}
 	public function SportMaster()
 	{
@@ -5037,7 +5097,7 @@ public function ChangePassword()
 			
 			else if($response_type==2)
 			{//Fetch
-				$sql_fetch = $this->db->prepare("SELECT * FROM banned_students order by `id` DESC");
+				$sql_fetch = $this->db->prepare("SELECT * FROM banned_students where `flag`=0 order by `id` DESC");
  				$sql_fetch->execute();
 				 if ($sql_fetch->rowCount() != 0) {  
 				 	$x=0;   
@@ -5121,6 +5181,20 @@ $string_insert[$x]['teacher_name']=$Tuser_name;
 			$this->response($this->json($success), 200);
 	}
 //--
+	public function IssueGreenCard() 
+	{
+		global $link;
+		include_once("common/global.inc.php");
+		if ($this->get_request_method() != "POST") {
+            $this->response('', 406);
+        }
+		//Insert
+		$updateid=$this->_request['id'];
+		$sql_insert = $this->db->prepare("update `banned_students` SET `flag`='1' where id='$updateid'");
+		$sql_insert->execute();	
+		$success = array('status'=> true, "Error" =>"" , 'Responce' => "Successfully Submitted");
+		$this->response($this->json($success), 200);
+	}
     public function VideosList() 
 	{
 		global $link;

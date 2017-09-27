@@ -10,15 +10,12 @@ if(isset($_POST['submit']))
 	$student_id=$_POST["student_id"];
 	$achivement=$_REQUEST["achivement"];
 	$rank=$_REQUEST["rank"];
+	$category_id=$_REQUEST["category_id"];
 	$date_current=date('Y-m-d');
 	 
-		$sql="insert into achivements(student_id,achivement,rank,curent_date)values('$student_id','$achivement','$rank','$date_current')";
-		 
+		$sql="insert into achivements(student_id,achivement,rank,curent_date,category_id,login_id)values('$student_id','$achivement','$rank','$date_current','$category_id','$session_id')";
 		$r=mysql_query($sql);
- 	  
-	ob_start();
-	echo "<meta http-equiv='refresh' content='0;url=achivements.php'>";
-	ob_flush();
+ 	 $eventid=mysql_insert_id();
 }
 
 	
@@ -48,6 +45,26 @@ if(isset($_POST['submit']))
 						 
                 <form  class="form-horizontal" id="form_sample_2"  role="form" method="post"> 
 					<div class="form-body">
+					
+					<div class="form-group">
+							<label class="control-label col-md-3">Select Category</label>
+							<div class="col-md-4">
+									<select class="form-control" required name="category_id" >
+									<option value="">---Select---</option>
+								    <?php 
+									$query=mysql_query("select * from `achivements_category` where flag='0' order by name ASC");
+									while($fetch=mysql_fetch_array($query))
+									{$i++;
+										$id=$fetch['id'];
+										$name=$fetch['name'];
+									?>
+									<option value="<?php echo $id; ?>"><?php echo $name; ?></option>
+									<?php } ?>
+									</select>
+								<span class="help-block">
+								Please select category</span>
+							</div>
+						</div>
 						<div class="form-group">
 							<label class="control-label col-md-3">Student Name</label>
 							<div class="col-md-4">
@@ -96,9 +113,26 @@ if(isset($_POST['submit']))
 					</div>
 			</div></div>
 </body>
-<?php footer(); ?>
+<?php  footer();?>			
+<script src="assets/global/plugins/jquery.min.js" type="text/javascript"></script>
+<script>
+<?php if($eventid>0){ ?>
+var update_id = <?php echo $eventid; ?>;
+alert(update_id);
+		$.ajax({
+			url: "notification_page.php?function_name=create_achivement_notify&id="+update_id,
+			type: "POST",
+			success: function(data)
+			{  alert(data); 
+ 			}
+		});
+<?php } ?>
+ 
+</script>
+
+
+	
 <?php scripts();?>
 
 </html>
  
-
