@@ -1,38 +1,39 @@
-<?php 
+<?php
 	include("database.php");
 	  $class_id=$_GET['pon'];
 	  $sect_id=$_GET['pon1'];
 	  $stdnt_id=$_GET['pon2'];
+	  $fac_id=$_GET['pon3'];
+	  $date_from=$_GET['pon4'];
+	  $date_to=$_GET['pon5'];
 $qury='';
-if(!empty($class_id) && empty($sect_id) && empty($stdnt_id))
+if(!empty($class_id))
 {
-	$qury="`class_id` = '$class_id'";
+	$qury[]="`class_id` = '$class_id'";
 }
- 	if(empty($class_id) && !empty($sect_id) && empty($stdnt_id))
+ 	if(!empty($sect_id))
 {
-	$qury="`section_id` = '$sect_id'";
+	$qury[]="`section_id` = '$sect_id'";
 }
- 	if(empty($class_id) && empty($sect_id) && !empty($stdnt_id))
+ 	if(!empty($stdnt_id))
 {
-	$qury="`student_id` LIKE '%$stdnt_id%'";
+	$qury[]="`student_id` LIKE '%$stdnt_id%'";
 }
-	if(!empty($class_id) && !empty($sect_id) && empty($stdnt_id))
+	if((!empty($date_from)) && (!empty($date_to)))
 {
-	$qury="`class_id` = '$class_id' && `section_id` = '$sect_id'";
+	$org_from=date('Y-m-d', strtotime($date_from));
+	$org_to=date('Y-m-d', strtotime($date_to));
+	$qury[]="`submission_date` BETWEEN '$org_from' AND '$org_to'";
 }
-	if(empty($class_id) && !empty($sect_id) && !empty($stdnt_id))
+	if(!empty($fac_id))
 {
-	$qury="`section_id` = '$sect_id' && `student_id` LIKE '%$stdnt_id%'";
-}
-if(!empty($class_id) && empty($sect_id) && !empty($stdnt_id))
-{
-	$qury="`class_id` = '$class_id' && `student_id` LIKE '%$stdnt_id%'";
-}
-if(!empty($class_id) && !empty($sect_id) && !empty($stdnt_id))
-{
-	$qury="`class_id` = '$class_id' && `section_id` = '$sect_id' && `student_id` LIKE '%$stdnt_id%'";
-}
-$qury.=" && `flag`=0 ORDER by `submission_date` DESC";
+	$qury[]="`user_id` = '$fac_id'";
+} 
+	$qury2.=" && `flag`=0 ORDER by `submission_date` DESC";
+	$qst="select * from `assignment` where";
+	$query1=implode(" && ", $qury);
+	$query1;
+	$query=$qst.$query1.$qury2;
 ?>
 <form method="post">
  	 <table class="table table-striped table-hover table-bordered" id="sample_editable_1">
@@ -55,9 +56,9 @@ $qury.=" && `flag`=0 ORDER by `submission_date` DESC";
  
 		<?php
 							  
-	$query=mysql_query("select * from `assignment` where ".$qury."");
+	$queries=mysql_query($query);
 
-	while($fetch=mysql_fetch_array($query))
+	while($fetch=mysql_fetch_array($queries))
 		{
 			$id=$fetch['id'];
 			$student_id=$fetch['student_id'];

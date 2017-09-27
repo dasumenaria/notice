@@ -99,6 +99,50 @@ if(isset($_POST['delateall']))
 											</div>
 										</div>
 										</div>
+										<br>
+							<!----------------->
+	<div class="row">
+	<div class="col-md-4">
+		<div class="form-group"	>
+			<label class="col-md-3">Teacher</label>
+			<div class="col-md-3">
+				<select name="fac_id" id="fac_id" class="form-control select2me input-medium search_hw" placeholder="Select Class">
+				<option value=""></option>
+				<?php
+				$cls_ftcs=mysql_query("select * from `faculty_login`");		
+				 while($ftc_clss=mysql_fetch_array($cls_ftcs))
+				{
+				$fac_id=$ftc_clss['id'];
+				$fac_name=$ftc_clss['name'];
+				?>
+				<option value="<?php echo $fac_id;?>"><?php echo $fac_name;?></option>                              
+				<?php }?> 
+				</select>
+			</div>												 
+		</div>
+	</div>
+	<div class="col-md-4">
+		<div id="dt">	
+			<div class="form-group">
+				<label class="col-md-3">From</label>
+				<div class="col-md-3">
+					<input class="form-control form-control-inline input-medium date-picker search_hw" required placeholder="dd/mm/yyyy" type="text" data-date-format="dd-mm-yyyy" id="date_from" name="date_from">
+				</div>												 
+			</div>												 
+		</div>
+	</div>
+	<div class="col-md-4">
+		<div id="dt">
+			<div class="form-group">
+				<label class="col-md-3">To</label>
+				<div class="col-md-3">
+					<input class="form-control form-control-inline input-medium date-picker search_hw" required placeholder="dd/mm/yyyy" type="text" data-date-format="dd-mm-yyyy" id="date_to" name="date_to">
+				</div>												 
+			</div>												 
+		</div>
+	</div>
+	</div>
+										
                                         </form>
 										<div  id="vhw">
 										</div>
@@ -156,9 +200,11 @@ if(isset($_POST['delateall']))
 				var t=$("#cls_id").val();
  	 
 				var s=$("#sec_id").val();
-   
+				var u=$("#fac_id").val();
+				var v=$("#date_from").val();
+				var w=$("#date_to").val();
 				  $.ajax({
-					url: "ajax_view_homework.php?pon="+t+"&pon1="+s+"&pon2="+vh,
+					url: "ajax_view_homework.php?pon="+t+"&pon1="+s+"&pon2="+vh+"&pon3="+u+"&pon4="+v+"&pon5="+w,
 					}).done(function(response) {
 					$("#vhw").html(""+response+"");
 					 
