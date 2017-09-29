@@ -87,17 +87,12 @@ if((!empty($class_id)) && (!empty($sect_id))  && (!empty($sub_id))  && (empty($e
 					<select class="form-control user3" required name="exam_id">
 						<option value="">---Select Exam---</option>
 							<?php 
-							
 							$slt=mysql_query("select DISTINCT(exam_type_id) from `student_marks` where `class_id`='$class_id' && `section_id`='$sect_id' && `subject_id`='$sub_id'");
 							while($flt=mysql_fetch_array($slt)){
-								
 								$exam_type_id=$flt['exam_type_id'];
-								
 								$query2=mysql_query("select * from `master_exam` where `id`='$exam_type_id'"); 
 								$fetch2=mysql_fetch_array($query2);
-								
-									$exam_type=$fetch2['exam_type'];
-								
+								$exam_type=$fetch2['exam_type'];
 								?>
 								<option value="<?php echo $exam_type_id; ?>"><?php echo $exam_type; ?></option>
 							<?php } ?>

@@ -5308,6 +5308,40 @@ $string_insert[$x]['teacher_name']=$Tuser_name;
 			$success = array('status'=> true, "Error" =>"" , 'Responce' => "Successfully Submitted");
 			$this->response($this->json($success), 200);
 	}
+	public function AudiosList() 
+	{
+		global $link;
+		include_once("common/global.inc.php");
+		if ($this->get_request_method() != "POST") {
+            $this->response('', 406);
+        }
+		
+		$sql_fetch = $this->db->prepare("SELECT * FROM audio order by `id` DESC");
+		$sql_fetch->execute();
+		 if ($sql_fetch->rowCount() != 0) {  
+			$x=0;   
+			while($row_gp = $sql_fetch->fetch(PDO::FETCH_ASSOC)){
+				foreach($row_gp as $key=>$valye)	
+				{
+					$audio_url='';
+					if(!empty($row_login ['image'])){
+						$audio_url = $site_url."audio/".$row_gp['audio_name'];
+					} 
+						
+					$string_insert[$x][$key]=$row_gp[$key];
+					$string_insert[$x]['audio_url']=$audio_url;
+				}
+				$x++;
+			}
+			$success = array('status' => true , "Error" => '', 'Responce' => $string_insert);
+			$this->response($this->json($success), 200);
+		} 
+		else {
+			
+			$error = array('status' => false , "Error" => "No data found", 'Responce' => '');
+			$this->response($this->json($error), 200);
+		}	
+	}
 //--
 ///////////////////////////////////////		
     /*
