@@ -1,7 +1,32 @@
 <?php 
 session_start();
 include("database.php");
+$to=$_GET['to'];
+$from=$_GET['from'];
 $view_u=$_GET['view_u'];
+$qry='';
+if(!empty($from) && !empty($to))
+{
+	$from=date('Y-m-d',strtotime($from));
+	$to=date('Y-m-d',strtotime($to));
+	
+	$qry.="`curent_date` BETWEEN '".$from."' and '".$to."' && ";	
+}
+
+if(!empty($view_u))
+{  
+	if($view_u == 1) 
+	{
+		$qry.="";
+	}
+	else
+	{
+		$qry.=" (`role_id`='".$view_u."' || `role_id`='1' ) && ";
+	}
+}
+ 
+$qry.=" `flag`= 0  order by id Desc ";
+
   ?>
 	<div> <table class="table table-bordered table-hover">
 								<thead>
@@ -11,11 +36,13 @@ $view_u=$_GET['view_u'];
 									<th>Date from</th>
 									<th>Date To</th>
 									<th>Location</th>
+									<th>Image</th>
 									<th>Action</th>
 								</tr>
 								</thead>
 							  <?php
-			  $r1=mysql_query("select * from event where flag='0' and role_id='".$view_u."' order by id Desc ");		
+			 
+			  $r1=mysql_query("select * from event where ".$qry."");		
 					$i=0;
 					while($row1=mysql_fetch_array($r1))
 					{
@@ -33,6 +60,8 @@ $view_u=$_GET['view_u'];
 					$r2=mysql_query("select * from master_role where id='".$role_id."'");		
 					$fet=mysql_fetch_array($r2);
 					$role_name=$fet['role_name'];
+					$n_name='event/event';
+					$exact_folderName=$n_name.$id.'/';
 					?>
 					
 								<tbody>
@@ -53,70 +82,81 @@ $view_u=$_GET['view_u'];
 									<?php echo $location;?>
 									</td>
 									<td>
-									 <a class="btn btn-circle btn-blue btn-xs" style="color:#FFF; background-color:#06F" data-toggle="modal" href="#view<?php echo $id ;?>"  >
+									<img src="<?php echo $exact_folderName.$image;?>" height="30px" width="30px"/>
+									</td>
+									<td>
+									 <a class="btn blue btn-sm" data-toggle="modal" rel="tooltip" title="View Details" href="#view<?php echo $id ;?>"  >
 										<i class="fa fa-search"></i></a>
 										
-		<div class="modal fade" id="view<?php echo $id ;?>" tabindex="-1" aria-hidden="true" style="padding-top:35px">
-                <div class="modal-dialog modal-md">
-                    <div class="modal-content">
-                        <div class="modal-footer">
-                     <table class="table-condensed table-bordered" width="100%">
-					 <tr>
-									<th>#</th>
-									<th>Event Name</th>
-									<th>Date</th>
-									<th>Time</th>
-									</tr>
-					  <?php
-			  $event_details=mysql_query("select * from event_details where event_id='".$id."' order by id Desc");		
-					$l=0;
-					while($event_details1=mysql_fetch_array($event_details))
-					{
-					$l++;
-					$e_id=$event_details1['id'];
-					$name=$event_details1['name'];
-                    $time=$event_details1['time'];
-					$date=$event_details1['date'];
-					$x_date=date('d-m-Y', strtotime($date));
-					
-					?>
-					
-								<tbody>
-								<tr>
-									<td>
-							<?php echo $l;?>
-									</td>
-									<td>
-									<?php echo $name;?>
-									</td>
-									<td>
-									<?php echo $x_date;?>
-									</td>
-                                    <td>
-									<?php echo $time;?>
-									</td>
-									</tr>
-									</tbody>
-					 
-					<?php }?>
-					 </table>
-					 
-                        </div>
-                    </div>
-                <!-- /.modal-content -->
-                </div>
-        <!-- /.modal-dialog -->
-            </div>
+						<div class="modal fade" id="view<?php echo $id ;?>"  tabindex="-1" role="basic" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+											<h4 class="modal-title"><b>Details</b></h4>
+										</div>
+										<div class="modal-body">
+											<table class="table table-condensed table-bordered" width="100%">
+												<tr>
+												<th>#</th>
+												<th>Event Name</th>
+												<th>Date</th>
+												<th>Time</th>
+												</tr>
+												<?php
+												$event_details=mysql_query("select * from event_details where event_id='".$id."' order by id Desc");		
+												$l=0;
+												while($event_details1=mysql_fetch_array($event_details))
+												{
+												$l++;
+												$e_id=$event_details1['id'];
+												$name=$event_details1['name'];
+												$time=$event_details1['time'];
+												$date=$event_details1['date'];
+												$x_date=date('d-m-Y', strtotime($date));
+
+												?>
+
+												<tbody>
+												<tr>
+												<td>
+												<?php echo $l;?>
+												</td>
+												<td>
+												<?php echo $name;?>
+												</td>
+												<td>
+												<?php echo $x_date;?>
+												</td>
+												<td>
+												<?php echo $time;?>
+												</td>
+												</tr>
+												</tbody>
+
+												<?php }?>
+												</table> 
+										</div>
+										<div class="modal-footer">
+											 
+										</div>
+									</div>
+									<!-- /.modal-content -->
+								</div>
+								<!-- /.modal-dialog -->
+							</div>
+				
 										
+										
+		 						
 										
 										
                                         &nbsp;		
-                                        <a class="btn btn-circle btn-xs" style="color:#FFF; background-color:#FFB848" href="event_edit.php?id=<?php echo $id;?>">
+                                        <a class="btn yellow btn-sm" rel="tooltip" title="Edit Details" target="_blank" href="event_edit.php?id=<?php echo $id;?>">
 										<i class="fa fa-edit"></i></a>
                                         &nbsp;				
                                        
-<a class="btn btn-circle btn-xs" style="color:#FFF; background-color:#C30"
-  rel="tooltip" title="Delete"  data-toggle="modal" href="#delete<?php echo $id ;?>"><i class="fa fa-trash"></i></a>
+<a class="btn red btn-sm" rel="tooltip" title="Delete"  data-toggle="modal" href="#delete<?php echo $id ;?>"><i class="fa fa-trash"></i></a>
             <div class="modal fade" id="delete<?php echo $id ;?>" tabindex="-1" aria-hidden="true" style="padding-top:35px">
                 <div class="modal-dialog modal-md">
                     <div class="modal-content">

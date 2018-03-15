@@ -26,11 +26,7 @@ $em=strtoupper($emm);
 <body>
 	<div class="page-content-wrapper">
 		 <div class="page-content">
-			 
-			
-			 
-			 
-			 <style>
+<style>
 
 .circle-text:after {
     content: "";
@@ -66,7 +62,7 @@ $em=strtoupper($emm);
 
 		<div class="row" >
 			<div class="col-md-6 col-sm-6" >
-				<div class="portlet box">
+				<div class="portlet box blue">
 					<div class="portlet-title">
 						<div class="caption">
 						<i class="fa fa-calendar"></i>Academic calendar
@@ -221,9 +217,10 @@ $em=strtoupper($emm);
 								</div>
 								<div class="details">
 									<div class="number">
-										Inquiry
+										
 									</div>
 									<div class="desc">
+										Inquiry
 									</div>
 								</div>
 								<a class="more" href="view_inquiry.php">
@@ -238,9 +235,10 @@ $em=strtoupper($emm);
 								</div>
 								<div class="details">
 									<div class="number">
-										Notice
+										
 									</div>
 									<div class="desc">
+									Notice
 									</div>
 								</div>
 								<a class="more" href="view_notice.php">
@@ -260,9 +258,10 @@ $em=strtoupper($emm);
 									</div>
 									<div class="details">
 										<div class="number">
-											 Upcoming Events
+											 
 										</div>
 										<div class="desc">
+										Upcoming Events
 										</div>
 									</div>
 									<a class="more" href="dashboard_event.php">
@@ -278,10 +277,10 @@ $em=strtoupper($emm);
 									</div>
 									<div class="details">
 										<div class="number">
-											News
+											
 										</div>
 										<div class="desc">
-											
+											News
 										</div>
 									</div>
 									<a class="more" href="dashboard_news.php">
@@ -299,9 +298,10 @@ $em=strtoupper($emm);
                                 </div>
                                 <div class="details">
                                     <div class="number">
-                                        Appointment
+                                        
                                     </div>
                                     <div class="desc">
+										Appointment
                                     </div>
                                 </div>
                                 <a class="more" href="appointment.php?s=0">
@@ -317,9 +317,10 @@ $em=strtoupper($emm);
                                 </div>
                                 <div class="details">
                                     <div class="number">
-                                        Leave Note
+                                        
                                     </div>
                                     <div class="desc">
+									Leave Note
                                     </div>
                                 </div>
                                 <a class="more" href="leave_note.php?s=0">
@@ -335,8 +336,8 @@ $em=strtoupper($emm);
 	</div>
 	<div class="row ">
 		<div class="col-md-6 col-sm-6" >
-		<div class="portlet box">
-			<div class="portlet-title">
+		<div class="portlet box red-pink">
+			<div class="portlet-title ">
 				<div class="caption">
 					<i class="fa fa-bell-o"></i>Event
 				</div>
@@ -403,8 +404,8 @@ $em=strtoupper($emm);
 				</div>    
                 <!------------------------------------NEWS---------------------------------------------->
                 <div class="col-md-6 col-sm-6">
-					<div class="portlet box">
-						<div class="portlet-title">
+					<div class="portlet box green">
+						<div class="portlet-title ">
 							<div class="caption">
 								<i class="fa fa-bell-o"></i>News
 							</div>

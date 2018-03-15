@@ -42,7 +42,7 @@ if(isset($_POST['sub_del']))
 <div class="page-content">
 <div class="row">
     <div class="col-md-6">
-        <div class="portlet box">
+        <div class="portlet box blue">
             <div class="portlet-title">
                 <div class="caption">
                     <i class="fa fa-gift"></i>Subject & teacher Mapping
@@ -119,7 +119,7 @@ if(isset($_POST['sub_del']))
     </div>
 <!-------------------------- View------------>
 <div class="col-md-6">
-<div class="portlet box">
+<div class="portlet box blue">
 <div class="portlet-title">
 <div class="caption">
 <i class="fa fa-gift"></i>View Mapping

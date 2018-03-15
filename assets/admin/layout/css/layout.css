@@ -188,7 +188,7 @@ Page Header
 .page-header.navbar .top-menu .navbar-nav > li.dropdown {
   margin: 0px;
   padding: 0px 4px;
-  height: 43px;
+  height: 46px;
   display: inline-block;
 }
 .page-header.navbar .top-menu .navbar-nav > li.dropdown:last-child {
@@ -966,7 +966,7 @@ Page sidebar
   padding: 10px 15px;
   text-decoration: none;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 300;
 }
 .page-sidebar .page-sidebar-menu > li > a > i,
 .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li > a > i {
@@ -1241,7 +1241,7 @@ Page sidebar
 @media (min-width: 992px) {
   /* 992px */
   .page-sidebar {
-    width: 212px;
+    width: 235px;
     float: left;
     position: relative;
     margin-right: -100%;
@@ -1273,9 +1273,6 @@ Page sidebar
   }
   .page-sidebar-fixed .page-sidebar-menu > li.last {
     margin-bottom: 15px !important;
-  }
-  .page-sidebar-fixed .page-sidebar-menu .sub-menu {
-    height: auto !important;
   }
 
   /* Sidebar Closed */
@@ -2198,7 +2195,7 @@ Page content
 .page-content {
   margin-top: 0px;
   padding: 0px;
-  background-color: #FFFFFF;
+  background-color: #fff;
 }
 .page-container-bg-solid .page-content {
   background: #F1F3FA;
@@ -2215,7 +2212,7 @@ Page content
     width: 100%;
   }
   .page-content-wrapper .page-content {
-    margin-left: 212px;
+    margin-left: 235px;
     margin-top: 0px;
     min-height: 600px;
     padding: 25px 20px 10px 20px;

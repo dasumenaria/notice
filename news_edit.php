@@ -1,4 +1,4 @@
-\<?php
+<?php
  include("index_layout.php");
  include("database.php");
  $user=$_SESSION['category'];
@@ -20,30 +20,23 @@ if(isset($_POST['update_submit']))
 	$news_date=date('Y-m-d',strtotime($news_date1));
 	$curent_date=date("Y-m-d");
 	@$file_name=$_FILES["image"]["name"];
-	
+	$r=mysql_query("update `news` SET `title`='$news_title',`description`='$news_details',`date`='$news_date',`user_id`='$user_id',`category_id`='$category_id',`role_id`='$role_id' where id='".$get_id."'" );
 	$n_name='news';
 	$folderName2=$n_name.$get_id;
 	if(!empty($file_name))
-					{
-					@$file_name=$_FILES["image"]["name"];
-					$file_tmp_name=$_FILES['image']['tmp_name'];
-					$target ="news/".$folderName2."/";
-					$file_name=strtotime(date('d-m-Y h:i:s'));
-					$filedata=explode('/', $_FILES["image"]["type"]);
-					$filedata[1];
-					$random=rand(100, 10000);
-					 $target=$target.basename($random.$file_name.'.'.$filedata[1]);
-					 move_uploaded_file($file_tmp_name,$target);
-					$item_image=$random.$file_name.'.'.$filedata[1];
-					
-					}
-					else{
-					$item_image=$k_image;
-					}
-					
-					
-	$r=mysql_query("update `news` SET `title`='$news_title',`description`='$news_details',`date`='$news_date',`user_id`='$user_id',`category_id`='$category_id',`role_id`='$role_id',`featured_image`='$item_image' where id='".$get_id."'" );
-	
+	{
+		@$file_name=$_FILES["image"]["name"];
+		$file_tmp_name=$_FILES['image']['tmp_name'];
+		$target ="news/".$folderName2."/";
+		$file_name=strtotime(date('d-m-Y h:i:s'));
+		$filedata=explode('/', $_FILES["image"]["type"]);
+		$filedata[1];
+		$random=rand(100, 10000);
+		 $target=$target.basename($random.$file_name.'.'.$filedata[1]);
+		 move_uploaded_file($file_tmp_name,$target);
+		$item_image=$random.$file_name.'.'.$filedata[1];
+		$r=mysql_query("update `news` SET `featured_image`='$item_image' where id='".$get_id."'" );
+	}
 	$message = "News Update Successfully.";
    }
 	 
@@ -60,25 +53,26 @@ if(isset($_POST['update_submit']))
 		 <div class="page-content">
 			
 			
-			<div class="portlet box">
-						<div class="portlet-title">
-							<div class="caption">
-								<i class="fa fa-gift"></i> Update News
-							</div>
-							<div class="tools">
-							<a class="" href="view_news.php" style="color: white"><i class="fa fa-search"> News View List</i></a>
-								<!--<a href="" class="collapse" data-original-title="" title="">
-								</a>-->
-								
-							</div>
-						</div>
-						<div class="portlet-body form">
-						<?php if($message!="") { ?>
-                       <!-- <input id="alert_message" type="text" class="form-control" value="some alert text goes here..." placeholder="enter a text ...">-->
-<div class="message" id="success" style="color:#44B6AE; text-align:center"><label class="control-label"><?php echo $message; ?></label></div>
+<div class="portlet box yellow">
+<div class="portlet-title">
+	<div class="caption">
+		<i class="fa fa-gift"></i> Update News
+	</div>
+	<div class="tools">
+	<a class="" href="view_news.php" style="color: white"><i class="fa fa-search"> View List</i></a>
+		<!--<a href="" class="collapse" data-original-title="" title="">
+		</a>-->
+		
+	</div>
+</div>
+<div class="portlet-body form"> 
+<?php if($message!="") { ?>
+<div id="success" class="alert alert-success" style="margin-top:5px; width:50%">
+<?php echo $message; ?>
+</div>
 <?php } ?>
-							<form class="form-horizontal" role="form" id="noticeform" method="post" enctype="multipart/form-data">
-								<div class="form-body">
+	<form class="form-horizontal" role="form" id="form_sample_2" method="post" enctype="multipart/form-data">
+		<div class="form-body">
 								
 								
 								 <?php
@@ -98,9 +92,9 @@ if(isset($_POST['update_submit']))
 					{ $news_date=date("d-m-Y", strtotime($news_date)); }
 					?>
 							  <div class="form-group">
-										<label class="col-md-3 control-label">Select Role</label>
-										<div class="col-md-3">
-                                        <select name="role_id" class="form-control select select2 select2me input-medium" placeholder="Select..." id="sid">
+										<label class="col-md-3 control-label">Select Role <span class="required" aria-required="true"> * </span></label>
+										<div class="col-md-4">
+                                        <select name="role_id" class="form-control select2me" required placeholder="Select..." id="sid">
                                          <option value=""></option>
                                             <?php
                                             $r1=mysql_query("select * from master_role where id=1 OR id=4 OR id=5");		
@@ -118,53 +112,44 @@ if(isset($_POST['update_submit']))
 								
 								
 									<div class="form-group">
-										<label class="col-md-3 control-label">News Title</label>
-										<div class="col-md-3">
+										<label class="col-md-3 control-label">News Title <span class="required" aria-required="true"> * </span></label>
+										<div class="col-md-4">
 											<input class="form-control input-md" required placeholder="Title" type="text" value="<?php echo $news_title;?>" name="news_title">
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="col-md-3 control-label">News Details</label>
-										<div class="col-md-3">
+										<label class="col-md-3 control-label">News Details <span class="required" aria-required="true"> * </span></label>
+										<div class="col-md-4">
 										<textarea class="form-control input-md" required placeholder="Details" type="text" name="news_details"><?php echo $news_details;?></textarea>
 										</div>
 									</div>
 									
 									<div class="form-group">
-										<label class="col-md-3 control-label">News Date</label>
+										<label class="col-md-3 control-label">News Date <span class="required" aria-required="true"> * </span></label>
 										
-										<div class="col-md-3">
+										<div class="col-md-4">
 											<input class="form-control form-control-inline input-md date-picker" required  value="<?php echo $news_date;?>" placeholder="dd/mm/yyyy" type="text" 
                                             data-date-format="dd-mm-yyyy" type="text" name="news_date">
 											
 										</div>
-										
-										
 									</div>
 									<div class="form-group">
-                              <label class="control-label col-md-3">Cover Image</label>
+										<label class="control-label col-md-3">Cover Image</label>
                             
-                                            <div class=" col-md-3 fileinput fileinput-new" style="padding-left: 15px;" data-provides="fileinput">
-                                                <div class="col-md-10 fileinput-new thumbnail" style="width: 200px;  height: 150px;">
-                                                    <img src="<?php echo $exact_folderName;?>/<?php echo $news_pic;?>" style="width:100%;" alt=""/>
-                                                </div>
-                                                <div class="col-md-3 fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;">
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <span class="btn default btn-file addbtnfile" style="background-color:#00CCFF; color:#FFF">
-                                                    <span class="fileinput-new">
-                                                    <i class="fa fa-plus"></i> </span>
-                                                    <span class="fileinput-exists">
-                                                    <i class="fa fa-plus"></i> </span>
-													 <input type="hidden" class="default" name="k_image" value="<?php echo $image;?>" id="">
-                                                    <input type="file" class="default" name="image" id="file1">
-                                                    </span>
-                                                    <a href="#" class="btn red fileinput-exists" data-dismiss="fileinput" style=" color:#FFF">
-                                                    <i class="fa fa-trash"></i> </a></div>
-                                                </div>
-												</div>
+										<div class=" col-md-4 fileinput fileinput-new" style="padding-left: 15px;" data-provides="fileinput">
+											<div class="col-md-10 fileinput-new thumbnail" style="width: 80px;  height: 80px;">
+												<img src="<?php echo $exact_folderName;?>/<?php echo $news_pic;?>" style="width:100%;" alt=""/>
+											</div>
+										   
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="control-label col-md-3">Change Image</label>
+										<div class=" col-md-4 ">
+										<input type="file" class="default form-control " name="image" id="file1">
+										</div>
+									</div>
 									
-								</div>
 								<div class=" right1" align="center" style="margin-right:10px">
 									<button type="submit" class="btn green" name="update_submit">Submit</button>
 								</div>

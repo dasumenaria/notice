@@ -77,8 +77,7 @@ if((!empty($class_id)) && (!empty($sect_id)) && (empty($sub_id))){
 					</div>
 
 <?php }	
-
-if((!empty($class_id)) && (!empty($sect_id))  && (!empty($sub_id))  && (empty($exm_id))){ ?>
+ if((!empty($class_id)) && (!empty($sect_id))  && (!empty($sub_id))  && (empty($exm_id))){ ?>
 	<div class="form-group">
 		<label class="control-label col-md-3">Exam Term</label> 
 			<div class="col-md-4">
@@ -106,10 +105,10 @@ if((!empty($class_id)) && (!empty($sect_id))  && (!empty($sub_id))  && (empty($e
 <?php if((!empty($class_id)) && (!empty($sect_id))  && (!empty($sub_id)) && (!empty($exm_id))) { ?>
 
 
-<a style="padding: 3px 15px; background-color:rgba(218, 73, 73, 0.74); color:#FFF;margin-left:30%" href="report_subject.php?cls=<?php echo $class_id; ?>&sec=<?php echo $sect_id; ?>&sub=<?php echo $sub_id; ?>&trm=<?php echo $exm_id; ?>" ><strong>Go to Report</strong></a>
+<a style="background-color:rgba(218, 73, 73, 0.74); color:#FFF;margin-left:30%" class="btn" href="report_subject.php?cls=<?php echo $class_id; ?>&sec=<?php echo $sect_id; ?>&sub=<?php echo $sub_id; ?>&trm=<?php echo $exm_id; ?>" ><strong>Report</strong></a>
 
-<a style="padding: 3px 15px; background-color:rgba(218, 73, 73, 0.74); color:#FFF;margin-left:2%" href="assign_marks.php?cls=<?php echo $class_id; ?>&sec=<?php echo $sect_id; ?>&sub=<?php echo $sub_id; ?>&trm=<?php echo $exm_id; ?>" ><strong> Fill Marks</strong></a>
-
+<!--<a style="padding: 3px 15px; background-color:rgba(218, 73, 73, 0.74); color:#FFF;margin-left:2%" href="assign_marks.php?cls=<?php echo $class_id; ?>&sec=<?php echo $sect_id; ?>&sub=<?php echo $sub_id; ?>&trm=<?php echo $exm_id; ?>" ><strong> Fill Marks</strong></a>
+-->
 </br>
 </br>
 </br>

@@ -1,248 +1,170 @@
 <?php
+include("database.php");
 @session_start();
-require_once("database.php");
-require_once("auth.php");
-include("functions.php");
-
-if(isset($_SESSION["id"])) {
-	if(isLoginSessionExpired()) {
-		header("Location:logout.php?session_expired=1");
-	}
+$id=$_SESSION['id']; 
+if(empty($id))
+{
+	header("location:login.php");
 }
-
- //$session_name=$_SESSION['name'];
-?>
-
-<?php function css() { ?>
-
-<!DOCTYPE html>
-<html lang="en" class="no-js">
-<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
-<head>
-
-
-<meta charset="utf-8"/>
- 
+ function css() { ?>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
 <meta content="" name="description"/>
 <meta content="" name="author"/>
- 
-
 <!-- BEGIN GLOBAL MANDATORY STYLES -->
-<link href="assets/Lato2OFLWeb/Lato2OFLWeb/Lato/latofonts.css" rel="stylesheet" type="text/css"/> 
+ 
+<!--<link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css"/>-->
 <link href="assets/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
 <link href="assets/global/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css"/>
 <link href="assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
 <link href="assets/global/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css"/>
-<link href="assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
+
+<link rel="stylesheet" type="text/css" href="assets/global/plugins/select2/select2.css"/>
+<link rel="stylesheet" type="text/css" href="assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css"/>
+
+
+<link rel="stylesheet" type="text/css" href="assets/global/plugins/select2/select2.css"/>
+<link rel="stylesheet" type="text/css" href="assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css"/>
+
+<!-- END GLOBAL MANDATORY STYLES -->
 <link rel="stylesheet" type="text/css" href="assets/global/plugins/bootstrap-datepicker/css/datepicker3.css"/>
 <link rel="stylesheet" type="text/css" href="assets/global/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css"/>
-<link rel="stylesheet" type="text/css" href="assets/global/plugins/bootstrap-daterangepicker/daterangepicker-bs3.css"/> 
+<link rel="stylesheet" type="text/css" href="assets/global/plugins/bootstrap-daterangepicker/daterangepicker-bs3.css"/>
+<link rel="stylesheet" type="text/css" href="assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css"/>
 
- <link rel="stylesheet" type="text/css" href="assets/global/plugins/select2/select2.css"/> 
-
-
-
-
-
-
-<!-- END PAGE STYLES -->
 <!-- BEGIN THEME STYLES -->
-<!-- DOC: To use 'rounded corners' style just load 'components-rounded.css' stylesheet instead of 'components.css' in the below style tag-->
-<link rel="stylesheet" type="text/css"href="assets/global/plugins/bootstrap-toastr/toastr.min.css"/>
-<link href="assets/global/css/components.css" rel="stylesheet" type="text/css"/>
+<link href="assets/global/css/components.css" id="style_components" rel="stylesheet" type="text/css"/>
 <link href="assets/global/css/plugins.css" rel="stylesheet" type="text/css"/>
 <link href="assets/admin/layout/css/layout.css" rel="stylesheet" type="text/css"/>
-<link id="style_color" href="assets/admin/layout/css/themes/default.css" rel="stylesheet" type="text/css"/>
+<link id="style_color" href="assets/admin/layout/css/themes/darkblue.css" rel="stylesheet" type="text/css"/>
 <link href="assets/admin/layout/css/custom.css" rel="stylesheet" type="text/css"/>
-
-<!-- END THEME STYLES -->
-<link rel="shortcut icon" href=""/>
-<!-- END THEME STYLES -->
-</head>
-
-
 <style>
-body{
-font-family: 'LatoWeb', sans-serif;
-font-size:14px;
-}
-.capitalize {
-    text-transform: capitalize;
-}
-.content
+.self-table > tbody > tr > td, .self-table > tr > td
 {
-	margin-top: 20px;
+	border-top:none !important;
 }
-@media print
+.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+ 
+    vertical-align:middle !important;
+}
+option 
 {
-	.box
-	{
-		border-top:none;
-	}
-	.box-body{
-		padding: 0px !important;
-	}
-	.container 
-	{
-		padding-right:  0px !important;
-		padding-left:  0px !important;
-		margin-right: 0px !important;
-		margin-left: 0px !important;
-		width:100%;
-	}
-	.contain
-	{
-		padding-right:  0px !important;
-		padding-left:  0px !important;
-		margin-right: 0px !important;
-		margin-left: 0px !important;
-		margin-top: 0px !important;
-	}
+    border-top:1px solid #CACACA;
+    padding:4px;
+	cursor:pointer;
 }
-.align_center{
-	text-align:center;
+select 
+{
+	cursor:pointer;
 }
-.align_right{
-	text-align:right;
-	padding-right:5px;
+.myshortlogo
+{
+	font: 15px "Open Sans",sans-serif;
+	text-transform: uppercase !important;
+	box-sizing:border-box;
 }
-.box.box-primary {
-    border-top-color: #187D79;
-}
-.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
-    background-color: #FFF;
+.required{
+	color: #ff2a2a !important;
 }
 </style>
-<!-- Disable Right Click   
- oncontextmenu="return false"
---->
+<style media="print">
+	.txt_padd
+	{
+		padding-left:2px;
+		padding-right:2px;
+		text-align:center;
+		margin-top:-8%
+	}
+	.hide_print
+	{
+		display:none;
+	}
+</style>
 <?php } ?>
 <body class="page-header-fixed page-quick-sidebar-over-content page-style-square"> 
 <?php 
 function contant_start()
 {
  ?>
-<!-- BEGIN HEADER -->
 <div class="page-header navbar navbar-fixed-top">
-	<!-- BEGIN HEADER INNER -->
 	<div class="page-header-inner">
-		<!-- BEGIN RESPONSIVE MENU TOGGLER -->
-		<div class="page-logo">
-			<a href="index1.php"> </a>
+		<div class="page-logo" >
+			<a href="index.php" style="text-decoration:none;" >
+				 
+			</a>
+			<div class="menu-toggler sidebar-toggler hide">
+			</div>
 		</div>
-		<!-- END RESPONSIVE MENU TOGGLER -->
-	<!-- BEGIN RESPONSIVE MENU TOGGLER -->
 		<a href="javascript:;" class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse">
 		</a>
-		<!-- END RESPONSIVE MENU TOGGLER -->
-		
-		<!-- BEGIN PAGE TOP -->
 		<div class="top-menu">
 			<ul class="nav navbar-nav pull-right">
-
-
-
-
-			<!------Start Notification code------------>
-			<li class="dropdown dropdown-extended dropdown-notification" id="header_notification_bar">
-					<!--<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-					<i class="icon-bell"></i>
-					<span class="badge badge-default" style="background-color:red;" id="count">
-					</span>
-					</a>-->
-					<ul class="dropdown-menu">
-						<li class="external">
-							<h3><span class="bold" id="total_notification" style="color:#FFF"></span></h3>
-							<!--<a href="extra_profile.html">view all</a>-->
-						</li>
-						<li>
-							<ul class="dropdown-menu-list scroller" style="height: 250px;" data-handle-color="#637283" id="notifications">
-								
-
-							</ul>
-						</li>
-					</ul>
-				</li>
-			
-			
-			
-			<!---------End Notification code--------->
-			<li class="dropdown dropdown-user">
+				<li class="dropdown dropdown-user">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-					<span class="username"><strong>Welcome
-                   </strong><?php //echo $login_details['0']['login']['name']; ?></span>
+					<span class="username username-hide-on-mobile">
+					<?php 
+					@session_start();
+					echo $name=$_SESSION['name'];
+						$fac_id=$_SESSION['id'];
+					?>
+					 </span>
 					<i class="fa fa-angle-down"></i>
 					</a>
 					<ul class="dropdown-menu dropdown-menu-default">
-<li>
-							<a class="tooltips" href="update_profile.php" data-placement="bottom" data-original-title="Update Your Profile">
+						<li>
+							<a href="staff_search.php?user=<?php echo $fac_id; ?>">
 							<i class="icon-user"></i> My Profile </a>
 						</li>
+						 
 						<li>
-                            <a href="logout.php" tite="Logout"><i class="icon-key"></i>  &nbsp;Logout</i></a>
+							<a href="logout.php">
+							<i class="icon-key"></i> Log Out </a>
 						</li>
 					</ul>
 				</li>
-            </ul>
+				<!-- END USER LOGIN DROPDOWN -->
+			</ul>
 		</div>
-		<!-- END PAGE TOP -->
+		<!-- END TOP NAVIGATION MENU -->
 	</div>
-	<!-- END HEADER INNER -->
 </div>
+<div class="page-container">
 
-<!-- END HEADER -->
-<div class="clearfix">
-</div>
-<!-- BEGIN CONTAINER -->
-
-
-
-<div class="" >
-	<div class="page-container">
-	<?php } ?>
-	
-<?php 
+<?php } ?>
+	<?php 
 function menu() {
 ?>
-
-		<!-- BEGIN SIDEBAR -->
-		<div class="page-sidebar-wrapper">
-			<!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
-			<!-- DOC: Change data-auto-speed="200" to adjust the sub menu slide up/down speed -->
-			<div class="page-sidebar navbar-collapse collapse">
-				<!-- BEGIN SIDEBAR MENU -->
-				<!-- DOC: Apply "page-sidebar-menu-light" class right after "page-sidebar-menu" to enable light sidebar menu style(without borders) -->
-				<!-- DOC: Apply "page-sidebar-menu-hover-submenu" class right after "page-sidebar-menu" to enable hoverable(hover vs accordion) sub menu mode -->
-				<!-- DOC: Apply "page-sidebar-menu-closed" class right after "page-sidebar-menu" to collapse("page-sidebar-closed" class must be applied to the body element) the sidebar sub menu mode -->
-				<!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
-				<!-- DOC: Set data-keep-expand="true" to keep the submenues expanded -->
-				<!-- DOC: Set data-auto-speed="200" to adjust the sub menu slide up/down speed -->
-				<ul class="page-sidebar-menu" data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
-             
-			  
-               	<?php  $page_name_from_url=basename($_SERVER['PHP_SELF']);
-							@$fac_id=$_SESSION['id'];
-						      $role_id=$_SESSION['category'];
-							 $selecto7=mysql_query("select * from `user_management` where `role_id`='$role_id'");
-			        while($reco7=mysql_fetch_array($selecto7))
-			       {
-					   $mng_mdul_id[]=$reco7['module_id'];
-				   }
-				    
-				 $sel_module2=mysql_query("select `main_menu` from `modules` where `page_name_url`='".$page_name_from_url."'");
+	<div class="page-sidebar-wrapper">
+		<div class="page-sidebar navbar-collapse collapse">
+			
+			<ul class="page-sidebar-menu" data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
+ 				<li class="sidebar-toggler-wrapper">
+ 				</li>
+				<?php  
+				$page_name_from_url=basename($_SERVER['PHP_SELF']);
+				$fac_id=$_SESSION['id'];
+				$role_id=$_SESSION['role']; 
+				$selecto7=mysql_query("select * from `user_management` where `role_id`='$role_id'");
+				while($reco7=mysql_fetch_array($selecto7))
+				{
+					$mng_mdul_id[]=$reco7['module_id'];
+				}
+				//print_r($mng_mdul_id); exit;   
+				$sel_module2=mysql_query("select `main_menu` from `modules` where `page_name_url`='".$page_name_from_url."'");
 				$arr_module2=mysql_fetch_array($sel_module2);
-				 $main_menu_active=$arr_module2['main_menu'];			
-				
-					$selecto3=mysql_query("select * FROM `modules` ORDER BY id");
-                      while($data=mysql_fetch_array($selecto3))
-					  {
-                      $main_menu_arr[]='';
-                     if(in_array($data['id'],$mng_mdul_id))
-					 {
-                        if(empty($data['main_menu']) && empty($data['sub_menu']))
-                        {
+				$main_menu_active=$arr_module2['main_menu'];	
+ 			
+				$selecto3=mysql_query("select * FROM `modules`");
+				 
+				while($data=mysql_fetch_array($selecto3))
+				{
+					 
+					$main_menu_arr[]='';
+					if(in_array($data['id'],$mng_mdul_id))
+					{
+						if(empty($data['main_menu']) && empty($data['sub_menu']))
+						{
 							
                             ?>
                             <li class="<?php if($page_name_from_url==$data['page_name_url']){ echo 'active'; } ?>">
@@ -259,7 +181,7 @@ function menu() {
                             }
                             else
                             {
-                                $main_menu_arr[]=$data['main_menu'];
+                               $main_menu_arr[]=$data['main_menu'];
                                   ?>
                                 <li class="<?php if($main_menu_active==$data['main_menu']){ echo 'active'; } ?>">
                                     <a href="javascript:;">
@@ -269,15 +191,17 @@ function menu() {
                                     </a>
                                     <ul  class="sub-menu">
                                     <?php
-									$selecto4=mysql_query("select * FROM `modules` where `main_menu`='".$data['main_menu']."'");
+		$selecto4=mysql_query("select * FROM `modules` where `main_menu`='".$data['main_menu']."'");
 									while($data_value=mysql_fetch_array($selecto4))
 									{
 										if(in_array($data_value['id'],$mng_mdul_id))
-										{?>
-                                            <li class="<?php if($page_name_from_url==$data_value['page_name_url']){ echo 'active'; } ?>">
-                                                <a href="<?php echo $data_value['page_name_url']; ?>"> <?php echo $data_value['name']; ?></a>
-                                            </li>
-                                            <?php
+										{			
+                                    
+                                         ?>
+                                                <li class="<?php if($page_name_from_url==$data_value['page_name_url']){ echo 'active'; } ?>">
+                                                    <a href="<?php echo $data_value['page_name_url']; ?>"><?php echo $data_value['name']; ?></a>
+                                                </li>
+                                                <?php
 										}
                                     }
                                     ?>
@@ -289,104 +213,89 @@ function menu() {
                         }
 					 }
 					  }
-					  ?>
-					
-				</ul>
-				<!-- END SIDEBAR MENU -->
-			</div>
+					  
+					  ?>					  
+			</ul>
+			<!-- END SIDEBAR MENU -->
 		</div>
-		<?php } ?>
-		<!-- END SIDEBAR -->
+	</div>
+	
+	<?php } ?>
 
-<!-- --------------------------------end  menu  header--------------------------------------------- -->
-<!-- BEGIN CONTENT -->
-                      
-					
- <!-- --------------------------------start  footer menu--------------------------------------------- -->
-  
- <!-- BEGIN FOOTER -->
- <?php
+<?php 
 function footer()
 {?>
- <div class="page-footer" style="background-color:#B0ADAD !important;">
-		<div class="page-footer-inner" style="color:#FFF !important;">
-			 2014 &copy; PHP POETS. All Rights Reserved.
-		</div>
-		<div class="scroll-to-top">
-			<i class="icon-arrow-up"></i>
-		</div>
-        
-	</div>
-	</div></div>
-	<?php } ?>
-    
-   
-   
-   
-   
-        
-    <!-- END FOOTER -->
-	<!-- END CONTAINER -->
-	
-<!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
-<!-- BEGIN CORE PLUGINS -->
-</body>
-<?php  
+<!-- END CONTAINER -->
+<!-- BEGIN FOOTER -->
+ 
+</div>
+<?php } ?>
+</body><?php 
+
 function scripts()
 {?>
-
-   <script src="assets/global/plugins/jquery.min.js" type="text/javascript"></script>
+<script src="assets/global/plugins/jquery.min.js" type="text/javascript"></script>
 <script src="assets/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
+<!-- IMPORTANT! Load jquery-ui-1.10.3.custom.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
+<script src="assets/global/plugins/jquery-ui/jquery-ui-1.10.3.custom.min.js" type="text/javascript"></script>
 <script src="assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
 <script src="assets/global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js" type="text/javascript"></script>
 <script src="assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
 <script src="assets/global/plugins/jquery.blockui.min.js" type="text/javascript"></script>
 <script src="assets/global/plugins/jquery.cokie.min.js" type="text/javascript"></script>
 <script src="assets/global/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
-<script src="assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
-<script src="assets/global/plugins/icheck/icheck.min.js" type="text/javascript"></script><!--nil-->
-<script src="assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
-
+<!-- END CORE PLUGINS -->
 <script type="text/javascript" src="assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
 <script type="text/javascript" src="assets/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js"></script>
- <script type="text/javascript" src="assets/global/plugins/bootstrap-daterangepicker/moment.min.js"></script>
-<script type="text/javascript" src="assets/global/plugins/bootstrap-daterangepicker/daterangepicker.js"></script> 
-<!-- END CORE PLUGINS -->
-<!-- BEGIN PAGE LEVEL PLUGINS --> 
+<script type="text/javascript" src="assets/global/plugins/bootstrap-daterangepicker/moment.min.js"></script>
+<script type="text/javascript" src="assets/global/plugins/bootstrap-daterangepicker/daterangepicker.js"></script>
+<script type="text/javascript" src="assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+<script src="assets/global/plugins/jquery-notific8/jquery.notific8.min.js"></script>
+<script src="assets/admin/pages/scripts/ui-notific8.js"></script>
 
-<script type="text/javascript" src="assets/global/plugins/jquery-validation/js/jquery.validate.min.js"></script>
-<script type="text/javascript" src="assets/global/plugins/jquery-validation/js/additional-methods.min.js"></script>
-<script src="assets/global/plugins/select2/select2.min.js" type="text/javascript"></script>
- 
-<!-- END PAGE LEVEL PLUGINS -->
 
-<!-- BEGIN PAGE LEVEL SCRIPTS -->
- 
-<script src="assets/global/plugins/bootstrap-touchspin/bootstrap.touchspin.js" type="text/javascript"></script>
+<script type="text/javascript" src="assets/global/plugins/select2/select2.min.js"></script>
+<script type="text/javascript" src="assets/global/plugins/datatables/media/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js"></script>
+
 <script src="assets/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="assets/admin/layout/scripts/layout.js" type="text/javascript"></script>
-<script src="assets/admin/pages/scripts/components-form-tools.js"></script>
-<script src="assets/admin/pages/scripts/components-dropdowns.js"></script>
+<script src="assets/admin/layout/scripts/quick-sidebar.js" type="text/javascript"></script>
+<script src="assets/admin/layout/scripts/demo.js" type="text/javascript"></script>
+<script src="assets/admin/pages/scripts/form-icheck.js"></script>
+
+<script src="assets/global/plugins/jquery.pulsate.min.js" type="text/javascript"></script> 
+<script src="assets/admin/pages/scripts/table-managed.js"></script>
 <script src="assets/admin/pages/scripts/components-pickers.js"></script>
-<!-- END PAGE LEVEL SCRIPTS --> 
+<script type="text/javascript" src="assets/global/plugins/jquery-validation/js/jquery.validate.min.js"></script>
+<script type="text/javascript" src="assets/global/plugins/jquery-validation/js/additional-methods.min.js"></script>
+<script src="assets/admin/pages/scripts/form-validation.js"></script>
+<script src="assets/admin/pages/scripts/ui-general.js" type="text/javascript"></script>
 
 <script>
-
-jQuery(document).ready(function() {
-	 
-		 
-Metronic.init();
-ComponentsPickers.init();
-Layout.init();
-ComponentsFormTools.init();	  
-ComponentsDropdowns.init();
- 
+jQuery(document).ready(function() {    
+	Metronic.init(); // init metronic core components
+	Layout.init(); // init current layout
+	QuickSidebar.init(); // init quick sidebar
+	Demo.init(); // init demo features
+	UINotific8.init();
+	FormValidation.init();
+	TableManaged.init();
+	ComponentsPickers.init();
+	UIGeneral.init();
+	FormiCheck.init(); // init page demo
+	ComponentsDropdowns.init();
 });
 </script>
- 
- <?php } ?>
-<!-- END JAVASCRIPTS -->
 
-
-<!-- END BODY -->
-</html>
+<script type="text/javascript">
+setInterval(function(){ abc(); }, 3000);
+function abc()
+{	$('#msg_div').fadeOut(500);
+	var delay = 500;
+	setTimeout(function() {
+	$('#msg_div').remove();
+	}, delay);
+}
+</script>
+<?php } ?>

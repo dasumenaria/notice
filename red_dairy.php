@@ -24,6 +24,9 @@ if(isset($_POST['sub_del']))
         <div class="caption">
             <i class="fa fa-globe"></i>Red Dairy View
         </div>
+		<div class="tools">
+			 <a class="" href="add_red_dairy.php" style="color: white"><i class="fa fa-book"> Add Dairy</i></a> 
+			</div>
     
     </div>
     <div class="portlet-body">
@@ -31,7 +34,7 @@ if(isset($_POST['sub_del']))
     <div id="sample_1_wrapper" class="dataTables_wrapper no-footer">
 	<div class="row">
 	<div class="col-md-4 col-sm-12">
-			<div class="dataTables_length" id="sample_1_length"><label> Class</label>
+			<div id="sample_1_length"><label> Class</label>
 				<select name="sample_1_length" id="cls" class="form-control users select2me">
 					<option value="">Select</option>
 					<?php
@@ -49,7 +52,7 @@ if(isset($_POST['sub_del']))
 			</div>
 		</div>
 		<div class="col-md-4 col-sm-12">
-			<div class="dataTables_length" id="sample_1_length"><label> Section</label>
+			<div id="sample_1_length"><label> Section</label>
 				<select name="sample_1_length" id="sec" class="form-control users select2me">
 					<option value="">Select</option>
 					<?php
@@ -67,7 +70,7 @@ if(isset($_POST['sub_del']))
 			</div>
 		</div> 
 		<div class="col-md-4 col-sm-12">
-			<div class="dataTables_length" id="sample_1_length"><label>Name</label>
+			<div id="sample_1_length"><label>Name</label>
 				<select name="sample_1_length" id="users" class="form-control users select2me">
 					<option value="">Select</option>
 					<?php
@@ -84,17 +87,43 @@ if(isset($_POST['sub_del']))
 				</select>
 			</div>
 		</div>
-		
 	</div>
-							<div id="data" class="scroller" style="height:400px; padding-top:5px"  data-always-visible="1" data-rail-visible="0">
-							</div>
-							
-							
-							 
-							
-							</div>
-						</div>
+	<div class="row" style="margin-top:10px">
+		<div class="col-md-4 col-sm-12">
+			<div class="form-group col-md-12">
+				<label class="">Select Date</label>
+				<div >
+					<div class="input-group input-large date-picker input-daterange" data-date-format="dd-mm-yyyy">
+						<input type="text" class="form-control users" id="from">
+						<span class="input-group-addon">
+						to </span>
+						<input type="text" class="form-control users" id="to">
 					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4 col-sm-12">
+			<div id="sample_1_length"><label> Mode of Complaint</label>
+				<select name="mode_of_complaint" id="moc" required class="form-control users select2me">
+								<option value="">Select</option>
+								<option value="Phone Call">Phone Call</option>
+								<option value="Walk-in">Walk-in</option>
+								<option value="School Diary">School Diary</option>
+								<option value="Parent's Contact">Parent's Contact</option>
+							</select>
+			</div>
+		</div> 
+	</div>
+	<center>
+		<button type="button" id="report" class="btn btn-sm blue"> Report</button>
+
+	
+			<div id="data" class="scroller" style="height:400px; padding-top:5px"  data-always-visible="1" data-rail-visible="0">
+			</div>
+		</center>
+		</div>
+	</div>
+</div>
 
 
 
@@ -107,15 +136,18 @@ if(isset($_POST['sub_del']))
 <script src="assets/global/plugins/jquery.min.js" type="text/javascript"></script>
 <script>
 $(document).ready(function(){    
-        $(".users").die().live("change",function(){
-			
+        $("#report").die().live("click",function(){
+			$("#data").html("<img height='50px' src='img/loading.gif'/>");
 			var stdn_name=$("#users").val();
 			var stdn_cls=$("#cls").val(); 
 			var stdn_sec=$("#sec").val();
+			var moc=$("#moc").val();
+			var from=$("#from").val();
+			var to=$("#to").val();
 		 	$.ajax({
-			url: "ajax_red_dairy.php?stdn_name="+stdn_name+"&stdn_cls="+stdn_cls+"&stdn_sec="+stdn_sec,
+			url: "ajax_red_dairy.php?stdn_name="+stdn_name+"&stdn_cls="+stdn_cls+"&stdn_sec="+stdn_sec+"&moc="+moc+"&from="+from+"&to="+to,
 			}).done(function(response) {
-		   $("#data").html(""+response+"");
+				$("#data").html(""+response+"");
 			});
 });
 });

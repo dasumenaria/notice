@@ -1,9 +1,35 @@
 <?php 
 session_start();
 include("database.php");
-  $view_u=$_GET['view_u'];
-  ?>
-	<div>	<table class="table table-bordered table-hover">
+$to=$_GET['to'];
+$from=$_GET['from'];
+$view_u=$_GET['view_u'];
+$qry='';
+if(!empty($from) && !empty($to))
+{
+	$from=date('Y-m-d',strtotime($from));
+	$to=date('Y-m-d',strtotime($to));
+	
+	$qry.="`curent_date` BETWEEN '".$from."' and '".$to."' && ";	
+}
+
+if(!empty($view_u))
+{  
+	if($view_u == 1) 
+	{
+		$qry.="";
+	}
+	else
+	{
+		$qry.=" (`role_id`='".$view_u."' || `role_id`='1' ) && ";
+	}
+}
+ 
+$qry.=" `flag`= 0  order by id Desc ";
+?>
+<div align="right" style="margin-right:10px"><a href="faculty_excel.php?view_u=<?php echo $view_u;?>&to=<?php echo $to;?>&from=<?php echo $from;?>" class="btn red-pink btn-sm"><i class="fa fa-download"></i> Excel</a></div>
+	<div style="margin-top:10px">	
+	<table class="table table-bordered table-hover">
  
 								<thead>
 								<tr>
@@ -29,7 +55,7 @@ include("database.php");
 								</tr>
 								</thead>
 							 <?php
-			  $r1=mysql_query("select * from faculty_login where role_id='".$view_u."' && flag = 0 ");		
+					$r1=mysql_query("select * from faculty_login where ".$qry." ");		
 					$i=0;
 					while($row1=mysql_fetch_array($r1))
 					{
@@ -63,12 +89,11 @@ include("database.php");
 									<?php echo $role_name;?>
 									</td>
 									<td>
-                                        <a class="btn btn-circle btn-xs" style="color:#FFF; background-color:#FFB848" href="users_edit.php?id=<?php echo $id;?>">
+                                        <a class="btn yellow btn-sm" target="_blank"  rel="tooltip" title="Edit Details"  href="users_edit.php?id=<?php echo $id;?>">
 										<i class="fa fa-edit"></i></a>
                                         &nbsp;				
                                        
-<a class="btn btn-circle btn-xs" style="color:#FFF; background-color:#F03"
-  rel="tooltip" title="Delete"  data-toggle="modal" href="#delete<?php echo $id ;?>"><i class="fa fa-trash"></i></a>
+<a class="btn red btn-sm"  rel="tooltip" title="Delete Record"  data-toggle="modal" href="#delete<?php echo $id ;?>"><i class="fa fa-trash"></i></a>
             <div class="modal fade" id="delete<?php echo $id ;?>" tabindex="-1" aria-hidden="true" style="padding-top:35px">
                 <div class="modal-dialog modal-md">
                     <div class="modal-content">

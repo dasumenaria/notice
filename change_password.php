@@ -29,12 +29,11 @@ if(isset($_POST['update_details']))
 <body>
 	<div class="page-content-wrapper">
 		 <div class="page-content">
-			<div class="portlet box">
-				<div class="portlet-title">
+			<div class="portlet box blue">
+				<div class="portlet-title ">
 					<div class="caption">
 						<i class="fa fa-gift"></i> Update Student Password
 					</div>
-							 
 				</div>
 				<div class="portlet-body form">
 					<div class="form-body">
@@ -54,7 +53,7 @@ if(isset($_POST['update_details']))
 								
 								
 									<div class="form-group">
-										<label class="control-label col-md-3">Student Name</label>
+										<label class="control-label col-md-3">Student Name <span class="required" aria-required="true"> * </span></label>
 										<div class="col-md-6">
 											<i class="fa"></i>
 											<select name="user_id" class="form-control class_id select2me" required="required" placeholder="Select..." id="sname">
@@ -75,29 +74,26 @@ if(isset($_POST['update_details']))
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="control-label col-md-3">password</label>
+										<label class="control-label col-md-3">Password <span class="required" aria-required="true"> * </span></label>
 										<div class="col-md-6">
 											<div class="input-icon right">
 												<input type="password" class="form-control" required="required" placeholder="Password" id='password' value="" name="password">	
 											</div>
 										</div>
-										<input  type="hidden" name="update_id" value="<?php echo $id ; ?>" >	
+										 
 									</div>
 									<div class="form-group">
-										<label class="control-label col-md-3">Confirm password</label>
+										<label class="control-label col-md-3">Confirm Password <span class="required" aria-required="true"> * </span></label>
 										<div class="col-md-6">
 											<div class="input-icon right">
 												<input type="password" class="form-control" required="required" placeholder="Confirm password" id='confirm_password' value="" name="confirm_password">	
 											</div>
 											<span id="message"></span>
 										</div>
-										<input  type="hidden" name="update_id" value="<?php echo $id ; ?>" >	
+										 	
 									</div>
-									<div class="form-group">
-										<div class="modal-footer">
-											<button type="button" class="btn default" data-dismiss="modal">Close</button>
-											<button type="submit" name="update_details" class="btn blue" >Update</button>
-										</div>
+									<div class="form-group"><center>
+										 <button type="submit" name="update_details" class="btn blue" >Update</button></center>
 									</div>
 								</div>
 								</div>

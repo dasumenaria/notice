@@ -1,22 +1,23 @@
 <?php 
 include('database.php');
- $from = $_GET['from'];
-     $from_date=date('Y-m-d',strtotime($from));
-     
- $to = $_GET['to'];
-     $to_date=date('Y-m-d',strtotime($to));
-?>
-<?php 
- 
- if(isset($_POST['sub_del']))
+$to=$_GET['to'];
+$from=$_GET['from'];
+if(!empty($from) && !empty($to))
 {
-  $delet_notice=$_POST['delet_notice'];
-  mysql_query("update `notice` SET `flag`='1' where id='$delet_notice'" );
-  
-  } 
-
-
-
+	$from=date('Y-m-d',strtotime($from));
+	$to=date('Y-m-d',strtotime($to));
+	
+	$qry.="`dateofpublish` BETWEEN '".$from."' and '".$to."' && ";	
+}
+ 
+$qry.=" `flag`= 0  order by id Desc ";
+ 
+if(isset($_POST['sub_del']))
+{
+	$delet_notice=$_POST['delet_notice'];
+	mysql_query("update `notice` SET `flag`='1' where id='$delet_notice'" );
+} 
+ 
   ?> 
  <div id="viewdata" class="scroller" style="height: 400px;" data-always-visible="1" data-rail-visible="0">
 							<table class="table table-bordered table-hover" id="sample_1">
@@ -48,12 +49,13 @@ include('database.php');
 							 </tr>
 							</thead>
                              <?php
-			  $r1=mysql_query("select * from notice where dateofpublish between '$from_date' and '$to_date' AND flag='0' order by id Desc ");		
+							 
+			  $r1=mysql_query("select * from notice where ".$qry."");		
 					$i=0;
 					while($row1=mysql_fetch_array($r1))
 					{
 					$i++;
-					$noticenumber=$row1['id'];
+					$id=$row1['id'];
 					$notice_no=$row1['notice_no'];
 					$title=$row1['title'];
                     $dateofpublish=$row1['dateofpublish'];
@@ -81,11 +83,11 @@ include('database.php');
 								</td>
 								
 								<td><?php if(!empty($notice_file)){ ?>
-<a href="notice/<?php echo $notice_file; ?>"><i class="btn btn-circle btn-xs fa fa-cloud-download" style="background-color:#C33; color:#FFF" ></i></a>
+<a href="notice/<?php echo $notice_file; ?>" target="_balnk" class="btn blue btn-sm"><i class="fa fa-download"></i></a>
 								<?php } ?>
 								</td>
 								<td> 
-	<a class="btn blue-madison red-stripe btn-sm"  rel="tooltip" title="Delete"  data-toggle="modal" href="#delete<?php echo $id ;?>">
+	<a class="btn red btn-sm"  rel="tooltip" title="Delete"  data-toggle="modal" href="#delete<?php echo $id ;?>">
 		<i class="fa fa-trash"></i>
 	</a>
 	<div class="modal fade" id="delete<?php echo $id ;?>" tabindex="-1" aria-hidden="true" style="padding-top:35px">
@@ -93,13 +95,13 @@ include('database.php');
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-					<span class="modal-title" style="font-size:14px; text-align:left">Are you sure, you want to delete this Notcie?</span>
+					<span class="modal-title" style="font-size:14px; text-align:left">Are you sure, you want to delete this Notice ?</span>
 				</div>
 				<div class="modal-footer">
 					<form method="post" name="delete<?php echo $id ;?>">
-					<input type="hidden" name="delet_notice" value="<?php echo $id; ?>" />
+						<input type="hidden" name="delet_notice" value="<?php echo $id; ?>" />
 
-					<button type="submit" name="sub_del" value="" class="btn btn-sm red-sunglo ">Yes</button> 
+						<button type="submit" name="sub_del" value="" class="btn btn-sm red-sunglo ">Yes</button> 
 					</form>
 				</div>
 			</div>

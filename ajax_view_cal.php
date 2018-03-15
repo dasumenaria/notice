@@ -1,8 +1,29 @@
 <?php 
 session_start();
-include("database.php");
-$view_u=$_GET['view_u'];
+include("database.php"); 
 $user_id=$_SESSION['id'];
+$to=$_GET['to'];
+$from=$_GET['from'];
+$view_u=$_GET['view_u'];
+$qry='';
+if(!empty($from) && !empty($to))
+{
+	$from=date('Y-m-d',strtotime($from));
+	$to=date('Y-m-d',strtotime($to));
+	
+	$qry.="`curent_date` BETWEEN '".$from."' and '".$to."' && ";	
+}
+
+if(!empty($view_u))
+{  
+	 
+	$qry.=" (`category_id`='".$view_u."') && ";
+	 
+}
+ 
+$qry.=" `flag`= 0  order by id Desc ";
+
+
   ?>
 	<div>	<table class="table table-bordered table-hover" id="sample_1">
  
@@ -11,11 +32,14 @@ $user_id=$_SESSION['id'];
 									<th>
 										 #
 									</th>
-								<th>
+									<th>
 										 Description
 									</th>
 									<th>
-                                      Calendar Date
+                                      Category
+									</th>
+									<th>
+										Calendar Date
 									</th>
                                     <th>
                                         Edit
@@ -26,33 +50,39 @@ $user_id=$_SESSION['id'];
 								</tr>
 								</thead>
 							  <?php
-			  $r1=mysql_query("select * from acedmic_calendar where flag=0 AND category_id=$view_u");		
+			  $r1=mysql_query("select * from acedmic_calendar where ".$qry."");		
 					$i=0;
 					while($row1=mysql_fetch_array($r1))
 					{
 					$i++;
 					$id=$row1['id'];
                     $name=$row1['description'];
-					 $category_id=$row1['category_id'];
+					$category_id=$row1['category_id'];
+					$r1s=mysql_query("select * from master_category where `id`= '$category_id'");		
+					$row1s=mysql_fetch_array($r1s);
+					$category_name=$row1s['category_name'];
 					$date=$row1['date'];
 					if($date=='0000-00-00')
 					{	$date='';}
 					else
-					{ $date=date("d-m-Y", strtotime($date)); }
+					{  $date=date("d-m-Y", strtotime($date)); }
 					?>
 								<tr>
 									<td>
-							<?php echo $i;?>
+									<?php echo $i;?>
 									</td>
 									
-                                    <td class="search">
+                                    <td width="20%">
 									<?php echo $name;?>
+									</td>
+                                    <td>
+										 <?php echo $category_name;?>
 									</td>
                                     <td>
 										 <?php echo $date;?>
 									</td>
 									<td>
-                                                <a class="btn btn-circle btn-xs" style="color:#FFF; background-color:#FFB848" rel="tooltip" title="Edit" data-toggle="modal" href="#edit<?php echo $id;?>"><i class="fa fa-edit"></i></a>
+                                    <a class="btn yellow btn-sm" rel="tooltip" title="Edit Details" data-toggle="modal" href="#edit<?php echo $id;?>"><i class="fa fa-edit"></i></a>
 							
 				<div class="modal fade" id="edit<?php echo $id ;?>" tabindex="-1" aria-hidden="true" style="padding-top:35px">
                 <div class="modal-dialog modal-md">
@@ -90,7 +120,6 @@ $user_id=$_SESSION['id'];
 										<label class="col-md-3 control-label">Calendar Date</label>
 										<div class="col-md-3">
 										<input class="form-control form-control-inline input-medium date-picker" required id="field_5" value="<?php echo $date; ?>" placeholder="dd/mm/yyyy" data-date-format="dd-mm-yyyy" type="text" name="date">
-
 										</div>
 									</div>
                                 <div class=" right1" align="right" style="margin-right:10px">
@@ -110,8 +139,7 @@ $user_id=$_SESSION['id'];
 												
                   
                                      <td>
-									      <a class="btn btn-circle btn-xs" style="color:#FFF; background-color:#C00"
-  rel="tooltip" title="Delete"  data-toggle="modal" href="#delete<?php echo $id ;?>"><i class="fa fa-trash"></i></a>
+									      <a class="btn red btn-sm" rel="tooltip" title="Delete Record"  data-toggle="modal" href="#delete<?php echo $id ;?>"><i class="fa fa-trash"></i></a>
             <div class="modal fade" id="delete<?php echo $id ;?>" tabindex="-1" aria-hidden="true" style="padding-top:35px">
                 <div class="modal-dialog modal-md">
                     <div class="modal-content">

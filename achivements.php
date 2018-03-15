@@ -47,7 +47,7 @@ if(isset($_POST['submit']))
 					<div class="form-body">
 					
 					<div class="form-group">
-							<label class="control-label col-md-3">Select Category</label>
+							<label class="control-label col-md-3">Select Category  <span class="required" aria-required="true"> * </span></label>
 							<div class="col-md-4">
 									<select class="form-control" required name="category_id" >
 									<option value="">---Select---</option>
@@ -66,7 +66,7 @@ if(isset($_POST['submit']))
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="control-label col-md-3">Student Name</label>
+							<label class="control-label col-md-3">Student Name  <span class="required" aria-required="true"> * </span></label>
 							<div class="col-md-4">
 									<select class="form-control user select2me " required name="student_id" >
 									<option value="">---Select Name---</option>
@@ -85,17 +85,17 @@ if(isset($_POST['submit']))
 							</div>
 						</div>
                         <div class="form-group">
-							<label class="control-label col-md-3">Achivements</label>
+							<label class="control-label col-md-3">Achivements  <span class="required" aria-required="true"> * </span></label>
 							<div class="col-md-4">
-								<input type='text'class="form-control" name="achivement">
+								<input type='text'class="form-control" required name="achivement">
                                 <span class="help-block">
 								Provide student achivements</span>	 
  							</div>
                         </div>
                         <div class="form-group">
-							<label class="control-label col-md-3">Rank</label>
+							<label class="control-label col-md-3">Rank <span class="required" aria-required="true"> * </span></label>
 							<div class="col-md-4">
-								<input type='text'class="form-control" name="rank">
+								<input type='text'class="form-control" required name="rank">
                                 <span class="help-block"> Provide student achivement rank</span>	 
  							</div>
                         </div>
@@ -118,12 +118,12 @@ if(isset($_POST['submit']))
 <script>
 <?php if($eventid>0){ ?>
 var update_id = <?php echo $eventid; ?>;
-alert(update_id);
+ 
 		$.ajax({
 			url: "notification_page.php?function_name=create_achivement_notify&id="+update_id,
 			type: "POST",
 			success: function(data)
-			{  alert(data); 
+			{    
  			}
 		});
 <?php } ?>

@@ -9,14 +9,16 @@ if(isset($_POST['submit']))
 {
 	$class_id=$_REQUEST["class_id"];
 	$section_id=$_REQUEST["section_id"];
-	$subject_id=$_REQUEST["subject_id"];
+	$subject_id=array_filter($_REQUEST["subject_id"]); 
 	$time_from=$_REQUEST["time_from"];
 	$time_to=$_REQUEST["time_to"]; 
 	$teacher_name=$_REQUEST["teacher_name"]; 
 	$period=$_REQUEST["period"]; 
 	$date_current=date('Y-m-d');
 	$i=0;
-	
+	if(sizeof($subject_id)>0)
+	{
+		 
 	 foreach($subject_id as $value)
 	 {
 		 $t_f=$time_from[$i];
@@ -25,9 +27,9 @@ if(isset($_POST['submit']))
 		 $TN=$teacher_name[$i];
 		 $PP=$period[$i];
 
-	$q="SELECT `id` from `time_table` where `class_id`='$class_id' && `section_id`='$section_id' && `subject_id`='$subject_id'";
-	$f=mysql_query($q);
-	$r=mysql_num_rows($f);	
+		$q="SELECT `id` from `time_table` where `class_id`='$class_id' && `section_id`='$section_id' && `subject_id`='$subject_id'";
+		$f=mysql_query($q);
+		$r=mysql_num_rows($f);	
 	
 		if($r>0)
 		{	
@@ -46,9 +48,14 @@ if(isset($_POST['submit']))
 		 }
 		 $message='Timetable added successfully';
 	 }
+	}
+	else
+	{
+		$message='Error Occurred';
+	}
 }
 	 
-  ?> 
+?> 
 <html>
 <head>
 <?php css();?>
@@ -80,7 +87,7 @@ if(isset($_POST['submit']))
 <form  class="form-horizontal" id="form_sample_2"  role="form" method="post"> 
 					<div class="form-body">
 						<div class="form-group">
-							<label class="control-label col-md-3">Class</label>
+							<label class="control-label col-md-3">Class <span class="required" aria-required="true"> * </span></label>
 							<div class="col-md-4">
 							   <div class="input-icon right">
 									<i class="fa"></i>
@@ -166,15 +173,16 @@ $(".user").live("change",function(){
 	$(".user1").live("change",function(){
 		var t=$(".user").val();
 		var s=$(this).val();
-		
-		$.ajax({
-		url: "ajax_time_table.php?pon="+t+"&pon1="+s,
-		}).done(function(response) {
-		
-		$("#data").html(""+response+"");
-		 
-		
-		});
+		if(s.length>0){
+			$.ajax({
+			url: "ajax_time_table.php?pon="+t+"&pon1="+s,
+			}).done(function(response) {
+			$("#data").html(""+response+"");
+			});
+		}
+		else{
+			$("#data").html("");
+		}
 
 	});	  
 

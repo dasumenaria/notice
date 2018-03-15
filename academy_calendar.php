@@ -1,22 +1,40 @@
 <?php
- include("index_layout.php");
- include("database.php");
- @session_start();
- $user_id=@$_SESSION['id'];
-
+include("index_layout.php");
+include("database.php");
+@session_start();
+$user_id=@$_SESSION['id'];
 $message=""; 
 if(isset($_POST['submit']))
 {
 	$type=mysql_real_escape_string($_REQUEST["category_id"]);
 	$name=mysql_real_escape_string($_REQUEST["name"]);
-	$date1=mysql_real_escape_string($_REQUEST["date"]);
+	$date1=mysql_real_escape_string($_REQUEST["date_from"]);
+	$date_to=mysql_real_escape_string($_REQUEST["date_to"]);
 	$date=date('Y-m-d',strtotime($date1));
-	$d = date_parse_from_format("Y-m-d", $date);
-	$curent_date=date('Y-m-d');
-	$x_d=$d["month"];
-	$sql="insert into acedmic_calendar(category_id,description,date,tag,curent_date,user_id)values('$type','$name','$date','$x_d','$curent_date','$user_id')";
-	$r=mysql_query($sql);
-	$message="Calendar Added Successfully ";
+	$date_to_cahnged=date('Y-m-d',strtotime($date_to));
+	 
+	
+	$result1 = array();
+	$currentTime = strtotime($date);
+		$endTime = strtotime($date_to_cahnged);
+	while ($currentTime <= $endTime) 
+	{
+		  if (date('N', $currentTime) < 8)
+		  {
+			$result1[] = date('Y-m-d', $currentTime);
+		  }
+		  $currentTime = strtotime('+1 day', $currentTime);
+	}
+	foreach($result1 as $value)
+	{
+		$d = date_parse_from_format("Y-m-d", $value);
+		$curent_date=date('Y-m-d');
+		$x_d=$d["month"];
+		$sql="insert into acedmic_calendar(category_id,description,date,tag,curent_date,user_id)values('$type','$name','$value','$x_d','$curent_date','$user_id')";
+		$r=mysql_query($sql); 
+	}
+ 	$message="Calendar Added Successfully ";
+	$eventid=mysql_insert_id();
 }
 ?> 
 <html>
@@ -29,30 +47,28 @@ if(isset($_POST['submit']))
 <body>
 	<div class="page-content-wrapper">
 		 <div class="page-content">
-			
-			
-			<div class="portlet box blue">
-						<div class="portlet-title">
-							<div class="caption">
-								<i class="fa fa-gift"></i>Academic Calendar
-							</div>
-							
-							<div class="tools">
-							<a class="" href="view_academy_calendar.php" style="color:white"><i class="fa fa-plus">&nbsp;View Calendar</i></a>
-							</div>
-							</div>
-						<div class="portlet-body form">
+ 			<div class="portlet box blue">
+				<div class="portlet-title">
+					<div class="caption">
+						<i class="fa fa-gift"></i>Academic Calendar
+					</div>
+				
+					<div class="tools">
+					<a class="" href="view_academy_calendar.php" style="color:white"><i class="fa fa-plus">&nbsp;View Calendar</i></a>
+					</div>
+				</div>
+				<div class="portlet-body form">
 <?php if($message!="") { ?>
 <div id="success" class="alert alert-success" style="margin-top:10px; width:50%">
 <?php echo $message; ?>
 </div>
 <?php } ?>
-							<form class="form-horizontal" role="form" id="noticeform" method="post" enctype="multipart/form-data">
+							<form class="form-horizontal" role="form" id="form_sample_2" method="post" enctype="multipart/form-data">
 								<div class="form-body">
                                	<div class="form-group">
-											<label class="col-md-3 control-label">Select Category</label>
-										<div class="col-md-3">
-                                        <select name="category_id" class="form-control select select2 select2me input-medium" placeholder="Select..." id="category_id">
+											<label class="col-md-3 control-label">Select Category <span class="required" aria-required="true"> * </span></label>
+										<div class="col-md-4">
+                                        <select name="category_id" required class="form-control select select2 select2me" placeholder="Select..." id="category_id">
                                          <option value=""></option>
                                             <?php
                                             $r1=mysql_query("select * from master_category");		
@@ -68,15 +84,21 @@ if(isset($_POST['submit']))
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="col-md-3 control-label">Description</label>
-										<div class="col-md-3">
-										<textarea class="form-control input-md" required placeholder="Date From - To  / or  Title/Description etc." type="text" name="name" value=""></textarea>
+										<label class="col-md-3 control-label">Description <span class="required" aria-required="true"> * </span></label>
+										<div class="col-md-4">
+										<textarea class="form-control " required placeholder="Date From - To  / or  Title/Description etc." type="text" name="name" value=""></textarea>
 										</div>
 									</div>
-									 <div class="form-group">
-										<label class="col-md-3 control-label">Calendar Date</label>
-										<div class="col-md-3">
-											<input class="form-control form-control-inline input-md date-picker" required id="field_5" value="<?php echo date("d-m-Y"); ?>" placeholder="dd/mm/yyyy" type="text" data-date-format="dd-mm-yyyy" type="text" name="date">
+ 									<div class="form-group">
+										<label class="col-md-3 control-label"> Date From<span class="required" aria-required="true"> * </span></label>
+										<div class="col-md-4">
+											<input class="form-control form-control-inline input-md date-picker" required id="field_5" value="<?php echo date("d-m-Y"); ?>" placeholder="dd/mm/yyyy" type="text" data-date-format="dd-mm-yyyy" type="text" name="date_from">
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-md-3 control-label"> Date to<span class="required" aria-required="true"> * </span></label>
+										<div class="col-md-4">
+											<input class="form-control form-control-inline input-md date-picker" required id="field_5" value="<?php echo date("d-m-Y"); ?>" placeholder="dd/mm/yyyy" type="text" data-date-format="dd-mm-yyyy" type="text" name="date_to">
 										</div>
 									</div>
 								</div>
@@ -92,6 +114,19 @@ if(isset($_POST['submit']))
 </body>
 
 <?php footer();?>
+<script src="assets/global/plugins/jquery.min.js" type="text/javascript"></script>
+<script>
+<?php if($eventid>0){ ?>
+var update_id = <?php echo $eventid; ?>;
+		$.ajax({
+			url: "notification_page.php?function_name=create_academy_notify&id="+update_id,
+			type: "POST",
+			success: function(data)
+			{   
+ 			}
+		});
+<?php } ?>
+</script>
 <script>
 		var myVar=setInterval(function(){myTimerr()},4000);
 		function myTimerr() 

@@ -47,7 +47,7 @@ echo '<script text="javascript">alert(Class Added Successfully")</script>';
 	<div class="page-content">
     <div class="row">
     <div class="col-md-6">
-			<div class="portlet box">
+			<div class="portlet box blue">
 			<div class="portlet-title">
 				<div class="caption">
 					<i class="fa fa-gift"></i>Master Class
@@ -96,14 +96,14 @@ echo '<script text="javascript">alert(Class Added Successfully")</script>';
             </div>
             <!-------------------------- View------------>
             <div class="col-md-6">
-			<div class="portlet box">
-			<div class="portlet-title">
+			<div class="portlet box blue">
+			<div class="portlet-title ">
 				<div class="caption">
 					<i class="fa fa-gift"></i>View Class
 				</div>
 			</div>
 			<div class="portlet-body form">
-			 <div class="table-scrollable" >
+			 <div class="table-scrollable">
 								<table class="table   table-hover" width="100%" style="font-family:Open Sans;">
 								<thead>
 									

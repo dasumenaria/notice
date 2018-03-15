@@ -106,7 +106,7 @@ if(!empty($class_id))
 				 <td><?php echo $section_name; ?></td>
 				 <td><?php echo $subject_name; ?></td>
 				 <td><?php echo $actual_date; ?></td>
-                 <th><a class="btn btn-circle btn-xs" style="color:#03F;" target="_blank" data-toggle="modal" href="edit_assignment.php?id=<?php echo $id ;?>"><i class="fa fa-edit"></i> Edit</a> 
+                 <th><a class="btn blue btn-sm"   target="_blank" data-toggle="modal" href="edit_assignment.php?id=<?php echo $id ;?>"><i class="fa fa-edit"></i> Edit</a> 
                 <!--<a class="btn btn-circle btn-xs" style="color:#03F;"
   rel="tooltip" title="Delete"  data-toggle="modal" href="#delete<?php echo $id ;?>"><i class="fa fa-trash"></i> Delete</a>
             <div class="modal fade" id="delete<?php echo $id ;?>" tabindex="-1" aria-hidden="true" style="padding-top:35px">

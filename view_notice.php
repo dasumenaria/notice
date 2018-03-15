@@ -5,13 +5,14 @@
  
 ?>
  <?php 
- 
- if(isset($_POST['sub_del']))
+
+if(isset($_POST['sub_del']))
 {
-  $delet_notice=$_POST['delet_notice'];
-  mysql_query("update `notice` SET `flag`='1' where id='$delet_notice'" );
-  
-  } 
+$delet_notice=$_POST['delet_notice'];
+echo "update `notice` SET `flag`='1' where id='$delet_notice'" ; exit;
+mysql_query("update `notice` SET `flag`='1' where id='$delet_notice'" );
+
+}  
   ?> 
 <html>
 <head>
@@ -34,7 +35,7 @@
 								<i class="fa fa-gift"></i>Notice View
 							</div>
 								<div class="tools">
-							<a class="" href="create_notice.php" style="color: white"><i class="fa fa-search">Create New Notice</i></a>
+							<a class="" href="create_notice.php" style="color: white"><i class="fa fa-search">Create Notice</i></a>
 							
 							</div>
 						</div>
@@ -134,11 +135,11 @@
 								</td>
 								
 								<td><?php if(!empty($notice_file)){ ?>
-<a href="notice/<?php echo $notice_file; ?>"><i class="btn btn-circle btn-xs fa fa-cloud-download" style="background-color:#C33; color:#FFF" ></i></a>
+<a href="notice/<?php echo $notice_file; ?>" class="btn blue btn-sm"><i class="fa fa-download" ></i></a>
 								<?php } ?>
 								</td>
 							<td> 
-	<a class="btn blue-madison red-stripe btn-sm"  rel="tooltip" title="Delete"  data-toggle="modal" href="#delete<?php echo $id ;?>">
+	<a class="btn red btn-sm"  rel="tooltip" title="Delete"  data-toggle="modal" href="#delete<?php echo $id ;?>">
 		<i class="fa fa-trash"></i>
 	</a>
 	<div class="modal fade" id="delete<?php echo $id ;?>" tabindex="-1" aria-hidden="true" style="padding-top:35px">

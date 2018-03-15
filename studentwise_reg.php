@@ -48,7 +48,10 @@ if(isset($_POST['sub_del']))
 }
 
   ?> 
-  
+ <div align="right" style="margin-right:10px">
+ <a href="student_excel.php?stdn_name=<?php echo $stdn_name;?>&stdn_sec=<?php echo $stdn_sec;?>&stdn_cls=<?php echo $stdn_cls;?>" class="btn red-pink btn-sm"><i class="fa fa-download"></i> Excel</a>
+ <a href="student_excel.php?stdn_name=0&stdn_sec=0&stdn_cls=0" class="btn red-pink btn-sm"><i class="fa fa-download"></i> All student</a>
+ </div> 
 <table class="table table-bordered table-hover dataTable no-footer" id="sample_1" role="grid" aria-describedby="sample_1_info">
 	<thead>
 		<tr role="row" style="background:#f9f9f9;">
@@ -57,7 +60,7 @@ if(isset($_POST['sub_del']))
 		<th class="sorting_disabled" rowspan="1" colspan="1" style="width: 301px;" aria-label="Email">Scholler No.</th>
 <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 301px;" aria-label="Email">Class</th>
 <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 301px;" aria-label="Email">Section</th> 
-<th class="sorting_disabled" rowspan="1" colspan="1" style="width: 301px;" aria-label="Email">Mobile No.</th>
+<th class="sorting_disabled" rowspan="1" colspan="1" style="width: 301px;" aria-label="Email">Username</th>
 		<th class="sorting_disabled" rowspan="1" colspan="1" style="width: 163px;" aria-label="Status">Action</th></tr>
 	</thead>
 
@@ -76,6 +79,7 @@ if(isset($_POST['sub_del']))
 		$section_id=$row1['section_id'];
 		$medium=$row1['medium'];
 		$mobile_no=$row1['mobile_no'];
+		$user_name=$row1['username'];
 		$dob1=$row1['dob'];
 		$dob=date('d-m-Y', strtotime($dob1));
 	 
@@ -93,23 +97,23 @@ if(isset($_POST['sub_del']))
  	?>
 <tbody>
 	<tr>
-		<td width = "15px">
-			<?php echo $x;?>
-		</td>
-		<td class="search">
-			<?php echo $name;?>
-		</td>
-		<td>
-			<?php echo $eno;?>
-		</td>
-<td><?php echo $class_name;?></td>
-<td><?php echo$section_name;?></td>
- 
-<td>
-			<?php echo $mobile_no;?>
-		</td>
-		<td>
-			<a class="btn btn-circle btn-xs" style="color:#FFF; background-color:#39F"  rel="tooltip" title="Delete"  data-toggle="modal" href="#delete1<?php echo $id ;?>"><i class="fa fa-search"></i></a>
+	<td width = "15px">
+	<?php echo $x;?>
+	</td>
+	<td class="search">
+	<?php echo $name;?>
+	</td>
+	<td>
+	<?php echo $eno;?>
+	</td>
+	<td><?php echo $class_name;?></td>
+	<td><?php echo$section_name;?></td>
+
+	<td>
+	<?php echo $user_name;?>
+	</td>
+	<td>
+			<a class="btn blue btn-sm" rel="tooltip" title="View Detials"  data-toggle="modal" href="#delete1<?php echo $id ;?>"><i class="fa fa-search"></i></a>
 			<div class="modal fade" id="delete1<?php echo $id ;?>" tabindex="-1" aria-hidden="true" style="padding-top:35px">
 					<div class="modal-dialog modal-lg">
 							<div class="modal-content">
@@ -161,10 +165,10 @@ if(isset($_POST['sub_del']))
 						</div>
 			</div>
 			&nbsp;
-			<a class="btn btn-circle btn-xs" style="color:#FFF; background-color:#FFB848" href="edit_profile.php?id=<?php echo $id;?>">
+			<a class="btn yellow btn-sm" target="_blank" href="edit_profile.php?id=<?php echo $id;?>">
 			<i class="fa fa-edit"></i></a>
 			&nbsp;
-			<a class="btn btn-circle btn-xs" style="color:#FFF; background-color:#F03"  rel="tooltip" title="Delete"  data-toggle="modal" href="#delete<?php echo $id ;?>"><i class="fa fa-trash"></i></a>
+			<a class="btn red btn-sm" style="color:#FFF; background-color:#F03"  rel="tooltip" title="Delete"  data-toggle="modal" href="#delete<?php echo $id ;?>"><i class="fa fa-trash"></i></a>
 			<div class="modal fade" id="delete<?php echo $id ;?>" tabindex="-1" aria-hidden="true" style="padding-top:35px">
 				<div class="modal-dialog modal-md">
 					<div class="modal-content">

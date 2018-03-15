@@ -1,7 +1,8 @@
 <?php
- include("index_layout.php");
- include("database.php");
- $session_id=@$_SESSION['id']; 
+include("index_layout.php");
+include("database.php");
+require_once('ImageManipulator.php'); 
+$session_id=@$_SESSION['id']; 
 $message='';
 if(isset($_POST['submit']))
 {
@@ -13,37 +14,31 @@ if(isset($_POST['submit']))
 	$news_date=date('Y-m-d',strtotime($news_date1));
 	$curent_date=date("Y-m-d");
 	@$file_name=$_FILES["image"]["name"];
-	
-	
 	$sql="insert into news(user_id,title,description,date,category_id,curent_date,role_id)values('$session_id','$news_title','$news_details','$news_date','$category_id','$curent_date','$role_id')";
 	$r=mysql_query($sql);
-	$file_upload='noimage.png';
-	$newsid=mysql_insert_id();
+ 	$newsid=mysql_insert_id();
 	$n_name='news';
 	$folderName2=$n_name.$newsid;
 	$directoryPath = "news/".$folderName2;
 	mkdir($directoryPath, 0777);
-		if(!empty($file_name))
-		{
-			@$file_name=$_FILES["image"]["name"];
-			$file_tmp_name=$_FILES['image']['tmp_name'];
-			$target ="news/".$folderName2."/";
-			$file_name=strtotime(date('d-m-Y h:i:s'));
-			$filedata=explode('/', $_FILES["image"]["type"]);
-			$filedata[1];
-			$random=rand(100, 10000);
-			$target=$target.basename($random.$file_name.'.'.$filedata[1]);
-			move_uploaded_file($file_tmp_name,$target);
-			$item_image=$random.$file_name.'.'.$filedata[1];
-		}
-		else
-		{
-			$item_image='no_image.png';
-		}
-		$xsql=mysql_query("update `news` SET `featured_image`='$item_image' where id='".$newsid."'" );
-		$xsqlr=mysql_query($xsql);    
-		$message = "News Add Successfully.";
-   }
+	if(!empty($file_name))
+	{
+ 		$filedata=explode('/', $_FILES["image"]["type"]);
+		$filedata[1];
+		$newNamePrefix = rand(100, 10000); 
+		$manipulator = new ImageManipulator($_FILES['image']['tmp_name']);
+		$newImage = $manipulator->resample(640, 360);
+		$manipulator->save("news/".$folderName2."/" . $newNamePrefix .".". $filedata[1]);
+		$insert_path=$newNamePrefix.".".$filedata[1];
+ 	}
+	else
+	{
+		$insert_path='no_image.png';
+	}
+	$xsql=mysql_query("update `news` SET `featured_image`='$insert_path' where id='".$newsid."'" );
+	$xsqlr=mysql_query($xsql);    
+	$message = "News Add Successfully.";
+}
   ?> 
 <html>
 <head>
@@ -55,9 +50,7 @@ if(isset($_POST['submit']))
 <body>
 	<div class="page-content-wrapper">
 		 <div class="page-content">
-			
-			
-			<div class="portlet box blue">
+ 			<div class="portlet box blue">
 						<div class="portlet-title">
 							<div class="caption">
 								<i class="fa fa-gift"></i> News
@@ -72,13 +65,13 @@ if(isset($_POST['submit']))
 <?php echo $message; ?>
 </div>
 <?php } ?>
-							<form class="form-horizontal" role="form" id="noticeform" method="post" enctype="multipart/form-data">
+							<form class="form-horizontal" role="form" id="form_sample_2" method="post" enctype="multipart/form-data">
 								<div class="form-body">
 								
 							  <div class="form-group">
-										<label class="col-md-3 control-label">Select Role</label>
-										<div class="col-md-3">
-                                        <select name="role_id" class="form-control select select2 select2me input-medium" placeholder="Select..." id="sid">
+										<label class="col-md-3 control-label">Select Role <span class="required" aria-required="true"> * </span></label>
+										<div class="col-md-4">
+                                        <select name="role_id" class="form-control select2me " required placeholder="Select..." id="sid">
                                          <option value=""></option>
                                             <?php
                                             $r1=mysql_query("select * from master_role where id=1 OR id=4 OR id=5");		
@@ -93,50 +86,33 @@ if(isset($_POST['submit']))
 								</select>
 								</div>
 								</div>
-								
-								
-									<div class="form-group">
-										<label class="col-md-3 control-label">News Title</label>
-										<div class="col-md-3">
+ 									<div class="form-group">
+										<label class="col-md-3 control-label">News Title <span class="required" aria-required="true"> * </span></label>
+										<div class="col-md-4">
 											<input class="form-control input-md" required placeholder="Title" type="text" name="news_title">
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="col-md-3 control-label">News Details</label>
-										<div class="col-md-3">
+										<label class="col-md-3 control-label">News Details <span class="required" aria-required="true"> * </span></label>
+										<div class="col-md-4">
 										<textarea class="form-control input-md" required placeholder="Details" type="text" name="news_details"></textarea>
 										</div>
 									</div>
 									
 									<div class="form-group">
-										<label class="col-md-3 control-label">News Date</label>
+										<label class="col-md-3 control-label">News Date <span class="required" aria-required="true"> * </span></label>
 										
-										<div class="col-md-3">
-											<input class="form-control form-control-inline input-md date-picker" required  value="<?php echo date("d-m-Y"); ?>" placeholder="dd/mm/yyyy" data-date-format="dd-mm-yyyy" type="text" name="news_date">
+										<div class="col-md-4">
+											<input class="form-control form-control-inline input-md date-picker" required  value="<?php echo date("d-m-Y"); ?>" placeholder="dd-mm-yyyy" data-date-format="dd-mm-yyyy" type="text" name="news_date">
 											
 										</div>
 										
 										
 									</div>
 									<div class="form-group">
-                                      <label class="control-label col-md-3">Cover Image</label>
-                                        <div class=" col-md-3 fileinput fileinput-new" style="padding-left: 15px;" data-provides="fileinput">
-                                            <div class="col-md-10 fileinput-new thumbnail" style="width: 200px;  height: 150px;">
-                                                <img src="img/noimage.png" style="width:100%;" alt=""/>
-                                            </div>
-                                            <div class="col-md-3 fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;">
-                                            </div>
-                                            <div class="col-md-2">
-                                                <span class="btn default btn-file addbtnfile" style="background-color:#00CCFF; color:#FFF">
-                                                <span class="fileinput-new">
-                                                <i class="fa fa-plus"></i> </span>
-                                                <span class="fileinput-exists">
-                                                <i class="fa fa-plus"></i> </span>
-                                                <input type="file" class="default" name="image" id="file1">
-                                                </span>
-                                                <a href="#" class="btn red fileinput-exists" data-dismiss="fileinput" style=" color:#FFF">
-                                                <i class="fa fa-trash"></i> </a></div>
-                                            </div>
+                                      <label class="control-label col-md-3">Cover Image <span class="required" aria-required="true"> * </span></label>
+                                        <div class=" col-md-4">
+                                            <input type="file" class="default form-control" required name="image" id="file1">
                                         </div>
 									
 								</div>
@@ -150,7 +126,6 @@ if(isset($_POST['submit']))
 </body>
 <?php footer(); ?>
 <script src="assets/global/plugins/jquery.min.js" type="text/javascript"></script>
-
 <script>
 <?php if($newsid>0){ ?>
 var update_id = <?php echo $newsid; ?>;

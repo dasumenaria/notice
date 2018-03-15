@@ -1,36 +1,32 @@
 <?php
- include("index_layout.php");
- include("database.php");
- $user=$_SESSION['category'];
- $user_id=$_SESSION['id'];
-  $message="";	
-	if(isset($_POST['submit']))
-	{
-		$role_id=5;
-		$name=mysql_real_escape_string($_REQUEST["name"]);
-		$mobile_no=mysql_real_escape_string($_REQUEST["mobile_no"]);
-		$email=mysql_real_escape_string($_REQUEST["email"]);
+include("index_layout.php");
+include("database.php");
+$user=$_SESSION['category'];
+$user_id=$_SESSION['id'];
+$message="";	
+if(isset($_POST['submit']))
+{
+	$role_id=5;
+	$name=mysql_real_escape_string($_REQUEST["name"]);
+	$mobile_no=mysql_real_escape_string($_REQUEST["mobile_no"]);
+	$email=mysql_real_escape_string($_REQUEST["email"]);
 
-		$designation=mysql_real_escape_string($_REQUEST["designation"]);
- 		
-		$fetch_st=mysql_query("select `id` from contact_detail where mobile_no='$mobile_no'");		
-		$fetch_st1=mysql_fetch_array($fetch_st);
-		if(empty($fetch_st1))
-		{
-								
-
-			$sql="insert into contact_detail(name,mobile_no,email,designation)values('$name','$mobile_no','$email','$designation')";
-			$r=mysql_query($sql); 
-			$message="Thank You, registration has been successfully.";
- 		}
-		else{
-			$message="User already exist!";
- 		}
- 	}
+	$designation=mysql_real_escape_string($_REQUEST["designation"]);
 	
-    
-  ?> 
-
+	$fetch_st=mysql_query("select `id` from contact_detail where email='$email'");		
+	$fetch_st1=mysql_fetch_array($fetch_st);
+	if(empty($fetch_st1))
+	{
+ 		$sql="insert into contact_detail(name,mobile_no,email,designation)values('$name','$mobile_no','$email','$designation')";
+		$r=mysql_query($sql);
+		$message="Thank You, registration has been successfully.";
+	}
+	else
+	{
+		$message="User already exist!";
+	}
+}
+?> 
 <html>
 <head>
 <?php css();?>
@@ -56,26 +52,35 @@
 <?php echo $message; ?>
 </div>
 <?php } ?>	
-												<form class="form-horizontal" role="form" id="noticeform" method="post" enctype="multipart/form-data">
+												<form class="form-horizontal" role="form" id="form_sample_2" method="post" enctype="multipart/form-data">
                                                   <div class="row col-md-12">  
                                                     <div class="col-sm-6">
-                                                            <label class="control-label">Name of Faculty</label>
+														 <div class="form-group col-sm-12">
+                                                            <label class="control-label">Name of Faculty <span class="required" aria-required="true"> * </span></label>
                                                             <input type="text" placeholder="Provide faculty name" name="name" required class="form-control" value=""/>
+														</div>
                                                     </div>
                                                     <div class="col-sm-6">
-                                                            <label class="control-label">Mobile No</label>
+														 <div class="form-group col-sm-12">
+                                                            <label class="control-label">Mobile No <span class="required" aria-required="true"> * </span></label>
                                                             <input type="text" placeholder="Provide faculty mobile no" required maxlength="10" minlength="10" name="mobile_no" class="form-control"/>
+														</div>
                                                     </div>
                                                   </div>
                                                   
                                                   <div class="row col-md-12">   
                                                     <div class="col-sm-6">
-                                                        <label class="control-label">Email Id</label>
-                                                        <input type="email" placeholder="Provide faculty Email Address" name="email" value="" class="form-control"/>
+														 <div class="form-group col-sm-12">
+                                                        <label class="control-label">Email Id<span class="required" aria-required="true"> * </span> </label>
+                                                        <input type="email" placeholder="Provide faculty Email Address" required name="email" value="" class="form-control"/>
+														</div>
                                                     </div>
                                                     <div class="col-sm-6">
-                                                        <label class="control-label">Designation</label>
-                                                        <input type="text" placeholder="Provide faculty designation" name="designation" value="" class="form-control"/> 
+														 <div class="form-group col-sm-12">
+                                                        <label class="control-label">Designation<span class="required" aria-required="true"> * </span> </label>
+                                                        <input type="text" placeholder="Provide faculty designation" required name="designation" value="" class="form-control"/> 
+														
+                                                    </div>
                                                     </div>
                                                  </div>   
                                                   

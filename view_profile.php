@@ -20,37 +20,38 @@
 <div class="page-content-wrapper">
 <div class="page-content">
 <div class="portlet box blue">
-						<div class="portlet-title">
-							<div class="caption">
-								<i class="fa fa-globe"></i>Registration View
-							</div>
-						
-						</div>
-						<div class="portlet-body">
-							
-							<div id="sample_1_wrapper" class="dataTables_wrapper no-footer">
+<div class="portlet-title">
+	<div class="caption">
+		<i class="fa fa-globe"></i>Registration View
+	</div>
+
+</div>
+<div class="portlet-body">
+	
+	<div id="sample_1_wrapper" class="dataTables_wrapper no-footer">
 	<div class="row">
 		
-		<div class="col-md-4 col-sm-12">
-			<div class="dataTables_length" id="sample_1_length"><label>Student class</label>
-				<select name="sample_1_length" id="cls" class="form-control users select2me">
-					<option value="">Select</option>
-					<?php
-					$r2=mysql_query("select * from master_class where flag='0'");
-					$i=0;
-					while($row2=mysql_fetch_array($r2))
-					{
-						$i++;
-						echo $class_id=$row2['id'];
-						$class_name=$row2['class_name'];
-					?> 
-					<option value="<?php echo $class_id; ?>"><?php echo $class_name;?></option>
-				<?php } ?>
-				</select>
+		<div class="col-md-4">
+			<div class="form-group">
+				<label>Student class</label>
+					<select name="sample_1_length" id="cls" class="form-control users select2me ">
+						<option value="">Select</option>
+						<?php
+						$r2=mysql_query("select * from master_class where flag='0'");
+						$i=0;
+						while($row2=mysql_fetch_array($r2))
+						{
+							$i++;
+							echo $class_id=$row2['id'];
+							$class_name=$row2['class_name'];
+						?> 
+						<option value="<?php echo $class_id; ?>"><?php echo $class_name;?></option>
+					<?php } ?>
+					</select>
 			</div>
 		</div>
 		<div class="col-md-4 col-sm-12">
-			<div class="dataTables_length" id="sample_1_length"><label>Student Section</label>
+			<div class="form-group"><label>Student Section</label>
 				<select name="sample_1_length" id="sec" class="form-control users select2me">
 					<option value="">Select</option>
 					<?php
@@ -68,7 +69,7 @@
 			</div>
 		</div>
 <div class="col-md-4 col-sm-12">
-			<div class="dataTables_length" id="sample_1_length"><label>Student Name</label>
+			<div class="form-group"><label>Student Name</label>
 				<select name="sample_1_length" id="users" class="form-control users select2me">
 					<option value="">Select</option>
 					<?php
@@ -86,9 +87,9 @@
 			</div>
 		</div>
 	</div>
-							<div id="data" class="scroller" style="height:400px; padding-top:5px"  data-always-visible="1" data-rail-visible="0">
+							<center><div id="data" class="scroller" style="height:400px; padding-top:5px"  data-always-visible="1" data-rail-visible="0">
 							</div>
-							
+							</center>
 							
 							 
 							
@@ -108,7 +109,7 @@
 <script>
 $(document).ready(function(){    
         $(".users").die().live("change",function(){
-			
+			$("#data").html("<img height='50px' src='img/loading.gif'/>");
 			var stdn_name=$("#users").val();
 			var stdn_cls=$("#cls").val(); 
 			var stdn_sec=$("#sec").val();

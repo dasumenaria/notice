@@ -5,41 +5,36 @@
 	 $stdn_name=$_GET['stdn_name'];
 	 $stdn_cls=$_GET['stdn_cls'];
 	 $stdn_sec=$_GET['stdn_sec'];
-	 
-	
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
+	 $moc=$_GET['moc'];
+	 $from=$_GET['from'];
+	 $to=$_GET['to'];
 
-  $qury='';
+	$qury='';
   
-	if(!empty($stdn_cls) && empty($stdn_sec) && empty($stdn_name))
+	if(!empty($stdn_cls))
 	{
-		$qury="`class_id` = '$stdn_cls'";
+		$qury.="`class_id` = '$stdn_cls' &&";
 	}
-	if(empty($stdn_cls) && !empty($stdn_sec) && empty($stdn_name))
+	if(!empty($stdn_sec))
 	{
-		$qury="`section_id` = '$stdn_sec'";
+		$qury.="`section_id` = '$stdn_sec' && ";
 	}
-	if(empty($stdn_cls) && empty($stdn_sec) && !empty($stdn_name))
+	if(!empty($stdn_name))
 	{
-		$qury="`student_id` = '$stdn_name'";
+		$qury.="`student_id` = '$stdn_name' &&";
 	}
-	if(!empty($stdn_cls) && !empty($stdn_sec) && empty($stdn_name))
+	if(!empty($moc))
 	{
-		$qury="`class_id` = '$stdn_cls' && `section_id` = '$stdn_sec'";
+		$qury.="`mode_of_complaint` = '$moc' &&";
 	}
-	if(empty($stdn_cls) && !empty($stdn_sec) && !empty($stdn_name))
+	if(!empty($from) && !empty($to))
 	{
-		$qury="`section_id` = '$stdn_sec' && `student_id` = '$stdn_name'";
+		$from=date('Y-m-d', strtotime($from));
+		$to=date('Y-m-d', strtotime($to));
+		$qury.="`current_date` between '$from' and '$to' &&";
 	}
-	if(!empty($stdn_cls) && empty($stdn_sec) && !empty($stdn_name))
-	{
-		$qury="`class_id` = '$stdn_cls' && `student_id` = '$stdn_name'";
-	}
-	if(!empty($stdn_cls) && !empty($stdn_sec) && !empty($stdn_name))
-	{
-		$qury="`class_id` = '$stdn_cls' && `section_id` = '$stdn_sec' && `student_id` = '$stdn_name'";
-	}
- 
+	 
+ $qury.=' flag=0 order by id DESC';
   ?> 
   
 <table class="table table-bordered table-hover dataTable no-footer" id="sample_1" role="grid" aria-describedby="sample_1_info">
@@ -55,8 +50,8 @@
 	</thead>
 
 	<?php
-		 
-	$r1=mysql_query("select * from remarks where ".$qury." && flag='0' order by id Desc");
+	///echo "select * from remarks where ".$qury."";	 
+	$r1=mysql_query("select * from remarks where ".$qury."");
 	while($row1=mysql_fetch_array($r1))
 	{
 		$id=$row1['id'];
@@ -90,7 +85,7 @@
 		</td>
         <td><?php echo $user_name;?></td>
         <td>
- 			<a class="btn btn-circle btn-xs" style="color:#FFF; background-color:#F03"  rel="tooltip" title="Delete"  data-toggle="modal" href="#delete<?php echo $id ;?>"><i class="fa fa-trash"></i></a>
+ 			<a class="btn red btn-sm" rel="tooltip" title="Delete"  data-toggle="modal" href="#delete<?php echo $id ;?>"><i class="fa fa-trash"></i></a>
 			<div class="modal fade" id="delete<?php echo $id ;?>" tabindex="-1" aria-hidden="true" style="padding-top:35px">
 				<div class="modal-dialog modal-md">
 					<div class="modal-content">

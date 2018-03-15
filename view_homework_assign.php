@@ -67,15 +67,25 @@ if(isset($_POST['delateall']))
 											</div>
 										</div>
 										<div class="col-md-4">
-											<div id="dt">	
+											 	
 											<div class="form-group">
 												<label class="col-md-3">Section</label>
 												<div class="col-md-3">
 													<select name="section_id" id="sec_id" class="form-control select2me input-medium search_hw" placeholder="Select Section" >
 													<option value=""></option>
+													<?php
+													$r3=mysql_query("select * from master_section where flag='0'");
+													$i=0;
+													while($row3=mysql_fetch_array($r3))
+													{
+														$i++;
+														$id=$row3['id'];
+														$section_name=$row3['section_name'];
+													?> 
+													<option value="<?php echo $id;?>"><?php echo $section_name;?></option>
+												<?php } ?>
 													 </select>
-												</div>												 
-												</div>												 
+												</div> 												 
 											</div>
 										</div>
                                         <div class="col-sm-4"> 
@@ -144,8 +154,10 @@ if(isset($_POST['delateall']))
 	</div>
 										
                                         </form>
+										<center>
 										<div  id="vhw">
 										</div>
+										</center>
 									 </div>
 							
 						</div>
@@ -163,53 +175,21 @@ if(isset($_POST['delateall']))
 <script> 
 	$(document).ready(function()
 		{
-			$(".rd").live("click",function()
-				{
-
-					var valu=$(this).val();
-					if(valu==2)
-					{
-						$('.ifyes').show();
-					}
-					else
-					{	
-						$('.ifyes').hide();
-					}
-				});
-
-			$(".user").live("change",function()
-				{
- 
-					var t=$(this).val();
- 
-					$.ajax({
-					url: "ajax_homework.php?pon="+t,
-					}).done(function(response) {
-					$("#dt").html(""+response+"");
-					$('.select2me').select2();  
-
-					});
-				});	 
- 
-	
+			  
 				$(".search_hw").live("change",function()
 				{		
-				 
-				var vh=$("#vh").val();
-				 
-				var t=$("#cls_id").val();
- 	 
-				var s=$("#sec_id").val();
-				var u=$("#fac_id").val();
-				var v=$("#date_from").val();
-				var w=$("#date_to").val();
-				  $.ajax({
-					url: "ajax_view_homework.php?pon="+t+"&pon1="+s+"&pon2="+vh+"&pon3="+u+"&pon4="+v+"&pon5="+w,
-					}).done(function(response) {
-					$("#vhw").html(""+response+"");
-					 
-					});
-					
+					$("#vhw").html("<img height='50px' src='img/loading.gif'/>");
+					var vh=$("#vh").val();
+					var t=$("#cls_id").val();
+					var s=$("#sec_id").val();
+					var u=$("#fac_id").val();
+					var v=$("#date_from").val();
+					var w=$("#date_to").val();
+					$.ajax({
+						url: "ajax_view_homework.php?pon="+t+"&pon1="+s+"&pon2="+vh+"&pon3="+u+"&pon4="+v+"&pon5="+w,
+						}).done(function(response) {
+						$("#vhw").html(""+response+"");
+						});
 				});			
 
 		});

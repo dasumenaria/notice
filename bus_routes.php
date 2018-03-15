@@ -40,7 +40,7 @@ if(isset($_POST['submit']))
 <body>
 	<div class="page-content-wrapper">
 		 <div class="page-content">
-			<div class="portlet box">
+			<div class="portlet box blue">
 						<div class="portlet-title">
 							<div class="caption">
 								<i class="fa fa-gift"></i>Master Station
@@ -130,7 +130,7 @@ if(isset($_POST['submit']))
             </div>
         </div>
                       
-		<div class="portlet box">
+		<div class="portlet box blue">
 			<div class="portlet-title">
 				<div class="caption">
 					<i class="fa fa-gift"></i>View Station

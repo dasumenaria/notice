@@ -8,9 +8,9 @@ $class_id=$_GET['pon'];
  
 			<div class="form-group">
 				<label class="control-label col-md-3">Section</label>
-				<div class="col-md-3">
-					<select class="form-control select select2 select2me" placeholder="Select section.." name="section_id">
-						<option value=""> </option>
+				<div class="col-md-4">
+					<select class="form-control" placeholder="Select..." name="section_id">
+						<option value=""> Select...</option>
 						<?php
  
 							$r1=mysql_query("select * from class_section where class_id='".$class_id."'");	

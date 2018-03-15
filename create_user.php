@@ -1,8 +1,9 @@
 <?php
- include("index_layout.php");
- include("database.php");
- $user=$_SESSION['category'];
-  $message="";
+include("index_layout.php");
+include("database.php");
+require_once('ImageManipulator.php');
+$user=$_SESSION['category'];
+$message="";
 if(isset($_POST['submit']))
 {
 	$username=mysql_real_escape_string($_REQUEST["user_name"]);
@@ -38,9 +39,9 @@ if(isset($_POST['submit']))
 		{
 			$item_image='no_image.png';
 		}
-		$notification_key="AAAAJs4r62Q:APA91bHtzaHry7Y63No5sTrsD09dl7Bu5Xj3ZuVxmY614VKvtA6a4eOKz6sydOzWZDAfLgAbqld1OkiuGA7o-ex_hnEUDNg2CWNZOUbkJDMYv5kJ-Q6816vOrtLAkDvZP3U_WizaqUql";
+		$notification_key="AAAATJpd3X0:APA91bFIfAJIxq5oBGv4YUfMPDLmhVT-iUilXpJS8l7AwSLIxy4-E1efuYrH4vY2oOwIP6ecLma0zvgva-lB5RYtkgjYa8pKiCBhxcQFqfbPrDbpXmBcc3oiGRQmRTrkucSkBxZAn8Tv";
 		$sql="insert into faculty_login(name,user_name,role_id,password,mobile_no,address,image,curent_date,class_id,section_id,notification_key)
-		values('$name','$username','$role_id','$password','$mobile_no','$address','$item_image','$date','$class_id','$section_id',$notification_key)";
+		values('$name','$username','$role_id','$password','$mobile_no','$address','$item_image','$date','$class_id','$section_id','$notification_key')";
 		$r=mysql_query($sql);
 	$message="User Added Successfully";
 	}
@@ -77,15 +78,15 @@ if(isset($_POST['submit']))
 <?php echo $message; ?>
 </div>
 <?php } ?>
-							<form class="form-horizontal" role="form" id="noticeform" method="post" enctype="multipart/form-data">
+							<form class="form-horizontal" role="form" id="form_sample_2"  method="post" enctype="multipart/form-data">
 								<div class="form-body">
 								
 								<div class="row">
 								<div class="form-group col-md-12" >
 										
 										<div class="col-md-4">
-										<label class="col-md-12">Select Role</label>
-                                        <select name="role_id" class="form-control select select2 select2me" placeholder="Select..." id="sid">
+										<label class="">Select Role <span class="required" aria-required="true"> * </span></label>
+                                        <select name="role_id" class="form-control select select2 select2me" required placeholder="Select..." id="sid">
                                          <option value=""></option>
                                             <?php
                                             $r1=mysql_query("select * from master_role where id=2 OR id=3 OR id=4");		
@@ -102,41 +103,46 @@ if(isset($_POST['submit']))
 										
 										
 										<div class="col-md-4">
-											<label class="col-md-12"> Name</label>
+											<label class=""> Name <span class="required" aria-required="true"> * </span></label>
 											<input class="form-control input-md" required placeholder=" Name" type="text" name="name">
 										</div>
 										
 										
 										<div class="col-md-4">
-											<label class="col-md-12">User Name</label>
+											<label class="">User Name <span class="required" aria-required="true"> * </span></label>
 											<input class="form-control input-md" required placeholder="User Name" type="text" name="user_name">
 										</div>
 										
 									</div>
 									</div>
 									
-									
-									
-									
 									<div class="row">
-                                    <div class="form-group">
-										<label class="col-md-2 control-label">Password</label>
-										<div class="col-md-3">
-											<input class="form-control input-md" required placeholder="Password" type="text" name="password">
+									<div class="form-group col-md-12">
+										
+										<div class="col-md-4">
+											<label class="">Password <span class="required" aria-required="true"> * </span></label>
+											<input class="form-control" required placeholder="Password" type="text" name="password">
 										</div>
 										
-										<label class="col-md-2 control-label">Mobile No</label>
-										<div class="col-md-3">
-											<input class="form-control input-md" required placeholder="Mobile No" type="text" name="mobile_no">
+										
+										<div class="col-md-4">
+											<label class="">Mobile No <span class="required" aria-required="true"> * </span></label>
+											<input class="form-control" required placeholder="Mobile No" type="text" name="mobile_no">
 										</div>
 										
-									</div>
+										<div class="col-md-4">
+											<label class="">Address</label>
+											<textarea class="form-control input-md" rows="2"  placeholder="Address" type="text" name="address"></textarea>
+										</div>
+									</div>	
+									 
 									</div>
 									
                                     <div class="row">
-                                        <div class="form-group">
-                                            <label class="col-md-2 control-label">Select Class</label>
-                                            <div class="col-md-3">
+                                        
+                                        <div class="form-group col-md-12">    
+                                            <div class="col-md-4">
+											<label>Select Class</label>
                                             <select name="class_id" class="form-control select select2 select2me section_select" placeholder="Select...">
                                              	<option value=""></option>
                                                 <?php
@@ -152,45 +158,30 @@ if(isset($_POST['submit']))
                                        		</select>
                                             </div>
                                         
-                                            <label class="col-md-2 control-label">Section</label>
-                                            <div class="col-md-3">
-                                               <select name="section_id" class="form-control select select2 select2me " placeholder="Select..." id="replace_data">
-                                             	<option value=""></option>
+                                            
+                                            <div class="col-md-4">
+												<label>Section</label>
+                                               <select name="section_id" class="form-control" placeholder="Select..." id="replace_data">
+                                             	<option value=""> Select...</option>
+												<?php
+													$r3=mysql_query("select * from master_section where flag='0'");
+													$i=0;
+													while($row3=mysql_fetch_array($r3))
+													{
+														$i++;
+														$id=$row3['id'];
+														$section_name=$row3['section_name'];
+													?> 
+													<option value="<?php echo $id;?>"><?php echo $section_name;?></option>
+												<?php } ?>
                                                </select>
                                             </div>
-                                        </div>
-									</div>
-                                    
-                                    
-                                    
-									<div class="row">
-									 <div class="form-group">
-									 <label class="col-md-2 control-label">Address</label>
-										<div class="col-md-3">
-											<textarea class="form-control input-md" rows="1"  placeholder="Address" type="text" name="address"></textarea>
+											<div class=" col-md-4">
+												<label>User Image</label>
+                                                <input type="file" class="default form-control " name="image" id="file1 " onChange="loadFile(event)">
+                                            </div>
 										</div>
-                                                    <label class="col-md-2 control-label ">User Image</label>
-                                                    </br>
-                                                    <div class=" col-md-5 fileinput fileinput-new" style="padding-left: 15px; padding-top:0px" data-provides="fileinput">
-                                                    <div class="col-md-10 fileinput-new thumbnail" style="width: 200px;  height: 50px;">
-                                                    <img src="img/noimage.png" style="width:100%;" alt=""/>
-                                                    </div>
-                                                    <div class="col-md-6 fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;">
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                    <span class="btn default btn-file addbtnfile" style="background-color:#00CCFF; color:#FFF">
-                                                    <span class="fileinput-new">
-                                                    <i class="fa fa-plus"></i> </span>
-                                                    <span class="fileinput-exists">
-                                                    <i class="fa fa-plus"></i> </span>
-
-                                                    <input type="file" class="default" name="image" id="file1 " onChange="loadFile(event)">
-                                                    </span>
-                                                    <a href="#" class="btn red fileinput-exists" data-dismiss="fileinput" style=" color:#FFF">
-                                                    <i class="fa fa-trash"></i> </a></div>
-                                                    </div>
-                                                    </div>
-                                                    </div>
+									</div>
  								<div class=" right1" align="center" style="margin-right:50px">
 									<button type="submit" class="btn green" name="submit">Submit</button>
 								</div>
@@ -224,7 +215,7 @@ $(document).ready(function(){
         $(".remove_row").die().live("click",function(){
             $(this).closest("#parant_table tr").remove();
         });
-		$(document).on('change','.section_select', function(){
+		/*$(document).on('change','.section_select', function(){
 			var class_id = $(this).val();
 			 
 			$.ajax({
@@ -235,7 +226,7 @@ $(document).ready(function(){
  					 $('#replace_data').html(data);
  				}
 			});
-		});
+		});*/
 		
 	});
 

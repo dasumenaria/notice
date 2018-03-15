@@ -8,16 +8,26 @@ $date=date('Y-m-d');
  		
 if(isset($_POST['submit']))
 {
-	
-	$class_id=$_POST["class_id"];
-	$section_id=$_POST["section_id"];
-	$subject_id=$_POST["subject_id"];				
-	$yesno=$_POST["yesno"];				
-	$topic=$_POST["topic"];
-	$submission_date=$_POST["submission_date"];
+	$data_arrs = $_POST;
+	foreach($data_arrs['assignment'] as $key => $data_arr)
+	{
+
+		foreach($_FILES['file']['error'] as $k=>  $error) {
+			$data_arr['file_name'] = $_FILES['file']['name'][$key];
+			$data_arr['file_tmp_name'] = $_FILES['file']['tmp_name'][$key];
+		}
+		
+	$class_id=$data_arrs["class_id"];
+	$section_id=$data_arrs["section_id"];
+	$subject_id=$data_arr["subject_id"];				
+	$yesno=$data_arrs["yesno"];				
+	$topic=$data_arr["topic"];
+	$submission_date=$data_arr["submission_date"];
 	$sub_date=date('Y-m-d',strtotime($submission_date));
-	$description=$_POST["description"];
-	$student_id=$_POST["student_id"]; 
+	$description=$data_arr['description'];
+	$student_id = $data_arr['student_id'];
+	$file_name=$data_arr['file_name'];
+	$file_tmp_name=$data_arr['file_tmp_name'];
 
 	if($yesno=='1')
 	{
@@ -25,12 +35,13 @@ if(isset($_POST['submit']))
 			$r=mysql_query($sql);
 			$time=time();
 			$eventid=mysql_insert_id();
-			$file_name=$_FILES["file"]["name"]; 
+		if(!empty($file_tmp_name))
+		{		
 			$ext=pathinfo($file_name,PATHINFO_EXTENSION);
 			$photo=$topic.$time.'.'.$ext;
-			move_uploaded_file($_FILES["file"]["tmp_name"],"homework/".$photo);
+			move_uploaded_file($file_tmp_name,"assignment/".$photo);
 			$r1=mysql_query("update `assignment` set file='$photo' where id='$eventid'");
-			
+		}	
 			
 				//---------------------------------------------------------------
 				$std_nm=mysql_query("SELECT `device_token`,`notification_key`,`id`,`role_id` FROM `login` where section_id='".$section_id."' AND  class_id='".$class_id."' AND device_token != '' ");
@@ -54,7 +65,7 @@ if(isset($_POST['submit']))
 							'message'  => $message,
 							'button_text' => 'View',
 							'link' => 'notice://Assignment?id='.$eventid.'&student_id='.$user_idss,
-							'notification_id' => $eventid,
+							'notification_id' => $user_idss,
 						);
 						$url = 'https://fcm.googleapis.com/fcm/send';
 						$fields = array
@@ -69,7 +80,7 @@ if(isset($_POST['submit']))
 						);
 						$link='notice://Assignment?id='.$eventid.'&student_id='.$user_idss;
 						//--- NOTIFICATIO INSERT
-						$NOTY_insert="INSERT into notification(title,message,user_id,submitted_by,date,time,role_id,link)VALUES('$title','$message','$user_id','$submitted_by','$date','$time','$role_id','$link')";
+						$NOTY_insert="INSERT into notification(title,message,user_id,submitted_by,date,time,role_id,link)VALUES('$title','$message','$user_idss','$submitted_by','$date','$time','$role_id','$link')";
 						$rr=mysql_query($NOTY_insert);
 						//-- END
 
@@ -94,13 +105,14 @@ if(isset($_POST['submit']))
 		$sql1="insert into assignment(user_id,student_id,topic,description,class_id,section_id,subject_id,submission_date,curent_date) values('$user_id','$implodestsdnt','$topic','$description','$class_id','$section_id','$subject_id','$sub_date','$date')";
 			$r2=mysql_query($sql1); 
 			$time=time();
-			$eventid=mysql_insert_id();
-			$file_name=$_FILES["file"]["name"]; 
+			$eventid=mysql_insert_id(); 
+		if(!empty($file_tmp_name))
+		{	
 			$ext=pathinfo($file_name,PATHINFO_EXTENSION);
 			$photo=$topic.$time.'.'.$ext;
-			move_uploaded_file($_FILES["file"]["tmp_name"],"homework/".$photo);
+			move_uploaded_file($file_tmp_name,"assignment/".$photo);
 			$r4=mysql_query("update `assignment` set file='$photo' where id='$eventid'");
-			 
+		}	 
 			foreach($student_id as $value)
 			{
 				$student_ids=$value;
@@ -126,7 +138,7 @@ if(isset($_POST['submit']))
 							'message'  => $message,
 							'button_text' => 'View',
 							'link' => 'notice://Assignment?id='.$eventid.'&student_id='.$student_ids,
-							'notification_id' => $eventid,
+							'notification_id' => $user_ids,
 						);
 						$url = 'https://fcm.googleapis.com/fcm/send';
 						$fields = array
@@ -162,6 +174,7 @@ if(isset($_POST['submit']))
 		}	
 	}
 
+	}
 }
 		
 		
@@ -174,6 +187,11 @@ if(isset($_POST['submit']))
 <?php css();?>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Home Work Assignment</title>
+<style>
+	span {
+		font-size: 14px;
+	}
+</style>
 </head>
 <?php contant_start(); menu();  ?>
 <body>
@@ -187,16 +205,17 @@ if(isset($_POST['submit']))
 							 
 						</div>
 						<div class="portlet-body form">
-						 	<form class="form-horizontal" role="form" id="noticeform" method="post" enctype="multipart/form-data">
+						 	<form  id="form_sample_2" method="post" enctype="multipart/form-data">
 								<div class="form-body">
 								</br>
 								<div class="row">
 								   <div class="col-sm-6">
 										  <div class="form-group">
-													<label class=" col-md-3 control-label">Select</label>
+													<label class=" col-md-3 control-label"><b>Select</b></label>
 												<div class="col-md-9">
-													<label><input type="radio" checked name="yesno" value="1" class="rd"> Class Wise </label>
-													<label><input type="radio" name="yesno" value="2" class="rd"> Student Wise</label> 
+													<label><input type="radio" name="yesno" checked value="2" class="rd"> Student Wise</label>
+													<label><input type="radio"  name="yesno" value="1" class="rd"> Class Wise </label>
+													 
 												</div>
 											</div>
 									 </div>
@@ -207,9 +226,9 @@ if(isset($_POST['submit']))
 									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group"	>
-												<label class="col-md-3 control-label">Class</label>
+												<label class="col-md-3 control-label"><b>Class</b> <span class="required" aria-required="true"> * </span></label>
 												<div class="col-md-3">
-													<select name="class_id" id="cls_id" class=" user form-control select2me input-medium" placeholder="Select Class">
+													<select name="class_id" id="cls_id" required class="user form-control select2me input-medium" placeholder="Select Class">
 													<option value=""></option>
 													<?php
 													$cls_ftc=mysql_query("select * from master_class");		
@@ -227,104 +246,117 @@ if(isset($_POST['submit']))
 										<div class="col-md-6">
 											<div id="dt">	
 											<div class="form-group">
-												<label class="col-md-3 control-label">Section</label>
+												<label class="col-md-3 control-label"><b>Section</b> <span class="required" aria-required="true"> * </span></label>
 												<div class="col-md-3">
-													<select name="section_id" class="form-control select2me input-medium" placeholder="Select Section" >
-													<option value=""></option>
+													<select name="section_id" required class="form-control input-medium" placeholder="Select..." >
+													<option value="">Select...</option>
 													 </select>
 												</div>												 
 												</div>												 
 											</div>
 										</div>
-										</div>
-										<div class="row">
-										<div class="col-md-6">
-										 <div id="data">
-												<div class="form-group">
-												<label class="col-md-3 control-label">Subject</label>
-												<div class="col-md-3">
-													<select name="subject_id" class="form-control select2me input-medium" placeholder="Select Subject" >
-													<option value=""></option>
-													 </select>
-												</div>												 
-												</div>
-											</div>
-										</div>
-										<div class="col-md-6">
+										<div class="col-md-offset-6 col-md-5">
 											<div class="form-group">
-												<label class="col-md-3 control-label">Topic</label>
-												<div class="col-md-3">
-												<input class="form-control input-medium " required  value="" placeholder="Enter Topic" type="text" name="topic">
-												</div>
-
-											</div> 
-										</div>
-										</div>
-									 
-									 <div class="row">
-										<div class="col-md-6">
-											<label class="col-md-3 control-label" align="center">Date</label>
-											<div class="col-md-3">
-											<input class="form-control form-control-inline input-medium date-picker" required  value="" placeholder="dd/mm/yyyy" type="text" data-date-format="dd-mm-yyyy"  name="submission_date">
-											</div>
-										</div>
-										<div class="col-md-6">
-											<div class="form-group">
-												<label class="control-label col-md-3">Image</label>
-												<div class=" col-md-6 fileinput fileinput-new" style="padding-left: 15px;" data-provides="fileinput">
-												<input type="file" class="form-control" name="file" id="file1">
-											</div>
+											  <a class="btn btn-xs btn-default addrow" style="float: right;" href="#" role="button">
+											  <i class="fa fa-plus"></i> Add row</a>
 											</div>
 										</div>
 									</div>
-								<div class="row">
-                                	<div class="col-md-6 ifYes" style="display:none">
-										 
-											<div class="form-group">
-													<label class=" col-md-3 control-label">Select Student </label>
-												<div class="col-md-3">
-													<select name="student_id[]" class="form-control select2me input-medium"   multiple='multiple' placeholder="Select...">
-													<option value=""></option>
-														<?php
-														$r1=mysql_query("select `name`,`id` from login where `flag`=0  order by id ASC");		
-														$i=0;
-														while($row1=mysql_fetch_array($r1))
-														{
-															$id=$row1['id'];
-															$name=$row1['name'];
-														?>
-															<option value="<?php echo $id;?>"><?php echo $name;?></option>                              
-													<?php }?> 
-													</select>
-												</div>
-											</div>
-										 
-                                    </div>
-										<div class="col-md-6">
-											<label class="col-md-3 control-label" align="center">Discription</label>
-											<div class="col-md-3">
-											<textarea class="form-control input-medium" rows="1" required placeholder="Discription" type="text" name="description"></textarea>										 	
-											</div>
-										</div>
-									</div>									
-								 <div  align="center">
-									<input  type="submit" class="btn green" name="submit"  value="Submit">
-						</div> 
+
+									
+										<table id="other_filds" width="100%">
+											
+											<tbody>
+											
+											</tbody>
+										</table>
+									
+										
+									<div  align="center" style="margin-top:10px">
+										<input  type="submit" class="btn green" name="submit"  value="Submit">
+									</div> 
 								</div>
 							</form>
 						</div>
 					</div>
-					
- 
- 		
-
 </div></div>
+<div style="display:none;">
+	<table id="bottomTbls" width="100%">
+		<tbody id="bottomTbody">
+			<tr class="one">
+				<td height="100px">
+					<div class="col-md-4">
+						<span style="text-align:center"><b>Subject </b><span class="required" aria-required="true"> * </span></span>
+						<select name="subject_id[]" required class="form-control subject_id input-medium" placeholder="Select Subject" >
+							<option value=""> Select...</option>
+						</select>
+					</div>
+				</td>
+				<td>
+					<div class="col-md-4">
+					<span style="text-align:center"><b>Topic </b><span class="required" aria-required="true"> * </span></span>
+					<input class="form-control input-medium" required  value="" placeholder="Enter Topic" type="text" name="topic[]">
+					</div>
+				</td>
+				<td>
+					<div class="col-md-4">
+					<span style="text-align:center"><b>Date</b> <span class="required" aria-required="true"> * </span></span>
+					<input class="form-control form-control-inline input-medium date-picker" required  value="" placeholder="dd/mm/yyyy" type="text" data-date-format="dd-mm-yyyy"  name="submission_date[]">
+					</div>
+				</td>
+				<td>
+					<div class="col-md-4">
+					<a class="btn btn-xs btn-default deleterow red" href="#" role="button"> <i class="fa fa-times"></i>  Remove Row </a>
+					</div>
+				</td>
+			</tr>
+			<tr class="two">
+				<td>
+					<div class="col-md-9">
+					<span align="center"><b>Image</b></span>
+					<input type="file" class="form-control" name="file[]" id="file1">
+					</div>
+				</td>
+				<td>
+					<div class="col-md-4">
+					<div class="ifYes student_list">
+						<span align="center"><b>Student</b> <span class="required" aria-required="true"> * </span></span>
+						<select name="student_id[]" class="form-control select2me input-medium" multiple='multiple' placeholder="Select..." id="student_data" >
+							<option value=""></option>
+								<?php
+									$r1=mysql_query("select `name`,`id` from login where `flag`=0 order by id ASC");		
+									$i=0;
+									while($row1=mysql_fetch_array($r1))
+									{
+										$id=$row1['id'];
+										$name=$row1['name'];
+									?>
+										<option value="<?php echo $id;?>">
+											<?php echo $name;?>
+										</option>                              
+							<?php }?> 
+						</select>
+					</div>
+					</div>
+				</td>
+				<td colspan="2">
+					<div class="col-md-4">
+					<span align="center"><b>Description</b> <span class="required" aria-required="true"> * </span></span>
+					<textarea class="form-control input-medium" rows="1" required placeholder="Discription" type="text" name="description[]"></textarea>
+					</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+ </div>
+ 
+ 
+</html>
 </body>
 
-<?php  footer();?>
+<?php footer();?>
 <script src="assets/global/plugins/jquery.min.js" type="text/javascript"></script>
 <script> 
- 
 $(document).ready(function() {
 		
 	$(".rd").live("click",function(){
@@ -340,37 +372,125 @@ $(document).ready(function() {
 	});
 	
 	$(".user").live("change",function(){
-		var t=$(this).val();
+		Userchange();
+		renameRows();
+	});	 
+
+	
+	function Userchange()
+	{
+		var t= $(".user option:selected").val();
 		$.ajax({
 		url: "ajax_homework.php?pon="+t,
 		}).done(function(response) {
-		$("#dt").html(""+response+"");
-			$('.select2me').select2();  
+			$('#dt').html(response);
+			renameRows();
 		});
-	});	 
-
-	$(".user1").live("change",function(){
- 		var t=$("#cls_id").val();
-		var s=$(this).val();
+	}
+	
+	function user1()
+	{
+		var t=$("#cls_id").val();
+		var s=$('.user1 option:selected').val();
 		$.ajax({
 		url: "ajax_homework.php?pon="+t+"&pon1="+s,
 		}).done(function(response) {
-		 $("#data").html(""+response+"");
-		 
-		
+			$('table#other_filds tbody tr.one td:eq(0)').html(response);
+			$('table#bottomTbls tbody tr.one td:eq(0)').html(response);
+			$('table#other_filds tbody tr.two td:eq(1) select').select2();
+			renameRows();
 		});
-	 
+	}
+	
+	
+	$(".user1").live("change",function(){
+		user1();
+		renameRows();
 	});	  
+	
+	$("#cls_id").live("change",function(){
+		classChnage();
+		renameRows();
+	});
 
+	$("#sec_id").live("change",function(){ 
+		classSectionChnage();
+		renameRows();
+	});	
+	
+	
+	function classChnage()
+	{
+		var class_id=$("#cls_id").val();
+		if(class_id != '')
+		{		
+			$.ajax({
+			url: "ajax_homework_student_list.php?class_id="+class_id,
+			}).done(function(response) {
+			 $('#other_filds tbody tr.two td').find('div.student_list').html(response);
+			 renameRows();
+			});
+		}
+	}
+	
+	function classSectionChnage()
+	{
+		var class_id=$("#cls_id").val();
+		var section_id=$("#sec_id").val();
+		if(class_id != '' && section_id != '')
+		{		
+			$.ajax({
+			url: "ajax_homework_student_list.php?class_id="+class_id+"&section_id="+section_id,
+			}).done(function(response) { 
+			 $('#other_filds tbody tr.two td').find('div.student_list').html(response);
+			 renameRows();
+			});
+		}
+	}
+	
+	
+		$('.addrow').live("click",function() {
+		add_row();
+	});
+	add_row();
+	function add_row(){
+		var tr1=$("#bottomTbls tbody#bottomTbody tr.one").clone();
+		var tr2=$("#bottomTbls tbody#bottomTbody tr.two").clone();
+		$("#other_filds tbody").append(tr1);
+		$("#other_filds tbody").append(tr2);
+		
+		renameRows();
+	}
+
+	$('.deleterow').live("click",function() {
+		$(this).closest("tr.one").next("tr.two").remove();
+		$(this).closest("tr.one").remove();
+		renameRows();
+	});	
+	
+	function renameRows()
+	{
+		var i=0; var j=0;
+		$("#other_filds tbody tr.one").each(function(){
+			$(this).find('td:eq(0) select').attr({name:"assignment["+i+"][subject_id]"});
+			$(this).find('td:eq(1) input').attr({name:"assignment["+i+"][topic]"});
+			$(this).find('td:eq(2) input').attr({name:"assignment["+i+"][submission_date]"}).datepicker();
+			i++;
+		});	
+		
+		
+		$("#other_filds tbody tr.two").each(function(){
+			$(this).find('td:eq(0) input').attr({name:"file[]"});
+			$(this).find('td:eq(1) select').attr({name:"assignment["+j+"][student_id][]"}).select2();
+			$(this).find('td:eq(2) textarea').attr({name:"assignment["+j+"][description]"});
+			j++;
+		});
+	}
+	
 });
+</script> 
+<?php scripts();?>
 
- </script> 
+
  
  
-
- 
-			
- <?php scripts();?>
-
-</html>
-

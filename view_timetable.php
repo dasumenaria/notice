@@ -7,7 +7,6 @@ if(isset($_POST['sub_del']))
 	$delete_name=$_POST['delete_name'];
 	$sd=mysql_query("delete from `time_table` where id='$delete_name'" );
 	$sql=mysql_query($sd);
-
 }
   ?> 
 <html>
@@ -20,7 +19,7 @@ if(isset($_POST['sub_del']))
 <body>
 	<div class="page-content-wrapper">
 		 <div class="page-content">
-			<div class="portlet box">
+			<div class="portlet box blue">
 						<div class="portlet-title">
 							<div class="caption">
 								<i class="fa fa-gift"></i> View Time Table

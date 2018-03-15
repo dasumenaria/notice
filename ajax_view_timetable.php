@@ -31,7 +31,7 @@ if($function_for=='exam')
 		if( !empty($class_id) && (!empty($section_ids) ))
 	{ 
 	?>
-		<table class="table-condensed table-bordered" width="100%">
+		<table class="table table-bordered table-hover">
 		<thead>
 			<tr>
 				<th>
@@ -130,9 +130,9 @@ if($function_for=='timetable')
 	if( !empty($class_id) && (!empty($section_ids) ))
 	{ 
 	?>
-		<table class="table-condensed table-bordered" width="100%">
+		<table class="table table-bordered table-hover">
 		<thead>
-			<tr style="background-color:#FFFFFF; color:#1A0DB3">
+			<tr>
 				<td>
 					#
 				</td>
@@ -192,8 +192,7 @@ if($function_for=='timetable')
 						<?php echo $time_to;?>
 					</td>
 					<td>
-						
-						<a class="btn btn-circle btn-danger" rel="tooltip" title="Delete"  data-toggle="modal" href="#delete<?php echo $id ;?>"><i class="fa fa-trash"></i></a>
+					<a class="btn red btn-sm" rel="tooltip" title="Delete"  data-toggle="modal" href="#delete<?php echo $id ;?>"><i class="fa fa-trash"></i></a>
 						<div class="modal fade" id="delete<?php echo $id ;?>" tabindex="-1" aria-hidden="true" style="padding-top:35px">
 							<div class="modal-dialog modal-md">
 								<div class="modal-content">

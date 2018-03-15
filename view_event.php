@@ -21,40 +21,61 @@
 	<div class="page-content-wrapper">
 		 <div class="page-content">
 			<div class="portlet box blue">
-						<div class="portlet-title">
-							<div class="caption">
-								<i class="fa fa-gift"></i> View Events
+				<div class="portlet-title">
+					<div class="caption">
+						<i class="fa fa-gift"></i> View Events
+					</div>
+				<div class="tools">
+					<a class="" href="create_event.php" style="color:white"><i class="fa fa-plus">&nbsp;Add Events</i></a>
+					</div>
+				</div>
+				<div class="portlet-body form">
+					<form class="form-horizontal" role="form" id="noticeform" method="post" enctype="multipart/form-data">
+						<div class="form-body">
+						<div class="row col-md-12">
+							<div class="form-group col-md-6">
+								<label class="control-label col-md-3">Select Date</label>
+								<div class="col-md-4">
+									<div class="input-group input-large date-picker input-daterange" data-date-format="dd-mm-yyyy">
+										<input type="text" class="form-control" id="from">
+										<span class="input-group-addon">
+										to </span>
+										<input type="text" class="form-control" id="to">
+									</div>
+								</div>
 							</div>
-						<div class="tools">
-							<a class="" href="create_event.php" style="color:white"><i class="fa fa-plus">&nbsp;Add Events</i></a>
+							<div class="form-group col-md-4">
+								<label class="col-md-3 control-label" style="text-align:right">Select</label>
+								<div class="col-md-4">
+									<select name="role_id" class="form-control select2me input-medium" placeholder="Select..." id="view_u">
+										<option value=""></option>
+										<?php
+										$r1=mysql_query("select * from master_role where id=1 OR id=4 OR id=5");		
+										$i=0;
+										while($row1=mysql_fetch_array($r1))
+										{
+											$id=$row1['id'];
+											$role_name=$row1['role_name'];
+										?>
+										<option value="<?php echo $id;?>"><?php echo $role_name;?></option>                              
+									<?php }?> 
+									</select>
+								</div>
+							</div>
+							<div class="form-group col-md-2" style="margin-left:50px">
+								<button class="btn btn blue view_u" type="button">Go</button>
 							</div>
 						</div>
-						<div class="portlet-body form">
-						<form class="form-horizontal" role="form" id="noticeform" method="post" enctype="multipart/form-data">
-								<div class="form-body">
-                                 <div class="row">
-								<div class="form-group">
-										<label class="col-md-5 control-label" style="text-align:right">Select Role Wise</label>
-										<div class="col-md-7">
-                                        <select name="role_id" class="form-control select select2 select2me input-medium" placeholder="Select..." id="view_u">
-                                         <option value=""></option>
-                                            <?php
-                                            $r1=mysql_query("select * from master_role where id=1 OR id=4 OR id=5");		
-                                            $i=0;
-                                            while($row1=mysql_fetch_array($r1))
-                                            {
-                                            $id=$row1['id'];
-                                            $role_name=$row1['role_name'];
-                                            ?>
-                              <option value="<?php echo $id;?>"><?php echo $role_name;?></option>                              
-                              <?php }?> 
-                              <select/>
-</div>
-</div>
-</div>
-<div id="data" class="scroller" style="height:400px; padding-top:5px"  data-always-visible="1" data-rail-visible="0"></div>
-</div>
-</form>
+						</br>
+						</br>
+						</br>
+						<center>
+						<div id="data" class="scroller" style="height:400px; padding-top:5px"  data-always-visible="1" data-rail-visible="0">
+						
+						</div>
+						</center>
+			</div>
+		</form>
 </div></div>
 </div></div></div>
 </body>
@@ -63,12 +84,19 @@
 <script src="assets/global/plugins/jquery.min.js" type="text/javascript"></script>
 <script>
 $(document).ready(function(){    
-	$("#view_u").die().live("change",function(){
+	$(".view_u").die().live("click",function(){
+			$("#data").html("<img height='50px' src='img/loading.gif'/>");
 			var view_u=$("#view_u").val();
+			var to=$("#to").val();
+			var from=$("#from").val();
+			if(view_u.length>0){}else{ view_u='';}
+			if(to.length>0){}else{ to='';}
+			if(from.length>0){}else{ from='';}
+			 
 			$.ajax({
-				url: "ajax_view_events.php?view_u="+view_u,
+				url: "ajax_view_events.php?view_u="+view_u+"&to="+to+"&from="+from,
 				}).done(function(response) {
-			   $("#data").html(""+response+"");
+				$("#data").html(""+response+"");
 				});
 	});
 });

@@ -2,12 +2,25 @@
  include("index_layout.php");
  include("database.php");
  $user=$_SESSION['category'];
-   if(isset($_POST['sub_del']))
+if(isset($_POST['sub_del']))
 {
-  $delet_model=$_POST['delet_model'];
-   $r=mysql_query("delete from `sub_gallery` where id='$delet_model'" );
-    $sql=mysql_query($r);
-  }
+	$delet_model=$_POST['delet_model'];
+	$r=mysql_query("delete from `sub_gallery` where id='$delet_model'" );
+	$sql=mysql_query($r);
+}
+if(isset($_POST['deleteall']))
+{
+	$event_id=$_POST['event_id'];
+	$category_id=$_POST['category_id'];
+	$gallry_sql=mysql_query("select * from gallery where category_id='$category_id' AND event_news_id='$event_id' order by id Desc ");
+	$gallry_sql_row=mysql_fetch_array($gallry_sql);
+	$gcount=mysql_num_rows($gallry_sql);
+	if($gcount > 0){
+		$gallery_id=$gallry_sql_row['id'];
+		$r=mysql_query("delete from `sub_gallery` where gallery_id='$gallery_id'" );
+		$sql=mysql_query($r);
+	}
+}
 ?> 
 <html>
 <head>
@@ -27,16 +40,13 @@
 								<i class="fa fa-gift"></i> View Gallery
 							</div>
 						<div class="tools">
-						<a class="" href="gallery.php" style="color: white"><i class="fa fa-plus"> Add Images into gallery </i></a>
-						 
-								
-							</div>
+						<a class="" href="gallery.php" style="color: white"><i class="fa fa-plus"> Add gallery </i></a>
+						</div>
                             
 						</div>
 						<div class="portlet-body form">
 							<form class="form-horizontal" role="form" id="noticeform" method="post" enctype="multipart/form-data">
 								<div class="form-body">
-								
 								<div class="row">
 								<div class="col-md-12">
 									<div class="form-group">
